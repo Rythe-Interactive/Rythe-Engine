@@ -41,15 +41,15 @@ namespace legion::core
         return ecs::Registry::createEntity(name, parent);
     }
 
-    ecs::entity SystemBase::createEntity(ecs::entity parent, const serialization::entity_prototype& prototype)
-    {
-        return ecs::Registry::createEntity(parent, prototype);
-    }
+    //ecs::entity SystemBase::createEntity(ecs::entity parent, const serialization::entity_prototype& prototype)
+    //{
+    //    return ecs::Registry::createEntity(parent, prototype);
+    //}
 
-    ecs::entity SystemBase::createEntity(const serialization::entity_prototype& prototype)
-    {
-        return ecs::Registry::createEntity(prototype);
-    }
+    //ecs::entity SystemBase::createEntity(const serialization::entity_prototype& prototype)
+    //{
+    //    return ecs::Registry::createEntity(prototype);
+    //}
 
     void SystemBase::raiseEvent(events::event_base& value)
     {

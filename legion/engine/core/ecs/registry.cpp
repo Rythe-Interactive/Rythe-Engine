@@ -136,34 +136,34 @@ namespace legion::core::ecs
         return entity{ &data };
     }
 
-    entity Registry::createEntity(entity parent, const serialization::entity_prototype& prototype)
-    {
-        OPTICK_EVENT();
-        // Call to create a new blank entity. No need to duplicate this logic.
-        auto ent = createEntity(prototype.name, parent);
+    //entity Registry::createEntity(entity parent, const serialization::entity_prototype& prototype)
+    //{
+    //    OPTICK_EVENT();
+    //    // Call to create a new blank entity. No need to duplicate this logic.
+    //    auto ent = createEntity(prototype.name, parent);
 
-        // Recursively serialize all child prototypes.
-        for (auto& childPrototype : prototype.children)
-            createEntity(ent, childPrototype);
+    //    // Recursively serialize all child prototypes.
+    //    for (auto& childPrototype : prototype.children)
+    //        createEntity(ent, childPrototype);
 
-        // Serialize all the component values.
-        for (auto& [type, prototypePtr] : prototype.composition)
-            getFamily(type)->create_component(ent, *prototypePtr);
+    //    // Serialize all the component values.
+    //    for (auto& [type, prototypePtr] : prototype.composition)
+    //        getFamily(type)->create_component(ent, *prototypePtr);
 
-        // Assign entity activity.
-        ent->active = prototype.active;
+    //    // Assign entity activity.
+    //    ent->active = prototype.active;
 
-        // Update entity filters to encorporate the new entity.
-        FilterRegistry::markEntityFullCreation(ent);
+    //    // Update entity filters to encorporate the new entity.
+    //    FilterRegistry::markEntityFullCreation(ent);
 
-        return ent;
-    }
+    //    return ent;
+    //}
 
-    entity Registry::createEntity(const serialization::entity_prototype& prototype)
-    {
-        // The world is used as a default parent.
-        return createEntity(world, prototype);
-    }
+    //entity Registry::createEntity(const serialization::entity_prototype& prototype)
+    //{
+    //    // The world is used as a default parent.
+    //    return createEntity(world, prototype);
+    //}
 
     void Registry::destroyEntity(entity target, bool recurse)
     {
@@ -265,27 +265,27 @@ namespace legion::core::ecs
         return getFamily(typeId)->create_component(target);
     }
 
-    void* Registry::createComponent(id_type typeId, entity target, const serialization::component_prototype_base& prototype)
-    {
-        OPTICK_EVENT();
-        // Update entity composition.
-        instance.m_entityCompositions.at(target).insert(typeId);
-        // Update filters.
-        FilterRegistry::markComponentAdd(typeId, target);
-        // Actually create and return the component using the prototype.
-        return getFamily(typeId)->create_component(target, prototype);
-    }
+    //void* Registry::createComponent(id_type typeId, entity target, const serialization::component_prototype_base& prototype)
+    //{
+    //    OPTICK_EVENT();
+    //    // Update entity composition.
+    //    instance.m_entityCompositions.at(target).insert(typeId);
+    //    // Update filters.
+    //    FilterRegistry::markComponentAdd(typeId, target);
+    //    // Actually create and return the component using the prototype.
+    //    return getFamily(typeId)->create_component(target, prototype);
+    //}
 
-    void* Registry::createComponent(id_type typeId, entity target, serialization::component_prototype_base&& prototype)
-    {
-        OPTICK_EVENT();
-        // Update entity composition.
-        instance.m_entityCompositions.at(target).insert(typeId);
-        // Update filters.
-        FilterRegistry::markComponentAdd(typeId, target);
-        // Actually create and return the component using the prototype.
-        return getFamily(typeId)->create_component(target, std::move(prototype));
-    }
+    //void* Registry::createComponent(id_type typeId, entity target, serialization::component_prototype_base&& prototype)
+    //{
+    //    OPTICK_EVENT();
+    //    // Update entity composition.
+    //    instance.m_entityCompositions.at(target).insert(typeId);
+    //    // Update filters.
+    //    FilterRegistry::markComponentAdd(typeId, target);
+    //    // Actually create and return the component using the prototype.
+    //    return getFamily(typeId)->create_component(target, std::move(prototype));
+    //}
 
     void Registry::destroyComponent(id_type typeId, entity target)
     {

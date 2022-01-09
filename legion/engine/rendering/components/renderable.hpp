@@ -4,9 +4,9 @@
 
 namespace legion::rendering
 {
+    [reflectable]
     struct mesh_renderer
     {
-        Reflectable;
     private:
         model_handle m_tempHandle = invalid_model_handle;
     public:
@@ -57,5 +57,3 @@ namespace legion::rendering
         }
     };
 }
-
-ManualReflector(legion::rendering::mesh_renderer, material);

@@ -7,9 +7,9 @@
 
 namespace legion::audio
 {
+    [reflectable]
     struct audio_source
     {
-        Reflectable;
         friend class AudioSystem;
     public:
         constexpr static ALuint invalid_source_id = -1;
@@ -289,5 +289,3 @@ namespace legion::audio
         byte m_changes = 0;
     };
 }
-
-ManualReflector(legion::audio::audio_source, m_sourceId, m_audio_handle, m_pitch, m_gain, m_looping, m_playState, m_nextPlayState, m_rolloffFactor, m_changes);

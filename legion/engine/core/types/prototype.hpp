@@ -1,61 +1,101 @@
 #pragma once
-#include <core/types/reflector.hpp>
+#include <core/platform/platform.hpp>
+#include <core/types/meta.hpp>
+#include <core/types/primitives.hpp>
+
+#include <any>
 
 namespace legion::core
 {
-    namespace detail
+    struct member_value;
+    //a copy of data
+    struct prototype
     {
-        template<typename T, typename... MemberTypes>
-        struct prototype_impl
+        id_type typeId;
+        std::string_view typeName;
+        std::vector<member_value> members;
+
+        prototype() = default;
+        prototype(id_type id, std::string_view name, std::vector<member_value> _members) : typeId(id), typeName(name), members(_members) {}
+        prototype(const prototype& prot) : typeId(prot.typeId), typeName(prot.typeName), members(prot.members) {}
+
+        prototype& operator=(const prototype& rhs)
         {
-            using source_type = T;
+            typeId = rhs.typeId;
+            typeName = rhs.typeName;
+            members = rhs.members;
 
-            static constexpr size_type size = sizeof...(MemberTypes);
-            std::tuple<MemberTypes...> values;
-            std::array<std::string, sizeof...(MemberTypes)> names;
+            return *this;
+        }
+    };
+    struct primitive_value
+    {
+        id_type typeId;
+        std::any data;
 
-            constexpr prototype_impl() noexcept = default;
-            template<typename Type, typename... Members>
-            constexpr prototype_impl(const Type&, const std::array<std::string, sizeof...(MemberTypes)>& memberNames, Members&&... members) noexcept
-                : values(std::forward<Members>(members)...), names(memberNames)
-            {
-                static_assert(std::is_same_v<Type, T>, "Prototype initialized with wrong input type.");
-            }
+        template<typename T>
+        L_NODISCARD T* cast()
+        {
+            return std::any_cast<T>(&data);
+        }
+
+        template<typename T>
+        L_NODISCARD const T* cast() const
+        {
+            return std::any_cast<T>(&data);
+        }
+    };
+    struct member_value
+    {
+        bool is_object;
+        std::string_view name;
+        union
+        {
+            prototype object;
+            primitive_value primitive;
         };
 
-        template<size_t I, typename T, typename Refl, typename... MemberTypes>
-        constexpr auto extract_from_reflector(const T& val, Refl&& refl, MemberTypes&&... members)
+        member_value() : is_object(false), name(""), primitive() {}
+        member_value(std::string_view _name, primitive_value _primitive) : is_object(false), name(_name), primitive(_primitive) {}
+        member_value(std::string_view _name, prototype prot) : is_object(true), name(_name), object(prot) {}
+        member_value(const member_value& other)
         {
-            if constexpr (I == 0)
-            {
-                return prototype_impl<T, remove_cvr_t<MemberTypes>...>(val, refl.names, std::forward<MemberTypes>(members)...);
-            }
+            is_object = other.is_object;
+            name = other.name;
+            if (is_object)
+                new (&object) prototype(other.object);
             else
-            {
-                return extract_from_reflector<I - 1>(val, std::forward<Refl>(refl), std::get<I - 1>(refl.values), std::forward<MemberTypes>(members)...);
-            }
+                new (&primitive) primitive_value(other.primitive);
         }
-
-        template<typename T>
-        constexpr auto get_prototype_impl(const T& val) noexcept
+        ~member_value()
         {
-            auto refl = make_reflector(val);
-            return extract_from_reflector<refl.size>(val, refl);
+            if (is_object)
+                object.~prototype();
+            else
+                primitive.~primitive_value();
         }
 
-        template<typename T>
-        using prototype_base = decltype(get_prototype_impl(std::declval<T>()));
-    }
+        member_value& operator=(const member_value& other)
+        {
+            if (is_object)
+                object.~prototype();
+            else
+                primitive.~primitive_value();
 
-    template<typename T>
-    struct prototype : public detail::prototype_base<T>
-    {
-        constexpr prototype(const T& val) noexcept : detail::prototype_base<T>(detail::get_prototype_impl(val)) {}
+            is_object = other.is_object;
+            name = other.name;
+            if (is_object)
+                new (&object) prototype(other.object);
+            else
+                new (&primitive) primitive_value(other.primitive);
+
+            return *this;
+        }
     };
 
     template<typename T>
-    constexpr auto make_prototype(const T& val) noexcept
+    L_NODISCARD prototype make_prototype(const T& obj)
     {
-        return prototype<T>(val);
+        return prototype{ localTypeHash<T>(), localNameOfType<T>(),std::vector<member_value>() };
     }
 }

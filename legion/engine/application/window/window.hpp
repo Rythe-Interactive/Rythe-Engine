@@ -9,9 +9,10 @@
 
 namespace legion::application
 {
+    [reflectable]
     struct window
     {
-        Reflectable;
+
         friend class WindowSystem;
 
         window() = default;
@@ -76,8 +77,6 @@ namespace legion::application
     };
 
 }
-
-ManualReflector(legion::application::window, m_title, m_isFullscreen, m_swapInterval, m_size);
 
 #if !defined(DOXY_EXCLUDE)
 namespace std
