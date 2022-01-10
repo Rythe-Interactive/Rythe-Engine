@@ -12,8 +12,8 @@ namespace legion::core::serialization
     private:
         static std::unordered_map<id_type, std::unique_ptr<serializer_base>> serializers;
     public:
-        template<typename type>
-        static pointer<serializer<type>> register_serializer();
+        template<typename ObjectType, typename... Args>
+        static pointer<serializer<ObjectType>> register_serializer(Args&&... args);
 
         template<typename type>
         static pointer<serializer<type>> get_serializer();

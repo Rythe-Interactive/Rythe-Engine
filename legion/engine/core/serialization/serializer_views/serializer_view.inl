@@ -4,7 +4,7 @@
 namespace legion::core::serialization
 {
     template<typename Type>
-    inline bool serializer_view::serialize(std::string name, Type&& value)
+    inline bool serializer_view::serialize(const std::string& name, Type&& value)
     {
         using raw_type = std::decay_t<Type>;
 
@@ -36,6 +36,41 @@ namespace legion::core::serialization
         else if constexpr (std::is_same_v<raw_type, id_type>)
         {
             serialize_id_type(name, value);
+            return true;
+        }
+        return false;
+    }
+
+    bool legion::core::serialization::serializer_view::serialize(const std::string& name, void* value, id_type typeId)
+    {
+        if (typeId == typeHash<int>())
+        {
+            serialize_int(name, *static_cast<int*>(value));
+            return true;
+        }
+        else if (typeId == typeHash<float>())
+        {
+            serialize_float(name, *static_cast<float*>(value));
+            return true;
+        }
+        else if (typeId == typeHash<double>())
+        {
+            serialize_double(name, *static_cast<double*>(value));
+            return true;
+        }
+        else if (typeId == typeHash<bool>())
+        {
+            serialize_bool(name, *static_cast<bool*>(value));
+            return true;
+        }
+        else if (typeId == typeHash<std::string>())
+        {
+            serialize_string(name, *static_cast<std::string*>(value));
+            return true;
+        }
+        else if (typeId == typeHash<id_type>())
+        {
+            serialize_id_type(name, *static_cast<id_type*>(value));
             return true;
         }
         return false;

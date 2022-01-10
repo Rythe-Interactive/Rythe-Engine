@@ -5,192 +5,259 @@ namespace legion::core::serialization
 {
     namespace detail
     {
-
         template<typename type>
-        inline common::result<void, fs_error> serialize_container(const void* container, serializer_view& s_view, std::string& name)
+        inline common::result<void, fs_error> serialize_container(type&& container, serializer_view& s_view, const std::string& name)
         {
             using container_type = typename remove_cvr_t<type>;
-            using value_type = remove_cvr_t<typename std::iterator_traits<container_type::const_iterator>::value_type>;
-
-            auto _container = static_cast<container_type*>(const_cast<void*>(container));
-
-            name = type_hash<type>().global_name().data();
+            using value_type = remove_cvr_t<typename container_type::value_type>;
 
             s_view.start_container(name);
 
-            for (container_type::const_iterator it = _container->begin(); it != _container->end(); ++it)
+            std::vector<std::string> warnings{};
+            size_type i = 0;
+            for (auto it = container.begin(); it != container.end(); ++it, i++)
             {
-                pointer<serializer<value_type>> _serializer = serializer_registry::get_serializer<value_type>();
+                auto _serializer = serializer_registry::get_serializer<value_type>();
 
-                _serializer->serialize(&*it, s_view, nameOfType<value_type>());
+                auto result = _serializer->serialize(*it, s_view, "item_" + std::to_string(i));
+                warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
+
+                if (result.has_error())
+                {
+                    s_view.end_container();
+                    return { result.error(), warnings };
+                }
             }
 
             s_view.end_container();
 
-            return common::success;
+            return { common::success, warnings };
         }
 
         template<typename type>
-        inline common::result<type, fs_error> deserialize_container(serializer_view& s_view)
+        inline common::result<remove_cvr_t<type>, fs_error> deserialize_container(serializer_view& s_view)
         {
             using container_type = typename remove_cvr_t<type>;
-            using value_type = remove_cvr_t<typename std::iterator_traits<container_type::const_iterator>::value_type>;
+            using value_type = remove_cvr_t<typename container_type::value_type>;
 
-            auto container = container_type();
+            size_type size = s_view.start_read_array();
 
-            int size = s_view.start_read_array();
+            std::vector<value_type> tempContainer{};
+            tempContainer.reserve(size);
 
-            for (int i = 0; i < size; i++)
+            byte buffer[sizeof(value_type)];
+            value_type* itemPtr = reinterpret_cast<value_type*>(buffer);
+            std::vector<std::string> warnings{};
+
+            for (size_type i = 0; i < size; i++)
             {
-                pointer<serializer<value_type>> _serializer = serializer_registry::get_serializer<value_type>();
+                auto _serializer = serializer_registry::get_serializer<value_type>();
 
-                auto result = _serializer->deserialize(s_view, type_hash<value_type>().global_name().data());
-                //container.insert(container.end(),*static_cast<value_type*>(result.value()));
+                auto result = _serializer->deserialize(buffer, s_view, "item_" + std::to_string(i));
+                warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
+
+                if (result.has_error())
+                {
+                    s_view.end_read_array();
+                    return { result.error(), warnings };
+                }
+
+                tempContainer.push_back(*itemPtr);
             }
 
             s_view.end_read_array();
 
-            return container;
+            using iterator = typename container_type::iterator;
+            using const_iterator = typename container_type::const_iterator;
+            using input_iterator = typename std::vector<value_type>::iterator;
+
+            container_type result{};
+
+            if constexpr (has_insert_v<container_type, iterator(const_iterator, input_iterator, input_iterator)>)
+                result.insert(result.begin(), tempContainer.begin(), tempContainer.end());
+            else if constexpr (has_insert_v<container_type, void(input_iterator, input_iterator)>)
+                result.insert(tempContainer.begin(), tempContainer.end());
+            else if constexpr (has_size_v<container_type, size_type()> && has_at_v<container_type, value_type & (size_type)>)
+            {
+                for (size_type i = 0; i < result.size(); i++)
+                    result[i] = tempContainer[i];
+            }
+
+            return { result, warnings };
         }
 
-        inline common::result<void, fs_error> serialize_ent_data(const ecs::entity_data& ent_data, serializer_view& s_view, std::string& name)
+        inline common::result<void, fs_error> serialize_ent_data(const ecs::entity_data& ent_data, serializer_view& s_view, const std::string& name)
         {
-            name = type_hash<ecs::entity_data>().global_name().data();
+            if (!ent_data.alive)
+                return legion_fs_error("Entity does not exist.");
+
+            std::vector<std::string> warnings{};
 
             s_view.start_object(name);
 
             s_view.serialize("name", ent_data.name);
-
-            s_view.serialize("alive", ent_data.alive);
             s_view.serialize("active", ent_data.active);
+            auto result = detail::serialize_container(ent_data.children, s_view, "children");
+            warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
 
-            pointer<serializer<ecs::entity_set>> _serializer = serializer_registry::get_serializer<ecs::entity_set>();
-            std::string container_name = "children";
-
-            detail::serialize_container<ecs::entity_set>(&ent_data.children, s_view, container_name);
+            if (result.has_error())
+            {
+                s_view.end_object();
+                return { result.error(), warnings };
+            }
 
             s_view.start_container("components");
-            auto ent_composition = ecs::Registry::entityComposition(ent_data.id);
+
+            auto ent = ecs::Registry::getEntity(ent_data.id);
+            auto ent_composition = ent.component_composition();
 
             for (id_type typeId : ent_composition)
             {
-                auto ent = ecs::Registry::getEntity(ent_data.id);
+                auto compName = std::string(type_hash::from_id(typeId).name());
+                if (compName.empty())
+                {
+                    s_view.end_container();
+                    s_view.end_object();
+                    return { legion_fs_error("Component type " + std::to_string(typeId) + " has no type data."), warnings };
+                }
+
                 auto _serializer = serializer_registry::get_serializer(typeId);
-                std::string compName = ecs::Registry::getFamilyName(typeId);
                 if (!_serializer)
                 {
-                    log::error("Could not find existing serializer for " + compName);
+                    warnings.push_back("Could not find existing serializer for " + compName);
                     continue;
                 }
-                auto comp = ecs::Registry::getComponent(typeId, ent);
-                _serializer->serialize(comp, s_view, std::to_string(typeId));
+
+                auto result = _serializer->serialize(ecs::Registry::getComponent(typeId, ent), s_view, compName);
+                warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
+
+                if (result.has_error())
+                {
+                    s_view.end_container();
+                    s_view.end_object();
+                    return { result.error(), warnings };
+                }
             }
+
             s_view.end_container();
-
             s_view.end_object();
-
-            return common::success;
+            return { common::success, warnings };
         }
 
-        inline common::result<ecs::entity, fs_error> deserialize_ent_data(serializer_view& s_view)
+        inline common::result<void, fs_error> deserialize_ent_data(void* target, serializer_view& s_view)
         {
-            //Entity
+            s_view.start_read();
+            std::vector<std::string> warnings{};
 
+            //Entity
             auto ent = ecs::Registry::createEntity();
             ent->name = s_view.deserialize<std::string>("name");
             ent->active = s_view.deserialize<bool>("active");
             ent->alive = s_view.deserialize<bool>("alive");
 
             //Children
-            int size = s_view.start_read_array();
+            auto result = deserialize_container<ecs::entity_set>(s_view);
+            warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
 
-            for (int i = 0; i < size; i++)
+            if (result.has_error())
             {
-                auto _serializer = serializer_registry::get_serializer<ecs::entity>();
-                auto result = _serializer->deserialize(s_view, type_hash<ecs::entity>().global_name().data());
-                ent.add_child(*static_cast<ecs::entity*>(result.value()));
+                s_view.end_object();
+                return { result.error(), warnings };
             }
 
-            s_view.end_read_array();
+            for (auto& child : result.value())
+                ent.add_child(child);
 
             //Components
-            size = s_view.start_read_array();
-            for (int i = 0;i<size;i++)
+            size_type size = s_view.start_read_array();
+            for (size_type i = 0; i < size; i++)
             {
-                auto key = s_view.get_key();
-                id_type typeId;
-                std::stringstream sstream(key);
-                sstream >> typeId;
+                auto componentName = s_view.get_key();
+                id_type typeId = nameHash(componentName);
 
                 auto _serializer = serializer_registry::get_serializer(typeId);
-                auto result = _serializer->deserialize(s_view, key);
-                ecs::Registry::createComponent(typeId,ent,result.value());
+
+                byte_vec buffer{};
+                buffer.resize(_serializer->type_size());
+
+                auto result = _serializer->deserialize(buffer.data(), s_view, componentName);
+                warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
+
+                if (result.has_error())
+                {
+                    s_view.end_object();
+                    return { result.error(), warnings };
+                }
+
+                ecs::Registry::createComponent(typeId, ent, buffer.data());
             }
 
             s_view.end_read_array();
 
-            return ent;
+            *static_cast<ecs::entity*>(target) = ent;
+
+            return { common::success, warnings };
         }
     }
 
-    inline common::result<void, fs_error>  serializer<ecs::entity_data>::serialize(const void* ent, serializer_view& s_view, std::string name)
+    inline common::result<void, fs_error>  serializer<ecs::entity_data>::serialize(const void* ent, serializer_view& s_view, const std::string& name)
     {
         return detail::serialize_ent_data(*static_cast<const ecs::entity_data*>(ent), s_view, name);
     }
 
-    inline common::result<void*, fs_error> serializer<ecs::entity_data>::deserialize(serializer_view& view,std::string name)
+    inline common::result<void, fs_error> serializer<ecs::entity_data>::deserialize(void* target, serializer_view& view, L_MAYBEUNUSED const std::string& name)
     {
-        return &detail::deserialize_ent_data(view).value();
+        return detail::deserialize_ent_data(target, view);
     }
 
-    inline common::result<void, fs_error> serializer<ecs::entity>::serialize(const void* ent, serializer_view& s_view, std::string name)
+    inline common::result<void, fs_error> serializer<ecs::entity>::serialize(const void* ent, serializer_view& s_view, const std::string& name)
     {
-        return detail::serialize_ent_data(
-            *static_cast<const ecs::entity_data*>(static_cast<const ecs::entity*>(ent)->data)
-            , s_view, name);
+        return detail::serialize_ent_data(*static_cast<const ecs::entity*>(ent)->data, s_view, name);
     }
 
-    inline common::result<void*, fs_error> serializer<ecs::entity>::deserialize(serializer_view& view,std::string name)
+    inline common::result<void, fs_error> serializer<ecs::entity>::deserialize(void* target, serializer_view& view, L_MAYBEUNUSED const std::string& name)
     {
-        return &detail::deserialize_ent_data(view).value();
+        ecs::entity_data data;
+        auto result = detail::deserialize_ent_data(&data, view);
+        *static_cast<ecs::entity*>(target) = ecs::Registry::getEntity(data.id);
+        return result;
     }
 
     template<typename type>
-    inline common::result<void, fs_error> serializer<type>::serialize(const void* serializable, serializer_view& s_view, std::string name)
+    inline common::result<void, fs_error> serializer<type>::serialize(const void* serializable, serializer_view& s_view, const std::string& name)
     {
         using serializable_type = typename remove_cvr_t<type>;
 
+        auto* ptr = static_cast<const serializable_type*>(serializable);
+
         if constexpr (is_serializable<serializable_type>::value)
         {
-            auto _serializable = *static_cast<const serializable_type*>(serializable);
-            s_view.serialize<serializable_type>(name, std::move(_serializable));
+            s_view.serialize(name, *ptr);
         }
         else if constexpr (is_container<serializable_type>::value)
-            detail::serialize_container<serializable_type>(serializable, s_view, name);
+            detail::serialize_container(*ptr, s_view, name);
         else
         {
-            auto _serializable = *static_cast<const serializable_type*>(serializable);
-            auto reflector = make_reflector(_serializable);
+            reflector refl = make_reflector(*ptr);
 
-            if (name.size() < 1)
+            if (name.empty())
                 s_view.start_object();
             else
                 s_view.start_object(name);
 
-            for_each(reflector,
-                [&s_view](auto& _name, auto& value)
+            for (auto& var : refl.members)
+            {
+                if (var.is_object)
                 {
-                    using value_type = typename remove_cvr_t<decltype(value)>;
-                    if (is_serializable<value_type>::value)
-                    {
-                        s_view.serialize<value_type>(_name,std::move(value));
-                    }
-                    else
-                    {
-                        auto _serializer = serializer_registry::get_serializer<value_type>();
-                        _serializer->serialize(&value, s_view, _name);
-                    }
-                });
+                    auto _serializer = serializer_registry::get_serializer(var.object.typeId);
+                    _serializer->serialize(var.object, s_view, var.name);
+                }
+                else
+                {
+                    auto _serializer = serializer_registry::get_serializer(var.primitive.typeId);
+                    s_view.serialize(var.name, var.primitive.data, var.primitive.typeId);
+                }
+            }
 
             s_view.end_object();
         }
@@ -198,7 +265,7 @@ namespace legion::core::serialization
     }
 
     template<typename type>
-    inline common::result<void*, fs_error> serializer<type>::deserialize(serializer_view& s_view,std::string name)
+    inline common::result<void*, fs_error> serializer<type>::deserialize(serializer_view& s_view, std::string name)
     {
         using serializable_type = typename remove_cvr_t<type>;
 

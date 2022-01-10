@@ -65,7 +65,7 @@ namespace legion::core::common
             if (m_succeeded)
                 m_success.~success_type();
             else if (!m_handled)
-                    throw m_error;
+                throw m_error;
         }
 
         L_NODISCARD success_type& value()
@@ -157,12 +157,33 @@ namespace legion::core::common
         using warning_type = Warning;
         using warning_list = std::vector<warning_type>;
 
-        result(const result& src) = default;
-        result(result&& src) = default;
+        result(const result& src) : m_handled(src.m_handled), m_error(src.m_error), m_warnings(src.m_warnings) {}
+        result(result&& src) : m_handled(src.m_handled), m_error(src.m_error), m_warnings(src.m_warnings) { src.m_handled = true; }
         ~result() noexcept(false)
         {
             if (m_error && !m_handled)
-                throw *m_error;
+                throw* m_error;
+        }
+
+        result& operator=(const result& src)
+        {
+            if (m_error && !m_handled)
+                throw* m_error;
+
+            m_handled = src.m_handled;
+            m_error = src.m_error;
+            m_warnings = src.m_warnings;
+        }
+
+        result& operator=(result&& src)
+        {
+            if (m_error && !m_handled)
+                throw* m_error;
+
+            m_handled = src.m_handled;
+            m_error = src.m_error;
+            m_warnings = src.m_warnings;
+            src.m_handled = true;
         }
 
         result(success_t) {}

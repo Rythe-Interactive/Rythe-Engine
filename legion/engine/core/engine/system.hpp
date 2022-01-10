@@ -17,7 +17,7 @@ namespace legion::core
     {
         friend class Engine;
     public:
-        const type_reference id;
+        const type_hash id;
 
         virtual ~SystemBase() = default;
 
@@ -25,7 +25,7 @@ namespace legion::core
         std::unordered_map<id_type, std::unique_ptr<scheduling::Process>> m_processes;
         std::unordered_map<id_type, delegate<void(events::event_base&)>> m_bindings;
 
-        SystemBase(type_reference&& id) : id(id) {}
+        SystemBase(type_hash&& id) : id(id) {}
 
         // TODO: Inline all the things
 

@@ -199,7 +199,9 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="scheduling\scheduler.hpp" />
     <ClInclude Include="scheduling\scheduling.hpp" />
     <ClInclude Include="serialization\serialization.hpp" />
+    <ClInclude Include="serialization\serializer_views\bson.hpp" />
     <ClInclude Include="serialization\serializer_views\bson_view.hpp" />
+    <ClInclude Include="serialization\serializer_views\json.hpp" />
     <ClInclude Include="serialization\serializer_views\json_view.hpp" />
     <ClInclude Include="ecs\registry.hpp" />
     <ClInclude Include="engine\engine.hpp" />
@@ -579,6 +581,7 @@ del /q ".\xcopyexclude"</Command>
     <ClCompile Include="scheduling\process.cpp" />
     <ClCompile Include="scheduling\processchain.cpp" />
     <ClCompile Include="scheduling\scheduler.cpp" />
+    <ClCompile Include="serialization\serializer_views\serializer_view.cpp" />
     <ClCompile Include="time\main_clock.cpp" />
     <ClCompile Include="time\defaults.cpp" />
     <ClCompile Include="types\type_util.cpp" />

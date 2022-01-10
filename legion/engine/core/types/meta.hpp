@@ -36,7 +36,7 @@ namespace legion::core
     };                                                                                                                  \
                                                                                                                         \
     template<typename C, typename F>                                                                                    \
-    constexpr bool CONCAT_DEFINE(has_, CONCAT(x, _v)) = CONCAT(has_, x)<C, F>::value;                                   \
+    constexpr bool CONCAT(has_, CONCAT(x, _v)) = CONCAT(has_, x)<C, F>::value;                                          \
                                                                                                                         \
     template<typename, typename T>                                                                                      \
     struct CONCAT(has_static_, x) {                                                                                     \
@@ -60,7 +60,7 @@ namespace legion::core
     };                                                                                                                  \
                                                                                                                         \
     template<typename C, typename F>                                                                                    \
-    constexpr bool CONCAT_DEFINE(has_static_, CONCAT(x, _v)) = CONCAT(has_static_, x)<C, F>::value; 
+    constexpr bool CONCAT(has_static_, CONCAT(x, _v)) = CONCAT(has_static_, x)<C, F>::value; 
 
 #define  typename_1(x)                                                                    typename x
 #define  typename_2(x, x2)                                                                typename x , typename x2
@@ -81,25 +81,25 @@ namespace legion::core
 
     // turn: a, b, ...c
     // into: typename a, typename b, typename ...c
-#define typenames_count(count, ...) EXPAND(CONCAT_DEFINE(typename_, count)(__VA_ARGS__))
-#define typenames(...) EXPAND(CONCAT_DEFINE(typename_, NARGS(__VA_ARGS__))(__VA_ARGS__))
+#define typenames_count(count, ...) EXPAND(CONCAT(typename_, count)(__VA_ARGS__))
+#define typenames(...) EXPAND(CONCAT(typename_, NARGS(__VA_ARGS__))(__VA_ARGS__))
 
 #define COMBINE_SFINAE(name, predicate, templateArgs...) \
     template<typenames(templateArgs)> \
     struct name                                                                                                         \
     {                                                                                                                   \
     private:                                                                                                            \
-      template<typename T>                                                                                            \
-      static constexpr auto check(T*)                                                                                 \
-        -> typename std::conditional<predicate, std::true_type, std::false_type>::type;                             \
-                                                                                                                            \
-      template <typename>                                                                                             \
-      static constexpr auto check(...)                                                                                \
-        ->std::false_type;                                                                                          \
-                                                                                                                            \
-      typedef decltype(check<void>(nullptr)) type;                                                                    \
+      template<typename T>                                                                                              \
+      static constexpr auto check(T*)                                                                                   \
+        -> typename std::conditional<predicate, std::true_type, std::false_type>::type;                                 \
+                                                                                                                        \
+      template <typename>                                                                                               \
+      static constexpr auto check(...)                                                                                  \
+        ->std::false_type;                                                                                              \
+                                                                                                                        \
+      typedef decltype(check<void>(nullptr)) type;                                                                      \
     public:                                                                                                             \
-      static constexpr bool value = type::value;                                                                      \
+      static constexpr bool value = type::value;                                                                        \
     };                                                                                                                  \
     template<EXPAND(typenames(EXPAND(templateArgs)))>                                                                   \
     constexpr bool CONCAT(name, _v) = name<EXPAND(templateArgs)>::value; 
@@ -110,18 +110,18 @@ namespace legion::core
 
     HAS_FUNC(begin);
     HAS_FUNC(end);
+    HAS_FUNC(at);
 
+    HAS_FUNC(size);
     HAS_FUNC(resize);
 
     HAS_FUNC(push_back);
     HAS_FUNC(emplace);
+    HAS_FUNC(insert);
 
-    COMBINE_SFINAE(is_container, has_begin_v<T L_COMMA typename T::iterator(void)>&& has_end_v<T L_COMMA typename T::iterator(void)>, T);
-    COMBINE_SFINAE(is_resizable_container, has_begin_v<T L_COMMA typename T::iterator(void)>&& has_end_v<T L_COMMA typename T::iterator(void)>&& has_resize_v<T L_COMMA void(size_type)>, T);
+    COMBINE_SFINAE(is_container, has_begin_v<T L_COMMA typename T::iterator(void)> && has_end_v<T L_COMMA typename T::iterator(void)>, T);
+    COMBINE_SFINAE(is_resizable_container, has_begin_v<T L_COMMA typename T::iterator(void)> && has_end_v<T L_COMMA typename T::iterator(void)> && has_resize_v<T L_COMMA void(size_type)>, T);
     COMBINE_SFINAE(is_any_castable, std::is_constructible<T L_COMMA const T&>::value, T);
-
-    HAS_FUNC(setup);
-    HAS_FUNC(update);
 
     template<typename T>
     struct is_serializable
@@ -156,87 +156,6 @@ namespace legion::core
 
     template<typename T>
     using remove_cvr_t = typename remove_cvr<T>::type;
-
-    template<typename, typename T>
-    struct has_resize
-    {
-        static_assert(
-            std::integral_constant<T, false>::value,
-            "Second template param needs to be of function type.");
-    };
-
-    template <typename C, typename Ret, typename... Args>
-    struct has_resize<C, Ret(Args...)>
-    {
-    private:
-        template<typename T>
-        static constexpr auto check(T*)
-            -> typename std::is_same<decltype(std::declval<T>().resize(std::declval<Args>()...)), Ret>::type;
-
-        template <typename>
-        static constexpr auto check(...)
-            ->std::false_type;
-
-        typedef decltype(check<C>(nullptr)) type;
-    public:
-        static constexpr bool value = type::value;
-    };
-
-    template <typename C, typename F>
-    constexpr bool has_resize_v = has_resize<C, F>::value;
-
-    template<typename T>
-    struct has_size
-    {
-    private:
-        typedef std::true_type yes;
-        typedef std::false_type no;
-
-        template<typename U> static auto check(int) -> decltype(std::declval<U>().size() == 1, yes());
-        template<typename> static no check(...);
-    public:
-        static constexpr bool value = std::is_same<decltype(check<T>()), yes>::value;
-    };
-
-    //template<typename T>
-    //struct has_begin
-    //{
-    //private:
-    //    typedef std::true_type yes;
-    //    typedef std::false_type no;
-
-    //    template<typename U> static constexpr auto check(int) -> decltype(std::is_same<decltype(std::declval<U>().begin()), typename U::const_iterator>::value, yes());
-    //    template<typename> static no check(...);
-    //public:
-    //    static constexpr bool value = std::is_same<decltype(check<T>()), yes>::value;
-    //};
-
-    //template<typename T>
-    //struct has_end
-    //{
-    //private:
-    //    typedef std::true_type yes;
-    //    typedef std::false_type no;
-
-    //    template<typename U> static constexpr auto check(int) -> decltype(std::is_same<decltype(std::declval<U>().end()), typename U::const_iterator>::value, yes());
-    //    template<typename> static no check(...);
-    //public:
-    //    static constexpr bool value = std::is_same<decltype(check<T>()), yes>::value;
-    //};
-
-
-    HAS_FUNC(begin);
-    HAS_FUNC(end);
-
-    template<typename ContainerType>
-    struct is_container
-    {
-        static constexpr bool value = has_begin_v<ContainerType,begin(),void> && has_end_v<ContainerType, end(),void>;
-    };
-
-    template<typename ContainerType>
-    constexpr bool is_container_v = is_container<ContainerType>::value;
-
 
     template <class T>
     struct is_vector
@@ -307,39 +226,4 @@ namespace legion::core
 
     template<typename T>
     struct is_pointer<T*> { static const bool value = true; };
-
-    /*  template <class T>
-      struct is_container
-          : public std::false_type
-      {};
-
-      template <class T>
-      struct is_container<std::vector<T>>
-          : public std::true_type
-      {};
-
-      template <class T>
-      struct is_container<std::basic_string<T>>
-          :public std::true_type
-      {};
-
-      template <class T>
-      struct is_container<std::deque<T>>
-          :public std::true_type
-      {};
-
-      template <class T>
-      struct is_container<std::list<T>>
-          :public std::true_type
-      {};
-
-      template <class T, size_t N>
-      struct is_container<std::array<T, N>>
-          :public std::true_type
-      {};
-
-      template <class T>
-      struct is_container<std::queue<T>>
-          :public std::true_type
-      {};*/
 }
