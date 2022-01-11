@@ -270,7 +270,7 @@ namespace legion::application
         using namespace filesystem::literals;
 
         m_exit = false;
-        m_defaultIcon = assets::load<image>("Legion Icon", "engine://resources/legion/icon"_view, assets::import_settings<image>{ true, true, false });
+        m_defaultIcon = *assets::load<image>("Legion Icon", "engine://resources/legion/icon"_view, assets::import_settings<image>{ true, true, false });
 
         bindToEvent<events::exit, &WindowSystem::onExit>();
 

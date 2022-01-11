@@ -41,8 +41,11 @@
     <ClCompile Include="data\loaders\objmeshloader.cpp" />
     <ClCompile Include="data\loaders\gltfmeshloader.cpp" />
     <ClCompile Include="time\main_clock.cpp" />
-    <ClCompile Include="time\defaults.cpp" />
     <ClCompile Include="serialization\serializer_views\serializer_view.cpp" />
+    <ClCompile Include="serialization\serializer_views\json.cpp" />
+    <ClCompile Include="serialization\serializer_views\bson.cpp" />
+    <ClCompile Include="serialization\serializer_views\yaml.cpp" />
+    <ClCompile Include="serialization\serializationregistry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -459,6 +462,7 @@
     <ClInclude Include="serialization\serializer_views\yaml.hpp" />
     <ClInclude Include="serialization\serializer_views\json.hpp" />
     <ClInclude Include="serialization\serializer_views\bson.hpp" />
+    <ClInclude Include="serialization\use_embedded_material.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -629,8 +633,5 @@
     <None Include="serialization\serializer_views\serializer_view.inl" />
     <None Include="ecs\prototypes\entity_data_prototype.inl" />
     <None Include="serialization\serialization.inl" />
-    <None Include="serialization\serializer_views\bson.inl" />
-    <None Include="serialization\serializer_views\json.inl" />
-    <None Include="serialization\serializer_views\yaml.inl" />
   </ItemGroup>
 </Project>

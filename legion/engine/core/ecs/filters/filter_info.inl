@@ -4,6 +4,12 @@
 namespace legion::core::ecs
 {
     template<typename... component_types>
+    const id_type filter_info<component_types...>::filter_id = filter_info<component_types...>::generateId<component_types...>();
+
+    template<typename... component_types>
+    const std::array<id_type, sizeof...(component_types)> filter_info<component_types...>::composition = { make_hash<component_types>().id()... };
+
+    template<typename... component_types>
     inline L_ALWAYS_INLINE id_type filter_info<component_types...>::id()
     {
         return filter_id;

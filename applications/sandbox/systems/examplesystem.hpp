@@ -22,10 +22,6 @@ namespace legion::core
     };
 }
 
-ManualReflector(example_comp, value);
-ManualReflector(scene_comp, id, entities);
-
-
 class ExampleSystem final : public legion::System<ExampleSystem>
 {
 public:

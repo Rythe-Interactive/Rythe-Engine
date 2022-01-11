@@ -111,7 +111,7 @@ namespace legion::core::filesystem
             if (result != common::valid)
                 return result.error();
 
-            for (auto& base : m_converters[nameHash(view.get_extension())])
+            for (auto& base : m_converters[nameHash(*view.get_extension())])
             {
                 // Do a safety check if the cast was valid before we call any functions on it.
                 if (typeHash<T>() == base->result_type())
@@ -120,7 +120,7 @@ namespace legion::core::filesystem
                     auto* converter = static_cast<resource_converter<T, Settings...>*>(base.get());
 
                     // Attempt the conversion and return the result.
-                    return converter->load(result, std::forward<Settings>(settings)...);
+                    return converter->load(*result, std::forward<Settings>(settings)...);
                 }
             }
 

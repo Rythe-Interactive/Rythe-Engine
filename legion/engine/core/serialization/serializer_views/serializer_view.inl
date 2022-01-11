@@ -41,57 +41,22 @@ namespace legion::core::serialization
         return false;
     }
 
-    bool legion::core::serialization::serializer_view::serialize(const std::string& name, void* value, id_type typeId)
-    {
-        if (typeId == typeHash<int>())
-        {
-            serialize_int(name, *static_cast<int*>(value));
-            return true;
-        }
-        else if (typeId == typeHash<float>())
-        {
-            serialize_float(name, *static_cast<float*>(value));
-            return true;
-        }
-        else if (typeId == typeHash<double>())
-        {
-            serialize_double(name, *static_cast<double*>(value));
-            return true;
-        }
-        else if (typeId == typeHash<bool>())
-        {
-            serialize_bool(name, *static_cast<bool*>(value));
-            return true;
-        }
-        else if (typeId == typeHash<std::string>())
-        {
-            serialize_string(name, *static_cast<std::string*>(value));
-            return true;
-        }
-        else if (typeId == typeHash<id_type>())
-        {
-            serialize_id_type(name, *static_cast<id_type*>(value));
-            return true;
-        }
-        return false;
-    }
-
     template<typename Type>
-    inline Type serializer_view::deserialize(std::string name)
+    inline common::result<Type, fs_error> serializer_view::deserialize(const std::string& name)
     {
         using raw_type = std::decay_t<Type>;
 
         if constexpr (std::is_same_v<raw_type, int>)
         {
-            return deserialize_int(name).value();
+            return deserialize_int(name);
         }
         else if constexpr (std::is_same_v<raw_type, float>)
         {
-            return deserialize_float(name).value();
+            return deserialize_float(name);
         }
         else if constexpr (std::is_same_v<raw_type, double>)
         {
-            return deserialize_double(name).value();
+            return deserialize_double(name);
         }
         else if constexpr (std::is_same_v<raw_type, bool>)
         {
@@ -99,12 +64,12 @@ namespace legion::core::serialization
         }
         else if constexpr (std::is_same_v<raw_type, std::string>)
         {
-            return deserialize_string(name).value();
+            return deserialize_string(name);
         }
         else if constexpr (std::is_same_v<raw_type, id_type>)
         {
-            return deserialize_id_type(name).value();
+            return deserialize_id_type(name);
         }
-        return;
+        return legion_fs_error("Type was not a primitive serializable type.");
     }
 }

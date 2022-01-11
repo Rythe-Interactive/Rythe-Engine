@@ -1,6 +1,8 @@
 #pragma once
 #include <core/ecs/ecs.hpp>
-#include<core/types/meta.hpp>
+#include <core/types/meta.hpp>
+#include <core/types/reflector.hpp>
+#include <core/types/prototype.hpp>
 #include <core/filesystem/filesystem.hpp>
 #include <core/serialization/serializer_views/json.hpp>
 #include <core/serialization/serializer_views/bson.hpp>
@@ -15,8 +17,8 @@ namespace legion::core::serialization
         serializer_base() = default;
         ~serializer_base() = default;
 
-        virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, const std::string& name) LEGION_PURE;
-        virtual common::result<void, fs_error> deserialize(void* target, serializer_view& view, const std::string& name) LEGION_PURE;
+        virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, std::string_view name) LEGION_PURE;
+        virtual common::result<void, fs_error> deserialize(void* target, serializer_view& view, std::string_view name) LEGION_PURE;
         virtual id_type type_size() LEGION_PURE;
     };
 
@@ -26,8 +28,8 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& s_view, const std::string& name) override;
-        virtual common::result<void, fs_error> deserialize(void* target, serializer_view& s_view, const std::string& name) override;
+        virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& s_view, std::string_view name) override;
+        virtual common::result<void, fs_error> deserialize(void* target, serializer_view& s_view, std::string_view name) override;
         virtual id_type type_size() override { return sizeof(serializable_type); }
     };
 
@@ -37,8 +39,8 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, const std::string& name) override;
-        virtual common::result<void, fs_error> deserialize(void* target, serializer_view& s_view, const std::string& name) override;
+        virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, std::string_view name) override;
+        virtual common::result<void, fs_error> deserialize(void* target, serializer_view& s_view, std::string_view name) override;
         virtual id_type type_size() override { return sizeof(ecs::entity_data); }
     };
 
@@ -48,8 +50,8 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, const std::string& name) override;
-        virtual common::result<void, fs_error> deserialize(void* target, serializer_view& s_view, const std::string& name) override;
+        virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, std::string_view name) override;
+        virtual common::result<void, fs_error> deserialize(void* target, serializer_view& s_view, std::string_view name) override;
         virtual id_type type_size() override { return sizeof(ecs::entity); }
     };
 

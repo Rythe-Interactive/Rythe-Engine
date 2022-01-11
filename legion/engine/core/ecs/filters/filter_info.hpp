@@ -58,11 +58,11 @@ namespace legion::core::ecs
     public:
         /**@brief The actual id of the filter variant.
          */
-        static constexpr id_type filter_id = generateId<component_types...>();
+        static const id_type filter_id;
 
         /**@brief Array of the individual component type ids.
          */
-        static constexpr std::array<id_type, sizeof...(component_types)> composition = { make_hash<component_types>()... };
+        static const std::array<id_type, sizeof...(component_types)> composition;
 
         virtual id_type id();
 

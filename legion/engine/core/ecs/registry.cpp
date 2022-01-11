@@ -263,28 +263,6 @@ namespace legion::core::ecs
         return getFamily(typeId)->create_component(target);
     }
 
-    //void* Registry::createComponent(id_type typeId, entity target, const serialization::component_prototype_base& prototype)
-    //{
-    //    OPTICK_EVENT();
-    //    // Update entity composition.
-    //    instance.m_entityCompositions.at(target).insert(typeId);
-    //    // Update filters.
-    //    FilterRegistry::markComponentAdd(typeId, target);
-    //    // Actually create and return the component using the prototype.
-    //    return getFamily(typeId)->create_component(target, prototype);
-    //}
-
-    //void* Registry::createComponent(id_type typeId, entity target, serialization::component_prototype_base&& prototype)
-    //{
-    //    OPTICK_EVENT();
-    //    // Update entity composition.
-    //    instance.m_entityCompositions.at(target).insert(typeId);
-    //    // Update filters.
-    //    FilterRegistry::markComponentAdd(typeId, target);
-    //    // Actually create and return the component using the prototype.
-    //    return getFamily(typeId)->create_component(target, std::move(prototype));
-    //}
-
     void* Registry::createComponent(id_type typeId, entity target, const void* component)
     {
         OPTICK_EVENT();
@@ -292,7 +270,7 @@ namespace legion::core::ecs
 
         FilterRegistry::markComponentAdd(typeId, target);
 
-        return getFamily(typeId)->create_component(target,std::move(component));
+        return getFamily(typeId)->create_component(target, component);
     }
 
 

@@ -12,16 +12,19 @@ namespace legion::core
         id_type typeId;
         std::string_view typeName;
         std::vector<member_reference> members;
+        void* data;
 
         reflector() = default;
-        reflector(id_type id, std::string_view name, std::vector<member_reference> _members) : typeId(id), typeName(name), members(_members) {}
-        reflector(const reflector& refl) : typeId(refl.typeId), typeName(refl.typeName), members(refl.members) {}
+        reflector(id_type id, std::string_view name, std::vector<member_reference> _members, void* _adress)
+            : typeId(id), typeName(name), members(_members), data(_adress) {}
+        reflector(const reflector& refl) : typeId(refl.typeId), typeName(refl.typeName), members(refl.members), data(refl.data) {}
 
         reflector& operator=(const reflector& rhs)
         {
             typeId = rhs.typeId;
             typeName = rhs.typeName;
             members = rhs.members;
+            data = rhs.data;
 
             return *this;
         }
@@ -100,8 +103,9 @@ namespace legion::core
     };
 
     template<typename T>
-    L_NODISCARD reflector make_reflector(T& obj)
+    L_NODISCARD auto make_reflector(T& obj) -> std::conditional_t<std::is_const_v<T>, const reflector, reflector>
     {
-        return reflector{ localTypeHash<T>(), localNameOfType<T>(),std::vector<member_reference>() };
+        ptr_type adress = reinterpret_cast<ptr_type>(std::addressof(obj));
+        return reflector{ typeHash<T>(), nameOfType<T>(), std::vector<member_reference>(), reinterpret_cast<void*>(adress) };
     }
 }

@@ -110,11 +110,6 @@ namespace legion::core::common
 
         void mark_handled() const noexcept { m_handled = true; }
 
-        L_NODISCARD operator success_type() { return value(); }
-        L_NODISCARD operator success_type() const { return value(); }
-        L_NODISCARD operator error_type() { return error(); }
-        L_NODISCARD operator error_type() const { return error(); }
-
         L_NODISCARD success_type& operator*() { return m_success; }
         L_NODISCARD const success_type& operator*() const { return m_success; }
         L_NODISCARD success_type* operator->() { return &m_success; }
@@ -225,9 +220,6 @@ namespace legion::core::common
 
         void mark_handled() const noexcept { m_handled = true; }
 
-        L_NODISCARD operator error_type() { return error(); }
-        L_NODISCARD operator error_type() const { return error(); }
-
         L_NODISCARD bool has_warnings() const noexcept { return !m_warnings.empty(); }
         L_NODISCARD size_t warning_count() const noexcept { return m_warnings.size(); }
         L_NODISCARD const Warning& warning_at(size_t i) const { return m_warnings[i]; }
@@ -291,9 +283,6 @@ namespace legion::core::common
             if (m_success) return *m_success;
             throw legion_exception_msg("this result is invalid!");
         }
-
-        L_NODISCARD operator success_type() { return value(); }
-        L_NODISCARD operator success_type() const { return value(); }
 
         L_NODISCARD success_type& operator*() { return *m_success; }
         L_NODISCARD const success_type& operator*() const { return *m_success; }

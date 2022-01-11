@@ -145,7 +145,7 @@ namespace legion::audio
         if (result != common::valid)
         {
             //log::error("Audio file wrong!");
-            log::error("Error while loading file: {}, {}", static_cast<std::string>(file.get_filename()), result.error());
+            log::error("Error while loading file: {}, {}", *file.get_filename(), result.error());
             return invalid_audio_segment_handle;
         }
 
@@ -155,7 +155,7 @@ namespace legion::audio
 
             if (settings.channel_processing == audio_import_settings::channel_processing_setting::split_channels)
             {
-                audio_segment as = static_cast<audio_segment>(result);
+                audio_segment as = *result;
                 int amount = 1;
                 audio_segment* segment = &as;
                 log::debug("next is nullptr: {}", as.getNextAudioSegment() == nullptr);
@@ -170,7 +170,7 @@ namespace legion::audio
             }
 
             auto* pairPointer = new std::pair<async::rw_spinlock, audio_segment>();                
-            pairPointer->second = static_cast<audio_segment>(result);
+            pairPointer->second = *result;
             m_segments.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::rw_spinlock, audio_segment>>(pairPointer)));
         }
 

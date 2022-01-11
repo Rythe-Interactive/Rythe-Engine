@@ -529,6 +529,7 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="serialization\serializer.hpp" />
     <ClInclude Include="serialization\serializer_views\serializer_view.hpp" />
     <ClInclude Include="serialization\serializer_views\yaml.hpp" />
+    <ClInclude Include="serialization\use_embedded_material.hpp" />
     <ClInclude Include="time\main_clock.hpp" />
     <ClInclude Include="time\utils.hpp" />
     <ClInclude Include="types\prototype.hpp" />
@@ -581,9 +582,12 @@ del /q ".\xcopyexclude"</Command>
     <ClCompile Include="scheduling\process.cpp" />
     <ClCompile Include="scheduling\processchain.cpp" />
     <ClCompile Include="scheduling\scheduler.cpp" />
+    <ClCompile Include="serialization\serializationregistry.cpp" />
+    <ClCompile Include="serialization\serializer_views\bson.cpp" />
+    <ClCompile Include="serialization\serializer_views\json.cpp" />
     <ClCompile Include="serialization\serializer_views\serializer_view.cpp" />
+    <ClCompile Include="serialization\serializer_views\yaml.cpp" />
     <ClCompile Include="time\main_clock.cpp" />
-    <ClCompile Include="time\defaults.cpp" />
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -751,9 +755,6 @@ del /q ".\xcopyexclude"</Command>
     <None Include="scheduling\processchain.inl" />
     <None Include="scheduling\scheduler.inl" />
     <None Include="serialization\serialization.inl" />
-    <None Include="serialization\serializer_views\bson.inl" />
-    <None Include="serialization\serializer_views\json.inl" />
-    <None Include="serialization\serializer_views\yaml.inl" />
     <None Include="time\utils.inl" />
     <None Include="serialization\serializationregistry.inl" />
     <None Include="serialization\serializer.inl" />

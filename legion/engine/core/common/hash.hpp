@@ -43,8 +43,8 @@ namespace legion::core
         template<typename T>
         std::string_view register_name(id_type id)
         {
-            auto [iterator, emplaced] = type_data::id_to_name.emplace(id, nameOfType());
-            return *iterator;
+            auto [iterator, emplaced] = type_data::id_to_name.emplace(id, std::string(nameOfType<T>()));
+            return iterator->second;
         }
     }
 

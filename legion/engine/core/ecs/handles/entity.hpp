@@ -22,16 +22,7 @@ namespace legion::core
 
         struct entity;
     }
-
-    namespace serialization
-    {
-
-        template<typename T>
-        struct prototype;
-    }
 }
-
-
 
 #if !defined(DOXY_EXCLUDE)
 namespace std
@@ -300,16 +291,6 @@ namespace legion::core::ecs
         template<typename archetype_type, typename component_type0, typename component_type1, typename... component_typeN>
         typename archetype_type::handle_group add_component(component_type0&& value0, component_type1&& value1, component_typeN&&... valueN);
 
-        /**@brief Creates and adds a new component of a certain type to this entity. Component is serialized from a prototype.
-         * @tparam component_type Type of the component to add.
-         * @param prot Prototype to serialize component from.
-         * @return Component handle to the component.
-         */
-        template<typename component_type>
-        component<component_type> add_component(const serialization::prototype<component<component_type>>& prot);
-        template<typename component_type>
-        component<component_type> add_component(serialization::prototype<component<component_type>>&& prot);
-
         /**@brief Checks whether this entity has a certain component.
          * @tparam component_type Type of the component to check for.
          * @return True if the entity has the component, false if not.
@@ -342,5 +323,3 @@ namespace legion::core::ecs
         void remove_component();
     };
 }
-ManualReflector(ecs::entity, data);
-
