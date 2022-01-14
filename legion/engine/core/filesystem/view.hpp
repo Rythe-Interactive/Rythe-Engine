@@ -149,7 +149,7 @@ namespace legion::core::filesystem
     class view_util
     {
     public:
-        static std::string view_util::get_view_path(const view& view, bool mustBeFile);
+        static std::string get_view_path(const view& view, bool mustBeFile);
     };
 
 

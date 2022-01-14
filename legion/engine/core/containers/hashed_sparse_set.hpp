@@ -24,18 +24,24 @@ namespace legion::core
      * @note With default container parameters iterators may be invalidated upon resize. See reference of std::vector.
      * @note Removing item might invalidate the iterator of the last item in the dense container.
      */
-    template <typename value_type, typename hash_type = std::hash<value_type>, template<typename...> typename dense_type = std::vector, template<typename...> typename sparse_type = std::unordered_map>
+    template <typename Value, typename Hash = std::hash<Value>, template<typename...> typename Dense = std::vector, template<typename...> typename Sparse = std::unordered_map>
     class hashed_sparse_set
     {
     public:
-        using self_type = hashed_sparse_set<value_type, hash_type, dense_type, sparse_type>;
-        using self_reference = self_type&;
-        using self_const_reference = const self_type&;
+        using value_type = Value;
+        using hash_type = Hash;
+        template<typename... Args>
+        using dense_type = Dense<Args...>;
+        template<typename... Args>
+        using sparse_type = Sparse<Args...>;
 
         using value_reference = value_type&;
         using value_const_reference = const value_type&;
         using value_pointer = value_type*;
-        using value_type = value_type;
+
+        using self_type = hashed_sparse_set<value_type, hash_type, dense_type, sparse_type>;
+        using self_reference = self_type&;
+        using self_const_reference = const self_type&;
 
         using sparse_container = sparse_type<value_type, size_type, hash_type>;
         using dense_container = dense_type<value_type>;
