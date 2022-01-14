@@ -7,27 +7,26 @@
 
 namespace legion::core::serialization
 {
-    template<typename Type, typename ViewType>
-    common::result<void, fs_error> serialize(ViewType& s_view, Type data);
-
-    template<typename ViewType = serializer_view&, typename Type>
-    common::result<void, fs_error> write(fs::view file, Type data);
-
-    template<typename ViewType = serializer_view&, typename Type>
-    common::result<void, fs_error> write(Type data, fs::view file);
-
-
-    template<typename Type, typename ViewType>
-    common::result<void, fs_error> deserialize(ViewType& s_view);
+    template<typename ViewType, typename Type>
+    common::result<void, fs_error> serialize(ViewType& s_view, Type&& data, std::string_view name);
 
     template<typename ViewType, typename Type>
-    common::result<void, fs_error> load(fs::view file);
+    common::result<void, fs_error> write(fs::view file, Type&& data, std::string_view name);
 
     template<typename ViewType, typename Type>
-    common::result<void, fs_error> load(std::vector<byte> data);
+    common::result<void, fs_error> write(Type&& data, fs::view file, std::string_view name);
 
-    template<typename ViewType, typename Type, typename Iterator>
-    common::result<void, fs_error> load(Iterator begin, Iterator end);
+    template<typename Type, typename ViewType>
+    common::result<Type, fs_error> deserialize(ViewType& s_view, std::string_view name);
+
+    template<typename ViewType, typename Type>
+    common::result<Type, fs_error> load(const fs::view& file, std::string_view name);
+
+    template<typename ViewType, typename Type>
+    common::result<Type, fs_error> load(std::vector<byte> data, std::string_view name);
+
+    template<typename ViewType, typename Iterator, typename Type>
+    common::result<Type, fs_error> load(Iterator begin, Iterator end, std::string_view name);
 }
 
 #include <core/serialization/serialization.inl>

@@ -1,14 +1,15 @@
 #pragma once
+#include <map>
+#include <vector>
+#include <memory>
+
+#include <argh.h>
+
 #include <core/platform/platform.hpp>
 #include <core/engine/module.hpp>
 #include <core/types/primitives.hpp>
 #include <core/types/meta.hpp>
 #include <core/logging/logging.hpp>
-#include <argh.h>
-
-#include <map>
-#include <vector>
-#include <memory>
 
 /**
  * @file engine.hpp

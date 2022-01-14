@@ -1,6 +1,14 @@
 #include <core/serialization/serializer.hpp>
 #pragma once
 
+#define EndReadPropagate(_result, _warnings, _view)                                                 \
+        _warnings.insert(_warnings.end(), _result.warnings().begin(), _result.warnings().end());    \
+        if (_result.has_error()) { _view.end_read(); return { _result.error(), _warnings }; }
+
+#define EndObjectPropagate(_result, _warnings, _view)                                               \
+        _warnings.insert(_warnings.end(), _result.warnings().begin(), _result.warnings().end());    \
+        if (_result.has_error()) { _view.end_object(); return { _result.error(), _warnings }; }
+
 namespace legion::core::serialization
 {
     namespace detail
@@ -11,25 +19,53 @@ namespace legion::core::serialization
             using container_type = typename remove_cvr_t<type>;
             using value_type = remove_cvr_t<typename container_type::value_type>;
 
-            s_view.start_container(std::string(name));
+            s_view.start_object(std::string(name));
+            s_view.serialize<std::string>("type_name", nameOfType<container_type>());
+            s_view.start_container("data");
 
             std::vector<std::string> warnings{};
             size_type i = 0;
             for (auto it = container.begin(); it != container.end(); ++it, i++)
             {
-                auto _serializer = serializer_registry::get_serializer<value_type>();
-
-                auto result = _serializer->serialize(&(*it), s_view, "item_" + std::to_string(i));
-                warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
-
-                if (result.has_error())
+                if constexpr (is_serializable_v<value_type>)
                 {
-                    s_view.end_container();
-                    return { result.error(), warnings };
+                    if (!s_view.serialize("", *it))
+                    {
+                        s_view.end_container();
+                        s_view.end_object();
+                        return { legion_fs_error("Type was not a primitive serializable type."), warnings };
+                    }
+                }
+                else if constexpr (is_container_v<value_type>)
+                {
+                    auto result = detail::serialize_container(*it, s_view, "");
+                    warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
+
+                    if (result.has_error())
+                    {
+                        s_view.end_container();
+                        s_view.end_object();
+                        return { result.error(), warnings };
+                    }
+                }
+                else
+                {
+                    auto _serializer = serializer_registry::get_serializer<value_type>();
+
+                    auto result = _serializer->serialize(&(*it), s_view, "");
+                    warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
+
+                    if (result.has_error())
+                    {
+                        s_view.end_container();
+                        s_view.end_object();
+                        return { result.error(), warnings };
+                    }
                 }
             }
 
             s_view.end_container();
+            s_view.end_object();
 
             return { common::success, warnings };
         }
@@ -39,8 +75,29 @@ namespace legion::core::serialization
         {
             using container_type = typename remove_cvr_t<type>;
             using value_type = remove_cvr_t<typename container_type::value_type>;
+            std::vector<std::string> warnings{};
 
-            s_view.start_read(std::string(name));
+            {
+                auto result = s_view.start_read(std::string(name));
+                PropagateErrors(result, warnings);
+            }
+
+            {
+                auto result = s_view.deserialize<std::string>("type_name");
+                EndReadPropagate(result, warnings, s_view);
+
+                if (*result != nameOfType<container_type>())
+                {
+                    s_view.end_read();
+                    return { legion_fs_error("Item of name " + std::string(name) + " is not of type " + std::string(nameOfType<container_type>()) + " but of type " + *result + "."), warnings };
+                }
+            }
+
+            {
+                auto result = s_view.start_read("data");
+                EndReadPropagate(result, warnings, s_view);
+            }
+
             size_type size = s_view.current_item_size();
 
             std::vector<value_type> tempContainer{};
@@ -48,24 +105,53 @@ namespace legion::core::serialization
 
             byte buffer[sizeof(value_type)];
             value_type* itemPtr = reinterpret_cast<value_type*>(buffer);
-            std::vector<std::string> warnings{};
 
             for (size_type i = 0; i < size; i++)
             {
-                auto _serializer = serializer_registry::get_serializer<value_type>();
-
-                auto result = _serializer->deserialize(buffer, s_view, "item_" + std::to_string(i));
-                warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
-
-                if (result.has_error())
+                if constexpr (is_serializable_v<value_type>)
                 {
-                    s_view.end_read();
-                    return { result.error(), warnings };
+                    auto result = s_view.deserialize<value_type>("");
+                    warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
+
+                    if (result.has_error())
+                    {
+                        s_view.end_read();
+                        s_view.end_read();
+                        return { result.error(), warnings };
+                    }
+                    new(itemPtr) value_type(*result);
+                }
+                else if constexpr (is_container_v<value_type>)
+                {
+                    auto result = detail::deserialize_container(*itemPtr, s_view, "");
+                    warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
+
+                    if (result.has_error())
+                    {
+                        s_view.end_read();
+                        s_view.end_read();
+                        return { result.error(), warnings };
+                    }
+                }
+                else
+                {
+                    auto _serializer = serializer_registry::get_serializer<value_type>();
+
+                    auto result = _serializer->deserialize(buffer, s_view, "");
+                    warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
+
+                    if (result.has_error())
+                    {
+                        s_view.end_read();
+                        s_view.end_read();
+                        return { result.error(), warnings };
+                    }
                 }
 
                 tempContainer.push_back(*itemPtr);
             }
 
+            s_view.end_read();
             s_view.end_read();
 
             using iterator = typename container_type::iterator;
@@ -78,7 +164,7 @@ namespace legion::core::serialization
                 container.insert(tempContainer.begin(), tempContainer.end());
             else if constexpr (has_size_v<container_type, size_type()> && has_at_v<container_type, value_type & (size_type)>)
             {
-                for (size_type i = 0; i < container.size(); i++)
+                for (size_type i = 0; i < tempContainer.size(); i++)
                     container[i] = tempContainer[i];
             }
 
@@ -93,17 +179,12 @@ namespace legion::core::serialization
             std::vector<std::string> warnings{};
 
             s_view.start_object(std::string(name));
-
+            s_view.serialize<std::string>("type_name", nameOfType<ecs::entity_data>());
             s_view.serialize("name", ent_data.name);
             s_view.serialize("active", ent_data.active);
-            auto result = detail::serialize_container(ent_data.children, s_view, "children");
-            warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
-
-            if (result.has_error())
-            {
-                s_view.end_object();
-                return { result.error(), warnings };
-            }
+            std::vector<ecs::entity> children{ ent_data.children.begin(), ent_data.children.end() };
+            auto result = detail::serialize_container(children, s_view, "children");
+            EndObjectPropagate(result, warnings, s_view);
 
             s_view.start_container("components");
 
@@ -143,71 +224,114 @@ namespace legion::core::serialization
             return { common::success, warnings };
         }
 
-        inline common::result<void, fs_error> deserialize_ent_data(void* target, serializer_view& s_view, std::string_view name)
+        inline common::result<void, fs_error> deserialize_ent_data(ecs::entity_data* target, serializer_view& s_view, std::string_view name)
         {
-            s_view.start_read(std::string(name));
             std::vector<std::string> warnings{};
 
-            //Entity
-            auto ent = ecs::Registry::createEntity();
-            ent->name = s_view.deserialize<std::string>("name");
-            ent->active = s_view.deserialize<bool>("active");
-            ent->alive = s_view.deserialize<bool>("alive");
-
-            //Children
-            ecs::entity_set children{};
-            auto result = deserialize_container(children, s_view, "children");
-            warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
-
-            if (result.has_error())
             {
-                s_view.end_object();
-                return { result.error(), warnings };
+                auto result = s_view.start_read(std::string(name)); // Object
+                PropagateErrors(result, warnings);
+            }
+
+            {
+                auto result = s_view.deserialize<std::string>("type_name");
+                EndReadPropagate(result, warnings, s_view);
+
+                if (*result != nameOfType<ecs::entity_data>())
+                {
+                    s_view.end_read();
+                    return { legion_fs_error("Item of name " + std::string(name) + " is not of type " + std::string(nameOfType<ecs::entity_data>()) + " but of type " + *result + "."), warnings };
+                }
+            }
+
+            // Entity
+            auto ent = ecs::Registry::createEntity();
+
+            {
+                auto result = s_view.deserialize<std::string>("name");
+                EndReadPropagate(result, warnings, s_view);
+                ent->name = *result;
+            }
+
+            {
+                auto result = s_view.deserialize<bool>("active");
+                EndReadPropagate(result, warnings, s_view);
+                ent->active = *result;
+            }
+
+            // Children
+            std::vector<ecs::entity> children{};
+            {
+                auto result = deserialize_container(children, s_view, "children");
+                EndReadPropagate(result, warnings, s_view);
             }
 
             for (auto& child : children)
                 ent.add_child(child);
 
-            //Components
-            s_view.start_read("components");
+            // Components
+            {
+                auto result = s_view.start_read("components");
+                EndReadPropagate(result, warnings, s_view);
+            }
+
             for (size_type i = 0; i < s_view.current_item_size(); i++)
             {
-                auto componentName = s_view.get_key();
-                id_type typeId = nameHash(componentName);
+                s_view.peak_ahead("");
+                id_type typeId;
+
+                {
+                    auto result = s_view.deserialize<std::string>("type_name");
+                    warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
+
+                    if (result.has_error())
+                    {
+                        s_view.end_read(); // Components
+                        s_view.end_read(); // Object
+                        return { result.error(), warnings };
+                    }
+
+                    typeId = nameHash(*result);
+                }
 
                 auto _serializer = serializer_registry::get_serializer(typeId);
 
                 byte_vec buffer{};
                 buffer.resize(_serializer->type_size());
 
-                auto result = _serializer->deserialize(buffer.data(), s_view, componentName);
-                warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
-
-                if (result.has_error())
                 {
-                    s_view.end_object();
-                    return { result.error(), warnings };
+                    auto result = _serializer->deserialize(buffer.data(), s_view, "");
+
+                    warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
+
+                    if (result.has_error())
+                    {
+                        s_view.end_read(); // Components
+                        s_view.end_read(); // Object
+                        return { result.error(), warnings };
+                    }
                 }
 
                 ecs::Registry::createComponent(typeId, ent, buffer.data());
             }
 
-            s_view.end_read();
+            s_view.end_read(); // Components
+            s_view.end_read(); // Object
 
-            *static_cast<ecs::entity*>(target) = ent;
+            new(target) ecs::entity_data(*ent.data);
 
             return { common::success, warnings };
         }
     }
 
-    inline common::result<void, fs_error>  serializer<ecs::entity_data>::serialize(const void* ent, serializer_view& s_view, std::string_view name)
+    inline common::result<void, fs_error> serializer<ecs::entity_data>::serialize(const void* ent, serializer_view& s_view, std::string_view name)
     {
         return detail::serialize_ent_data(*static_cast<const ecs::entity_data*>(ent), s_view, name);
     }
 
     inline common::result<void, fs_error> serializer<ecs::entity_data>::deserialize(void* target, serializer_view& view, std::string_view name)
     {
-        return detail::deserialize_ent_data(target, view, name);
+        return detail::deserialize_ent_data(reinterpret_cast<ecs::entity_data*>(target), view, name);
     }
 
     inline common::result<void, fs_error> serializer<ecs::entity>::serialize(const void* ent, serializer_view& s_view, std::string_view name)
@@ -217,9 +341,10 @@ namespace legion::core::serialization
 
     inline common::result<void, fs_error> serializer<ecs::entity>::deserialize(void* target, serializer_view& view, std::string_view name)
     {
-        ecs::entity_data data;
-        auto result = detail::deserialize_ent_data(&data, view, name);
-        *static_cast<ecs::entity*>(target) = ecs::Registry::getEntity(data.id);
+        byte rawData[sizeof(ecs::entity_data)];
+        ecs::entity_data* data = reinterpret_cast<ecs::entity_data*>(rawData);
+        auto result = detail::deserialize_ent_data(data, view, name);
+        *static_cast<ecs::entity*>(target) = ecs::Registry::getEntity(data->id);
         return result;
     }
 
@@ -230,11 +355,11 @@ namespace legion::core::serialization
 
         auto* ptr = static_cast<const serializable_type*>(serializable);
 
-        if constexpr (is_serializable<serializable_type>::value)
+        if constexpr (is_serializable_v<serializable_type>)
         {
             return s_view.serialize(std::string(name), *ptr) ? common::success : legion_fs_error("Type was not a primitive serializable type.");
         }
-        else if constexpr (is_container<serializable_type>::value)
+        else if constexpr (is_container_v<serializable_type>)
         {
             return detail::serialize_container(*ptr, s_view, name);
         }
@@ -244,6 +369,7 @@ namespace legion::core::serialization
             std::vector<std::string> warnings{};
 
             s_view.start_object(std::string(name));
+            s_view.serialize<std::string>("type_name", nameOfType<serializable_type>());
 
             for (auto& var : refl.members)
             {
@@ -251,21 +377,14 @@ namespace legion::core::serialization
                 {
                     auto _serializer = serializer_registry::get_serializer(var.object.typeId);
                     auto result = _serializer->serialize(var.object.data, s_view, var.name);
-
-                    warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
-
-                    if (result.has_error())
-                    {
-                        s_view.end_object();
-                        return { result.error(), warnings };
-                    }
+                    EndObjectPropagate(result, warnings, s_view);
                 }
                 else
                 {
                     if (!s_view.serialize(std::string(var.name), var.primitive.data, var.primitive.typeId))
                     {
                         s_view.end_object();
-                        return { legion_fs_error("Type was not a primitive serializable type."), warnings};
+                        return { legion_fs_error("Type was not a primitive serializable type."), warnings };
                     }
                 }
             }
@@ -281,24 +400,40 @@ namespace legion::core::serialization
         using serializable_type = typename remove_cvr_t<type>;
         auto* ptr = static_cast<serializable_type*>(target);
 
-        if constexpr (is_serializable<serializable_type>::value)
+        if constexpr (is_serializable_v<serializable_type>)
         {
             auto result = s_view.deserialize<serializable_type>(std::string(name));
             if (result.has_error())
                 return { result.error(), result.warnings() };
             else
-                *ptr = result.value();
+                new(ptr) serializable_type(result.value());
         }
-        else  if constexpr (is_container<serializable_type>::value)
+        else  if constexpr (is_container_v<serializable_type>)
         {
+            new(ptr) serializable_type();
             return detail::deserialize_container(*ptr, s_view, name);
         }
         else
         {
+            new(ptr) serializable_type();
             reflector refl = make_reflector(*ptr);
             std::vector<std::string> warnings{};
 
-            s_view.start_read(std::string(name));
+            {
+                auto result = s_view.start_read(std::string(name));
+                PropagateErrors(result, warnings);
+            }
+
+            {
+                auto result = s_view.deserialize<std::string>("type_name");
+                EndReadPropagate(result, warnings, s_view);
+
+                if (*result != nameOfType<serializable_type>())
+                {
+                    s_view.end_read();
+                    return { legion_fs_error("Item of name " + std::string(name) + " is not of type " + std::string(nameOfType<serializable_type>()) + " but of type " + *result + "."), warnings };
+                }
+            }
 
             for (auto& var : refl.members)
             {
@@ -306,26 +441,12 @@ namespace legion::core::serialization
                 {
                     auto _serializer = serializer_registry::get_serializer(var.object.typeId);
                     auto result = _serializer->deserialize(var.object.data, s_view, var.name);
-
-                    warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
-
-                    if (result.has_error())
-                    {
-                        s_view.end_read();
-                        return { result.error(), warnings };
-                    }
+                    EndReadPropagate(result, warnings, s_view);
                 }
                 else
                 {
                     auto result = s_view.deserialize(std::string(var.name), var.primitive.data, var.primitive.typeId);
-
-                    warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
-
-                    if (result.has_error())
-                    {
-                        s_view.end_read();
-                        return { result.error(), warnings };
-                    }
+                    EndReadPropagate(result, warnings, s_view);
                 }
             }
             s_view.end_read();
@@ -334,3 +455,6 @@ namespace legion::core::serialization
         }
     }
 }
+
+#undef EndReadPropagate
+#undef EndObjectPropagate

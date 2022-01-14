@@ -1,1 +1,126 @@
-{"legion::core::ecs::entity_data":{"name":"Root","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[{"legion::core::ecs::entity_data":{"name":"7","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[{"legion::core::ecs::entity_data":{"name":"8","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[],"components":[{"11949557849597501724":{"value":1}}]}}],"components":[{"11949557849597501724":{"value":1}},{"5024733841066084311":{"x":0.0,"y":0.0,"z":0.0}},{"5210677229598950623":{"x":0.0,"y":0.0,"z":0.0}}]}},{"legion::core::ecs::entity_data":{"name":"9","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[{"legion::core::ecs::entity_data":{"name":"10","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[],"components":[{"11949557849597501724":{"value":1}}]}}],"components":[{"11949557849597501724":{"value":1}},{"5024733841066084311":{"x":0.0,"y":0.0,"z":0.0}},{"5210677229598950623":{"x":0.0,"y":0.0,"z":0.0}}]}},{"legion::core::ecs::entity_data":{"name":"11","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[{"legion::core::ecs::entity_data":{"name":"12","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[],"components":[{"11949557849597501724":{"value":1}}]}}],"components":[{"11949557849597501724":{"value":1}},{"5024733841066084311":{"x":0.0,"y":0.0,"z":0.0}},{"5210677229598950623":{"x":0.0,"y":0.0,"z":0.0}}]}},{"legion::core::ecs::entity_data":{"name":"13","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[{"legion::core::ecs::entity_data":{"name":"14","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[],"components":[{"11949557849597501724":{"value":1}}]}}],"components":[{"11949557849597501724":{"value":1}},{"5024733841066084311":{"x":0.0,"y":0.0,"z":0.0}},{"5210677229598950623":{"x":0.0,"y":0.0,"z":0.0}}]}},{"legion::core::ecs::entity_data":{"name":"15","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[{"legion::core::ecs::entity_data":{"name":"16","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[],"components":[{"11949557849597501724":{"value":1}}]}}],"components":[{"11949557849597501724":{"value":1}},{"5024733841066084311":{"x":0.0,"y":0.0,"z":0.0}},{"5210677229598950623":{"x":0.0,"y":0.0,"z":0.0}}]}},{"legion::core::ecs::entity_data":{"name":"17","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[{"legion::core::ecs::entity_data":{"name":"18","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[],"components":[{"11949557849597501724":{"value":1}}]}}],"components":[{"11949557849597501724":{"value":1}},{"5024733841066084311":{"x":0.0,"y":0.0,"z":0.0}},{"5210677229598950623":{"x":0.0,"y":0.0,"z":0.0}}]}},{"legion::core::ecs::entity_data":{"name":"19","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[{"legion::core::ecs::entity_data":{"name":"20","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[],"components":[{"11949557849597501724":{"value":1}}]}}],"components":[{"11949557849597501724":{"value":1}},{"5024733841066084311":{"x":0.0,"y":0.0,"z":0.0}},{"5210677229598950623":{"x":0.0,"y":0.0,"z":0.0}}]}},{"legion::core::ecs::entity_data":{"name":"21","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[{"legion::core::ecs::entity_data":{"name":"22","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[],"components":[{"11949557849597501724":{"value":1}}]}}],"components":[{"11949557849597501724":{"value":1}},{"5024733841066084311":{"x":0.0,"y":0.0,"z":0.0}},{"5210677229598950623":{"x":0.0,"y":0.0,"z":0.0}}]}},{"legion::core::ecs::entity_data":{"name":"23","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[{"legion::core::ecs::entity_data":{"name":"24","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[],"components":[{"11949557849597501724":{"value":1}}]}}],"components":[{"11949557849597501724":{"value":1}},{"5024733841066084311":{"x":0.0,"y":0.0,"z":0.0}},{"5210677229598950623":{"x":0.0,"y":0.0,"z":0.0}}]}},{"legion::core::ecs::entity_data":{"name":"25","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[{"legion::core::ecs::entity_data":{"name":"26","alive":true,"active":true,"legion::core::hashed_sparse_set<legion::core::ecs::entity,std::hash<legion::core::ecs::entity>,std::vector,std::unordered_map>":[],"components":[{"11949557849597501724":{"value":1}}]}}],"components":[{"11949557849597501724":{"value":1}},{"5024733841066084311":{"x":0.0,"y":0.0,"z":0.0}},{"5210677229598950623":{"x":0.0,"y":0.0,"z":0.0}}]}}],"components":[]}}
+{
+    "scene": {
+        "type_name": "legion::core::ecs::entity_data",
+        "name": "Root",
+        "active": true,
+        "children": {
+            "type_name": "std::vector<legion::core::ecs::entity,std::allocator<legion::core::ecs::entity>>",
+            "data": [
+                {
+                    "type_name": "legion::core::ecs::entity_data",
+                    "name": "7",
+                    "active": true,
+                    "children": {
+                        "type_name": "std::vector<legion::core::ecs::entity,std::allocator<legion::core::ecs::entity>>",
+                        "data": [
+                            {
+                                "type_name": "legion::core::ecs::entity_data",
+                                "name": "8",
+                                "active": true,
+                                "children": {
+                                    "type_name": "std::vector<legion::core::ecs::entity,std::allocator<legion::core::ecs::entity>>",
+                                    "data": []
+                                },
+                                "components": [
+                                    {
+                                        "type_name": "example_comp",
+                                        "value": 0
+                                    }
+                                ]
+                            },
+                            {
+                                "type_name": "legion::core::ecs::entity_data",
+                                "name": "9",
+                                "active": true,
+                                "children": {
+                                    "type_name": "std::vector<legion::core::ecs::entity,std::allocator<legion::core::ecs::entity>>",
+                                    "data": []
+                                },
+                                "components": []
+                            }
+                        ]
+                    },
+                    "components": []
+                },
+                {
+                    "type_name": "legion::core::ecs::entity_data",
+                    "name": "10",
+                    "active": true,
+                    "children": {
+                        "type_name": "std::vector<legion::core::ecs::entity,std::allocator<legion::core::ecs::entity>>",
+                        "data": [
+                            {
+                                "type_name": "legion::core::ecs::entity_data",
+                                "name": "11",
+                                "active": true,
+                                "children": {
+                                    "type_name": "std::vector<legion::core::ecs::entity,std::allocator<legion::core::ecs::entity>>",
+                                    "data": []
+                                },
+                                "components": [
+                                    {
+                                        "type_name": "example_comp",
+                                        "value": 1
+                                    }
+                                ]
+                            },
+                            {
+                                "type_name": "legion::core::ecs::entity_data",
+                                "name": "12",
+                                "active": true,
+                                "children": {
+                                    "type_name": "std::vector<legion::core::ecs::entity,std::allocator<legion::core::ecs::entity>>",
+                                    "data": []
+                                },
+                                "components": []
+                            }
+                        ]
+                    },
+                    "components": []
+                },
+                {
+                    "type_name": "legion::core::ecs::entity_data",
+                    "name": "13",
+                    "active": true,
+                    "children": {
+                        "type_name": "std::vector<legion::core::ecs::entity,std::allocator<legion::core::ecs::entity>>",
+                        "data": [
+                            {
+                                "type_name": "legion::core::ecs::entity_data",
+                                "name": "14",
+                                "active": true,
+                                "children": {
+                                    "type_name": "std::vector<legion::core::ecs::entity,std::allocator<legion::core::ecs::entity>>",
+                                    "data": []
+                                },
+                                "components": [
+                                    {
+                                        "type_name": "example_comp",
+                                        "value": 2
+                                    }
+                                ]
+                            },
+                            {
+                                "type_name": "legion::core::ecs::entity_data",
+                                "name": "15",
+                                "active": true,
+                                "children": {
+                                    "type_name": "std::vector<legion::core::ecs::entity,std::allocator<legion::core::ecs::entity>>",
+                                    "data": []
+                                },
+                                "components": []
+                            }
+                        ]
+                    },
+                    "components": []
+                }
+            ]
+        },
+        "components": [
+            {
+                "type_name": "example_comp",
+                "value": 1
+            }
+        ]
+    }
+}

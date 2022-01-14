@@ -4,23 +4,60 @@
 #include <rendering/rendering.hpp>
 #include <audio/audio.hpp>
 
-#include <core/serialization/serialization.hpp>
-
 #include <core/ecs/handles/entity.hpp>
+
+namespace legion
+{
+    struct reflectable_attribute {};
+#define reflectable reflectable_attribute
+}
+
+struct [[legion::reflectable]] example_comp 
+{
+    int value = 1;
+};
 
 namespace legion::core
 {
-    struct example_comp
+    template<>
+    L_NODISCARD reflector make_reflector<example_comp>(example_comp& obj)
     {
-        int value = 1;
-    };
+        reflector refl;
+        refl.typeId = typeHash<example_comp>();
+        refl.typeName = "example_comp";
+        refl.members = std::vector<member_reference>
+        {
+            member_reference
+            {
+                "value",
+                primitive_reference{ typeHash<int>(), &obj.value }
+            }
+        };
+        refl.data = std::addressof(obj);
+        return refl;
+    }
 
-    struct scene_comp
+    template<>
+    L_NODISCARD const reflector make_reflector<const example_comp>(const example_comp& obj)
     {
-        id_type id = -1;
-        std::vector<ecs::entity> entities;
-    };
+        ptr_type adress = reinterpret_cast<ptr_type>(std::addressof(obj));
+        reflector refl;
+        refl.typeId = typeHash<example_comp>();
+        refl.typeName = "example_comp";
+        refl.members = std::vector<member_reference>
+        {
+            member_reference
+            {
+                "value",
+                primitive_reference{ typeHash<int>(), &obj.value }
+            }
+        };
+        refl.data = reinterpret_cast<void*>(adress);
+        return refl;
+    }
 }
+
+#include <core/serialization/serialization.hpp>
 
 class ExampleSystem final : public legion::System<ExampleSystem>
 {
@@ -59,56 +96,40 @@ public:
 
         //Serialization Test
         srl::serializer_registry::register_serializer<example_comp>();
-        srl::serializer_registry::register_serializer<position>();
+        srl::serializer_registry::register_serializer<ecs::entity>();
+        //srl::serializer_registry::register_serializer<position>();
         //srl::serializer_registry::register_serializer<rotation>();
-        srl::serializer_registry::register_serializer<velocity>();
+        //srl::serializer_registry::register_serializer<velocity>();
         //srl::serializer_registry::register_serializer<scale>();
 
         auto rootEnt = createEntity();
         rootEnt->name = "Root";
         rootEnt.add_component<example_comp>();
-        rootEnt.add_component<position>();
 
-        //for (int i = 0; i < 10; i++)
-        //{
-        //    auto ent = createEntity();
-        //    ent.add_component<example_comp>();
-        //    ent.add_component<position>();
-        //    ent.add_component<velocity>();
+        for (int i = 0; i < 3; i++)
+        {
+            auto child = createEntity();
+            rootEnt.add_child(child);
+            for (int j = 0; j < 2; j++)
+            {
+                auto child2 = createEntity();
+                child.add_child(child2);
+                if (j == 0)
+                    child2.add_component(example_comp{ i });
+            }
+        }
 
-        //    auto child = createEntity();
-        //    child.add_component<rotation>();
-        //    child.add_component<example_comp>();
-        //    ent.add_child(child);
-
-        //    rootEnt.add_child(ent);
-        //}
-
-        std::string_view filePath = "assets://scenes/scene1.json";
-        srl::write<srl::json>(filePath, rootEnt);
+        srl::write<srl::yaml>(fs::view("assets://scenes/scene1.yaml"), rootEnt, "scene");
+        srl::write<srl::json>(fs::view("assets://scenes/scene1.json"), rootEnt, "scene");
+        srl::write<srl::bson>(fs::view("assets://scenes/scene1.bson"), rootEnt, "scene");
 
         ecs::Registry::destroyEntity(rootEnt);
 
-        /////////////////////////////////////////////////////////
-        //                                  EXAMPLE API
-        ////////////////////////////////////////////////////////
+        auto result4 = srl::load<srl::bson, ecs::entity>(fs::view("assets://scenes/scene1.bson"), "scene");
 
-         //auto result1 = srl::load<srl::json, scene_comp>("assets://scenes/scene1.json"_view);
-         //std::vector<byte> byteVec;
-         //auto result2 = srl::load<srl::yaml, scene_comp>(byteVec);
-         //auto result3 = srl::load<srl::bson, scene_comp>(byteVec.begin(),byteVec.end());
-
-         srl::json j_view;
-
-         fs::view file("assets://scenes/scene1.json");
-         j_view.read(file);
-         //j_view.read(byteVec);
-         //j_view.read(byteVec.begin(), byteVec.end());
-
-        auto result4 = srl::deserialize<ecs::entity>(j_view);
-
-        std::string_view filePath2 = "assets://scenes/scene2.json";
-        srl::write<srl::json>(filePath2, ecs::Registry::getEntity(6));
+        srl::write<srl::yaml>(fs::view("assets://scenes/scene2.yaml"), *result4, "scene");
+        srl::write<srl::json>(fs::view("assets://scenes/scene2.json"), *result4, "scene");
+        srl::write<srl::bson>(fs::view("assets://scenes/scene2.bson"), *result4, "scene");
 
         /////////////////////////////////////////////////////////
     }

@@ -360,4 +360,10 @@ namespace legion::core::common
         warning_list m_warnings;
     };
 
+#define PropagateErrors(result, warnings)                                                      \
+{                                                                                           \
+    warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());    \
+    if (result.has_error()) { return { result.error(), warnings }; }                        \
+}
+
 }

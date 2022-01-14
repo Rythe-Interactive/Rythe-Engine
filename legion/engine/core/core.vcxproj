@@ -189,9 +189,6 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="ecs\filters\filterregistry.hpp" />
     <ClInclude Include="ecs\handles\component.hpp" />
     <ClInclude Include="ecs\handles\entity.hpp" />
-    <ClInclude Include="ecs\prototypes\component_prototype.hpp" />
-    <ClInclude Include="ecs\prototypes\entity_data_prototype.hpp" />
-    <ClInclude Include="ecs\prototypes\entity_prototype.hpp" />
     <ClInclude Include="engine\enginesubsystem.hpp" />
     <ClInclude Include="scheduling\clock.hpp" />
     <ClInclude Include="scheduling\process.hpp" />
@@ -606,8 +603,6 @@ del /q ".\xcopyexclude"</Command>
     <None Include="ecs\handles\component.inl" />
     <None Include="ecs\handles\entity.inl" />
     <None Include="ecs\handles\filter.inl" />
-    <None Include="ecs\prototypes\entity_data_prototype.inl" />
-    <None Include="ecs\prototypes\entity_prototype.inl" />
     <None Include="ecs\registry.inl" />
     <None Include="engine\engine.inl" />
     <None Include="engine\enginesubsystem.inl" />

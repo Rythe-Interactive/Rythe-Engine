@@ -5,6 +5,8 @@
 #include <core/platform/platform.hpp>
 #include <core/types/types.hpp>
 #include <core/common/string_literal.hpp>
+#include <core/engine/enginesubsystem.hpp>
+#include <core/engine/engine.hpp>
 
 namespace legion::core
 {
@@ -35,15 +37,23 @@ namespace legion::core
 
     namespace detail
     {
-        struct type_data
+        struct type_data : public EngineSubSystem<type_data>
         {
-            static std::unordered_map<id_type, std::string> id_to_name;
+            std::unordered_map<id_type, std::string> id_to_name;
+
+            AllowPrivateOnInit;
+            SubSystemInstance(type_data);
+        private:
+            static void onInit();
         };
+
+        OnEngineInit(type_data, &type_data::init);
+        OnEngineShutdown(type_data, &type_data::shutdown);
 
         template<typename T>
         std::string_view register_name(id_type id)
         {
-            auto [iterator, emplaced] = type_data::id_to_name.emplace(id, std::string(nameOfType<T>()));
+            auto [iterator, emplaced] = type_data::getInstance().id_to_name.emplace(id, std::string(nameOfType<T>()));
             return iterator->second;
         }
     }

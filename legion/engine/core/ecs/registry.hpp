@@ -16,7 +16,6 @@
 #include <core/ecs/handles/entity.hpp>
 #include <core/ecs/handles/component.hpp>
 #include <core/ecs/data/entity_data.hpp>
-#include <core/ecs/prototypes/entity_prototype.hpp>
 #include <core/ecs/meta/meta.hpp>
 
 /**
@@ -289,6 +288,5 @@ namespace legion::core::ecs
 #include <core/ecs/filters/filterregistry.inl>
 #include <core/ecs/handles/entity.inl>
 #include <core/ecs/handles/component.inl>
-#include <core/ecs/prototypes/entity_prototype.inl>
 #include <core/ecs/archetype/archetype.inl>
 

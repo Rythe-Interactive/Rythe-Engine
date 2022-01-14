@@ -50,8 +50,9 @@ namespace legion::core::ecs
 
     void FilterRegistry::onInit()
     {
-        create();
+        reportDependency<::legion::core::detail::type_data>();
         reportDependency<Registry>();
+        create();
     }
 
     void FilterRegistry::onShutdown()

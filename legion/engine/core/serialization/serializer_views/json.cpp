@@ -2,9 +2,16 @@
 
 namespace legion::core::serialization
 {
+    json::entry& json::current_item()
+    {
+        if (isPeaking)
+            return peakObject;
+        return active_stack.top();
+    }
+
     void json::serialize_int(const std::string& name, int serializable)
     {
-        auto& [key, item, rdIdx] = active_stack.top();
+        auto& [key, item, rdIdx] = current_item();
         if (item.is_object())
             item.emplace(name, serializable);
         else if (item.is_array())
@@ -13,7 +20,7 @@ namespace legion::core::serialization
 
     void json::serialize_float(const std::string& name, float serializable)
     {
-        auto& [key, item, rdIdx] = active_stack.top();
+        auto& [key, item, rdIdx] = current_item();
         if (item.is_object())
             item.emplace(name, serializable);
         else if (item.is_array())
@@ -22,7 +29,7 @@ namespace legion::core::serialization
 
     void json::serialize_double(const std::string& name, double serializable)
     {
-        auto& [key, item, rdIdx] = active_stack.top();
+        auto& [key, item, rdIdx] = current_item();
         if (item.is_object())
             item.emplace(name, serializable);
         else if (item.is_array())
@@ -31,7 +38,7 @@ namespace legion::core::serialization
 
     void json::serialize_bool(const std::string& name, bool serializable)
     {
-        auto& [key, item, rdIdx] = active_stack.top();
+        auto& [key, item, rdIdx] = current_item();
         if (item.is_object())
             item.emplace(name, serializable);
         else if (item.is_array())
@@ -40,7 +47,7 @@ namespace legion::core::serialization
 
     void json::serialize_string(const std::string& name, const std::string& serializable)
     {
-        auto& [key, item, rdIdx] = active_stack.top();
+        auto& [key, item, rdIdx] = current_item();
         if (item.is_object())
             item.emplace(name, serializable);
         else if (item.is_array())
@@ -49,7 +56,7 @@ namespace legion::core::serialization
 
     void json::serialize_id_type(const std::string& name, id_type serializable)
     {
-        auto& [key, item, rdIdx] = active_stack.top();
+        auto& [key, item, rdIdx] = current_item();
         if (item.is_object())
             item.emplace(name, serializable);
         else if (item.is_array())
@@ -59,7 +66,7 @@ namespace legion::core::serialization
 
     common::result<int, fs_error> json::deserialize_int(const std::string& name)
     {
-        auto& [currentName, current, readIndex] = active_stack.top();
+        auto& [currentName, current, readIndex] = current_item();
         if (current.is_object())
         {
             auto iterator = current.find(name);
@@ -88,7 +95,7 @@ namespace legion::core::serialization
 
     common::result<float, fs_error> json::deserialize_float(const std::string& name)
     {
-        auto& [currentName, current, readIndex] = active_stack.top();
+        auto& [currentName, current, readIndex] = current_item();
         if (current.is_object())
         {
             auto iterator = current.find(name);
@@ -117,7 +124,7 @@ namespace legion::core::serialization
 
     common::result<double, fs_error> json::deserialize_double(const std::string& name)
     {
-        auto& [currentName, current, readIndex] = active_stack.top();
+        auto& [currentName, current, readIndex] = current_item();
         if (current.is_object())
         {
             auto iterator = current.find(name);
@@ -146,7 +153,7 @@ namespace legion::core::serialization
 
     common::result<bool, fs_error> json::deserialize_bool(const std::string& name)
     {
-        auto& [currentName, current, readIndex] = active_stack.top();
+        auto& [currentName, current, readIndex] = current_item();
         if (current.is_object())
         {
             auto iterator = current.find(name);
@@ -175,7 +182,7 @@ namespace legion::core::serialization
 
     common::result<std::string, fs_error> json::deserialize_string(const std::string& name)
     {
-        auto& [currentName, current, readIndex] = active_stack.top();
+        auto& [currentName, current, readIndex] = current_item();
         if (current.is_object())
         {
             auto iterator = current.find(name);
@@ -204,7 +211,7 @@ namespace legion::core::serialization
 
     common::result<id_type, fs_error> json::deserialize_id_type(const std::string& name)
     {
-        auto& [currentName, current, readIndex] = active_stack.top();
+        auto& [currentName, current, readIndex] = current_item();
         if (current.is_object())
         {
             auto iterator = current.find(name);
@@ -233,7 +240,7 @@ namespace legion::core::serialization
 
     void json::start_object()
     {
-        active_stack.emplace("item_" + std::to_string(active_stack.top().item.size()), nlohmann::ordered_json::object());
+        active_stack.emplace("item_" + std::to_string(current_item().item.size()), nlohmann::ordered_json::object());
     }
 
     void json::start_object(const std::string& name)
@@ -246,7 +253,7 @@ namespace legion::core::serialization
         if (active_stack.empty())
             return;
 
-        auto& [name, object, readIndex] = active_stack.top();
+        auto& [name, object, readIndex] = current_item();
 
         if (!object.is_object())
             return;
@@ -260,10 +267,10 @@ namespace legion::core::serialization
         {
             entry cpy{ name, object, readIndex };
             active_stack.pop();
-            auto& [nxtName, next, nxtRdIdx] = active_stack.top();
+            auto& [nxtName, next, nxtRdIdx] = current_item();
 
             if (next.is_array())
-                next.push_back(object);
+                next.push_back(cpy.item);
             else if (next.is_object())
                 next.emplace(cpy.key, cpy.item);
         }
@@ -279,7 +286,7 @@ namespace legion::core::serialization
         if (active_stack.empty())
             return;
 
-        auto& [name, arr, readIndex] = active_stack.top();
+        auto& [name, arr, readIndex] = current_item();
 
         if (!arr.is_array())
             return;
@@ -293,7 +300,7 @@ namespace legion::core::serialization
         {
             entry cpy{ name, arr, readIndex };
             active_stack.pop();
-            auto& [nxtName, next, nxtRdIdx] = active_stack.top();
+            auto& [nxtName, next, nxtRdIdx] = current_item();
 
             if (next.is_array())
                 next.push_back(arr);
@@ -304,20 +311,21 @@ namespace legion::core::serialization
 
     common::result<void, fs_error> json::start_read(const std::string& name)
     {
+        isPeaking = false;
         if (active_stack.empty())
         {
             auto iterator = root.item.find(name);
             if (iterator == root.item.end())
                 return legion_fs_error("Item with name: " + name + " is not in current object.");
 
-            if (!iterator->is_object() || !iterator->is_array())
+            if (!iterator->is_object() && !iterator->is_array())
                 return legion_fs_error("Item with name: " + name + " is not an object or array.");
 
-            active_stack.emplace(iterator.key(), *iterator);
+            active_stack.emplace(name, *iterator);
         }
         else
         {
-            auto& [name, current, readIndex] = active_stack.top();
+            auto& [curName, current, readIndex] = active_stack.top();
 
             if (current.is_array())
             {
@@ -330,12 +338,49 @@ namespace legion::core::serialization
                 if (iterator == current.end())
                     return legion_fs_error("Item with name: " + name + " is not in current object.");
 
-                if (!iterator->is_object() || !iterator->is_array())
+                if (!iterator->is_object() && !iterator->is_array())
                     return legion_fs_error("Item with name: " + name + " is not an object or array.");
 
-                active_stack.emplace(iterator.key(), *iterator);
+                active_stack.emplace(name, *iterator);
             }
         }
+        return common::success;
+    }
+
+    common::result<void, fs_error> json::peak_ahead(const std::string& name)
+    {
+        if (active_stack.empty())
+        {
+            auto iterator = root.item.find(name);
+            if (iterator == root.item.end())
+                return legion_fs_error("Item with name: " + name + " is not in current object.");
+
+            if (!iterator->is_object() && !iterator->is_array())
+                return legion_fs_error("Item with name: " + name + " is not an object or array.");
+
+            peakObject = entry{ iterator.key(), *iterator };
+        }
+        else
+        {
+            auto& [curName, current, readIndex] = active_stack.top();
+
+            if (current.is_array())
+            {
+                peakObject = entry{ "item_" + std::to_string(readIndex), current[readIndex] };
+            }
+            else if (current.is_object())
+            {
+                auto iterator = current.find(name);
+                if (iterator == current.end())
+                    return legion_fs_error("Item with name: " + name + " is not in current object.");
+
+                if (!iterator->is_object() && !iterator->is_array())
+                    return legion_fs_error("Item with name: " + name + " is not an object or array.");
+
+                peakObject = entry{ iterator.key(), *iterator };
+            }
+        }
+        isPeaking = true;
         return common::success;
     }
 
@@ -349,27 +394,27 @@ namespace legion::core::serialization
 
     bool json::is_current_array()
     {
-        return active_stack.top().item.is_array();
+        return current_item().item.is_array();
     }
 
     bool json::is_current_object()
     {
-        return active_stack.top().item.is_object();
+        return current_item().item.is_object();
     }
 
     size_type json::current_item_size()
     {
-        return active_stack.top().item.size();
+        return current_item().item.size();
     }
 
     std::string json::get_key()
     {
-        return active_stack.top().key;
+        return current_item().key;
     }
 
     common::result<void, fs_error> json::write(fs::view& file)
     {
-        return file.set(fs::basic_resource(root.item.dump()));
+        return file.set(fs::basic_resource(root.item.dump(4)));
     }
 
     common::result<void, fs_error> json::read(const fs::view& file)

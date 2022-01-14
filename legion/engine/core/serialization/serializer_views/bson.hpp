@@ -8,9 +8,9 @@ namespace legion::core::serialization
         bson() = default;
         virtual ~bson() = default;
 
-        virtual common::result<void, fs_error> write(fs::view& file) override;
-        virtual common::result<void, fs_error> read(const fs::view& file) override;
-        virtual common::result<void, fs_error> read(const byte_vec& data) override;
-        virtual common::result<void, fs_error> read(byte_vec::iterator begin, byte_vec::iterator end) override;
+        L_NODISCARD virtual common::result<void, fs_error> write(fs::view& file) override;
+        L_NODISCARD virtual common::result<void, fs_error> read(const fs::view& file) override;
+        L_NODISCARD virtual common::result<void, fs_error> read(const byte_vec& data) override;
+        L_NODISCARD virtual common::result<void, fs_error> read(byte_vec::iterator begin, byte_vec::iterator end) override;
     };
 }

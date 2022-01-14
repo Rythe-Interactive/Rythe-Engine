@@ -119,8 +119,8 @@ namespace legion::core
     HAS_FUNC(emplace);
     HAS_FUNC(insert);
 
-    COMBINE_SFINAE(is_container, has_begin_v<T L_COMMA typename T::iterator(void)> && has_end_v<T L_COMMA typename T::iterator(void)>, T);
-    COMBINE_SFINAE(is_resizable_container, has_begin_v<T L_COMMA typename T::iterator(void)> && has_end_v<T L_COMMA typename T::iterator(void)> && has_resize_v<T L_COMMA void(size_type)>, T);
+    COMBINE_SFINAE(is_container, has_begin_v<T L_COMMA typename T::iterator(void)>&& has_end_v<T L_COMMA typename T::iterator(void)>, T);
+    COMBINE_SFINAE(is_resizable_container, has_begin_v<T L_COMMA typename T::iterator(void)>&& has_end_v<T L_COMMA typename T::iterator(void)>&& has_resize_v<T L_COMMA void(size_type)>, T);
     COMBINE_SFINAE(is_any_castable, std::is_constructible<T L_COMMA const T&>::value, T);
 
     template<typename T>
@@ -144,6 +144,9 @@ namespace legion::core
     public:
         static constexpr bool value = type::value;
     };
+
+    template<typename T>
+    constexpr bool is_serializable_v = is_serializable<T>::value;
 
     template<typename derived_type, typename base_type>
     using inherits_from = typename std::enable_if<std::is_base_of<base_type, derived_type>::value, int>::type;

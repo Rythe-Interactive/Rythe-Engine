@@ -3,45 +3,121 @@
 
 namespace legion::core::serialization
 {
+    template<typename ViewType, typename Type>
+    inline common::result<void, fs_error> serialize(ViewType& s_view, Type&& data, std::string_view name)
+    {
+        std::vector<std::string> warnings{};
+
+        auto serializer = serializer_registry::get_serializer<remove_cvr_t<Type>>();
+        auto result = serializer->serialize(&data, s_view, name);
+        PropagateErrors(result, warnings);
+
+        return { common::success, warnings };
+    }
+
+    template<typename ViewType, typename Type>
+    inline common::result<void, fs_error> write(fs::view file, Type&& data, std::string_view name)
+    {
+        ViewType view{};
+        std::vector<std::string> warnings{};
+
+        {
+            auto serializer = serializer_registry::get_serializer<remove_cvr_t<Type>>();
+            auto result = serializer->serialize(&data, view, name);
+            PropagateErrors(result, warnings);
+        }
+
+        {
+            auto result = view.write(file);
+            PropagateErrors(result, warnings);
+        }
+
+        return { common::success, warnings };
+    }
+
+    template<typename ViewType, typename Type>
+    inline L_ALWAYS_INLINE common::result<void, fs_error> write(Type&& data, fs::view file, std::string_view name)
+    {
+        return write(file, std::forward<Type>(data), name);
+    }
+
     template<typename Type, typename ViewType>
-    inline common::result<void, fs_error> serialize(ViewType& s_view, Type data)
+    common::result<Type, fs_error> deserialize(ViewType& s_view, std::string_view name)
     {
-        return common::success;
+        byte rawData[sizeof(Type)];
+        Type* data = reinterpret_cast<Type*>(rawData);
+        std::vector<std::string> warnings{};
+
+        auto serializer = serializer_registry::get_serializer<remove_cvr_t<Type>>();
+        auto result = serializer->deserialize(data, s_view, name);
+        PropagateErrors(result, warnings);
+
+        return { *data, warnings };
     }
 
     template<typename ViewType, typename Type>
-    inline common::result<void, fs_error> write(fs::view file, Type data)
+    inline common::result<Type, fs_error> load(const fs::view& file, std::string_view name)
     {
-        return common::success;
+        ViewType view{};
+        byte rawData[sizeof(Type)];
+        Type* data = reinterpret_cast<Type*>(rawData);
+        std::vector<std::string> warnings{};
+
+        {
+            auto result = view.read(file);
+            PropagateErrors(result, warnings);
+        }
+
+        {
+            auto serializer = serializer_registry::get_serializer<remove_cvr_t<Type>>();
+            auto result = serializer->deserialize(data, view, name);
+            PropagateErrors(result, warnings);
+        }
+
+        return { *data, warnings };
     }
 
     template<typename ViewType, typename Type>
-    inline common::result<void, fs_error> write(Type data, fs::view file)
+    inline common::result<Type, fs_error> load(const byte_vec& bytes, std::string_view name)
     {
-        return common::success;
+        ViewType view{};
+        byte rawData[sizeof(Type)];
+        Type* data = reinterpret_cast<Type*>(rawData);
+        std::vector<std::string> warnings{};
+
+        {
+            auto result = view.read(bytes);
+            PropagateErrors(result, warnings);
+        }
+
+        {
+            auto serializer = serializer_registry::get_serializer<remove_cvr_t<Type>>();
+            auto result = serializer->deserialize(data, view, name);
+            PropagateErrors(result, warnings);
+        }
+
+        return { *data, warnings };
     }
 
+    template<typename ViewType, typename Iterator, typename Type>
+    common::result<Type, fs_error> load(Iterator begin, Iterator end, std::string_view name)
+    {
+        ViewType view{};
+        byte rawData[sizeof(Type)];
+        Type* data = reinterpret_cast<Type*>(rawData);
+        std::vector<std::string> warnings{};
 
-    template<typename Type, typename ViewType>
-    common::result<void, fs_error> deserialize(ViewType& s_view)
-    {
-        return common::success;
-    }
+        {
+            auto result = view.read(begin, end);
+            PropagateErrors(result, warnings);
+        }
 
-    template<typename ViewType, typename Type>
-    inline common::result<void, fs_error> load(fs::view file)
-    {
-        return common::success;
-    }
+        {
+            auto serializer = serializer_registry::get_serializer<remove_cvr_t<Type>>();
+            auto result = serializer->deserialize(data, view, name);
+            PropagateErrors(result, warnings);
+        }
 
-    template<typename ViewType = serializer_view&, typename Type>
-    inline common::result<void, fs_error> load(std::vector<byte> data)
-    {
-        return common::success;
-    }
-    template<typename ViewType = serializer_view&, typename Iterator, typename Type>
-    common::result<void, fs_error> load(Iterator begin, Iterator end)
-    {
-        return common::success;
+        return { *data, warnings };
     }
 }

@@ -17,6 +17,14 @@ namespace legion::core
         reflector() = default;
         reflector(id_type id, std::string_view name, std::vector<member_reference> _members, void* _adress)
             : typeId(id), typeName(name), members(_members), data(_adress) {}
+
+        reflector(id_type id, std::string_view name, std::vector<member_reference> _members, const void* _adress)
+            : typeId(id), typeName(name), members(_members)
+        {
+            ptr_type adress = reinterpret_cast<ptr_type>(_adress);
+            data = reinterpret_cast<void*>(adress);
+        }
+
         reflector(const reflector& refl) : typeId(refl.typeId), typeName(refl.typeName), members(refl.members), data(refl.data) {}
 
         reflector& operator=(const reflector& rhs)
@@ -29,10 +37,16 @@ namespace legion::core
             return *this;
         }
     };
+
     struct primitive_reference
     {
         id_type typeId;
         void* data = nullptr;
+
+        RULE_OF_5_NOEXCEPT(primitive_reference);
+        primitive_reference(id_type id, void* address) noexcept : typeId(id), data(address) {}
+        primitive_reference(id_type id, const void* address) noexcept : typeId(id)
+        { ptr_type tmp = reinterpret_cast<ptr_type>(address); data = reinterpret_cast<void*>(tmp); }
 
         template<typename T>
         L_NODISCARD T* cast()
@@ -54,6 +68,7 @@ namespace legion::core
             return nullptr;
         }
     };
+
     struct member_reference
     {
         bool is_object;
@@ -64,8 +79,8 @@ namespace legion::core
             primitive_reference primitive;
         };
 
-        member_reference() : is_object(false), name(""), primitive() {}
-        member_reference(std::string_view _name, primitive_reference _primitive) : is_object(false), name(_name), primitive(_primitive) {}
+        member_reference() noexcept : is_object(false), name(""), primitive() {}
+        member_reference(std::string_view _name, primitive_reference _primitive) noexcept : is_object(false), name(_name), primitive(_primitive) {}
         member_reference(std::string_view _name, reflector refl) : is_object(true), name(_name), object(refl) {}
         member_reference(const member_reference& other)
         {

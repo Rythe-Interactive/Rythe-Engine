@@ -41,9 +41,9 @@ namespace legion::core::ecs
 
     void Registry::onInit()
     {
+        reportDependency<FilterRegistry>();
         create();
         world = getWorld();
-        reportDependency<FilterRegistry>();
     }
 
     void Registry::onShutdown()

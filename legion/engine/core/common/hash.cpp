@@ -2,7 +2,13 @@
 
 namespace legion::core
 {
-    std::unordered_map<id_type, std::string> detail::type_data::id_to_name;
+    namespace detail
+    {
+        void type_data::onInit()
+        {
+            create();
+        }
+    }
 
     name_hash::name_hash(const name_hash& src) noexcept { value = src.value; }
 
@@ -20,9 +26,9 @@ namespace legion::core
         return *this;
     }
 
-    type_hash::type_hash(const type_hash& src) noexcept : m_value(src.m_value), m_name(src.m_name) {}
+    type_hash::type_hash(const type_hash& src) noexcept : m_name(src.m_name), m_value(src.m_value) {}
 
-    type_hash::type_hash(type_hash&& src) noexcept : m_value(src.m_value), m_name(src.m_name) {}
+    type_hash::type_hash(type_hash&& src) noexcept : m_name(src.m_name), m_value(src.m_value) {}
 
     type_hash& type_hash::operator=(const type_hash& src) noexcept
     {
@@ -44,7 +50,7 @@ namespace legion::core
 
     L_NODISCARD std::string_view type_hash::name() const noexcept { return m_name; }
 
-    type_hash::type_hash(id_type id, std::string_view name) noexcept : m_value(id), m_name(name) {}
+    type_hash::type_hash(id_type id, std::string_view name) noexcept : m_name(name), m_value(id) {}
 
     L_NODISCARD type_hash type_hash::from_name(std::string_view name)
     {
@@ -53,6 +59,6 @@ namespace legion::core
 
     L_NODISCARD type_hash type_hash::from_id(id_type id)
     {
-        return type_hash(id, detail::type_data::id_to_name[id]);
+        return type_hash(id, detail::type_data::getInstance().id_to_name[id]);
     }
 }
