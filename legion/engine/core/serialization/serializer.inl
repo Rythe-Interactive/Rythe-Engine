@@ -19,9 +19,7 @@ namespace legion::core::serialization
             using container_type = typename remove_cvr_t<type>;
             using value_type = remove_cvr_t<typename container_type::value_type>;
 
-            s_view.start_object(std::string(name));
-            s_view.serialize<std::string>("type_name", nameOfType<container_type>());
-            s_view.start_container("data");
+            s_view.start_container(std::string(name));
 
             std::vector<std::string> warnings{};
             size_type i = 0;
@@ -32,7 +30,6 @@ namespace legion::core::serialization
                     if (!s_view.serialize("", *it))
                     {
                         s_view.end_container();
-                        s_view.end_object();
                         return { legion_fs_error("Type was not a primitive serializable type."), warnings };
                     }
                 }
@@ -44,7 +41,6 @@ namespace legion::core::serialization
                     if (result.has_error())
                     {
                         s_view.end_container();
-                        s_view.end_object();
                         return { result.error(), warnings };
                     }
                 }
@@ -58,14 +54,12 @@ namespace legion::core::serialization
                     if (result.has_error())
                     {
                         s_view.end_container();
-                        s_view.end_object();
                         return { result.error(), warnings };
                     }
                 }
             }
 
             s_view.end_container();
-            s_view.end_object();
 
             return { common::success, warnings };
         }
@@ -80,22 +74,6 @@ namespace legion::core::serialization
             {
                 auto result = s_view.start_read(std::string(name));
                 PropagateErrors(result, warnings);
-            }
-
-            {
-                auto result = s_view.deserialize<std::string>("type_name");
-                EndReadPropagate(result, warnings, s_view);
-
-                if (*result != nameOfType<container_type>())
-                {
-                    s_view.end_read();
-                    return { legion_fs_error("Item of name " + std::string(name) + " is not of type " + std::string(nameOfType<container_type>()) + " but of type " + *result + "."), warnings };
-                }
-            }
-
-            {
-                auto result = s_view.start_read("data");
-                EndReadPropagate(result, warnings, s_view);
             }
 
             size_type size = s_view.current_item_size();
@@ -116,7 +94,6 @@ namespace legion::core::serialization
                     if (result.has_error())
                     {
                         s_view.end_read();
-                        s_view.end_read();
                         return { result.error(), warnings };
                     }
                     new(itemPtr) value_type(*result);
@@ -128,7 +105,6 @@ namespace legion::core::serialization
 
                     if (result.has_error())
                     {
-                        s_view.end_read();
                         s_view.end_read();
                         return { result.error(), warnings };
                     }
@@ -143,7 +119,6 @@ namespace legion::core::serialization
                     if (result.has_error())
                     {
                         s_view.end_read();
-                        s_view.end_read();
                         return { result.error(), warnings };
                     }
                 }
@@ -151,7 +126,6 @@ namespace legion::core::serialization
                 tempContainer.push_back(*itemPtr);
             }
 
-            s_view.end_read();
             s_view.end_read();
 
             using iterator = typename container_type::iterator;
