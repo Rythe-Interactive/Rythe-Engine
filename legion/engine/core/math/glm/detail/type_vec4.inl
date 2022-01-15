@@ -313,13 +313,6 @@ namespace detail
     // -- Conversion vector constructors --
 
     template<typename T, qualifier Q>
-    template<typename Archive>
-    inline void vec<4, T, Q>::serialize(Archive& archive)
-    {
-        archive(CEREAL_NVP(x), CEREAL_NVP(y), CEREAL_NVP(z), CEREAL_NVP(w));
-    }
-
-    template<typename T, qualifier Q>
     template<typename A, typename B, typename C, qualifier P>
     GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<4, T, Q>::vec(vec<2, A, P> const& _xy, B _z, C _w)
         : x(static_cast<T>(_xy.x))

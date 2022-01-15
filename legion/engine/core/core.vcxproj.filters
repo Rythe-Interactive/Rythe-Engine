@@ -459,7 +459,6 @@
     <ClInclude Include="serialization\serializer_views\yaml.hpp" />
     <ClInclude Include="serialization\serializer_views\json.hpp" />
     <ClInclude Include="serialization\serializer_views\bson.hpp" />
-    <ClInclude Include="serialization\use_embedded_material.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

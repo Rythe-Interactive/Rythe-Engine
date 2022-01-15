@@ -151,13 +151,6 @@ namespace detail
     // -- Conversion constructors --
 
     template<typename T, qualifier Q>
-    template<typename Archive>
-    void qua<T, Q>::serialize(Archive& archive)
-    {
-        archive(CEREAL_NVP(x), CEREAL_NVP(y), CEREAL_NVP(z), CEREAL_NVP(w));
-    }
-
-    template<typename T, qualifier Q>
     template<typename U, qualifier P>
     GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q>::qua(qua<U, P> const& q)
 #       ifdef GLM_FORCE_QUAT_DATL_WXYZ

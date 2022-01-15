@@ -67,13 +67,6 @@ namespace legion::core::math
     {}
 
     template<typename T, qualifier Q>
-    template<typename Archive>
-    inline void vec<3, T, Q>::serialize(Archive& archive)
-    {
-        archive(CEREAL_NVP(x), CEREAL_NVP(y), CEREAL_NVP(z));
-    }
-
-    template<typename T, qualifier Q>
     template<typename X, typename Y, typename Z>
     GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<3, T, Q>::vec(X _x, Y _y, Z _z)
         : x(static_cast<T>(_x))
