@@ -1,6 +1,5 @@
 import sys
 import xml.etree.ElementTree as ET
-from pprint import pprint
 
 output = ''
 
@@ -9,8 +8,6 @@ try:
         output += line
 except KeyboardInterrupt:
     sys.stdout.flush()
-    pass
-
 
 class github_log:
     def __init__(self):
