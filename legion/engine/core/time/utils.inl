@@ -7,7 +7,7 @@ namespace legion::core::time
     constexpr time_span<precision> hours(precision amount) noexcept
     {
         int64 ratio = 3600;
-        int64 integer;
+        int64 integer = 0;
 
         if constexpr (std::numeric_limits<precision>::is_iec559)
         {
@@ -29,7 +29,7 @@ namespace legion::core::time
     constexpr time_span<precision> minutes(precision amount) noexcept
     {
         int64 ratio = 60000;
-        int64 integer;
+        int64 integer = 0;
 
         if constexpr (std::numeric_limits<precision>::is_iec559)
         {
@@ -51,7 +51,7 @@ namespace legion::core::time
     constexpr time_span<precision> seconds(precision amount) noexcept
     {
         int64 ratio = 1000000;
-        int64 integer;
+        int64 integer = 0;
 
         if constexpr (std::numeric_limits<precision>::is_iec559)
         {
@@ -73,7 +73,7 @@ namespace legion::core::time
     constexpr time_span<precision> milliseconds(precision amount) noexcept
     {
         int64 ratio = 1000000;
-        int64 integer;
+        int64 integer = 0;
 
         if constexpr (std::numeric_limits<precision>::is_iec559)
         {
@@ -95,7 +95,7 @@ namespace legion::core::time
     constexpr time_span<precision> microseconds(precision amount) noexcept
     {
         int64 ratio = 1000;
-        int64 integer;
+        int64 integer = 0;
 
         if constexpr (std::numeric_limits<precision>::is_iec559)
         {
