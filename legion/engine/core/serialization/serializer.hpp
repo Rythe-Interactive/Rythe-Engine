@@ -14,7 +14,7 @@ namespace legion::core::serialization
 {
     struct serializer_base
     {
-        RULE_OF_5_NOEXCEPT(serializer_base);
+        NO_DTOR_RULE5_NOEXCEPT(serializer_base);
         virtual ~serializer_base() = default;
 
         virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, std::string_view name) LEGION_PURE;
@@ -25,7 +25,7 @@ namespace legion::core::serialization
     template<typename serializable_type>
     struct serializer : serializer_base
     {
-        RULE_OF_5_NOEXCEPT(serializer);
+        NO_DTOR_RULE5_NOEXCEPT(serializer);
         virtual ~serializer() = default;
 
         virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& s_view, std::string_view name) override;
@@ -36,7 +36,7 @@ namespace legion::core::serialization
     template<>
     struct serializer<ecs::entity_data> : serializer_base
     {
-        RULE_OF_5_NOEXCEPT(serializer);
+        NO_DTOR_RULE5_NOEXCEPT(serializer);
         virtual ~serializer() = default;
 
         virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, std::string_view name) override;
@@ -47,7 +47,7 @@ namespace legion::core::serialization
     template<>
     struct serializer<ecs::entity> : serializer_base
     {
-        RULE_OF_5_NOEXCEPT(serializer);
+        NO_DTOR_RULE5_NOEXCEPT(serializer);
         virtual ~serializer() = default;
 
         virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, std::string_view name) override;
