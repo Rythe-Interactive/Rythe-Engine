@@ -67,7 +67,7 @@ namespace legion::core::serialization
         template<typename type>
         inline common::result<void, fs_error> deserialize_container(type& container, serializer_view& s_view, std::string_view name)
         {
-            using container_type = typename remove_cvr_t<type>;
+            using container_type = remove_cvr_t<type>;
             using value_type = remove_cvr_t<typename container_type::value_type>;
             std::vector<std::string> warnings{};
 
@@ -325,7 +325,7 @@ namespace legion::core::serialization
     template<typename type>
     inline common::result<void, fs_error> serializer<type>::serialize(const void* serializable, serializer_view& s_view, std::string_view name)
     {
-        using serializable_type = typename remove_cvr_t<type>;
+        using serializable_type = remove_cvr_t<type>;
 
         auto* ptr = static_cast<const serializable_type*>(serializable);
 
@@ -371,7 +371,7 @@ namespace legion::core::serialization
     template<typename type>
     inline common::result<void, fs_error> serializer<type>::deserialize(void* target, serializer_view& s_view, std::string_view name)
     {
-        using serializable_type = typename remove_cvr_t<type>;
+        using serializable_type = remove_cvr_t<type>;
         auto* ptr = static_cast<serializable_type*>(target);
 
         if constexpr (is_serializable_v<serializable_type>)
