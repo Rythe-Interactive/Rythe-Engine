@@ -16,7 +16,7 @@ namespace legion::core::serialization
         template<typename type>
         inline common::result<void, fs_error> serialize_container(type&& container, serializer_view& s_view, std::string_view name)
         {
-            using container_type = typename remove_cvr_t<type>;
+            using container_type = remove_cvr_t<type>;
             using value_type = remove_cvr_t<typename container_type::value_type>;
 
             s_view.start_container(std::string(name));
@@ -46,7 +46,7 @@ namespace legion::core::serialization
                 }
                 else
                 {
-                    auto _serializer = serializer_registry::get_serializer<value_type>();
+                    auto _serializer = SerializerRegistry::getSerializer<value_type>();
 
                     auto result = _serializer->serialize(&(*it), s_view, "");
                     warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
@@ -111,7 +111,7 @@ namespace legion::core::serialization
                 }
                 else
                 {
-                    auto _serializer = serializer_registry::get_serializer<value_type>();
+                    auto _serializer = SerializerRegistry::getSerializer<value_type>();
 
                     auto result = _serializer->deserialize(buffer, s_view, "");
                     warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
@@ -175,7 +175,7 @@ namespace legion::core::serialization
                     return { legion_fs_error("Component type " + std::to_string(typeId) + " has no type data."), warnings };
                 }
 
-                auto _serializer = serializer_registry::get_serializer(typeId);
+                auto _serializer = SerializerRegistry::getSerializer(typeId);
                 if (!_serializer)
                 {
                     warnings.push_back("Could not find existing serializer for " + compName);
@@ -268,7 +268,7 @@ namespace legion::core::serialization
                     typeId = nameHash(*result);
                 }
 
-                auto _serializer = serializer_registry::get_serializer(typeId);
+                auto _serializer = SerializerRegistry::getSerializer(typeId);
 
                 byte_vec buffer{};
                 buffer.resize(_serializer->type_size());
@@ -349,7 +349,7 @@ namespace legion::core::serialization
             {
                 if (var.is_object)
                 {
-                    auto _serializer = serializer_registry::get_serializer(var.object.typeId);
+                    auto _serializer = SerializerRegistry::getSerializer(var.object.typeId);
                     auto result = _serializer->serialize(var.object.data, s_view, var.name);
                     EndObjectPropagate(result, warnings, s_view);
                 }
@@ -413,7 +413,7 @@ namespace legion::core::serialization
             {
                 if (var.is_object)
                 {
-                    auto _serializer = serializer_registry::get_serializer(var.object.typeId);
+                    auto _serializer = SerializerRegistry::getSerializer(var.object.typeId);
                     auto result = _serializer->deserialize(var.object.data, s_view, var.name);
                     EndReadPropagate(result, warnings, s_view);
                 }

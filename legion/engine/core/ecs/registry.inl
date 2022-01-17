@@ -61,7 +61,6 @@ namespace legion::core::ecs
             {
                 checked = true;
                 registerComponentType<component_type>();
-                //serialization::serializer_registry::register_serializer<component_type>();
             }
 
             // Update entity composition.

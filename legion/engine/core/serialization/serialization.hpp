@@ -31,3 +31,8 @@ namespace legion::core::serialization
 
 #include <core/serialization/serialization.inl>
 #include <core/serialization/serializer.inl>
+
+namespace legion::core
+{
+    namespace srl = serialization;
+}

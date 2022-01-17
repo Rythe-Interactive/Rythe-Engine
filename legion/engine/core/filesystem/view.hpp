@@ -2,7 +2,6 @@
 
 #include <core/common/result.hpp>
 #include <core/filesystem/resource.hpp>
-#include <core/filesystem/basic_resolver.hpp>
 
 #include <core/common/exception.hpp>
 
@@ -11,7 +10,6 @@
 #include "mem_filesystem_resolver.hpp"
 #include "navigator.hpp"
 #include "detail/traits.hpp"
-
 
 namespace legion::core::filesystem
 {
@@ -144,12 +142,6 @@ namespace legion::core::filesystem
         common::result<void,fs_error> make_solution() const;
 
         mutable navigator::solution m_foundSolution{};
-    };
-
-    class view_util
-    {
-    public:
-        static std::string get_view_path(const view& view, bool mustBeFile);
     };
 
 

@@ -95,12 +95,12 @@ public:
         }
 
         //Serialization Test
-        srl::serializer_registry::register_serializer<example_comp>();
-        srl::serializer_registry::register_serializer<ecs::entity>();
-        //srl::serializer_registry::register_serializer<position>();
-        //srl::serializer_registry::register_serializer<rotation>();
-        //srl::serializer_registry::register_serializer<velocity>();
-        //srl::serializer_registry::register_serializer<scale>();
+        srl::SerializerRegistry::registerSerializer<example_comp>();
+        srl::SerializerRegistry::registerSerializer<ecs::entity>();
+        //srl::SerializerRegistry::registerSerializer<position>();
+        //srl::SerializerRegistry::registerSerializer<rotation>();
+        //srl::SerializerRegistry::registerSerializer<velocity>();
+        //srl::SerializerRegistry::registerSerializer<scale>();
 
         auto rootEnt = createEntity();
         rootEnt->name = "Root";

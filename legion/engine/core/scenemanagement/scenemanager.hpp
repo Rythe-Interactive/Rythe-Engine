@@ -3,7 +3,6 @@
 #include <core/ecs/handles/component.hpp>
 #include <core/filesystem/filesystem.hpp>
 #include <core/filesystem/view.hpp>
-#include <nlohmann/json.hpp>
 
 /**
 *@file scenemanager.hpp

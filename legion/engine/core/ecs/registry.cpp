@@ -60,9 +60,11 @@ namespace legion::core::ecs
     std::string Registry::getFamilyName(id_type id)
     {
         if (const auto itr = instance.m_familyNames.find(id); itr != instance.m_familyNames.end())
+        {
             return itr->second;
+        }
 
-        return "";
+        return "Component type " + std::to_string(id);
     }
 
     std::unordered_map<id_type, std::unique_ptr<component_pool_base>>& Registry::getFamilies()

@@ -32,7 +32,6 @@
 namespace legion
 {
     using namespace core;
-    namespace srl = ::legion::serialization;
 }
 
 namespace lgn = legion;

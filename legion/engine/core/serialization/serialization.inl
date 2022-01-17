@@ -8,7 +8,7 @@ namespace legion::core::serialization
     {
         std::vector<std::string> warnings{};
 
-        auto serializer = serializer_registry::get_serializer<remove_cvr_t<Type>>();
+        auto serializer = SerializerRegistry::getSerializer<remove_cvr_t<Type>>();
         auto result = serializer->serialize(&data, s_view, name);
         PropagateErrors(result, warnings);
 
@@ -22,7 +22,7 @@ namespace legion::core::serialization
         std::vector<std::string> warnings{};
 
         {
-            auto serializer = serializer_registry::get_serializer<remove_cvr_t<Type>>();
+            auto serializer = SerializerRegistry::getSerializer<remove_cvr_t<Type>>();
             auto result = serializer->serialize(&data, view, name);
             PropagateErrors(result, warnings);
         }
@@ -48,7 +48,7 @@ namespace legion::core::serialization
         Type* data = reinterpret_cast<Type*>(rawData);
         std::vector<std::string> warnings{};
 
-        auto serializer = serializer_registry::get_serializer<remove_cvr_t<Type>>();
+        auto serializer = SerializerRegistry::getSerializer<remove_cvr_t<Type>>();
         auto result = serializer->deserialize(data, s_view, name);
         PropagateErrors(result, warnings);
 
@@ -58,6 +58,9 @@ namespace legion::core::serialization
     template<typename ViewType, typename Type>
     inline common::result<Type, fs_error> load(const fs::view& file, std::string_view name)
     {
+        static_assert(!std::is_pointer_v<Type> && !std::is_reference_v<Type>, "Type to load must be a value type.");
+        static_assert(!std::is_abstract_v<Type>, "Type to load must be a constructible type.");
+
         ViewType view{};
         byte rawData[sizeof(Type)];
         Type* data = reinterpret_cast<Type*>(rawData);
@@ -69,7 +72,7 @@ namespace legion::core::serialization
         }
 
         {
-            auto serializer = serializer_registry::get_serializer<remove_cvr_t<Type>>();
+            auto serializer = SerializerRegistry::getSerializer<remove_cvr_t<Type>>();
             auto result = serializer->deserialize(data, view, name);
             PropagateErrors(result, warnings);
         }
@@ -80,6 +83,9 @@ namespace legion::core::serialization
     template<typename ViewType, typename Type>
     inline common::result<Type, fs_error> load(const byte_vec& bytes, std::string_view name)
     {
+        static_assert(!std::is_pointer_v<Type> && !std::is_reference_v<Type>, "Type to load must be a value type.");
+        static_assert(!std::is_abstract_v<Type>, "Type to load must be a constructible type.");
+
         ViewType view{};
         byte rawData[sizeof(Type)];
         Type* data = reinterpret_cast<Type*>(rawData);
@@ -91,7 +97,7 @@ namespace legion::core::serialization
         }
 
         {
-            auto serializer = serializer_registry::get_serializer<remove_cvr_t<Type>>();
+            auto serializer = SerializerRegistry::getSerializer<remove_cvr_t<Type>>();
             auto result = serializer->deserialize(data, view, name);
             PropagateErrors(result, warnings);
         }
@@ -102,6 +108,9 @@ namespace legion::core::serialization
     template<typename ViewType, typename Iterator, typename Type>
     common::result<Type, fs_error> load(Iterator begin, Iterator end, std::string_view name)
     {
+        static_assert(!std::is_pointer_v<Type> && !std::is_reference_v<Type>, "Type to load must be a value type.");
+        static_assert(!std::is_abstract_v<Type>, "Type to load must be a constructible type.");
+
         ViewType view{};
         byte rawData[sizeof(Type)];
         Type* data = reinterpret_cast<Type*>(rawData);
@@ -113,7 +122,7 @@ namespace legion::core::serialization
         }
 
         {
-            auto serializer = serializer_registry::get_serializer<remove_cvr_t<Type>>();
+            auto serializer = SerializerRegistry::getSerializer<remove_cvr_t<Type>>();
             auto result = serializer->deserialize(data, view, name);
             PropagateErrors(result, warnings);
         }
