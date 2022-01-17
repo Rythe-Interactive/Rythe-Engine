@@ -9,7 +9,6 @@
 
 namespace legion::application
 {
-    [reflectable]
     struct window
     {
 

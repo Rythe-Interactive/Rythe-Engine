@@ -4,7 +4,6 @@
 
 namespace legion::rendering
 {
-    [reflectable]
     struct mesh_renderer
     {
     private:
