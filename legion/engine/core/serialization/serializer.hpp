@@ -1,51 +1,63 @@
 #pragma once
+#include <core/ecs/ecs.hpp>
+#include <core/types/meta.hpp>
+#include <core/types/reflector.hpp>
+#include <core/types/prototype.hpp>
 #include <core/filesystem/filesystem.hpp>
-#include <core/platform/platform.hpp>
-#include <core/ecs/handles/component.hpp>
-#include <core/ecs/prototypes/component_prototype.hpp>
-#include <nlohmann/json.hpp>
+#include <core/serialization/serializer_views/json.hpp>
+#include <core/serialization/serializer_views/bson.hpp>
+#include <core/serialization/serializer_views/yaml.hpp>
 
-#include <sstream>
 #include <fstream>
-#include <string>
-#include <memory>
-#include <any>
 
 namespace legion::core::serialization
 {
-    using json = nlohmann::json;
-    //Some testing objects for serialization
-#pragma region TestObjects
-    struct MyRecord
-    {
-    public:
-        uint8_t x;
-        uint8_t y;
-        float z;
-        MyRecord() = default;
-    };
-    struct Records
-    {
-        MyRecord records[20];
-
-    };
-#pragma endregion
-
     struct serializer_base
     {
+        NO_DTOR_RULE5_NOEXCEPT(serializer_base);
         virtual ~serializer_base() = default;
+
+        virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, std::string_view name) LEGION_PURE;
+        virtual common::result<void, fs_error> deserialize(void* target, serializer_view& view, std::string_view name) LEGION_PURE;
+        virtual id_type type_size() LEGION_PURE;
     };
 
-    template<typename type>
-    struct serializer : public serializer_base
+    template<typename serializable_type>
+    struct serializer : serializer_base
     {
-    public:
-        void serialize(fs::view filePath);
-        prototype_base deserialize(fs::view filePath);
+        NO_DTOR_RULE5_NOEXCEPT(serializer);
+        virtual ~serializer() = default;
 
+        virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& s_view, std::string_view name) override;
+        virtual common::result<void, fs_error> deserialize(void* target, serializer_view& s_view, std::string_view name) override;
+        virtual id_type type_size() override { return sizeof(serializable_type); }
     };
+
+    template<>
+    struct serializer<ecs::entity_data> : serializer_base
+    {
+        NO_DTOR_RULE5_NOEXCEPT(serializer);
+        virtual ~serializer() = default;
+
+        virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, std::string_view name) override;
+        virtual common::result<void, fs_error> deserialize(void* target, serializer_view& s_view, std::string_view name) override;
+        virtual id_type type_size() override { return sizeof(ecs::entity_data); }
+    };
+
+    template<>
+    struct serializer<ecs::entity> : serializer_base
+    {
+        NO_DTOR_RULE5_NOEXCEPT(serializer);
+        virtual ~serializer() = default;
+
+        virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, std::string_view name) override;
+        virtual common::result<void, fs_error> deserialize(void* target, serializer_view& s_view, std::string_view name) override;
+        virtual id_type type_size() override { return sizeof(ecs::entity); }
+    };
+
 }
 
-#include <core/serialization/serializer.inl>
+
+
 
 

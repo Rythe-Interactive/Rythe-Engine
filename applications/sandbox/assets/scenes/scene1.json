@@ -1,0 +1,96 @@
+{
+    "scene": {
+        "type_name": "legion::core::ecs::entity_data",
+        "name": "Root",
+        "active": true,
+        "children": [
+            {
+                "type_name": "legion::core::ecs::entity_data",
+                "name": "7",
+                "active": true,
+                "children": [
+                    {
+                        "type_name": "legion::core::ecs::entity_data",
+                        "name": "8",
+                        "active": true,
+                        "children": [],
+                        "components": [
+                            {
+                                "type_name": "example_comp",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "type_name": "legion::core::ecs::entity_data",
+                        "name": "9",
+                        "active": true,
+                        "children": [],
+                        "components": []
+                    }
+                ],
+                "components": []
+            },
+            {
+                "type_name": "legion::core::ecs::entity_data",
+                "name": "10",
+                "active": true,
+                "children": [
+                    {
+                        "type_name": "legion::core::ecs::entity_data",
+                        "name": "11",
+                        "active": true,
+                        "children": [],
+                        "components": [
+                            {
+                                "type_name": "example_comp",
+                                "value": 1
+                            }
+                        ]
+                    },
+                    {
+                        "type_name": "legion::core::ecs::entity_data",
+                        "name": "12",
+                        "active": true,
+                        "children": [],
+                        "components": []
+                    }
+                ],
+                "components": []
+            },
+            {
+                "type_name": "legion::core::ecs::entity_data",
+                "name": "13",
+                "active": true,
+                "children": [
+                    {
+                        "type_name": "legion::core::ecs::entity_data",
+                        "name": "14",
+                        "active": true,
+                        "children": [],
+                        "components": [
+                            {
+                                "type_name": "example_comp",
+                                "value": 2
+                            }
+                        ]
+                    },
+                    {
+                        "type_name": "legion::core::ecs::entity_data",
+                        "name": "15",
+                        "active": true,
+                        "children": [],
+                        "components": []
+                    }
+                ],
+                "components": []
+            }
+        ],
+        "components": [
+            {
+                "type_name": "example_comp",
+                "value": 1
+            }
+        ]
+    }
+}

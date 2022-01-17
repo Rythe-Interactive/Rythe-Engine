@@ -324,7 +324,6 @@ namespace legion::core::filesystem
 
     }
 
-
     void view::make_inheritance() const
     {
         OPTICK_EVENT();

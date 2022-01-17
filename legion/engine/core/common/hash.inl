@@ -8,12 +8,6 @@ namespace legion::core
         return value;
     }
 
-    template<typename T>
-    constexpr type_hash<T>::operator id_type() const noexcept
-    {
-        return value;
-    }
-
     constexpr id_type combine_hash(id_type seed, id_type value)
     {
         value += 0x9e3779b9 + (seed << 6) + (seed >> 2);

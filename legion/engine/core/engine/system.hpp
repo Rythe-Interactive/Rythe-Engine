@@ -4,10 +4,8 @@
 #include <core/platform/platform.hpp>
 #include <core/events/event.hpp>
 #include <core/time/time.hpp>
-#include <core/common/hash.hpp>
 #include <core/scheduling/process.hpp>
 #include <core/ecs/handles/entity.hpp>
-#include <core/ecs/prototypes/entity_prototype.hpp>
 
 namespace legion::core
 {
@@ -17,7 +15,7 @@ namespace legion::core
     {
         friend class Engine;
     public:
-        const type_reference id;
+        const id_type id;
 
         virtual ~SystemBase() = default;
 
@@ -25,7 +23,7 @@ namespace legion::core
         std::unordered_map<id_type, std::unique_ptr<scheduling::Process>> m_processes;
         std::unordered_map<id_type, delegate<void(events::event_base&)>> m_bindings;
 
-        SystemBase(type_reference&& id) : id(id) {}
+        SystemBase(id_type&& id) : id(id) {}
 
         // TODO: Inline all the things
 
@@ -105,7 +103,7 @@ namespace legion::core
         static auto queueJobs(size_type count, Func&& func);
 
     public:
-        System() : SystemBase(make_hash<SelfType>()) {}
+        System() : SystemBase(typeHash<SelfType>()) {}
 
         virtual ~System() = default;
 

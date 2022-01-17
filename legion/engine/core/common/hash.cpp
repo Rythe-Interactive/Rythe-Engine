@@ -2,19 +2,12 @@
 
 namespace legion::core
 {
-    id_type local_cast(id_type global)
+    namespace detail
     {
-        return detail::global_to_local.at(global);
-    }
-
-    id_type global_cast(id_type local)
-    {
-        return detail::local_to_global.at(local);
-    }
-
-    type_reference type_ref_cast(id_type hash)
-    {
-        return detail::hash_to_reference.at(hash);
+        void type_data::onInit()
+        {
+            create();
+        }
     }
 
     name_hash::name_hash(const name_hash& src) noexcept { value = src.value; }
@@ -33,55 +26,39 @@ namespace legion::core
         return *this;
     }
 
-    type_reference::type_reference(std::nullptr_t)
-        : value(nullptr) {}
+    type_hash::type_hash(const type_hash& src) noexcept : m_name(src.m_name), m_value(src.m_value) {}
 
-    type_reference::type_reference(const type_hash_base& src)
-        : value(src.copy())
+    type_hash::type_hash(type_hash&& src) noexcept : m_name(src.m_name), m_value(src.m_value) {}
+
+    type_hash& type_hash::operator=(const type_hash& src) noexcept
     {
-        detail::hash_to_reference.emplace(value->local(), *this);
-    }
-
-    type_reference::type_reference(const type_reference& src)
-        : value(src.value->copy()) {}
-
-    type_reference::type_reference(type_reference&& src)
-        : value(std::move(src.value)) {}
-
-    type_reference& type_reference::operator=(const type_reference& src)
-    {
-        value = std::unique_ptr<type_hash_base>(src.value->copy());
+        m_value = src.m_value;
+        m_name = src.m_name;
         return *this;
     }
 
-    type_reference& type_reference::operator=(type_reference&& src)
+    type_hash& type_hash::operator=(type_hash&& src) noexcept
     {
-        value = std::move(src.value);
+        m_value = src.m_value;
+        m_name = src.m_name;
         return *this;
     }
 
-    id_type type_reference::local() const
+    type_hash::operator id_type() const noexcept { return id(); }
+
+    L_NODISCARD id_type type_hash::id() const noexcept { return m_value; }
+
+    L_NODISCARD std::string_view type_hash::name() const noexcept { return m_name; }
+
+    type_hash::type_hash(id_type id, std::string_view name) noexcept : m_name(name), m_value(id) {}
+
+    L_NODISCARD type_hash type_hash::from_name(std::string_view name)
     {
-        return value->local();
+        return type_hash(nameHash(name), name);
     }
 
-    id_type type_reference::global() const
+    L_NODISCARD type_hash type_hash::from_id(id_type id)
     {
-        return value->global();
-    }
-
-    std::string_view type_reference::local_name() const
-    {
-        return value->local_name();
-    }
-
-    std::string_view type_reference::global_name() const
-    {
-        return value->global_name();
-    }
-
-    type_reference::operator id_type() const
-    {
-        return value->local();
+        return type_hash(id, detail::type_data::getInstance().id_to_name[id]);
     }
 }

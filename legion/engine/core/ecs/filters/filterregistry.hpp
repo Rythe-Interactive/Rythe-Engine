@@ -6,6 +6,7 @@
 #include <core/types/primitives.hpp>
 #include <core/engine/engine.hpp>
 #include <core/engine/enginesubsystem.hpp>
+#include <core/common/hash.hpp>
 
 #include <core/ecs/handles/entity.hpp>
 #include <core/ecs/filters/filter_info.hpp>

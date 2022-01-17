@@ -6,7 +6,6 @@
 #include "../systems/simplecameracontroller.hpp"
 #include "../systems/gui_test.hpp"
 
-
 class ExampleModule : public legion::Module
 {
 public:

@@ -65,7 +65,7 @@ namespace legion::core::common
             if (m_succeeded)
                 m_success.~success_type();
             else if (!m_handled)
-                    throw m_error;
+                throw m_error;
         }
 
         L_NODISCARD success_type& value()
@@ -110,11 +110,6 @@ namespace legion::core::common
 
         void mark_handled() const noexcept { m_handled = true; }
 
-        L_NODISCARD operator success_type() { return value(); }
-        L_NODISCARD operator success_type() const { return value(); }
-        L_NODISCARD operator error_type() { return error(); }
-        L_NODISCARD operator error_type() const { return error(); }
-
         L_NODISCARD success_type& operator*() { return m_success; }
         L_NODISCARD const success_type& operator*() const { return m_success; }
         L_NODISCARD success_type* operator->() { return &m_success; }
@@ -157,12 +152,33 @@ namespace legion::core::common
         using warning_type = Warning;
         using warning_list = std::vector<warning_type>;
 
-        result(const result& src) = default;
-        result(result&& src) = default;
+        result(const result& src) : m_handled(src.m_handled), m_error(src.m_error), m_warnings(src.m_warnings) {}
+        result(result&& src) : m_handled(src.m_handled), m_error(src.m_error), m_warnings(src.m_warnings) { src.m_handled = true; }
         ~result() noexcept(false)
         {
             if (m_error && !m_handled)
-                throw *m_error;
+                throw* m_error;
+        }
+
+        result& operator=(const result& src)
+        {
+            if (m_error && !m_handled)
+                throw* m_error;
+
+            m_handled = src.m_handled;
+            m_error = src.m_error;
+            m_warnings = src.m_warnings;
+        }
+
+        result& operator=(result&& src)
+        {
+            if (m_error && !m_handled)
+                throw* m_error;
+
+            m_handled = src.m_handled;
+            m_error = src.m_error;
+            m_warnings = src.m_warnings;
+            src.m_handled = true;
         }
 
         result(success_t) {}
@@ -203,9 +219,6 @@ namespace legion::core::common
         }
 
         void mark_handled() const noexcept { m_handled = true; }
-
-        L_NODISCARD operator error_type() { return error(); }
-        L_NODISCARD operator error_type() const { return error(); }
 
         L_NODISCARD bool has_warnings() const noexcept { return !m_warnings.empty(); }
         L_NODISCARD size_t warning_count() const noexcept { return m_warnings.size(); }
@@ -270,9 +283,6 @@ namespace legion::core::common
             if (m_success) return *m_success;
             throw legion_exception_msg("this result is invalid!");
         }
-
-        L_NODISCARD operator success_type() { return value(); }
-        L_NODISCARD operator success_type() const { return value(); }
 
         L_NODISCARD success_type& operator*() { return *m_success; }
         L_NODISCARD const success_type& operator*() const { return *m_success; }
@@ -349,5 +359,11 @@ namespace legion::core::common
         bool m_succeeded;
         warning_list m_warnings;
     };
+
+#define PropagateErrors(result, warnings)                                                      \
+{                                                                                           \
+    warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());    \
+    if (result.has_error()) { return { result.error(), warnings }; }                        \
+}
 
 }

@@ -22,17 +22,6 @@ namespace legion::rendering
         }
 
         material_handle material = invalid_material_handle;
-
-        template <class Archive>
-        void save(Archive& oa)
-        {
-            oa(CEREAL_NVP(material));
-        }
-        template <class Archive>
-        void load(Archive& ia)
-        {
-            ia(CEREAL_NVP(material));
-        }
     };
 
     struct mesh_renderable : public ecs::archetype<mesh_filter, mesh_renderer>

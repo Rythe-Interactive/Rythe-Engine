@@ -41,9 +41,11 @@
     <ClCompile Include="data\loaders\objmeshloader.cpp" />
     <ClCompile Include="data\loaders\gltfmeshloader.cpp" />
     <ClCompile Include="time\main_clock.cpp" />
+    <ClCompile Include="serialization\serializer_views\serializer_view.cpp" />
+    <ClCompile Include="serialization\serializer_views\json.cpp" />
+    <ClCompile Include="serialization\serializer_views\bson.cpp" />
+    <ClCompile Include="serialization\serializer_views\yaml.cpp" />
     <ClCompile Include="serialization\serializationregistry.cpp" />
-    <ClCompile Include="serialization\serializer.cpp" />
-    <ClCompile Include="serialization\view_type.inl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -398,7 +400,6 @@
     <ClInclude Include="data\image.hpp" />
     <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
-    <ClInclude Include="serialization\serializationmeta.hpp" />
     <ClInclude Include="math\geometry.hpp" />
     <ClInclude Include="math\close_enough.hpp" />
     <ClInclude Include="common\managed_resource.hpp" />
@@ -414,10 +415,8 @@
     <ClInclude Include="ecs\registry.hpp" />
     <ClInclude Include="ecs\handles\entity.hpp" />
     <ClInclude Include="ecs\containers\component_pool.hpp" />
-    <ClInclude Include="ecs\prototypes\entity_prototype.hpp" />
     <ClInclude Include="ecs\data\entity_data.hpp" />
     <ClInclude Include="ecs\handles\component.hpp" />
-    <ClInclude Include="ecs\prototypes\component_prototype.hpp" />
     <ClInclude Include="types\reflector.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
     <ClInclude Include="ecs\filters\filterregistry.hpp" />
@@ -435,6 +434,7 @@
     <ClInclude Include="scheduling\process.hpp" />
     <ClInclude Include="defaults\coremodule.hpp" />
     <ClInclude Include="ecs\containers\component_container.hpp" />
+    <ClInclude Include="serialization\serializationregistry.hpp" />
     <ClInclude Include="defaults\defaultcomponents.hpp" />
     <ClInclude Include="ecs\archetype\archetype.hpp" />
     <ClInclude Include="ecs\meta\meta.hpp" />
@@ -451,8 +451,14 @@
     <ClInclude Include="data\loaders\gltfmeshloader.hpp" />
     <ClInclude Include="engine\enginesubsystem.hpp" />
     <ClInclude Include="time\main_clock.hpp" />
-    <ClInclude Include="serialization\view_type.hpp" />
+    <ClInclude Include="serialization\serializer_views\json_view.hpp" />
+    <ClInclude Include="serialization\serializer_views\bson_view.hpp" />
+    <ClInclude Include="serialization\serialization.hpp" />
     <ClInclude Include="types\prototype.hpp" />
+    <ClInclude Include="serialization\serializer_views\serializer_view.hpp" />
+    <ClInclude Include="serialization\serializer_views\yaml.hpp" />
+    <ClInclude Include="serialization\serializer_views\json.hpp" />
+    <ClInclude Include="serialization\serializer_views\bson.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -597,7 +603,6 @@
     <None Include="ecs\registry.inl" />
     <None Include="ecs\containers\component_pool.inl" />
     <None Include="ecs\handles\component.inl" />
-    <None Include="ecs\prototypes\entity_prototype.inl" />
     <None Include="common\hash.inl" />
     <None Include="ecs\filters\filterregistry.inl" />
     <None Include="engine\engine.inl" />
@@ -620,5 +625,7 @@
     <None Include="engine\module.inl" />
     <None Include="serialization\serializer.inl" />
     <None Include="serialization\serializationregistry.inl" />
+    <None Include="serialization\serializer_views\serializer_view.inl" />
+    <None Include="serialization\serialization.inl" />
   </ItemGroup>
 </Project>

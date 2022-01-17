@@ -444,7 +444,7 @@ namespace legion::core::assets
     template<typename... Args>
     inline L_ALWAYS_INLINE asset<AssetType> AssetLoader<AssetType>::create(id_type nameHash, Args&&...args) const
     {
-        return AssetCache<AssetType>::createInternal(nameHash, std::forward<Args>(args)...);
+        return *AssetCache<AssetType>::createInternal(nameHash, std::forward<Args>(args)...);
     }
 
     template<typename AssetType>

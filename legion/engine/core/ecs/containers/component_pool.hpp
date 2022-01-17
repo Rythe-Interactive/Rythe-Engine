@@ -4,7 +4,6 @@
 #include <core/containers/sparse_map.hpp>
 #include <core/events/events.hpp>
 
-#include <core/ecs/prototypes/component_prototype.hpp>
 #include <core/ecs/containers/component_container.hpp>
 #include <core/ecs/handles/entity.hpp>
 #include <core/ecs/filters/filterregistry.hpp>
@@ -30,11 +29,10 @@ namespace legion::core::ecs
 
         /**@brief Creates a component attached to a certain entity. (uses a prototype to serialize the component)
          * @param target Entity ID to create the component for.
-         * @param prototype Prototype used to serialize the component.
+         * @param src Pointer to component to copy from.
          * @return Pointer to the created component.
          */
-        //virtual void* create_component(entity target, const serialization::component_prototype_base& prototype) LEGION_PURE;
-        //virtual void* create_component(entity target, serialization::component_prototype_base&& prototype) LEGION_PURE;
+        virtual void* create_component(entity target, const void* src) LEGION_PURE;
 
         /**@brief Check if a certain entity has the type of component managed by this pool.
          * @param target Entity ID of the entity to check for.
@@ -52,12 +50,6 @@ namespace legion::core::ecs
          * @param target Entity ID of the entity the component is attached to.
          */
         virtual void destroy_component(entity target) LEGION_PURE;
-
-        /**@brief Serialize a certain component into a prototype.
-         * @param target Entity ID of the entity the component is attached to.
-         * @return `std::unique_ptr` with the prototype.
-         */
-        //L_NODISCARD virtual std::unique_ptr<serialization::component_prototype_base> create_prototype(entity target) const LEGION_PURE;
 
         virtual ~component_pool_base() = default;
     };
@@ -86,11 +78,10 @@ namespace legion::core::ecs
 
         /**@brief Creates a component attached to a certain entity. (uses a prototype to serialize the component)
          * @param target Entity ID to create the component for.
-         * @param prototype Prototype used to serialize the component.
+         * @param src Pointer to component to copy from.
          * @return Pointer to the created component.
          */
-        //virtual void* create_component(entity target, const serialization::component_prototype_base& prototype);
-        //virtual void* create_component(entity target, serialization::component_prototype_base&& prototype);
+        virtual void* create_component(entity target, const void* src);
 
         /**@brief Check if a certain entity has the type of component managed by this pool.
          * @param target Entity ID of the entity to check for.
@@ -109,14 +100,6 @@ namespace legion::core::ecs
          */
         virtual void destroy_component(entity target);
 
-        /**@brief Serialize a certain component into a prototype.
-         * @param target Entity ID of the entity the component is attached to.
-         * @return `std::unique_ptr` with the prototype.
-         */
-        //L_NODISCARD virtual std::unique_ptr<serialization::component_prototype_base> create_prototype(entity target) const;
-
-        //L_NODISCARD static serialization::component_prototype<component_type> create_prototype_direct(entity target);
-
         /**@brief Creates a component attached to a certain entity.
          * @note This is a more optimized direct variant, but it requires compile time info about what the component type is.
          * @param target Entity ID to create the component for.
@@ -131,15 +114,6 @@ namespace legion::core::ecs
          */
         static component_type& create_component_direct(entity target, component_type&& value);
         static component_type& create_component_direct(entity target, const component_type& value);
-
-        /**@brief Creates a component attached to a certain entity. (uses a prototype to serialize the component)
-         * @note This is a more optimized direct variant, but it requires compile time info about what the component type is.
-         * @param target Entity ID to create the component for.
-         * @param prototype Prototype used to serialize the component.
-         * @return Reference to the component.
-         */
-        //static component_type& create_component_direct(entity target, const serialization::component_prototype_base& prototype);
-        //static component_type& create_component_direct(entity target, serialization::component_prototype_base&& prototype);
 
         /**@brief Check if a certain entity has the type of component managed by this pool.
          * @note This is a more optimized direct variant, but it requires compile time info about what the component type is.

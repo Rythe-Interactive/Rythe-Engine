@@ -5,6 +5,9 @@
 namespace legion::core::ecs
 {
     template<typename component_type>
+    const type_hash component<component_type>::typeId = make_hash<component_type>();
+
+    template<typename component_type>
     inline L_ALWAYS_INLINE component<component_type>& component<component_type>::operator=(const component_type& src)
     {
         Registry::getComponent<component_type>(owner) = src;

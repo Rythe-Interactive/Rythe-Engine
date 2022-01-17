@@ -189,14 +189,17 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="ecs\filters\filterregistry.hpp" />
     <ClInclude Include="ecs\handles\component.hpp" />
     <ClInclude Include="ecs\handles\entity.hpp" />
-    <ClInclude Include="ecs\prototypes\component_prototype.hpp" />
-    <ClInclude Include="ecs\prototypes\entity_prototype.hpp" />
     <ClInclude Include="engine\enginesubsystem.hpp" />
     <ClInclude Include="scheduling\clock.hpp" />
     <ClInclude Include="scheduling\process.hpp" />
     <ClInclude Include="scheduling\processchain.hpp" />
     <ClInclude Include="scheduling\scheduler.hpp" />
     <ClInclude Include="scheduling\scheduling.hpp" />
+    <ClInclude Include="serialization\serialization.hpp" />
+    <ClInclude Include="serialization\serializer_views\bson.hpp" />
+    <ClInclude Include="serialization\serializer_views\bson_view.hpp" />
+    <ClInclude Include="serialization\serializer_views\json.hpp" />
+    <ClInclude Include="serialization\serializer_views\json_view.hpp" />
     <ClInclude Include="ecs\registry.hpp" />
     <ClInclude Include="engine\engine.hpp" />
     <ClInclude Include="engine\module.hpp" />
@@ -521,12 +524,12 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="serialization\serializationregistry.hpp" />
     <ClInclude Include="serialization\serializer.hpp" />
-    <ClInclude Include="serialization\view_type.hpp" />
+    <ClInclude Include="serialization\serializer_views\serializer_view.hpp" />
+    <ClInclude Include="serialization\serializer_views\yaml.hpp" />
     <ClInclude Include="time\main_clock.hpp" />
     <ClInclude Include="time\utils.hpp" />
     <ClInclude Include="types\prototype.hpp" />
     <ClInclude Include="types\reflector.hpp" />
-    <ClInclude Include="serialization\serializationmeta.hpp" />
     <ClInclude Include="time\stopwatch.hpp" />
     <ClInclude Include="time\time.hpp" />
     <ClInclude Include="time\time_span.hpp" />
@@ -575,12 +578,12 @@ del /q ".\xcopyexclude"</Command>
     <ClCompile Include="scheduling\process.cpp" />
     <ClCompile Include="scheduling\processchain.cpp" />
     <ClCompile Include="scheduling\scheduler.cpp" />
-    <ClCompile Include="time\main_clock.cpp" />
     <ClCompile Include="serialization\serializationregistry.cpp" />
-    <ClCompile Include="serialization\serializer.cpp" />
-    <ClCompile Include="serialization\view_type.inl">
-      <FileType>CppHeader</FileType>
-    </ClCompile>
+    <ClCompile Include="serialization\serializer_views\bson.cpp" />
+    <ClCompile Include="serialization\serializer_views\json.cpp" />
+    <ClCompile Include="serialization\serializer_views\serializer_view.cpp" />
+    <ClCompile Include="serialization\serializer_views\yaml.cpp" />
+    <ClCompile Include="time\main_clock.cpp" />
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -599,7 +602,6 @@ del /q ".\xcopyexclude"</Command>
     <None Include="ecs\handles\component.inl" />
     <None Include="ecs\handles\entity.inl" />
     <None Include="ecs\handles\filter.inl" />
-    <None Include="ecs\prototypes\entity_prototype.inl" />
     <None Include="ecs\registry.inl" />
     <None Include="engine\engine.inl" />
     <None Include="engine\enginesubsystem.inl" />
@@ -746,13 +748,11 @@ del /q ".\xcopyexclude"</Command>
     <None Include="scheduling\process.inl" />
     <None Include="scheduling\processchain.inl" />
     <None Include="scheduling\scheduler.inl" />
+    <None Include="serialization\serialization.inl" />
     <None Include="time\utils.inl" />
-    <None Include="serialization\serializationregistry.inl">
-      <FileType>CppHeader</FileType>
-    </None>
-    <None Include="serialization\serializer.inl">
-      <FileType>CppHeader</FileType>
-    </None>
+    <None Include="serialization\serializationregistry.inl" />
+    <None Include="serialization\serializer.inl" />
+    <None Include="serialization\serializer_views\serializer_view.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

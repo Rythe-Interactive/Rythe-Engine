@@ -12,24 +12,41 @@ namespace legion::core
         id_type typeId;
         std::string_view typeName;
         std::vector<member_reference> members;
+        void* data;
 
         reflector() = default;
-        reflector(id_type id, std::string_view name, std::vector<member_reference> _members) : typeId(id), typeName(name), members(_members) {}
-        reflector(const reflector& refl) : typeId(refl.typeId), typeName(refl.typeName), members(refl.members) {}
+        reflector(id_type id, std::string_view name, std::vector<member_reference> _members, void* _adress)
+            : typeId(id), typeName(name), members(_members), data(_adress) {}
+
+        reflector(id_type id, std::string_view name, std::vector<member_reference> _members, const void* _adress)
+            : typeId(id), typeName(name), members(_members)
+        {
+            ptr_type adress = reinterpret_cast<ptr_type>(_adress);
+            data = reinterpret_cast<void*>(adress);
+        }
+
+        reflector(const reflector& refl) : typeId(refl.typeId), typeName(refl.typeName), members(refl.members), data(refl.data) {}
 
         reflector& operator=(const reflector& rhs)
         {
             typeId = rhs.typeId;
             typeName = rhs.typeName;
             members = rhs.members;
+            data = rhs.data;
 
             return *this;
         }
     };
+
     struct primitive_reference
     {
         id_type typeId;
         void* data = nullptr;
+
+        RULE_OF_5_NOEXCEPT(primitive_reference);
+        primitive_reference(id_type id, void* address) noexcept : typeId(id), data(address) {}
+        primitive_reference(id_type id, const void* address) noexcept : typeId(id)
+        { ptr_type tmp = reinterpret_cast<ptr_type>(address); data = reinterpret_cast<void*>(tmp); }
 
         template<typename T>
         L_NODISCARD T* cast()
@@ -51,6 +68,7 @@ namespace legion::core
             return nullptr;
         }
     };
+
     struct member_reference
     {
         bool is_object;
@@ -61,8 +79,8 @@ namespace legion::core
             primitive_reference primitive;
         };
 
-        member_reference() : is_object(false), name(""), primitive() {}
-        member_reference(std::string_view _name, primitive_reference _primitive) : is_object(false), name(_name), primitive(_primitive) {}
+        member_reference() noexcept : is_object(false), name(""), primitive() {}
+        member_reference(std::string_view _name, primitive_reference _primitive) noexcept : is_object(false), name(_name), primitive(_primitive) {}
         member_reference(std::string_view _name, reflector refl) : is_object(true), name(_name), object(refl) {}
         member_reference(const member_reference& other)
         {
@@ -100,8 +118,9 @@ namespace legion::core
     };
 
     template<typename T>
-    L_NODISCARD reflector make_reflector(T& obj)
+    L_NODISCARD auto make_reflector(T& obj) -> std::conditional_t<std::is_const_v<T>, const reflector, reflector>
     {
-        return reflector{ localTypeHash<T>(), localNameOfType<T>(),std::vector<member_reference>() };
+        ptr_type adress = reinterpret_cast<ptr_type>(std::addressof(obj));
+        return reflector{ typeHash<T>(), nameOfType<T>(), std::vector<member_reference>(), reinterpret_cast<void*>(adress) };
     }
 }

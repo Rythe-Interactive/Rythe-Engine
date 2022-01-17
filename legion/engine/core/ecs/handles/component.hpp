@@ -2,6 +2,7 @@
 #include <core/platform/platform.hpp>
 #include <core/math/math.hpp>
 #include <core/common/hash.hpp>
+
 #include <core/ecs/handles/entity.hpp>
 
 /**
@@ -24,7 +25,7 @@ namespace legion::core::ecs
     template<typename component_type>
     struct component : public component_base
     {
-        static constexpr type_hash<component_type> typeId = make_hash<component_type>();
+        static const type_hash typeId;
 
         entity owner;
 

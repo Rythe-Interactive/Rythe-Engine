@@ -903,7 +903,7 @@ namespace legion::rendering
 
     shader_handle ShaderCache::create_shader(const fs::view& file, shader_import_settings settings)
     {
-        return create_shader(file.get_filename(), file, settings);
+        return create_shader(*file.get_filename(), file, settings);
     }
 
     shader_handle ShaderCache::get_handle(const std::string& name)

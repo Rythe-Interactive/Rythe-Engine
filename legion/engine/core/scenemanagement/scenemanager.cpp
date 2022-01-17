@@ -1,5 +1,4 @@
 #include <core/scenemanagement/components/scene.hpp>
-#include <core/serialization/serializationutil.hpp>
 #include <core/logging/logging.hpp>
 #include <core/common/string_extra.hpp>
 //#include <core/defaults/defaultcomponents.hpp>
@@ -21,7 +20,7 @@ namespace legion::core::scenemanagement
         //if (sceneEntities.size() == 0)
         //{
         //    log::debug("Creating a Scene Entity");
-        //sceneEntity = m_ecs->createEntity();
+        //    sceneEntity = m_ecs->createEntity();
         //    sceneEntity.add_component<hierarchy>();
         //    sceneEntity.add_component<scene>();
         //    std::vector<ecs::entity> children;
@@ -103,7 +102,7 @@ namespace legion::core::scenemanagement
         //world.write_component(hry);
         //log::debug("Child Count After: {}", world.child_count());
 
-        //auto sceneEntity = serialization::serializer_base::deserialize<ecs::entity>(inFile);
+        //auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity>(inFile);
         //currentScene = name;
 
         //SceneManager::saveScene(name, sceneEntity);
@@ -114,7 +113,7 @@ namespace legion::core::scenemanagement
     bool SceneManager::save_scene(L_MAYBEUNUSED const std::string& name, L_MAYBEUNUSED ecs::entity& ent)
     {
         //std::ofstream outFile("assets/scenes/" + name + ".cornflake");
-        //serialization::serializer_base::serialize<ecs::entity>(outFile, ent);
+        //serialization::SerializationUtil::JSONSerialize<ecs::entity>(outFile, ent);
         return true;
     }
 

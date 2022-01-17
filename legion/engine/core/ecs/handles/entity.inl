@@ -139,20 +139,6 @@ namespace legion::core::ecs
     }
 
     template<typename component_type>
-    inline L_ALWAYS_INLINE component<component_type> entity::add_component(const serialization::prototype<component<component_type>>& prot)
-    {
-        Registry::createComponent<component_type>(*this, prot);
-        return { {}, entity{data} };
-    }
-
-    template<typename component_type>
-    inline L_ALWAYS_INLINE component<component_type> entity::add_component(serialization::prototype<component<component_type>>&& prot)
-    {
-        Registry::createComponent<component_type>(*this, std::move(prot));
-        return { {}, entity{data} };
-    }
-
-    template<typename component_type>
     inline L_ALWAYS_INLINE bool entity::has_component() const
     {
         return Registry::hasComponent<component_type>(*this);

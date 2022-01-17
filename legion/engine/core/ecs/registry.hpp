@@ -16,7 +16,6 @@
 #include <core/ecs/handles/entity.hpp>
 #include <core/ecs/handles/component.hpp>
 #include <core/ecs/data/entity_data.hpp>
-#include <core/ecs/prototypes/entity_prototype.hpp>
 #include <core/ecs/meta/meta.hpp>
 
 /**
@@ -94,7 +93,7 @@ namespace legion::core::ecs
         L_NODISCARD static component_pool<component_type>* getFamily(Args&&... args);
 
         /**@brief Non templated way to get a pointer to the family of a certain component type.
-         * @note Will throw an exception if non of the templated functions have been called
+         * @note Will throw an exception if none of the templated functions have been called
          *       before for this component type due to the type not being registered yet.
          * @param typeId Local type hash of the component type.
          */
@@ -205,6 +204,8 @@ namespace legion::core::ecs
         //template<typename component_type>
         //static component_type& createComponent(entity target, serialization::component_prototype<component_type>&& prototype);
 
+        static void* createComponent(id_type typeId, entity target, const void* component);
+
         /**@brief Creates a new component of a certain type for a specific entity.
          * @param typeId Type hash of component type to create.
          * @param target Entity to create the component for.
@@ -287,6 +288,5 @@ namespace legion::core::ecs
 #include <core/ecs/filters/filterregistry.inl>
 #include <core/ecs/handles/entity.inl>
 #include <core/ecs/handles/component.inl>
-#include <core/ecs/prototypes/entity_prototype.inl>
 #include <core/ecs/archetype/archetype.inl>
 
