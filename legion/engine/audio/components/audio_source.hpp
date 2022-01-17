@@ -7,7 +7,6 @@
 
 namespace legion::audio
 {
-    [reflectable]
     struct audio_source
     {
         friend class AudioSystem;

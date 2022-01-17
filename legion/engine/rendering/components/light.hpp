@@ -12,7 +12,6 @@ namespace legion::rendering
 
     namespace detail
     {
-        [reflectable]
         struct light_data
         {
             light_type type;
@@ -27,7 +26,6 @@ namespace legion::rendering
         };
     }
 
-    [reflectable]
     struct light
     {
     private:
