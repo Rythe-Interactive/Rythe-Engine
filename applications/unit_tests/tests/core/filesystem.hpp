@@ -126,7 +126,7 @@ static void TestFS()
 
     L_CHECK(contents_valid);
 
-    auto result = fs::view("basic://config/test2.txt").set(contents);
+    auto result = fs::view("basic://config/test2.txt").set(*contents);
 
     L_CHECK(!result.has_error());
 }
