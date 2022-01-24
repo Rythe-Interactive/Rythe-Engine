@@ -23,12 +23,6 @@ namespace legion::physics
         */
         void calculateNewLocalCenterOfMass();
 
-        /** @brief Instantiates a ConvexCollider and calls ConstructConvexHullWithMesh on it and passes the given mesh. This
-         * ConvexCollider is then added to the list of PhysicsColliders
-         * @param meshHandle - The mesh handle to lock the mesh and the mesh to create a hull from
-        */
-		std::shared_ptr<ConvexCollider> constructConvexHull(legion::core::mesh_handle meshHandle);
-
         /** @brief Generates a convex collider from the list of vertices given.
          * @param vertices the vertices used to generate the convex hull. The centroid of these vertices is the origin.
         */
