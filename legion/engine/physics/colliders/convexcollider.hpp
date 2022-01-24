@@ -29,12 +29,7 @@ namespace legion::physics
 
         /** @brief Given a physics_contact that has been resolved, use its label and lambdas in order to create a ConvexConverganceIdentifier
        */
-        void AddConverganceIdentifier(const physics_contact& contact) override
-        {
-            converganceIdentifiers.push_back(
-                std::make_unique<ConvexConverganceIdentifier>(contact.label, contact.totalLambda,
-                    contact.tangent1Lambda, contact.tangent2Lambda, GetColliderID()));
-        }
+        void AddConverganceIdentifier(const physics_contact& contact) override;
 
         void CheckCollision(PhysicsCollider* physicsCollider, physics_manifold& manifold) override
         {
@@ -89,6 +84,7 @@ namespace legion::physics
             ConstructConvexHullWithMesh(mesh,spacingAmount);
         }
 
+        //void ConstructConvexHullWithMesh(legion::core::mesh_handle meshHandle, math::mat4 DEBUG_transform );
         
 
         //TODO(algorythmix,jelled1st) This desperately needs cleanup
@@ -108,6 +104,8 @@ namespace legion::physics
 
             ConstructConvexHullWithMesh(mesh,math::vec3(),shouldDebug);
         }
+
+
 
         void  ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount = math::vec3(), bool shouldDebug = false);
        
@@ -309,6 +307,14 @@ namespace legion::physics
             ac->pairingEdge = ca;   dc->pairingEdge = cd;
             cg->pairingEdge = gc;   ca->pairingEdge = ac;
 
+            //edge pairings have been set, we can calculate edge directions now
+            for (HalfEdgeFace* face : halfEdgeFaces)
+            {
+                auto calculateDirection = [](HalfEdgeEdge* edge) {edge->calculateRobustEdgeDirection(); };
+
+                face->forEachEdge(calculateDirection);
+
+            }
 
             //initialize the ID of the edges, this is done mostly for debugging reasons and will be removed when it
             //is no longer needed
@@ -341,7 +347,7 @@ namespace legion::physics
             return halfEdgeFaces;
         }
 
-        const std::vector<math::vec3>& GetVertices() const
+        std::vector<math::vec3>& GetVertices() 
         {
             return vertices;
         }
@@ -363,6 +369,10 @@ namespace legion::physics
             }
         }
 
+        /**@brief populates the vertices vector with the 
+         * edge positions of the each face in halfEdgeFace
+         */
+        void populateVertexListWithHalfEdges();
 
     private:
 
@@ -655,7 +665,6 @@ namespace legion::physics
             }
         }
 
-        
         std::vector<HalfEdgeFace*> halfEdgeFaces;
 
         // Convex hull generation debug stuffs
