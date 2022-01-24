@@ -115,7 +115,7 @@ namespace legion::physics
             auto physicsCompHandle = ent.add_component<physicsComponent>();
             auto physicsComp = physicsCompHandle.read();
             auto meshFilter = ent.read_component<mesh_filter>();
-            auto convexCollider = physicsComp.ConstructConvexHull(meshFilter);
+            auto convexCollider = physicsComp.constructConvexHull(meshFilter);
             physicsCompHandle.write(physicsComp);
 
             //add rigidbody 
