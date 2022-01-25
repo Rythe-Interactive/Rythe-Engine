@@ -14,12 +14,12 @@ struct SpawnHullActive : public app::input_action< SpawnHullActive> {};
 
 struct ObjectToFollow
 {
-    ecs::entity_handle ent;
+    ecs::entity ent;
 };
 
 namespace legion::physics
 {
-    class PhysicsTestSystem final : public System<PhysicsTestSystem>
+    class PhysicsTestSystem final : public legion::System<PhysicsTestSystem>
     {
     public:
 
@@ -31,7 +31,7 @@ namespace legion::physics
 
         bool m_throwingHullActivated = false;
 
-        void CreateElongatedFloor(math::vec3 position,math::quat rot, math::vec3 scale, rendering::material_handle mat, bool hasCollider =true);
+        void CreateElongatedFloor(math::vec3 position, math::quat rot, math::vec3 scale, rendering::material_handle mat, bool hasCollider = true);
 
         //SCENES
 
@@ -45,25 +45,25 @@ namespace legion::physics
 
         //SCENE HELPERS
 
-        void createQuickhullTestObject(math::vec3 position, rendering::model_handle cubeH, rendering::material_handle TextureH,math::mat3 inertia = math::mat3(6.0f));
+        void createQuickhullTestObject(math::vec3 position, rendering::model_handle cubeH, rendering::material_handle TextureH, math::mat3 inertia = math::mat3(6.0f));
 
-        void PopulateFollowerList(ecs::entity_handle physicsEnt,int index);
-       
-        void addStaircase(math::vec3 position,float breadthMult = 1.0f,float widthMult = 27.0f);
+        void PopulateFollowerList(ecs::entity physicsEnt, int index);
+
+        void addStaircase(math::vec3 position, float breadthMult = 1.0f, float widthMult = 27.0f);
 
         //FUNCTION BINDED ACTIONS
 
-        void ActivateSpawnRandomHull(SpawnHullActive*action);
+        void ActivateSpawnRandomHull(SpawnHullActive& action);
 
-        void spawnRandomConvexHullOnCameraLocation(SpawnRandomHullOnCameraLoc*action);
+        void spawnRandomConvexHullOnCameraLocation(SpawnRandomHullOnCameraLoc& action);
 
-        void extendedContinuePhysics(extendedPhysicsContinue* action);
+        void extendedContinuePhysics(extendedPhysicsContinue& action);
 
-        void OneTimeContinuePhysics(nextPhysicsTimeStepContinue* action);
+        void OneTimeContinuePhysics(nextPhysicsTimeStepContinue& action);
 
-        void quickHullStep(QHULL * action);
+        void quickHullStep(QHULL& action);
 
-        void AddRigidbodyToQuickhulls(AddRigidbody * action);
+        void AddRigidbodyToQuickhulls(AddRigidbody& action);
 
         void drawPhysicsColliders();
 
@@ -85,29 +85,31 @@ namespace legion::physics
         rendering::material_handle vertexColor;
         rendering::material_handle brickH;
         rendering::material_handle wireFrameH;
-   
+
         rendering::model_handle cubeH;
         rendering::model_handle concaveTestObject;
         rendering::model_handle planeH;
         rendering::model_handle cylinderH;
         rendering::model_handle complexH;
         rendering::model_handle directionalLightH;
-   
+
         //convex hull tests
         rendering::model_handle colaH;
         rendering::model_handle hammerH;
         rendering::model_handle suzzaneH;
         rendering::model_handle teapotH;
 
-        ecs::entity_handle smallExplosionEnt;
-        ecs::entity_handle mediumExplosionEnt;
-        ecs::entity_handle largeExplosionEnt;
+        ecs::entity smallExplosionEnt;
+        ecs::entity mediumExplosionEnt;
+        ecs::entity largeExplosionEnt;
 
-        ecs::entity_handle staticToAABBEntLinear, staticToAABBEntRotation, staticToOBBEnt, staticToEdgeEnt;
+        ecs::entity staticToAABBEntLinear, staticToAABBEntRotation, staticToOBBEnt, staticToEdgeEnt;
 
 
-        std::vector< ecs::entity_handle> registeredColliderColorDraw;
+        std::vector< ecs::entity> registeredColliderColorDraw;
 
-        std::vector<std::vector<ecs::entity_handle>> folowerObjects;
+        std::vector<std::vector<ecs::entity>> folowerObjects;
     };
+
 }
+
