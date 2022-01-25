@@ -110,12 +110,6 @@ namespace legion::physics
         static bool DetectConvexSphereCollision(ConvexCollider* convexA, const math::mat4& transformA, math::vec3 sphereWorldPosition, float sphereRadius,
              float& maximumSeperation);
 
-
-        static std::pair< math::vec3,math::vec3> ConstructAABBFromPhysicsComponentWithTransform
-        (ecs::component<physicsComponent> physicsComponentToUse, const math::mat4& transform);
-
-        static float GetPhysicsComponentSupportPointAtDirection(math::vec3 direction,physicsComponent& physicsComponentToUse);
-
         static std::pair< math::vec3, math::vec3> ConstructAABBFromVertices(const std::vector<math::vec3>& vertices);
 
         static std::pair< math::vec3, math::vec3> ConstructAABBFromTransformedVertices(const std::vector<math::vec3>& vertices,const math::mat4& transform);

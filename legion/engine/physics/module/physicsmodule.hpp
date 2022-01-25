@@ -4,8 +4,6 @@
 #include <physics/systems/physicssystem.hpp>
 #include <physics/components/physics_component.hpp>
 #include <physics/components/rigidbody.hpp>
-#include <physics/mesh_splitter_utils/mesh_splitter.hpp>
-#include <physics/components/fracturer.hpp>
 #include <physics/components/fracturecountdown.hpp>
 #include <physics/systems/physics_test_system.hpp>
 
@@ -18,7 +16,8 @@ namespace legion::physics
 
         virtual void setup() override
         {
-            createProcessChain("Physics");
+            log::debug("physics is setup!");
+            /*createProcessChain("Physics");
             reportSystem<PhysicsSystem>();
             reportComponentType<physicsComponent>();
             reportComponentType<rigidbody>();
@@ -26,7 +25,7 @@ namespace legion::physics
             reportComponentType<MeshSplitter>();
             reportComponentType<Fracturer>();
             reportComponentType<FractureCountdown>();
-            reportComponentType<ObjectToFollow>();
+            reportComponentType<ObjectToFollow>();*/
             //reportComponentType <addRB>();
         }
 

@@ -14,16 +14,12 @@
     <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgrid.cpp" />
     <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.cpp" />
     <ClCompile Include="colliders\convexcollider.cpp" />
-    <ClCompile Include="components\fracturer.cpp" />
     <ClCompile Include="data\collider_face_to_vert.cpp" />
     <ClCompile Include="data\convexconvexpenetrationquery.cpp" />
     <ClCompile Include="data\edgepenetrationquery.cpp" />
     <ClCompile Include="halfedgeedge.cpp" />
     <ClCompile Include="halfedgeface.cpp" />
     <ClCompile Include="components\physics_component.cpp" />
-    <ClCompile Include="mesh_splitter_utils\mesh_splitter.cpp" />
-    <ClCompile Include="mesh_splitter_utils\primitive_mesh.cpp" />
-    <ClCompile Include="mesh_splitter_utils\splittable_polygon.cpp" />
     <ClCompile Include="physics_statics.cpp" />
     <ClCompile Include="systems\physicssystem.cpp" />
     <ClCompile Include="systems\physics_test_system.cpp" />
@@ -40,7 +36,6 @@
     <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.hpp" />
     <ClInclude Include="colliders\convexcollider.hpp" />
     <ClInclude Include="components\fracturecountdown.hpp" />
-    <ClInclude Include="components\fracturer.hpp" />
     <ClInclude Include="data\contact_vertex.hpp" />
     <ClInclude Include="data\convergance_identifier.hpp" />
     <ClInclude Include="data\convexconvexpenetrationquery.hpp" />
@@ -61,16 +56,6 @@
     <ClInclude Include="halfedgeface.hpp" />
     <ClInclude Include="colliders\physicscollider.hpp" />
     <ClInclude Include="data\penetrationquery.hpp" />
-    <ClInclude Include="mesh_splitter_utils\half_edge_finder.hpp" />
-    <ClInclude Include="mesh_splitter_utils\intersecting_polygon_organizer.hpp" />
-    <ClInclude Include="mesh_splitter_utils\intersection_edge_info.hpp" />
-    <ClInclude Include="mesh_splitter_utils\mesh_split_params.hpp" />
-    <ClInclude Include="mesh_splitter_utils\mesh_splitter.hpp" />
-    <ClInclude Include="mesh_splitter_utils\mesh_half_edge.hpp" />
-    <ClInclude Include="mesh_splitter_utils\mesh_splitter_debug_helpers.hpp" />
-    <ClInclude Include="mesh_splitter_utils\mesh_splitter_typedefs.hpp" />
-    <ClInclude Include="mesh_splitter_utils\primitive_mesh.hpp" />
-    <ClInclude Include="mesh_splitter_utils\splittable_polygon.hpp" />
     <ClInclude Include="physics.hpp" />
     <ClInclude Include="physicsconstants.hpp" />
     <ClInclude Include="physics_contact.hpp" />
@@ -79,7 +64,7 @@
     <ClInclude Include="physics_statics.hpp" />
     <ClInclude Include="data\physics_manifold.hpp" />
     <ClInclude Include="components\physics_component.hpp" />
-    <ClInclude Include="physicsmodule.hpp" />
+    <ClInclude Include="module\physicsmodule.hpp" />
     <ClInclude Include="components\rigidbody.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

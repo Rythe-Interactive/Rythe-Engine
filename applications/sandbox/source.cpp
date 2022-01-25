@@ -9,6 +9,7 @@
 #include <application/application.hpp>
 #include <rendering/rendering.hpp>
 #include <audio/audio.hpp>
+#include <physics/physics.hpp>
 
 #include "module/examplemodule.hpp"
 
@@ -19,4 +20,5 @@ void LEGION_CCONV reportModules(legion::Engine* engine)
     engine->reportModule<gfx::RenderingModule>();
     engine->reportModule<audio::AudioModule>();
     engine->reportModule<ExampleModule>();
+    engine->reportModule<physics::PhysicsModule>();
 }

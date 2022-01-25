@@ -1,5 +1,5 @@
 #pragma once
-#include <physics/physicsmodule.hpp>
+
 #include <physics/components/physics_component.hpp>
 #include <physics/components/rigidbody.hpp>
 #include <physics/colliders/convexcollider.hpp>
@@ -14,3 +14,4 @@
 #include <physics/data/physics_manifold_precursor.hpp>
 #include <physics/data/pointer_encapsulator.hpp>
 #include <physics/systems/physicssystem.hpp>
+#include <physics/module/physicsmodule.hpp>

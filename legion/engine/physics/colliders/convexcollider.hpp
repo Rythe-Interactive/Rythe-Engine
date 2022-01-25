@@ -63,17 +63,6 @@ namespace legion::physics
         void UpdateLocalAABB() override;
        
         virtual void DrawColliderRepresentation(const math::mat4& transform, math::color usedColor, float width,float time,bool ignoreDepth = false) override;
-        
-
-        /**@brief Does one step of the convex hull generation
-         * Just for debug purposes
-         */
-        void doStep(legion::core::mesh_handle& mesh)
-        {
-           
-            ConstructConvexHullWithMesh(mesh);
-            ++step;
-        }
 
         void ConstructConvexHullWithVertices( std::vector<math::vec3>& vertices,math::vec3 spacingAmount = math::vec3())
         {
@@ -83,29 +72,6 @@ namespace legion::physics
             mesh.vertices = std::move(vertices);
             ConstructConvexHullWithMesh(mesh,spacingAmount);
         }
-
-        //void ConstructConvexHullWithMesh(legion::core::mesh_handle meshHandle, math::mat4 DEBUG_transform );
-        
-
-        //TODO(algorythmix,jelled1st) This desperately needs cleanup
-        //TODO(cont.) investigate unused variables! (projected)
-        //LIKE A LOT OF CLEANUP
-
-        /**@brief Constructs a polyhedron-shaped convex hull that encompasses the given mesh.
-        * @param meshHandle - The mesh handle to lock the mesh and the mesh to create a hull from
-        */
-        void ConstructConvexHullWithMesh(legion::core::mesh_handle meshHandle,bool shouldDebug = true)
-        {
-            auto meshLockPair = meshHandle.get();
-
-            //mesh lock stuff
-            async::readonly_guard guard(meshLockPair.first);
-            auto mesh = meshLockPair.second;
-
-            ConstructConvexHullWithMesh(mesh,math::vec3(),shouldDebug);
-        }
-
-
 
         void  ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount = math::vec3(), bool shouldDebug = false);
        
