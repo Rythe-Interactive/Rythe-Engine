@@ -5,7 +5,6 @@
 #include <physics/components/physics_component.hpp>
 #include <physics/components/rigidbody.hpp>
 #include <physics/components/fracturecountdown.hpp>
-#include <physics/systems/physics_test_system.hpp>
 
 namespace legion::physics
 {
@@ -17,10 +16,13 @@ namespace legion::physics
         virtual void setup() override
         {
             log::debug("physics is setup!");
+
+           /* reportComponentType<physicsComponent>();
+            reportComponentType<rigidbody>();*/
+
             /*createProcessChain("Physics");
             reportSystem<PhysicsSystem>();
-            reportComponentType<physicsComponent>();
-            reportComponentType<rigidbody>();
+            
             reportComponentType<identifier>();
             reportComponentType<MeshSplitter>();
             reportComponentType<Fracturer>();

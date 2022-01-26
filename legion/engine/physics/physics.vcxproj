@@ -22,7 +22,6 @@
     <ClCompile Include="components\physics_component.cpp" />
     <ClCompile Include="physics_statics.cpp" />
     <ClCompile Include="systems\physicssystem.cpp" />
-    <ClCompile Include="systems\physics_test_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.vcxproj">
@@ -59,7 +58,6 @@
     <ClInclude Include="physics.hpp" />
     <ClInclude Include="physicsconstants.hpp" />
     <ClInclude Include="physics_contact.hpp" />
-    <ClInclude Include="systems\physics_test_system.hpp" />
     <ClInclude Include="systems\physicssystem.hpp" />
     <ClInclude Include="physics_statics.hpp" />
     <ClInclude Include="data\physics_manifold.hpp" />
