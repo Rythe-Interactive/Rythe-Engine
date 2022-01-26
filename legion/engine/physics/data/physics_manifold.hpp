@@ -78,7 +78,7 @@ namespace legion::physics
         {
             auto idHA = entityA.get_component<identifier>();
             auto idHB = entityB.get_component<identifier>();
-            
+
             str1 = "" ;
             str2 = "" ;
 

@@ -15,20 +15,8 @@ namespace legion::physics
 
         virtual void setup() override
         {
-            log::debug("physics is setup!");
-
-           /* reportComponentType<physicsComponent>();
-            reportComponentType<rigidbody>();*/
-
-            /*createProcessChain("Physics");
-            reportSystem<PhysicsSystem>();
-            
-            reportComponentType<identifier>();
-            reportComponentType<MeshSplitter>();
-            reportComponentType<Fracturer>();
-            reportComponentType<FractureCountdown>();
-            reportComponentType<ObjectToFollow>();*/
-            //reportComponentType <addRB>();
+            registerComponentType<rigidbody>();
+            registerComponentType<physicsComponent>();
         }
 
         virtual priority_type priority() override

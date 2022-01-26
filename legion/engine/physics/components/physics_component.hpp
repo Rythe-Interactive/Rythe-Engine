@@ -8,15 +8,11 @@ namespace legion::physics
 {
 	struct physicsComponent
 	{
-		//physics material
-
         std::vector<std::shared_ptr<PhysicsCollider>> colliders;
 
-        bool isTrigger =false;
+        bool isTrigger = false;
 
         math::vec3 localCenterOfMass{};
-
-		//physics bitmask
 
         /** @brief given the colliders this physicsComponent, calculates the new local center of mass.
         * @note This is called internally by the physicsComponent every time a collider is added.
