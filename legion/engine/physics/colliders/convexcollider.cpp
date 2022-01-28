@@ -32,7 +32,6 @@ namespace legion::physics
        
         if (!physics::PhysicsStatics::CollideAABB(low0, high0, low1, high1))
         {
-
             manifold.isColliding = false;
             return;
         }
@@ -627,7 +626,6 @@ namespace legion::physics
         const size_t reserveSize = halfEdgeFaces.size() * 3;
 
         verticesVec.reserve(reserveSize);
-
 
         auto collectVertices = [&verticesVec](HalfEdgeEdge* edge)
         {

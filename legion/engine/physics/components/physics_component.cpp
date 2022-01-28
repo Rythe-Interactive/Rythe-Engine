@@ -25,7 +25,6 @@ namespace legion::physics
         if (collider)
         {
             colliders.push_back(collider);
-
             calculateNewLocalCenterOfMass();
         }
    

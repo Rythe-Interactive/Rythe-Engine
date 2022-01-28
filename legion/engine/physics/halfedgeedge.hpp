@@ -23,7 +23,6 @@ namespace legion::physics
         std::string id;
 
         HalfEdgeEdge() = default;
-        int identifier;
 
         HalfEdgeEdge(math::vec3 newEdgePositionPtr);
 

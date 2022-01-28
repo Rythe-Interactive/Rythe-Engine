@@ -16,17 +16,6 @@ namespace legion::physics
             pFace->faceToVert = this;
         }
 
-        ~ColliderFaceToVert()
-        {
-
-        }
-
-        ColliderFaceToVert(const ColliderFaceToVert& other)
-        {
-            outsideVerts = other.outsideVerts;
-            face = other.face;
-        }
-
         /** @brief Given the positions in 'outsideVerts', gets the vertex furthest from the HalfEdgeFace 'face'
          */
         std::pair<math::vec3,float> getFurthestOutsideVert() const;
@@ -34,6 +23,5 @@ namespace legion::physics
         /** @brief Given the vertices in 'vertVector', adds them to 'outsideVerts'
          */
         void populateVectorWithVerts(std::vector<math::vec3>& vertVector);
-
     };
 }
