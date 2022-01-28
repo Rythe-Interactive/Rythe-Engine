@@ -35,6 +35,5 @@ namespace legion::physics
          */
         void populateVectorWithVerts(std::vector<math::vec3>& vertVector);
 
-        
     };
 }

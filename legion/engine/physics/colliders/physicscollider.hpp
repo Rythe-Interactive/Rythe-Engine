@@ -24,9 +24,9 @@ namespace legion::physics
             id = colliderID++;
         }
 
-        virtual void AddConverganceIdentifier(const  physics_contact& contact) = 0;
+        virtual void AddConvergenceIdentifier(const  physics_contact& contact) = 0;
 
-        void AttemptFindAndCopyConverganceID(physics_contact& contact)
+        void AttemptFindAndCopyConvergenceID(physics_contact& contact)
         {
             if (!constants::applyWarmStarting) { return; }
 

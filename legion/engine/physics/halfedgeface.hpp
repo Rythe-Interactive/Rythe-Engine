@@ -7,8 +7,8 @@ namespace legion::physics
 {
     struct ColliderFaceToVert;
 
-	struct HalfEdgeFace
-	{
+    struct HalfEdgeFace
+    {
         /**@class face_angle_relation
          * @brief Enum Struct to indicate the angle relation between two faces
          * Coplaner:    The faces could be merged, the angle between them is 180 degrees
@@ -22,13 +22,13 @@ namespace legion::physics
             concave
         };
 
-		math::vec3 normal;
-		math::vec3 centroid;
+        math::vec3 normal;
+        math::vec3 centroid;
         math::color DEBUG_color;
         HalfEdgeEdge* startEdge = nullptr;
         ColliderFaceToVert* faceToVert = nullptr; 
         
-		HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
+        HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
 
         /**@brief Given that the face has a startEdge,a normal, and a centroid,
          * initializes the face so that it can be used for collision detection in a convex hull
@@ -48,10 +48,10 @@ namespace legion::physics
          */
         void setFaceForAllEdges();
 
-		/** @brief given a function that takes in a HalfEdgeEdge*, 
-		* executes the function on each edge connected to 'startEdge'
-		*/
-		void forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute,
+        /** @brief given a function that takes in a HalfEdgeEdge*, 
+        * executes the function on each edge connected to 'startEdge'
+        */
+        void forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute,
             legion::core::delegate <HalfEdgeEdge* (HalfEdgeEdge*)> getNextEdge = [](HalfEdgeEdge* current) { return current->nextEdge; });
 
         void forEachEdgeReverse(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute);
@@ -121,6 +121,6 @@ namespace legion::physics
 
         void DEBUG_DirectionDrawFace(const math::mat4& transform, const math::color& debugColor, float time = 20.0f);
 
-		~HalfEdgeFace();
-	};
+        ~HalfEdgeFace();
+    };
 }

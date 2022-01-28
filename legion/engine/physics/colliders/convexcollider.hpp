@@ -29,7 +29,7 @@ namespace legion::physics
 
         /** @brief Given a physics_contact that has been resolved, use its label and lambdas in order to create a ConvexConverganceIdentifier
        */
-        void AddConverganceIdentifier(const physics_contact& contact) override;
+        void AddConvergenceIdentifier(const physics_contact& contact) override;
 
         void CheckCollision(PhysicsCollider* physicsCollider, physics_manifold& manifold) override
         {
@@ -84,9 +84,6 @@ namespace legion::physics
             ConstructConvexHullWithMesh(mesh,spacingAmount);
         }
 
-        //void ConstructConvexHullWithMesh(legion::core::mesh_handle meshHandle, math::mat4 DEBUG_transform );
-        
-
         //TODO(algorythmix,jelled1st) This desperately needs cleanup
         //TODO(cont.) investigate unused variables! (projected)
         //LIKE A LOT OF CLEANUP
@@ -104,8 +101,6 @@ namespace legion::physics
 
             ConstructConvexHullWithMesh(mesh,math::vec3(),shouldDebug);
         }
-
-
 
         void  ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount = math::vec3(), bool shouldDebug = false);
        
@@ -311,9 +306,7 @@ namespace legion::physics
             for (HalfEdgeFace* face : halfEdgeFaces)
             {
                 auto calculateDirection = [](HalfEdgeEdge* edge) {edge->calculateRobustEdgeDirection(); };
-
                 face->forEachEdge(calculateDirection);
-
             }
 
             //initialize the ID of the edges, this is done mostly for debugging reasons and will be removed when it

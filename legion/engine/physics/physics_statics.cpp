@@ -13,7 +13,6 @@ namespace legion::physics
 
         for (auto face : convexB->GetHalfEdgeFaces())
         {
-
             math::vec3 seperatingAxis = math::normalize(transformB * math::vec4((face->normal), 0));
 
             math::vec3 transformedPositionB = transformB * math::vec4(face->centroid, 1);
@@ -97,9 +96,6 @@ namespace legion::physics
         math::vec3 centroidDir = transformA * math::vec4(convexA->GetLocalCentroid(), 0);
         math::vec3 positionA = math::vec3(transformA[3]) + centroidDir;
 
-        int facei = 0;
-        int facej = 0;
-
         for (const auto faceA : convexA->GetHalfEdgeFaces())
         {
             //----------------- Get all edges of faceA ------------//
@@ -111,8 +107,6 @@ namespace legion::physics
             };
 
             faceA->forEachEdge(lambda);
-            facej = 0;
-
 
             for (const auto faceB : convexB->GetHalfEdgeFaces())
             {
@@ -126,32 +120,10 @@ namespace legion::physics
 
                 faceB->forEachEdge(lambda);
 
-                bool isCorrectFaces = facei == 0 && facej == 13;
-
-                int edgeAIter = 0;
-
                 for (HalfEdgeEdge* edgeA : convexAHalfEdges)
                 {
-                    bool drawA = isCorrectFaces && edgeAIter == 1;
-
-                    if (drawA)
-                    {
-                        //edgeA->DEBUG_drawEdge(transformA, math::colors::magenta, 5.0f);
-                    }
-
-                    int edgeBIter = 0;
-
                     for (HalfEdgeEdge* edgeB : convexBHalfEdges)
                     {
-                        bool drawB = isCorrectFaces && edgeBIter == 0;
-
-                        if (drawB)
-                        {
-                            //edgeB->DEBUG_drawEdge(transformB, math::colors::cyan, 5.0f);
-                        }
-
-                        edgeBIter++;
-
                         //if the given edges creates a minkowski face
                         if (attemptBuildMinkowskiFace(edgeA, edgeB, transformA, transformB))
                         {
@@ -184,7 +156,7 @@ namespace legion::physics
 
                             //check if given edges create a seperating axis
                             float distance = math::dot(seperatingAxis, edgeBtransformedPosition - edgeAtransformedPosition);
-                            //log::debug("distance {} , currentMinimumSeperation {}", distance, currentMinimumSeperation);
+
                             if (distance > currentMaximumSeperation)
                             {
                                 refEdge.ptr = edgeA;
@@ -203,12 +175,8 @@ namespace legion::physics
                         }
                         
                     }
-
-                    edgeAIter++;
                 }
-                facej++;
             }
-            facei++;
         }
 
         return false;
@@ -542,7 +510,8 @@ namespace legion::physics
            
         // Normalize normal and fill in the plane equation fields
         outPlaneNormal = math::normalize(outPlaneNormal);
-        distToCentroid = math::dot(centroid, outPlaneNormal) / v.size(); // �centroid / n� is the true centroid point
+        distToCentroid = math::dot(centroid, outPlaneNormal) / v.size(); // �centroid / n� is the true centroid point
+
     }
 
     bool PhysicsStatics::attemptBuildMinkowskiFace(HalfEdgeEdge* edgeA, HalfEdgeEdge* edgeB, const math::mat4& transformA, const math::mat4& transformB)

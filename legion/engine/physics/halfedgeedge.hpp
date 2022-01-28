@@ -73,6 +73,6 @@ namespace legion::physics
         void DEBUG_drawInsetEdge(const math::vec3 spacing, const math::color& debugColor, float time = 20.0f, float width = 5.0f);
 
         void DEBUG_directionDrawEdge(const math::mat4& transform, const math::color& debugColor, float time, float width);
-	};
+    };
 }
 

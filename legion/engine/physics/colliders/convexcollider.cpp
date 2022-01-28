@@ -9,7 +9,7 @@
 
 namespace legion::physics
 {
-    void ConvexCollider::AddConverganceIdentifier(const physics_contact& contact)
+    void ConvexCollider::AddConvergenceIdentifier(const physics_contact& contact)
     {
         if (contact.label.IsSet())
         {
@@ -170,12 +170,9 @@ namespace legion::physics
     void ConvexCollider::DrawColliderRepresentation(const math::mat4& transform,math::color usedColor, float width, float time,bool ignoreDepth)
     {
         if (!shouldBeDrawn) { return; }
-        //math::vec3 colliderCentroid = pos + math::vec3(localTransform * math::vec4(physCollider->GetLocalCentroid(), 0));
-        //debug::user_projectDrawLine(colliderCentroid, colliderCentroid + math::vec3(0.0f,0.2f,0.0f), math::colors::cyan, 6.0f,0.0f,true);
 
         for (auto face : GetHalfEdgeFaces())
         {
-            //face->forEachEdge(drawFunc);
             physics::HalfEdgeEdge* initialEdge = face->startEdge;
             physics::HalfEdgeEdge* currentEdge = face->startEdge;
 
@@ -201,12 +198,6 @@ namespace legion::physics
 
 
     }
-
-  /*  void ConvexCollider::ConstructConvexHullWithMesh(legion::core::mesh_handle meshHandle, math::mat4 DEBUG_transform)
-    {
-        meshHandle.
-        return PhysicsStatics::generateConvexHull()
-    }*/
 
     void ConvexCollider::ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount,bool shouldDebug)
     {
@@ -633,7 +624,7 @@ namespace legion::physics
     {
         auto& verticesVec = vertices;
 
-        int reserveSize = halfEdgeFaces.size() * 3;
+        const size_t reserveSize = halfEdgeFaces.size() * 3;
 
         verticesVec.reserve(reserveSize);
 
@@ -648,8 +639,6 @@ namespace legion::physics
         {
             face->forEachEdge(collectVertices);
         }
-
-
     }
 
     void ConvexCollider::convexHullConstructHorizon(math::vec3 vert, HalfEdgeFace& face, std::deque<HalfEdgeEdge*>& edges, HalfEdgeEdge* originEdge,
