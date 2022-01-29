@@ -624,7 +624,6 @@ namespace legion::physics
         auto& verticesVec = vertices;
 
         const size_t reserveSize = halfEdgeFaces.size() * 3;
-
         verticesVec.reserve(reserveSize);
 
         auto collectVertices = [&verticesVec](HalfEdgeEdge* edge)

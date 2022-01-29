@@ -3,6 +3,16 @@
 
 namespace legion::physics
 {
+    namespace detail
+    {
+        static inline bool greater_penetration(const physics_contact& contact1, const physics_contact& contact2)
+        {
+            auto dot1 = math::dot(contact1.RefWorldContact - contact1.IncWorldContact, -contact1.collisionNormal);
+            auto dot2 = math::dot(contact2.RefWorldContact - contact2.IncWorldContact, -contact2.collisionNormal);
+            return dot1 > dot2;
+        }
+    }
+
     std::unique_ptr<BroadPhaseCollisionAlgorithm> PhysicsSystem::m_broadPhase = nullptr;
 
     bool PhysicsSystem::IsPaused = true;
@@ -131,14 +141,9 @@ namespace legion::physics
 
             initializeManifolds(manifoldsToSolve, manifoldValidity);
 
-            auto largestPenetration = [](const physics_contact& contact1, const physics_contact& contact2)
-            -> bool {
-            return math::dot(contact1.RefWorldContact - contact1.IncWorldContact, -contact1.collisionNormal)
-            > math::dot(contact2.RefWorldContact - contact2.IncWorldContact, -contact2.collisionNormal);};
-
             for (auto& manifold : manifoldsToSolve)
             {
-                std::sort(manifold.contacts.begin(), manifold.contacts.end(), largestPenetration);
+                std::sort(manifold.contacts.begin(), manifold.contacts.end(), &detail::greater_penetration);
             }
 
             {
