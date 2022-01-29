@@ -103,8 +103,7 @@ namespace legion::physics
 
 
     void HalfEdgeFace::forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute,
-        legion::core::delegate <HalfEdgeEdge* (HalfEdgeEdge*)> getNextEdge 
-    )
+        legion::core::delegate <HalfEdgeEdge* (HalfEdgeEdge*)> getNextEdge )
     {
         HalfEdgeEdge* initialEdge = startEdge;
         HalfEdgeEdge* currentEdge = startEdge;
@@ -120,7 +119,6 @@ namespace legion::physics
             functionToExecute(edgeToExecuteOn);
 
         } while (initialEdge != currentEdge && getNextEdge(currentEdge) != nullptr);
-
     }
 
     void HalfEdgeFace::forEachEdgeReverse(legion::core::delegate<void(HalfEdgeEdge*)> functionToExecute)
@@ -153,7 +151,6 @@ namespace legion::physics
             HalfEdgeEdge* newPrev = edges.at(nextIndex);
 
             edges.at(i)->setNextAndPrevEdge(newNext, newPrev);
-
         }
 
         startEdge = edges.at(0);
@@ -475,7 +472,7 @@ namespace legion::physics
         math::vec3 worldStart = transform * math::vec4(centroid, 1);
         math::vec3 worldEnd = transform * math::vec4(centroid + normal * 0.1f, 1);
 
-        debug::user_projectDrawLine(worldStart, worldEnd, math::colors::green, 3.0f, time, false);
+        debug::drawLine(worldStart, worldEnd, math::colors::green, 3.0f, time, false);
 
         forEachEdge(drawFunc);
     }

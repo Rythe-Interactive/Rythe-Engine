@@ -171,7 +171,6 @@ namespace legion::physics
                             {
                                 return true;
                             }
-
                         }
                     }
                 }
@@ -476,7 +475,6 @@ namespace legion::physics
                     currentFaceToVert.ptr->outsideVerts.clear();
                 }
             }
-
         }
 
         //[7] Populate the new ConvexCollider's face vector with the faces generated from the previous step
@@ -539,15 +537,11 @@ namespace legion::physics
         const math::vec3& transformedB2, const math::vec3& planeANormal, const math::vec3& planeBNormal)
     {
         //------------------------ Check if normals created by arcA seperate normals of B --------------------------------------//
-        //CBA
-        float planeADotB1 = math::dot(planeANormal, transformedB1);
-        //DBA
-        float planeADotB2 = math::dot(planeANormal, transformedB2);
+        
+        float planeADotB1 = math::dot(planeANormal, transformedB1); //CBA
+        float planeADotB2 = math::dot(planeANormal, transformedB2); //DBA
 
-        float dotMultiplyResultA =
-            planeADotB1 * planeADotB2;
-
-        //log::debug("dotMultiplyResultA {}", dotMultiplyResultA);
+        float dotMultiplyResultA = planeADotB1 * planeADotB2;
 
         if (dotMultiplyResultA > 0.0f )
         {
@@ -556,14 +550,10 @@ namespace legion::physics
 
         //------------------------ Check if normals created by arcB seperate normals of A --------------------------------------//
 
-        //ADC
-        float planeBDotA1 = math::dot(planeBNormal, transformedA1);
-        //BDC
-        float planeBDotA2 = math::dot(planeBNormal, transformedA2);
+        float planeBDotA1 = math::dot(planeBNormal, transformedA1); //ADC
+        float planeBDotA2 = math::dot(planeBNormal, transformedA2); //BDC
 
-        float  dotMultiplyResultB = planeBDotA1 * planeBDotA2;
-
-        //log::debug("dotMultiplyResultB {}", dotMultiplyResultB);
+        float dotMultiplyResultB = planeBDotA1 * planeBDotA2;
 
         if (dotMultiplyResultB > 0.0f )
         {
@@ -822,7 +812,6 @@ namespace legion::physics
                 {
                     bestMatchDistance = currentDistance;
                     bestFaceToVert = &faceToVert;
-
                 }
             }
 
@@ -1045,7 +1034,6 @@ namespace legion::physics
         {
             delete face;
         }
-
     }
 
     bool PhysicsStatics::isFacesConcave(HalfEdgeFace* first, HalfEdgeFace* second)
@@ -1086,7 +1074,6 @@ namespace legion::physics
         second->forEachEdge(collectVerticesOfFace);
         NewellPolygon.pop_back();
 
-
          float distToCentroid;
         calculateNewellPlane(NewellPolygon, outNormal, distToCentroid);
 
@@ -1103,6 +1090,4 @@ namespace legion::physics
 
         return true;
     }
-
 };
-
