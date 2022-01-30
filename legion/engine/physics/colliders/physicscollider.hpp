@@ -3,7 +3,7 @@
 #include <core/core.hpp>
 #include <memory>
 #include <physics/halfedgeface.hpp>
-#include <physics/data/convergance_identifier.hpp>
+#include <physics/data/convergence_identifier.hpp>
 #include <physics/physics_contact.hpp>
 
 namespace legion::physics
@@ -16,7 +16,7 @@ namespace legion::physics
     {
     public:
         bool shouldBeDrawn = true;
-        std::vector<std::unique_ptr<ConverganceIdentifier>> converganceIdentifiers;
+        std::vector<std::unique_ptr<ConvergenceIdentifier>> convergenceIdentifiers;
 
         PhysicsCollider()
         {
@@ -24,19 +24,19 @@ namespace legion::physics
             id = colliderID++;
         }
 
-        virtual void AddConverganceIdentifier(const  physics_contact& contact) = 0;
+        virtual void AddConvergenceIdentifier(const  physics_contact& contact) = 0;
 
-        void AttemptFindAndCopyConverganceID(physics_contact& contact)
+        void AttemptFindAndCopyConvergenceID(physics_contact& contact)
         {
             if (!constants::applyWarmStarting) { return; }
 
-            for (auto&& converganceId : converganceIdentifiers)
+            for (auto&& convergenceId : convergenceIdentifiers)
             {
-                if (converganceId->refColliderID == contact.refCollider->GetColliderID())
+                if (convergenceId->refColliderID == contact.refCollider->GetColliderID())
                 {
-                    if (converganceId->IsEqual(contact))
+                    if (convergenceId->IsEqual(contact))
                     {
-                        converganceId->CopyLambdasToContact(contact);
+                        convergenceId->CopyLambdasToContact(contact);
                         return;
                     }
                 }

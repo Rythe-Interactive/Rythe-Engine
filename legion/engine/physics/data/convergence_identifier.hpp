@@ -5,13 +5,13 @@
 
 namespace legion::physics
 {
-    class ConvexConverganceIdentifier;
+    class ConvexConvergenceIdentifier;
 
-    class ConverganceIdentifier
+    class ConvergenceIdentifier
     {
     public:
 
-        ConverganceIdentifier(const EdgeLabel& plabel,float pTotalLambda,
+        ConvergenceIdentifier(const EdgeLabel& plabel,float pTotalLambda,
             float pTangent1Lambda, float pTangent2Lambda,int pRefColliderId)
             :  totalLambda(pTotalLambda),tangent1Lambda(pTangent1Lambda),
             tangent2Lambda(pTangent2Lambda),refColliderID(pRefColliderId)
