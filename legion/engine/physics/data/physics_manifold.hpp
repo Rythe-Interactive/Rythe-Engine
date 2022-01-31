@@ -21,17 +21,17 @@ namespace legion::physics
         math::mat4 transformA;
         math::mat4 transformB;
 
-        PhysicsCollider* colliderA;
-        PhysicsCollider* colliderB;
+        PhysicsCollider* colliderA = nullptr;
+        PhysicsCollider* colliderB = nullptr;
 
-        ecs::entity_handle entityA;
-        ecs::entity_handle entityB;
+        ecs::entity entityA;
+        ecs::entity entityB;
 
-        physics::physicsComponent* physicsCompA;
-        physics::physicsComponent* physicsCompB;
+        physics::physicsComponent* physicsCompA = nullptr;
+        physics::physicsComponent* physicsCompB = nullptr;
 
-        physics::rigidbody* rigidbodyA;
-        physics::rigidbody* rigidbodyB;
+        physics::rigidbody* rigidbodyA = nullptr;
+        physics::rigidbody* rigidbodyB = nullptr;
 
         std::unique_ptr<PenetrationQuery> penetrationInformation;
 
@@ -76,20 +76,20 @@ namespace legion::physics
 
         void GetPairID(std::string& str1, std::string& str2) const
         {
-            auto idHA = entityA.get_component_handle<identifier>();
-            auto idHB = entityB.get_component_handle<identifier>();
+            auto idHA = entityA.get_component<identifier>();
+            auto idHB = entityB.get_component<identifier>();
 
             str1 = "" ;
             str2 = "" ;
 
             if (idHA)
             {
-                str1 = idHA.read().id;
+                str1 = idHA.get().id;
             }
 
             if (idHB)
             {
-                str2 = idHB.read().id;
+                str2 = idHB.get().id;
             }
 
         }

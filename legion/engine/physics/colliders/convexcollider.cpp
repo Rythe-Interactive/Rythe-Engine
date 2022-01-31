@@ -13,8 +13,8 @@ namespace legion::physics
     {
         if (contact.label.IsSet())
         {
-            converganceIdentifiers.push_back(
-                std::make_unique<ConvexConverganceIdentifier>(contact.label, contact.totalLambda,
+            convergenceIdentifiers.push_back(
+                std::make_unique<ConvexConvergenceIdentifier>(contact.label, contact.totalLambda,
                     contact.tangent1Lambda, contact.tangent2Lambda, GetColliderID()));
         }
     }

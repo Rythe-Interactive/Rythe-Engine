@@ -4,9 +4,6 @@
 #include <physics/systems/physicssystem.hpp>
 #include <physics/components/physics_component.hpp>
 #include <physics/components/rigidbody.hpp>
-#include <physics/mesh_splitter_utils/mesh_splitter.hpp>
-#include <physics/components/fracturer.hpp>
-#include <physics/components/fracturecountdown.hpp>
 #include <physics/systems/physics_test_system.hpp>
 
 namespace legion::physics
@@ -20,14 +17,9 @@ namespace legion::physics
         {
             createProcessChain("Physics");
             reportSystem<PhysicsSystem>();
-            reportComponentType<physicsComponent>();
-            reportComponentType<rigidbody>();
-            reportComponentType<identifier>();
-            reportComponentType<MeshSplitter>();
-            reportComponentType<Fracturer>();
-            reportComponentType<FractureCountdown>();
-            reportComponentType<ObjectToFollow>();
-            //reportComponentType <addRB>();
+            registerComponentType<physicsComponent>();
+            registerComponentType<rigidbody>();
+            registerComponentType<identifier>();
         }
 
         virtual priority_type priority() override

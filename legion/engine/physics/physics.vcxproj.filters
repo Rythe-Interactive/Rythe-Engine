@@ -39,19 +39,7 @@
     <ClCompile Include="data\edgepenetrationquery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mesh_splitter_utils\primitive_mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mesh_splitter_utils\splittable_polygon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="components\fracturer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="physics_statics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mesh_splitter_utils\mesh_splitter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgrid.cpp">
@@ -77,7 +65,7 @@
     <ClInclude Include="cube_collider_params.hpp">
       <Filter>components</Filter>
     </ClInclude>
-    <ClInclude Include="physicsmodule.hpp">
+    <ClInclude Include="module\physicsmodule.hpp">
       <Filter>module</Filter>
     </ClInclude>
     <ClInclude Include="components\physics_component.hpp">
@@ -143,28 +131,10 @@
     <ClInclude Include="events\events.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="mesh_splitter_utils\mesh_splitter.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh_splitter_utils\mesh_split_params.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\VoronoiAABB.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="halfedgeedge.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh_splitter_utils\mesh_splitter_typedefs.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh_splitter_utils\mesh_half_edge.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh_splitter_utils\intersecting_polygon_organizer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="components\fracturer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\convex_convex_collision_info.hpp">
@@ -174,21 +144,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\physics_manifold_precursor.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh_splitter_utils\splittable_polygon.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh_splitter_utils\primitive_mesh.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh_splitter_utils\mesh_splitter_debug_helpers.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh_splitter_utils\intersection_edge_info.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh_splitter_utils\half_edge_finder.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="broadphasecollisionalgorithms\broadphasebruteforce.hpp">
@@ -203,9 +158,6 @@
     <ClInclude Include="data\fractureparams.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="components\fracturecountdown.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\collider_face_to_vert.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -213,6 +165,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="systems\physics_test_system.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\convergence_identifier.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\convex_convergence_identifier.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
