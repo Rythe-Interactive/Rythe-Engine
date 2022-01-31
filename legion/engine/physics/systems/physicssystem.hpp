@@ -12,8 +12,6 @@
 #include <physics/events/events.hpp>
 #include <memory>
 #include <rendering/debugrendering.hpp>
-#include <physics/components/fracturer.hpp>
-#include <physics/components/fracturecountdown.hpp>
 
 namespace legion::physics
 {
@@ -30,7 +28,7 @@ namespace legion::physics
         static bool IsPaused;
         static bool oneTimeRunActive;
 
-        ecs::EntityQuery manifoldPrecursorQuery;
+        ecs::filter<position, rotation, scale, physicsComponent> manifoldPrecursorQuery;
 
         //TODO move implementation to a seperate cpp file
 
@@ -51,18 +49,17 @@ namespace legion::physics
 
             {
                 OPTICK_EVENT("Fetching data");
-                manifoldPrecursorQuery.queryEntities();
 
-                rigidbodies.resize(manifoldPrecursorQuery.size());
+                rigidbodies.reserve(manifoldPrecursorQuery.size());
                 hasRigidBodies.resize(manifoldPrecursorQuery.size());
 
-                m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
+                queueJobs(manifoldPrecursorQuery.size(), [&]() {
                     id_type index = async::this_job::get_id();
                     auto entity = manifoldPrecursorQuery[index];
                     if (entity.has_component<rigidbody>())
                     {
                         hasRigidBodies[index] = true;
-                        rigidbodies[index] = entity.read_component<rigidbody>();
+                        rigidbodies[index] = entity.get_component<rigidbody>();
                     }
                     else
                         hasRigidBodies[index] = false;
@@ -88,22 +85,6 @@ namespace legion::physics
                 integrateRigidbodies(hasRigidBodies, rigidbodies, deltaTime);
                 runPhysicsPipeline(hasRigidBodies, rigidbodies, physComps, positions, rotations, scales, deltaTime);
                 integrateRigidbodyQueryPositionAndRotation(hasRigidBodies, positions, rotations, rigidbodies, deltaTime);
-            }
-
-            {
-                OPTICK_EVENT("Writing data");
-                m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
-                    id_type index = async::this_job::get_id();
-                    if (hasRigidBodies[index])
-                    {
-                        auto entity = manifoldPrecursorQuery[index];
-                        entity.write_component(rigidbodies[index]);
-                    }
-                    }).wait();
-
-                    manifoldPrecursorQuery.submit<physicsComponent>();
-                    manifoldPrecursorQuery.submit<position>();
-                    manifoldPrecursorQuery.submit<rotation>();
             }
 
            /* auto splitterDrawQuery = createQuery<MeshSplitter>();
@@ -139,15 +120,16 @@ namespace legion::physics
             OPTICK_EVENT();
             manifoldPrecursors.resize(physComps.size());
 
-            m_scheduler->queueJobs(physComps.size(), [&]() {
+            queueJobs(physComps.size(), [&]() {
                 id_type index = async::this_job::get_id();
-                math::mat4 transf;
-                math::compose(transf, scales[index], rotations[index], positions[index]);
+                math::mat4 transf = math::compose( scales[index].get(), rotations[index].get(), positions[index].get());
+                
+                physicsComponent& individualPhysicsComponent = physComps[index].get();
 
-                for (auto& collider : physComps[index].colliders)
+                for (auto& collider : individualPhysicsComponent.colliders)
                     collider->UpdateTransformedTightBoundingVolume(transf);
 
-                manifoldPrecursors[index] = { transf, &physComps[index], index, manifoldPrecursorQuery[index] };
+                manifoldPrecursors[index] = { transf, &individualPhysicsComponent, index, manifoldPrecursorQuery[index] };
                 }).wait();
         }
 
@@ -209,14 +191,10 @@ namespace legion::physics
             manifold.entityB = precursorB.entity;
 
             if (hasRigidBodies[precursorA.id])
-                manifold.rigidbodyA = &rigidbodies[precursorA.id];
-            else
-                manifold.rigidbodyA = nullptr;
+                manifold.rigidbodyA = &rigidbodies[precursorA.id].get();
 
             if (hasRigidBodies[precursorB.id])
-                manifold.rigidbodyB = &rigidbodies[precursorB.id];
-            else
-                manifold.rigidbodyB = nullptr;
+                manifold.rigidbodyB = &rigidbodies[precursorB.id].get();
 
             manifold.physicsCompA = precursorA.physicsComp;
             manifold.physicsCompB = precursorB.physicsComp;
@@ -235,11 +213,11 @@ namespace legion::physics
         void integrateRigidbodies(std::vector<byte>& hasRigidBodies, ecs::component_container<rigidbody>& rigidbodies, float deltaTime)
         {
             OPTICK_EVENT();
-            m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
+            queueJobs(manifoldPrecursorQuery.size(), [&]() {
                 if (!hasRigidBodies[async::this_job::get_id()])
                     return;
 
-                auto& rb = rigidbodies[async::this_job::get_id()];
+                rigidbody& rb = rigidbodies[async::this_job::get_id()].get();
 
                 ////-------------------- update velocity ------------------//
                 math::vec3 acc = rb.forceAccumulator * rb.inverseMass;
@@ -261,14 +239,14 @@ namespace legion::physics
             float deltaTime)
         {
             OPTICK_EVENT();
-            m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
+            queueJobs(manifoldPrecursorQuery.size(), [&]() {
                 id_type index = async::this_job::get_id();
                 if (!hasRigidBodies[index])
                     return;
 
-                auto& rb = rigidbodies[index];
-                auto& pos = positions[index];
-                auto& rot = rotations[index];
+                rigidbody& rb = rigidbodies[index].get();
+                position& pos = positions[index].get();
+                rotation& rot = rotations[index].get();
 
                 ////-------------------- update position ------------------//
                 pos += rb.velocity * deltaTime;

@@ -23,12 +23,6 @@ namespace legion::physics
     {
         createProcess<&PhysicsSystem::fixedUpdate>("Physics", m_timeStep);
 
-        manifoldPrecursorQuery = createQuery<position, rotation, scale, physicsComponent>();
-
-        //std::make_unique<BroadphaseUniformGrid>(math::vec3(2,2,2),1);
-        //std::make_unique<BroadphaseBruteforce>();
-        //std::make_unique<BroadphaseUniformGridNoCaching>(math::vec3(2, 2, 2));
-
         m_broadPhase = std::make_unique<BroadphaseUniformGridNoCaching>(math::vec3(3, 3, 3));
 
     }
@@ -174,8 +168,8 @@ namespace legion::physics
                 //reset convergance identifiers for all colliders
                 for (auto& manifold : manifoldsToSolve)
                 {
-                    manifold.colliderA->converganceIdentifiers.clear();
-                    manifold.colliderB->converganceIdentifiers.clear();
+                    manifold.colliderA->convergenceIdentifiers.clear();
+                    manifold.colliderB->convergenceIdentifiers.clear();
                 }
 
                 //using the known lambdas of this time step, add it as a convergance identifier
