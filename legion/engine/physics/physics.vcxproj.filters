@@ -57,9 +57,6 @@
     <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="systems\physics_test_system.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cube_collider_params.hpp">
@@ -162,9 +159,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\physics_test_system.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\convergence_identifier.hpp">
