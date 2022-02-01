@@ -22,7 +22,7 @@ namespace legion::physics {
          *         of this collision.
          */
 
-        L_NODISCARD std::pair<ecs::entity_handle,ecs::entity_handle> participants() const
+        L_NODISCARD std::pair<ecs::entity,ecs::entity> participants() const
         {
             return std::make_pair(
                 manifold->entityA,

@@ -1,16 +1,16 @@
 #pragma once
 #include <core/core.hpp>
-#include <physics/data/convergance_identifier.hpp>
+#include <physics/data/convergence_identifier.hpp>
 #include <physics/data/edge_label.hpp>
 namespace legion::physics
 {
-    class ConvexConverganceIdentifier : public ConverganceIdentifier
+    class ConvexConvergenceIdentifier : public ConvergenceIdentifier
     {
     public:
 
-        ConvexConverganceIdentifier(const EdgeLabel& label, float pTotalLambda,
+        ConvexConvergenceIdentifier(const EdgeLabel& label, float pTotalLambda,
             float pTangent1Lambda, float pTangent2Lambda, int pRefColliderId)
-            : ConverganceIdentifier(label,pTotalLambda, pTangent1Lambda, pTangent2Lambda, pRefColliderId)
+            : ConvergenceIdentifier(label,pTotalLambda, pTangent1Lambda, pTangent2Lambda, pRefColliderId)
         {
 
         }

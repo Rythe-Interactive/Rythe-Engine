@@ -48,7 +48,7 @@ namespace legion::physics
         contact.IncWorldContact = incContactPoint;
         contact.RefWorldContact = refContactPoint;
 
-        refCollider->AttemptFindAndCopyConverganceID(contact);
+        refCollider->AttemptFindAndCopyConvergenceID(contact);
 
         manifold.contacts.push_back(contact);
 
