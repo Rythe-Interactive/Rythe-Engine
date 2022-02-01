@@ -9,7 +9,7 @@
 #include <application/application.hpp>
 #include <rendering/rendering.hpp>
 #include <audio/audio.hpp>
-#include <physics\physics.hpp>
+#include <physics/physics.hpp>
 
 #include "module/examplemodule.hpp"
 

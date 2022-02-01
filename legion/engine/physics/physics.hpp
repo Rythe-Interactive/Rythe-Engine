@@ -1,5 +1,4 @@
 #pragma once
-
 #include <physics/components/physics_component.hpp>
 #include <physics/components/rigidbody.hpp>
 #include <physics/colliders/convexcollider.hpp>

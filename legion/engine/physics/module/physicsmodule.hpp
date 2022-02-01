@@ -1,5 +1,4 @@
 #pragma once
-
 #include <core/core.hpp>
 #include <physics/systems/physicssystem.hpp>
 #include <physics/components/physics_component.hpp>
@@ -9,7 +8,6 @@ namespace legion::physics
 {
     class PhysicsModule : public Module
     {
-
     public:
 
         virtual void setup() override
@@ -25,9 +23,7 @@ namespace legion::physics
         {
             return 20;
         }
-
     };
-
 }
 
 
