@@ -228,36 +228,6 @@ namespace legion::physics
         return true;
     }
 
-    std::pair< math::vec3, math::vec3> PhysicsStatics::ConstructAABBFromPhysicsComponentWithTransform
-    (ecs::component_handle<physicsComponent> physicsComponentToUse,const math::mat4& transform)
-    {
-        math::vec3 min, max;
-
-        //auto physicsComponent = physicsComponentToUse.read();
-
-        ////get up
-        //math::vec3 invTransUp = math::normalize( math::inverse(transform) * math::vec4(math::vec3(0, 1, 0), 0) );
-        //max.y = GetPhysicsComponentSupportPointAtDirection(invTransUp, physicsComponent);
-        //
-        ////get down
-        //math::vec3 invTransDown = math::normalize(math::inverse(transform) * math::vec4(math::vec3(0, -1, 0), 0));
-        //min.y = GetPhysicsComponentSupportPointAtDirection(invTransUp, physicsComponent);
-
-        ////get right
-
-
-        ////get left
-
-
-        ////get forward
-
-
-        ////get backward
-
-
-        return std::make_pair(min,max);
-    }
-
     float PhysicsStatics::GetPhysicsComponentSupportPointAtDirection(math::vec3 direction, physicsComponent& physicsComponentToUse)
     {
         float currentMaximumSupportPoint = std::numeric_limits<float>::lowest();

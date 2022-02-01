@@ -6,7 +6,7 @@
 #include <physics/cube_collider_params.hpp>
 #include <physics/halfedgeedge.hpp>
 #include <physics/halfedgeface.hpp>
-#include <physics/data/convex_convergance_identifier.hpp>
+#include <physics/data/convex_convergence_identifier.hpp>
 #include <physics/data/physics_manifold.hpp>
 #include <rendering/debugrendering.hpp>
 
@@ -68,7 +68,7 @@ namespace legion::physics
         /**@brief Does one step of the convex hull generation
          * Just for debug purposes
          */
-        void doStep(legion::core::mesh_handle& mesh)
+        void doStep(legion::core::mesh& mesh)
         {
            
             ConstructConvexHullWithMesh(mesh);
@@ -87,20 +87,6 @@ namespace legion::physics
         //TODO(algorythmix,jelled1st) This desperately needs cleanup
         //TODO(cont.) investigate unused variables! (projected)
         //LIKE A LOT OF CLEANUP
-
-        /**@brief Constructs a polyhedron-shaped convex hull that encompasses the given mesh.
-        * @param meshHandle - The mesh handle to lock the mesh and the mesh to create a hull from
-        */
-        void ConstructConvexHullWithMesh(legion::core::mesh_handle meshHandle,bool shouldDebug = true)
-        {
-            auto meshLockPair = meshHandle.get();
-
-            //mesh lock stuff
-            async::readonly_guard guard(meshLockPair.first);
-            auto mesh = meshLockPair.second;
-
-            ConstructConvexHullWithMesh(mesh,math::vec3(),shouldDebug);
-        }
 
         void  ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount = math::vec3(), bool shouldDebug = false);
        
