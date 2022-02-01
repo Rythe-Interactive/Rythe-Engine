@@ -419,19 +419,19 @@ namespace legion::core::assets
     template<typename... Arguments>
     inline L_ALWAYS_INLINE asset<AssetType> AssetCache<AssetType>::create(const std::string& name, Arguments&&... args)
     {
-        return create(nameHash(name), name, std::string(""), std::forward<Arguments>(args)...);
+        return createWithPath(nameHash(name), name, std::string(""), std::forward<Arguments>(args)...);
     }
 
     template<typename AssetType>
     template<typename... Arguments>
     inline L_ALWAYS_INLINE asset<AssetType> AssetCache<AssetType>::create(id_type nameHash, const std::string& name, Arguments&&... args)
     {
-        return create(nameHash, name, std::string(""), std::forward<Arguments>(args)...);
+        return createWithPath(nameHash, name, std::string(""), std::forward<Arguments>(args)...);
     }
 
     template<typename AssetType>
     template<typename ...Arguments>
-    inline asset<AssetType> AssetCache<AssetType>::create(id_type nameHash, const std::string& name, const std::string& path, Arguments && ...args)
+    inline asset<AssetType> AssetCache<AssetType>::createWithPath(id_type nameHash, const std::string& name, const std::string& path, Arguments && ...args)
     {
         static_assert(std::is_constructible_v<AssetType, Arguments...>, "Asset type is not constructible with given argument types.");
 

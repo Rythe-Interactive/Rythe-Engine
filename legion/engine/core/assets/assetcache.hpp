@@ -105,7 +105,7 @@ namespace legion::core::assets
         template<typename... Arguments>
         static asset_ptr create(id_type nameHash, const std::string& name, Arguments&&... args);
         template<typename... Arguments>
-        static asset_ptr create(id_type nameHash, const std::string& name, const std::string& path, Arguments&&... args);
+        static asset_ptr createWithPath(id_type nameHash, const std::string& name, const std::string& path, Arguments&&... args);
 
         static bool has(const std::string& name);
         static bool has(id_type nameHash);
