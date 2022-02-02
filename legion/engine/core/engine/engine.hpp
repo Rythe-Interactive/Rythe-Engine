@@ -107,7 +107,13 @@ namespace legion::core
 
         Engine(int argc, char** argv);
         Engine();
-        MOVE_FUNCS(Engine);
+
+        Engine(const Engine&);
+        Engine& operator=(const Engine&);
+
+        Engine(Engine&&);
+        Engine& operator=(Engine&&);
+
         ~Engine() = default;
 
         /**@brief Reports an engine module.
