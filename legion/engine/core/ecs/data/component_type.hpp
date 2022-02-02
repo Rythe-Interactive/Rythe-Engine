@@ -10,7 +10,9 @@ namespace legion::core::ecs
         std::string componentName;
         id_type typeId;
 
-        RULE_OF_5(component_type_base);
+        NO_DTOR_RULE5(component_type_base);
+
+        virtual ~component_type_base() = default;
 
         component_type_base(std::string_view name, id_type id) : componentName(name), typeId(id) {}
 

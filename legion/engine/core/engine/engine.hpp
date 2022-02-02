@@ -108,9 +108,6 @@ namespace legion::core
         Engine(int argc, char** argv);
         Engine();
 
-        Engine(const Engine&);
-        Engine& operator=(const Engine&);
-
         Engine(Engine&&);
         Engine& operator=(Engine&&);
 

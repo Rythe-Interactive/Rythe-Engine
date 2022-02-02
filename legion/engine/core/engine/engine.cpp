@@ -74,22 +74,6 @@ namespace legion::core
         reportModule<CoreModule>();
     }
 
-    Engine::Engine(const Engine& other)        
-        : m_modules(other.m_modules), m_shouldRestart(other.m_shouldRestart.load(std::memory_order_relaxed)), id(generateId()), exitCode(0), cliargs(other.cliargs)
-    {
-        reportModule<CoreModule>();
-    }
-
-    Engine& Engine::operator=(const Engine& other)
-    {
-        m_modules = other.m_modules;
-        m_shouldRestart.store(other.m_shouldRestart.load(std::memory_order_relaxed), std::memory_order_relaxed);
-        id = other.id;
-        exitCode = other.exitCode;
-        cliargs = other.cliargs;
-        return *this;
-    }
-
     Engine::Engine(Engine&& other)
         : m_modules(std::move(other.m_modules)), m_shouldRestart(other.m_shouldRestart.load(std::memory_order_relaxed)), id(std::move(other.id)), exitCode(0), cliargs(std::move(other.cliargs))
     {
