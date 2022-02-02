@@ -23,7 +23,17 @@ namespace legion::core::ecs
     template<typename ComponentType, typename... Args>
     inline L_ALWAYS_INLINE component_pool<ComponentType>* Registry::getFamily(Args&&... args)
     {
-        return tryEmplaceFamily<ComponentType>(std::forward<Args>(args)...);
+        id_type typeId = typeHash<ComponentType>();
+        auto& families = getFamilies();
+        if (families.count(typeId)) // Check and fetch in order to avoid a possibly unnecessary allocation and deletion.
+            return dynamic_cast<component_pool<ComponentType>*>(families.at(typeId).get());
+
+        // Allocate and emplace if no item was found.
+        auto& [_, componentType] = *(componentTypes().try_emplace(typeId, std::make_unique<component_type<ComponentType>>(std::forward<Args>(args)...)).first);
+        return dynamic_cast<component_pool<ComponentType>*>(families.emplace(
+            typeId,
+            std::move(componentType->create_pool())
+        ).first->second.get()); // std::pair<iterator, bool>.first --> iterator<std::pair<key, value>>->second --> std::unique_ptr.get() --> component_pool_base*
     }
 
     template<typename ComponentType>
