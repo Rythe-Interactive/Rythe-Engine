@@ -5,6 +5,7 @@
 #include <core/types/meta.hpp>
 #include <core/async/spinlock.hpp>
 #include <core/containers/pointer.hpp>
+#include <core/logging/logging.hpp>
 
 #include <argh.h>
 
@@ -24,6 +25,27 @@ namespace legion::core
     }
 
     class Engine;
+
+    struct engine_id
+    {
+        friend class Engine;
+        template<typename CharType, typename TraitsType>
+        friend std::basic_ostream<CharType, TraitsType>& operator<<(std::basic_ostream<CharType, TraitsType>&, engine_id);
+    private:
+        id_type m_id;
+
+        engine_id(id_type id) noexcept : m_id(id) {}
+
+    public:
+        RULE_OF_5_NOEXCEPT(engine_id);
+
+        operator id_type() { return m_id; }
+    };
+
+    template <class CharType, class TraitsType>
+    std::basic_ostream<CharType, TraitsType>& operator<<(std::basic_ostream<CharType, TraitsType>& stream, engine_id id) {
+        return stream << id.m_id;
+    }
 
     struct this_engine
     {
@@ -61,6 +83,8 @@ namespace legion::core
         static size_type m_runningInstances;
         static async::spinlock m_startupShutdownLock;
 
+        static id_type generateId();
+
         L_NODISCARD static multicast_delegate<void()>& initializationSequence();
         L_NODISCARD static multicast_delegate<void()>& shutdownSequence();
 
@@ -75,13 +99,16 @@ namespace legion::core
         template<typename SubSystem>
         static byte reportSubSystem();
 
+        engine_id id;
+
         int exitCode;
 
         argh::parser cliargs;
 
         Engine(int argc, char** argv);
         Engine();
-        NO_DEF_CTOR_RULE5(Engine);
+        MOVE_FUNCS(Engine);
+        ~Engine() = default;
 
         /**@brief Reports an engine module.
          * @tparam ModuleType The module you want to report.
@@ -105,6 +132,35 @@ namespace legion::core
 
 #define ReportSubSystem(Type) ANON_VAR(byte, CONCAT(_reportSubSystem_, Type)) = legion::core::Engine::reportSubSystem<Type>();
 
+}
+
+namespace fmt
+{
+    template <>
+    struct formatter<legion::core::engine_id>
+    {
+
+        constexpr const char* parse(format_parse_context& ctx)
+        {
+            auto it = ctx.begin(), end = ctx.end();
+
+            if (!it)
+                return nullptr;
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+            return it++;
+        }
+
+        template <typename FormatContext>
+        auto format(const legion::core::engine_id& id, FormatContext& ctx)
+        {
+            std::ostringstream oss;
+            oss << id;
+            return format_to(ctx.out(), "{}", oss.str());
+        }
+
+    };
 }
 
 #include <core/engine/engine.inl>

@@ -1,9 +1,9 @@
 #include <core/engine/engine.hpp>
+#include <core/common/hash.hpp>
 #include <core/defaults/coremodule.hpp>
 #include <core/ecs/ecs.hpp>
 #include <core/scheduling/scheduling.hpp>
 #include <core/events/eventbus.hpp>
-#include <core/logging/logging.hpp>
 
 namespace legion::core
 {
@@ -37,6 +37,13 @@ namespace legion::core
     size_type Engine::m_runningInstances = 0;
     async::spinlock Engine::m_startupShutdownLock{};
 
+    id_type Engine::generateId()
+    {
+        static id_type baseId = nameHash("\xabLEGION ENGINE\xbb\r\n\x13\n");
+        id_type threadId = std::hash<std::thread::id>{}(std::this_thread::get_id());
+        return combine_hash(baseId++, threadId);
+    }
+
     multicast_delegate<void()>& Engine::initializationSequence()
     {
         static multicast_delegate<void()> m_initializationSequence;
@@ -57,12 +64,12 @@ namespace legion::core
     }
 
     Engine::Engine(int argc, char** argv)
-        : m_modules(), m_shouldRestart(false), exitCode(0), cliargs(argc, argv)
+        : m_modules(), m_shouldRestart(false), id(generateId()), exitCode(0), cliargs(argc, argv)
     {
         reportModule<CoreModule>();
     }
 
-    Engine::Engine() : m_modules(), m_shouldRestart(false), exitCode(0), cliargs()
+    Engine::Engine() : m_modules(), m_shouldRestart(false), id(generateId()), exitCode(0), cliargs()
     {
         reportModule<CoreModule>();
     }

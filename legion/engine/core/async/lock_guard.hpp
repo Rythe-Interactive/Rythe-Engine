@@ -15,7 +15,7 @@ namespace legion::core::async
             m_lock.lock();
         }
 
-        lock_guard(lock_type& _Mtx, std::adopt_lock_t) : m_lock(lck) {} // construct but don't lock
+        lock_guard(lock_type& lck, std::adopt_lock_t) : m_lock(lck) {} // construct but don't lock
 
         ~lock_guard() noexcept {
             m_lock.unlock();
