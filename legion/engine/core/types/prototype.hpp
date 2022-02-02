@@ -94,8 +94,5 @@ namespace legion::core
     };
 
     template<typename T>
-    L_NODISCARD prototype make_prototype(const T& obj)
-    {
-        return prototype{ typeHash<T>(), nameOfType<T>(), std::vector<member_value>() };
-    }
+    extern L_NODISCARD prototype make_prototype(const T& obj);
 }

@@ -109,10 +109,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="autogen\autogen_prototype_example_comp.cpp" />
+    <ClCompile Include="autogen\autogen_reflector_example_comp.cpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="systems\gui_test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="autogen\autogen_prototype_example_comp.hpp" />
+    <ClInclude Include="autogen\autogen_reflector_example_comp.hpp" />
     <ClInclude Include="data\pp_bloom.hpp" />
     <ClInclude Include="data\pp_edgedetect.hpp" />
     <ClInclude Include="module\examplemodule.hpp" />

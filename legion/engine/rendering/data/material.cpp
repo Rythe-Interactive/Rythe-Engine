@@ -149,7 +149,6 @@ namespace legion::rendering
 
     void material::make_unsavable()
     {
-        m_canLoadOrSave = false;
     }
 
     id_type material_handle::current_variant() const

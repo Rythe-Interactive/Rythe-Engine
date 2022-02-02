@@ -118,9 +118,5 @@ namespace legion::core
     };
 
     template<typename T>
-    L_NODISCARD auto make_reflector(T& obj) -> std::conditional_t<std::is_const_v<T>, const reflector, reflector>
-    {
-        ptr_type adress = reinterpret_cast<ptr_type>(std::addressof(obj));
-        return reflector{ typeHash<T>(), nameOfType<T>(), std::vector<member_reference>(), reinterpret_cast<void*>(adress) };
-    }
+    extern L_NODISCARD auto make_reflector(T& obj)->std::conditional_t<std::is_const_v<T>, const reflector, reflector>;
 }

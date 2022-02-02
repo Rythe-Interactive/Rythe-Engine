@@ -233,7 +233,7 @@ namespace legion::rendering
                     material.set_param("useHeight", false);
                 }
 
-                material.setLoadOrSaveBit(false);
+                //material.setLoadOrSaveBit(false);
                 model.materials.push_back(material);
                 log::debug("Loaded embedded material {}/{}", name, mat.name);
             }
@@ -378,7 +378,7 @@ namespace legion::rendering
                     material.set_param("useHeight", false);
                 }
 
-                material.setLoadOrSaveBit(false);
+                //material.setLoadOrSaveBit(false);
                 model.materials.push_back(material);
                 log::debug("Loaded embedded material {}/{}", name, mat.name);
             }
@@ -523,7 +523,7 @@ namespace legion::rendering
                     material.set_param("useHeight", false);
                 }
 
-                material.setLoadOrSaveBit(false);
+                //material.setLoadOrSaveBit(false);
                 model.materials.push_back(material);
                 log::debug("Loaded embedded material {}/{}", name, mat.name);
             }
@@ -668,7 +668,7 @@ namespace legion::rendering
                     material.set_param("useHeight", false);
                 }
 
-                material.setLoadOrSaveBit(false);
+                //material.setLoadOrSaveBit(false);
                 model.materials.push_back(material);
                 log::debug("Loaded embedded material {}/{}", meshName, mat.name);
             }
@@ -812,7 +812,7 @@ namespace legion::rendering
                     material.set_param("useHeight", false);
                 }
 
-                material.setLoadOrSaveBit(false);
+                //material.setLoadOrSaveBit(false);
                 model.materials.push_back(material);
                 log::debug("Loaded embedded material {}/{}", name, mat.name);
             }
@@ -958,7 +958,7 @@ namespace legion::rendering
                     material.set_param("useHeight", false);
                 }
 
-                material.setLoadOrSaveBit(false);
+                //material.setLoadOrSaveBit(false);
                 model.materials.push_back(material);
                 log::debug("Loaded embedded material {}/{}", meshName, mat.name);
             }
