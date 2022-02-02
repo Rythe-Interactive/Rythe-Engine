@@ -50,7 +50,10 @@ namespace legion::physics
             {
                 OPTICK_EVENT("Fetching data");
 
-                rigidbodies.reserve(manifoldPrecursorQuery.size());
+                rigidbody emptyRigidbody;
+                std::reference_wrapper<rigidbody> wrapperToEmptyBody = emptyRigidbody;
+
+                rigidbodies.resize(manifoldPrecursorQuery.size(), wrapperToEmptyBody);
                 hasRigidBodies.resize(manifoldPrecursorQuery.size());
 
                 queueJobs(manifoldPrecursorQuery.size(), [&]() {
