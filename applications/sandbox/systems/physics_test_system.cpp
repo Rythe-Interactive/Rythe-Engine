@@ -19,7 +19,8 @@ namespace legion::physics
    
         auto litShader = rendering::ShaderCache::create_shader("lit", fs::view("engine://shaders/default_lit.shs"));
         vertexColor = rendering::MaterialCache::create_material("vertexColor", "assets://shaders/vertexcolor.shs"_view);
-        textureH = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
+
+        textureH = rendering::MaterialCache::create_material("texture", fs::view("engine://shaders/default_lit.shs") );
         textureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/split-test.png"_view));
 
         /////////////////
@@ -38,6 +39,29 @@ namespace legion::physics
         //auto litShader = rendering::ShaderCache::create_shader("lit", fs::view("engine://shaders/default_lit.shs"));
        /* tileH = rendering::MaterialCache::create_material("tile", "assets://shaders/texture.shs"_view);
         tileH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/tile/tileColor.png"_view)); */
+
+        //Legion Default
+
+        textureH = rendering::MaterialCache::create_material("LegionDefault", litShader);
+        textureH.set_param("alphaCutoff", 0.5f);
+        textureH.set_param("useAlbedoTex", true);
+        textureH.set_param("useRoughnessTex", true);
+        textureH.set_param("useNormal", true);
+
+        textureH.set_param("useEmissiveTex", false);
+        textureH.set_param("useAmbientOcclusion", false);
+        textureH.set_param("useHeight", false);
+        textureH.set_param("useMetallicTex", false);
+        textureH.set_param("useMetallicRoughness", false);
+
+        textureH.set_param("metallicValue", 0.0f);
+        textureH.set_param("emissiveColor", math::colors::black);
+
+        textureH.set_param("albedoTex", rendering::TextureCache::create_texture("assets://textures/split-test.png"_view));
+        textureH.set_param("normalTex", rendering::TextureCache::create_texture("assets://textures/tile/tileNormal.png"_view));
+        textureH.set_param("roughnessTex", rendering::TextureCache::create_texture("assets://textures/tile/tileRoughness.png"_view));
+        textureH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+
 
         //log::debug("------------------------------ TILE -------------");
  
@@ -426,8 +450,6 @@ namespace legion::physics
         addStaircase(math::vec3(5.0f, -1, 5.0f), 10.0f, 10.0f);
     }
 
-    
-
     void PhysicsTestSystem::addStaircase(math::vec3 position, float breadthMult, float widthMult )
     {
         physics::cube_collider_params cubeParams;
@@ -446,7 +468,8 @@ namespace legion::physics
         entPhysicsComponent.AddBox(cubeParams);
 
         auto ent2 = createEntity();
-        ent2.add_component<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(defaultStairMaterial));
+
+        ent2.add_component(rendering::mesh_renderer(defaultStairMaterial, cubeH));
 
         auto [position2H, rotation2H, scale2H] = ent2.add_component<transform>(); 
         position2H = position;
@@ -465,7 +488,7 @@ namespace legion::physics
         auto [positionH, rotationH, scaleH] = ent.add_component<transform>(); 
         positionH = position;
 
-        ent.add_component<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(TextureH));
+        ent.add_component(rendering::mesh_renderer(tileH,cubeH));
 
         auto& entPhysicsComp = ent.add_component<physics::physicsComponent>().get();
         entPhysicsComp.constructConvexHullFromVertices(cubeH.get_mesh()->vertices);
