@@ -33,6 +33,14 @@ namespace legion::core
         return 0;
     }
 
+    template<typename SubSystem>
+    inline byte Engine::reportSubSystem()
+    {
+        subscribeToInit(&SubSystem::init);
+        subscribeToShutdown(&SubSystem::shutdown);
+        return 0;
+    }
+
     template <typename ModuleType, typename... Args CNDOXY(inherits_from<ModuleType, Module>)>
     inline void Engine::reportModule(Args && ...args)
     {

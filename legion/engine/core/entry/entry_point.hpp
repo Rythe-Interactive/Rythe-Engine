@@ -19,7 +19,61 @@
   * @ref legion::core::Engine::reportModule<T,...>()
   */
 extern void reportModules(legion::core::Engine* engine);
-//#define LEGION_ENTRY
+
+namespace legion::core
+{
+    static void enterRealtimePriority()
+    {
+#if defined(LEGION_WINDOWS)
+        if (!SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS))
+        {
+            DWORD error = GetLastError();
+            log::undecoratedInfo(
+                "==============================================================\n"
+                "| Failed to enter real-time performance mode, error: {} |\n"
+                "==============================================================", error);
+            return;
+        }
+#elif defined(LEGION_LINUX)
+        pid_t pid = getpid();
+        if (setpriority(PRIO_PROCESS, pid, sched_get_priority_max(sched_getscheduler(pid))) == -1)
+        {
+            int errornum = errno;
+            std::string error;
+
+            switch (errornum)
+            {
+            case ESRCH:
+                error = "ESRCH";
+                break;
+            case EINVAL:
+                error = "EINVAL";
+                break;
+            case EPERM:
+                error = "EPERM";
+                break;
+            case EACCES:
+                error = "EACCES";
+                break;
+            default:
+                error = std::to_string(errornum);
+                break;
+            }
+
+            log::undecoratedInfo(
+                "=============================================================\n"
+                "| Failed to enter real-time performance mode, error: {} |\n"
+                "=============================================================", error);
+            return;
+        }
+#endif
+        log::undecoratedInfo(
+            "=======================================\n"
+            "| Entered real-time performance mode. |\n"
+            "=======================================");
+    }
+}
+
 #if defined(LEGION_ENTRY)
 
 #if (defined(LEGION_HIGH_PERFORMANCE) && defined(LEGION_WINDOWS))
@@ -37,61 +91,16 @@ int main(int argc, char** argv)
 
     log::setup();
 
-    Engine::cliargs.parse(argc, argv);
-
 #if defined(LEGION_HIGH_PERFORMANCE)
-#   if defined(LEGION_WINDOWS)
-    if (!SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS))
-    {
-        DWORD error = GetLastError();
-        log::undecoratedInfo("==============================================================\n"
-                             "| Failed to enter real-time performance mode, error: {} |\n"
-                             "==============================================================", error);
-    }
-#   elif defined(LEGION_LINUX)
-    pid_t pid = getpid();
-    if (setpriority(PRIO_PROCESS, pid, sched_get_priority_max(sched_getscheduler(pid))) == -1)
-    {
-        int errornum = errno;
-        std::string error;
-
-        switch (errornum)
-        {
-        case ESRCH:
-            error = "ESRCH";
-            break;
-        case EINVAL:
-            error = "EINVAL";
-            break;
-        case EPERM:
-            error = "EPERM";
-            break;
-        case EACCES:
-            error = "EACCES";
-            break;
-        default:
-            error = std::to_string(errornum);
-            break;
-        }
-
-        log::undecoratedInfo("=============================================================\n"
-                             "| Failed to enter real-time performance mode, error: {} |\n"
-                             "=============================================================", error);
-    }
-#   endif
-    else
-    {
-        log::undecoratedInfo("=======================================\n"
-                             "| Entered real-time performance mode. |\n"
-                             "=======================================");
-    }
+    enterRealtimePriority();
 #else
-    log::undecoratedInfo("========================================\n"
-                         "| Engine will start in low power mode. |\n"
-                         "========================================");
+    log::undecoratedInfo(
+        "========================================\n"
+        "| Engine will start in low power mode. |\n"
+        "========================================");
 #endif
 
-    Engine engine;
+    Engine engine{ argc, argv };
 
     reportModules(&engine);
 

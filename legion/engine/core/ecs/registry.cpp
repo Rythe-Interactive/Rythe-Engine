@@ -3,6 +3,24 @@
 
 namespace legion::core::ecs
 {
+    component_pool_base* Registry::tryEmplaceFamily(id_type id, std::unique_ptr<component_pool_base>&& ptr)
+    {
+        auto& families = getFamilies();
+        if (families.count(id)) // Check and fetch in order to avoid a possibly unnecessary allocation and deletion.
+            return families.at(id).get();
+
+        // Allocate and emplace if no item was found.
+        return families.emplace(
+            id,
+            std::move(ptr)
+        ).first->second.get(); // std::pair<iterator, bool>.first --> iterator<std::pair<key, value>>->second --> std::unique_ptr.get() --> component_pool_base*
+    }
+    std::unordered_map<id_type, std::unique_ptr<component_type_base>>& Registry::componentTypes()
+    {
+        static std::unordered_map<id_type, std::unique_ptr<component_type_base>> m_componentTypes;
+        return m_componentTypes;
+    }
+
     id_type Registry::getNextEntityId()
     {
         // Get the current entity ID by recycling or generating a new one.
@@ -37,11 +55,15 @@ namespace legion::core::ecs
     }
 
     // Assign world entity.
-    entity world = Registry::getWorld();
+    entity world;
 
     void Registry::onInit()
     {
         create();
+
+        for (auto& [id, componentType] : componentTypes())
+            tryEmplaceFamily(id, componentType->create_pool());
+
         world = getWorld();
         reportDependency<FilterRegistry>();
     }
@@ -57,20 +79,21 @@ namespace legion::core::ecs
         return getFamilies().at(typeId).get();
     }
 
-    std::string Registry::getFamilyName(id_type id)
+    const std::string& Registry::getFamilyName(id_type id)
     {
-        if (const auto itr = instance.m_familyNames.find(id); itr != instance.m_familyNames.end())
+        auto& types = componentTypes();
+        if (const auto itr = types.find(id); itr != types.end())
         {
-            return itr->second;
+            return itr->second->componentName;
         }
 
-        return "Component type " + std::to_string(id);
+        static std::string unknownCompName = "unkown component";
+        return unknownCompName;
     }
 
     std::unordered_map<id_type, std::unique_ptr<component_pool_base>>& Registry::getFamilies()
     {
-        static std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_componentFamilies;
-        return m_componentFamilies;
+        return instance.m_componentFamilies;
     }
 
     entity Registry::createEntity()
@@ -135,35 +158,6 @@ namespace legion::core::ecs
         // By keeping these identical entity handles inline rvalues the compiler is allowed to optimize them away.
         return entity{ &data };
     }
-
-    //entity Registry::createEntity(entity parent, const serialization::entity_prototype& prototype)
-    //{
-    //    OPTICK_EVENT();
-    //    // Call to create a new blank entity. No need to duplicate this logic.
-    //    auto ent = createEntity(prototype.name, parent);
-
-    //    // Recursively serialize all child prototypes.
-    //    for (auto& childPrototype : prototype.children)
-    //        createEntity(ent, childPrototype);
-
-    //    // Serialize all the component values.
-    //    for (auto& [type, prototypePtr] : prototype.composition)
-    //        getFamily(type)->create_component(ent, *prototypePtr);
-
-    //    // Assign entity activity.
-    //    ent->active = prototype.active;
-
-    //    // Update entity filters to encorporate the new entity.
-    //    FilterRegistry::markEntityFullCreation(ent);
-
-    //    return ent;
-    //}
-
-    //entity Registry::createEntity(const serialization::entity_prototype& prototype)
-    //{
-    //    // The world is used as a default parent.
-    //    return createEntity(world, prototype);
-    //}
 
     void Registry::destroyEntity(entity target, bool recurse)
     {
@@ -264,28 +258,6 @@ namespace legion::core::ecs
         // Actually create and return the component.
         return getFamily(typeId)->create_component(target);
     }
-
-    //void* Registry::createComponent(id_type typeId, entity target, const serialization::component_prototype_base& prototype)
-    //{
-    //    OPTICK_EVENT();
-    //    // Update entity composition.
-    //    instance.m_entityCompositions.at(target).insert(typeId);
-    //    // Update filters.
-    //    FilterRegistry::markComponentAdd(typeId, target);
-    //    // Actually create and return the component using the prototype.
-    //    return getFamily(typeId)->create_component(target, prototype);
-    //}
-
-    //void* Registry::createComponent(id_type typeId, entity target, serialization::component_prototype_base&& prototype)
-    //{
-    //    OPTICK_EVENT();
-    //    // Update entity composition.
-    //    instance.m_entityCompositions.at(target).insert(typeId);
-    //    // Update filters.
-    //    FilterRegistry::markComponentAdd(typeId, target);
-    //    // Actually create and return the component using the prototype.
-    //    return getFamily(typeId)->create_component(target, std::move(prototype));
-    //}
 
     void Registry::destroyComponent(id_type typeId, entity target)
     {

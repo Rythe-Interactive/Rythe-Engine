@@ -374,7 +374,7 @@ namespace legion::core
                 if (m_size >= m_capacity)
                     reserve(m_size + 1);
 
-                m_dense_value.emplace_back(arguments...);
+                m_dense_value.emplace_back(std::forward<Arguments>(arguments)...);
 
                 m_dense_key.emplace_back(key);
 
@@ -400,7 +400,7 @@ namespace legion::core
                 if (m_size >= m_capacity)
                     reserve(m_size + 1);
 
-                m_dense_value.emplace_back(arguments...);
+                m_dense_value.emplace_back(std::forward<Arguments>(arguments)...);
 
                 auto key_ref = m_dense_key.emplace_back(std::move(key));
 
@@ -436,7 +436,7 @@ namespace legion::core
                 if (m_size >= m_capacity)
                     reserve(m_size + 1);
 
-                m_dense_value.emplace_back(arguments...);
+                m_dense_value.emplace_back(std::forward<Arguments>(arguments)...);
 
                 m_dense_key.emplace_back(key);
 
@@ -462,7 +462,7 @@ namespace legion::core
                 if (m_size >= m_capacity)
                     reserve(m_size + 1);
 
-                m_dense_value.emplace_back(arguments...);
+                m_dense_value.emplace_back(std::forward<Arguments>(arguments)...);
 
                 auto key_ref = m_dense_key.emplace_back(std::move(key));
 

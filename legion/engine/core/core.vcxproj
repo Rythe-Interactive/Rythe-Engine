@@ -134,6 +134,7 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="async\async_operation.hpp" />
     <ClInclude Include="async\async_runnable.hpp" />
     <ClInclude Include="async\job_pool.hpp" />
+    <ClInclude Include="async\lock_guard.hpp" />
     <ClInclude Include="async\ring_sync_lock.hpp" />
     <ClInclude Include="async\thread_util.hpp" />
     <ClInclude Include="async\wait_priority.hpp" />
@@ -179,6 +180,7 @@ del /q ".\xcopyexclude"</Command>
     </ClInclude>
     <ClInclude Include="defaults\defaultcomponents.hpp" />
     <ClInclude Include="ecs\archetype\archetype.hpp" />
+    <ClInclude Include="ecs\data\component_type.hpp" />
     <ClInclude Include="ecs\meta\meta.hpp" />
     <ClInclude Include="ecs\containers\component_container.hpp" />
     <ClInclude Include="ecs\containers\component_pool.hpp" />

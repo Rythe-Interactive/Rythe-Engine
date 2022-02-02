@@ -4,6 +4,14 @@
 
 namespace legion::core::scheduling
 {
+    thread_local Engine* Scheduler::m_currentEngineInstance;
+
+    multicast_delegate<Scheduler::thread_callback_type>& Scheduler::getOnThreadCreate()
+    {
+        static multicast_delegate<thread_callback_type> m_onThreadCreate;
+        return m_onThreadCreate;
+    }
+
     void Scheduler::onInit()
     {
         reportDependency<events::EventBus>();
@@ -24,10 +32,13 @@ namespace legion::core::scheduling
             exit(0);
     }
 
-    void Scheduler::threadMain(bool lowPower, std::string name)
+    void Scheduler::threadMain(Engine& engine, bool lowPower, std::string name)
     {
-        log::info("Thread {} assigned.", std::this_thread::get_id());
+        hookThreadToEngine(engine);
+        getOnThreadCreate()();
+
         async::set_thread_name(name.c_str());
+        log::info("Thread {} assigned.", std::this_thread::get_id());
 
         OPTICK_THREAD(name.c_str());
 
@@ -140,13 +151,27 @@ namespace legion::core::scheduling
         instance.m_onFrameEnd(dt, time::span(Clock::elapsedSinceTickStart()));
     }
 
+    void Scheduler::hookThreadToEngine(Engine& context)
+    {
+        m_currentEngineInstance = &context;
+        this_engine::m_ptr = &context;
+    }
+
+    pointer<Engine> Scheduler::currentEngineInstance()
+    {
+        return { m_currentEngineInstance };
+    }
+
     pointer<std::thread> Scheduler::getThread(std::thread::id id)
     {
         return { &instance.m_threads.at(id) };
     }
 
-    int Scheduler::run(bool lowPower, size_type minThreads)
+    int Scheduler::run(Engine& engine, bool lowPower, size_type minThreads)
     {
+        hookThreadToEngine(engine);
+        getOnThreadCreate()();
+
         bool m_lowPower = lowPower;
 
         size_type m_minThreads = minThreads < 1 ? 1 : minThreads;
@@ -163,7 +188,7 @@ namespace legion::core::scheduling
         {
             auto& logData = log::impl::get();
             async::readwrite_guard guard(logData.threadNamesLock);
-            while ((ptr = createThread(Scheduler::threadMain, m_lowPower, name + std::to_string(instance.m_jobPoolSize))) != nullptr)
+            while ((ptr = createThread(Scheduler::threadMain, std::ref(engine), m_lowPower, name + std::to_string(instance.m_jobPoolSize))) != nullptr)
                 logData.threadNames[ptr->get_id()] = name + std::to_string(instance.m_jobPoolSize++);
 
             logData.threadNames[std::this_thread::get_id()] = "Main thread";
@@ -224,7 +249,7 @@ namespace legion::core::scheduling
                 L_PAUSE_INSTRUCTION();
         }
 
-        Engine::shutdownModules();
+        m_currentEngineInstance->shutdownModules();
 
         for (auto& [_, thread] : instance.m_threads)
             if (thread.joinable())
@@ -248,8 +273,8 @@ namespace legion::core::scheduling
         }
 
         log::undecoratedInfo("=========================\n"
-                             "| Shutting down engine. |\n"
-                             "=========================");
+            "| Shutting down engine. |\n"
+            "=========================");
 
         instance.m_exitCode = exitCode;
         instance.m_exit.store(true, std::memory_order_release);
@@ -284,6 +309,11 @@ namespace legion::core::scheduling
         if (instance.m_processChains.contains(id))
             return { &instance.m_processChains.at(id) };
         return { nullptr };
+    }
+
+    void Scheduler::subscribeToThreadCreate(const thread_callback_delegate& callback)
+    {
+        getOnThreadCreate().push_back(callback);
     }
 
     void Scheduler::subscribeToChainStart(id_type chainId, const chain_callback_delegate& callback)

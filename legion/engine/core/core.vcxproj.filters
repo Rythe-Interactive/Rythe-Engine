@@ -449,6 +449,8 @@
     <ClInclude Include="engine\enginesubsystem.hpp" />
     <ClInclude Include="time\main_clock.hpp" />
     <ClInclude Include="types\prototype.hpp" />
+    <ClInclude Include="ecs\data\component_type.hpp" />
+    <ClInclude Include="async\lock_guard.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

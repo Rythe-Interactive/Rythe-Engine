@@ -3,14 +3,39 @@
 #include <core/ecs/ecs.hpp>
 #include <core/scheduling/scheduling.hpp>
 #include <core/events/eventbus.hpp>
+#include <core/logging/logging.hpp>
 
 namespace legion::core
 {
-    std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> Engine::m_modules;
-    int Engine::exitCode = 0;
-    argh::parser Engine::cliargs;
+    thread_local Engine* this_engine::m_ptr;
 
-    std::atomic_bool Engine::m_shouldRestart = { false };
+    pointer<Engine> this_engine::get_context()
+    {
+        return { m_ptr };
+    }
+
+    int& this_engine::exit_code()
+    {
+        return m_ptr->exitCode;
+    }
+
+    argh::parser& this_engine::cliargs()
+    {
+        return m_ptr->cliargs;
+    }
+
+    void this_engine::restart()
+    {
+        m_ptr->restart();
+    }
+
+    void this_engine::shutdown()
+    {
+        m_ptr->shutdown();
+    }
+
+    size_type Engine::m_runningInstances = 0;
+    async::spinlock Engine::m_startupShutdownLock{};
 
     multicast_delegate<void()>& Engine::initializationSequence()
     {
@@ -31,24 +56,36 @@ namespace legion::core
                 module->shutdown();
     }
 
-    Engine::Engine()
+    Engine::Engine(int argc, char** argv)
+        : m_modules(), m_shouldRestart(false), exitCode(0), cliargs(argc, argv)
     {
-        initializationSequence()();
+        reportModule<CoreModule>();
+    }
 
+    Engine::Engine() : m_modules(), m_shouldRestart(false), exitCode(0), cliargs()
+    {
         reportModule<CoreModule>();
     }
 
     void Engine::run(bool low_power, uint minThreads)
     {
+        this_engine::m_ptr = this;
         do
         {
             m_shouldRestart.store(false, std::memory_order_relaxed);
 
-            log::undecoratedInfo("==========================\n"
-                                 "| Initializing engine... |\n"
-                                 "==========================");
+            log::undecoratedInfo(
+                "==========================\n"
+                "| Initializing engine... |\n"
+                "==========================");
 
-            initializationSequence()();
+            {
+                async::lock_guard guard(m_startupShutdownLock);
+                if (m_runningInstances == 0)
+                    initializationSequence()();
+
+                m_runningInstances++;
+            }
 
             {
                 auto& logData = log::impl::get();
@@ -63,14 +100,21 @@ namespace legion::core
             for (const auto& [priority, moduleList] : m_modules)
                 for (auto& module : moduleList)
                     module->init();
-            
-            log::undecoratedInfo("==============================\n"
-                                 "| Entering main engine loop. |\n"
-                                 "==============================");
 
-            exitCode = scheduling::Scheduler::run(low_power, minThreads);
+            log::undecoratedInfo(
+                "==============================\n"
+                "| Entering main engine loop. |\n"
+                "==============================");
 
-            shutdownSequence()();
+            exitCode = scheduling::Scheduler::run(*this, low_power, minThreads);
+
+            {
+                async::lock_guard guard(m_startupShutdownLock);
+                m_runningInstances--;
+
+                if (m_runningInstances == 0)
+                    shutdownSequence()();
+            }
 
         } while (m_shouldRestart.load(std::memory_order_relaxed));
     }
@@ -78,16 +122,16 @@ namespace legion::core
     void Engine::restart()
     {
         m_shouldRestart.store(true, std::memory_order_relaxed);
-        
-        log::undecoratedInfo("========================\n"
-                             "| Restarting engine... |\n"
-                             "========================");
+
+        log::undecoratedInfo(
+            "========================\n"
+            "| Restarting engine... |\n"
+            "========================");
         shutdown();
     }
 
     void Engine::shutdown()
     {
-        scheduling::Scheduler::exit(0);
+        scheduling::Scheduler::exit(exitCode);
     }
-
 }

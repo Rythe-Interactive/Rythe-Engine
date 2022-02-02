@@ -56,7 +56,7 @@ namespace legion::core
     };
 }
 
-#define SubSystemInstance(Type) inline static Type& instance = legion::core::EngineSubSystem< Type >::getInstance();
+#define SubSystemInstance(Type) inline static Type& instance = legion::core::EngineSubSystem<Type>::getInstance();
 
 #define AllowPrivateOnInit                        \
 template<typename, typename>                        \

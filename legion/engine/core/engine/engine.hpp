@@ -3,7 +3,9 @@
 #include <core/engine/module.hpp>
 #include <core/types/primitives.hpp>
 #include <core/types/meta.hpp>
-#include <core/logging/logging.hpp>
+#include <core/async/spinlock.hpp>
+#include <core/containers/pointer.hpp>
+
 #include <argh.h>
 
 #include <map>
@@ -21,6 +23,24 @@ namespace legion::core
         class Scheduler;
     }
 
+    class Engine;
+
+    struct this_engine
+    {
+        friend class Engine;
+        friend class scheduling::Scheduler;
+    private:
+        thread_local static Engine* m_ptr;
+
+    public:
+        static pointer<Engine> get_context();
+        static int& exit_code();
+        static argh::parser& cliargs();
+
+        static void restart();
+        static void shutdown();
+    };
+
     /**@class Engine
      * @brief Main top level engine abstraction.
      *        This class allows you to setup the engine with all the necessary modules and settings.
@@ -34,14 +54,17 @@ namespace legion::core
     {
         friend class legion::core::scheduling::Scheduler;
     private:
-        static std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> m_modules;
+        std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> m_modules;
 
-        static std::atomic_bool m_shouldRestart;
+        std::atomic_bool m_shouldRestart;
+
+        static size_type m_runningInstances;
+        static async::spinlock m_startupShutdownLock;
 
         L_NODISCARD static multicast_delegate<void()>& initializationSequence();
         L_NODISCARD static multicast_delegate<void()>& shutdownSequence();
 
-        static void shutdownModules();
+        void shutdownModules();
 
     public:
         template<typename Func>
@@ -49,11 +72,16 @@ namespace legion::core
         template<typename Func>
         static byte subscribeToShutdown(Func&& func);
 
-        static int exitCode;
+        template<typename SubSystem>
+        static byte reportSubSystem();
 
-        static argh::parser cliargs;
+        int exitCode;
 
+        argh::parser cliargs;
+
+        Engine(int argc, char** argv);
         Engine();
+        NO_DEF_CTOR_RULE5(Engine);
 
         /**@brief Reports an engine module.
          * @tparam ModuleType The module you want to report.
@@ -67,13 +95,16 @@ namespace legion::core
          */
         void run(bool low_power = false, uint minThreads = 0);
 
-        static void restart();
+        void restart();
 
-        static void shutdown();
+        void shutdown();
     };
 
 #define OnEngineInit(Type, Func) ANON_VAR(byte, CONCAT(_onInit_, Type)) = legion::core::Engine::subscribeToInit(Func);
 #define OnEngineShutdown(Type, Func) ANON_VAR(byte, CONCAT(_onShutdown_, Type)) = legion::core::Engine::subscribeToShutdown(Func);
+
+#define ReportSubSystem(Type) ANON_VAR(byte, CONCAT(_reportSubSystem_, Type)) = legion::core::Engine::reportSubSystem<Type>();
+
 }
 
 #include <core/engine/engine.inl>

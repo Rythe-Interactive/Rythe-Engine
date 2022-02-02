@@ -29,6 +29,8 @@ namespace legion::core::scheduling
         using chain_callback_delegate = typename ProcessChain::chain_callback_delegate;
         using frame_callback_type = chain_callback_type;
         using frame_callback_delegate = chain_callback_delegate;
+        using thread_callback_type = void();
+        using thread_callback_delegate = delegate<thread_callback_type>;
 
     private:
         static constexpr size_type reserved_threads = 1; // this, OS
@@ -56,10 +58,14 @@ namespace legion::core::scheduling
 
         std::atomic<float> m_pollTime = { 0.1f };
 
+        thread_local static Engine* m_currentEngineInstance;
+
+        static multicast_delegate<thread_callback_type>& getOnThreadCreate();
+
         static void onInit();
         static void onShutdown();
 
-        static void threadMain(bool lowPower, std::string name);
+        static void threadMain(Engine& engine, bool lowPower, std::string name);
 
         template<typename Function, typename... Args >
         L_NODISCARD static pointer<std::thread> createThread(Function&& function, Args&&... args);
@@ -69,6 +75,10 @@ namespace legion::core::scheduling
         static void doTick(Clock::span_type deltaTime);
 
     public:
+        static void hookThreadToEngine(Engine& context);
+
+        static pointer<Engine> currentEngineInstance();
+
         template<typename functor, typename... argument_types>
         L_NODISCARD static pointer<std::thread> reserveThread(functor&& function, argument_types&&... args);
 
@@ -79,7 +89,7 @@ namespace legion::core::scheduling
         template<typename Func>
         static auto queueJobs(size_type count, Func&& func);
 
-        static int run(bool lowPower = false, size_type minThreads = 0);
+        static int run(Engine& engine, bool lowPower = false, size_type minThreads = 0);
 
         static void exit(int exitCode);
 
@@ -106,6 +116,8 @@ namespace legion::core::scheduling
         /**@brief Get pointer to a certain process-chain.
          */
         L_NODISCARD static pointer<ProcessChain> getChain(cstring name);
+
+        static void subscribeToThreadCreate(const thread_callback_delegate& callback);
 
         static void subscribeToFrameStart(const frame_callback_delegate& callback);
         static void unsubscribeFromFrameStart(const frame_callback_delegate& callback);
@@ -175,8 +187,7 @@ namespace legion::core::scheduling
         static bool unhookProcess(id_type chainId, pointer<Process> process);
     };
 
-    OnEngineInit(Scheduler, &Scheduler::init);
-    OnEngineShutdown(Scheduler, &Scheduler::shutdown);
+    ReportSubSystem(Scheduler);
 }
 
 #include <core/scheduling/scheduler.inl>

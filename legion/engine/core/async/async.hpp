@@ -14,3 +14,4 @@
 #include <core/async/spinlock.hpp>
 #include <core/async/transferable_atomic.hpp>
 #include <core/async/ring_sync_lock.hpp>
+#include <core/async/lock_guard.hpp>
