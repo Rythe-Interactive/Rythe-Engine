@@ -385,7 +385,7 @@ static void TestECS()
 
         if (fltr.size() != 0)
             for (auto& ent : fltr)
-                log::error("Entity leaked: {}", static_cast<id_type>(ent));
+                log::error("Entity leaked: {}", ent.valid()? std::to_string(ent->id) : "nullptr");
 
         L_CHECK(tcFamily->m_components.empty());
     }
