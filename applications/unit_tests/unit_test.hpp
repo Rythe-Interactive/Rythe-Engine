@@ -27,7 +27,7 @@ namespace legion
 #endif
     }
 
-    using CheckFunc = void(*)(bool, cstring, int, const char*);
+    using CheckFunc = void(*)(const doctest::detail::Result&, doctest::assertType::Enum, cstring, int, const char*);
     using SubDomainFunc = bool(*)(cstring);
 
     struct test_data
@@ -81,22 +81,20 @@ namespace legion
         constexpr operator bool() const noexcept { return true; }
     };
 
-    inline L_ALWAYS_INLINE void NoOpt(bool value, L_MAYBEUNUSED cstring file, L_MAYBEUNUSED int line, L_MAYBEUNUSED const char* expr)
+    inline L_ALWAYS_INLINE void NoOpt(const doctest::detail::Result& value, doctest::assertType::Enum assrt, L_MAYBEUNUSED cstring file, L_MAYBEUNUSED int line, L_MAYBEUNUSED const char* expr)
     {
-        if (!value)
-            DoNotOptimize(value);
+        if (!value.m_passed)
+            DoNotOptimize(assrt);
 
         DoNotOptimize(value);
     }
 
-    inline L_ALWAYS_INLINE void DoCheck(bool value, cstring file, int line, const char* expr)
+    inline L_ALWAYS_INLINE void DoCheck(const doctest::detail::Result& value, doctest::assertType::Enum assrt, cstring file, int line, const char* expr)
     {
         DOCTEST_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Woverloaded-shift-op-parentheses")
-            doctest::detail::ResultBuilder _DOCTEST_RB(doctest::assertType::DT_CHECK, file,
+            doctest::detail::ResultBuilder _DOCTEST_RB(assrt, file,
                 line, expr);
-        DOCTEST_WRAP_IN_TRY(_DOCTEST_RB.setResult(
-            doctest::detail::ExpressionDecomposer(doctest::assertType::DT_CHECK)
-            << value))
+        _DOCTEST_RB.setResult(value);
             DOCTEST_ASSERT_LOG_AND_REACT(_DOCTEST_RB);
         DOCTEST_CLANG_SUPPRESS_WARNING_POP
     }
@@ -188,7 +186,27 @@ namespace legion
         std::invoke(c, std::forward<Args>(args)...);
     }
 
-#define L_CHECK(...) test_data::Check((__VA_ARGS__), __FILE__, __LINE__, #__VA_ARGS__)
+#define WRAP_IN_TRY(x)                                                                              \
+    try {                                                                                           \
+        x;                                                                                          \
+    } catch(...) { legion::log::error("{}", doctest::translateActiveException().c_str()); }
+
+#define L_CHECK_IMPL(assert_type, ...)                                                                                                                              \
+    do {                                                                                                                                                            \
+        byte _DATA_BUFF[sizeof(doctest::detail::Result)];                                                                                                           \
+        doctest::detail::Result* _DOCTEST_RES = reinterpret_cast<doctest::detail::Result*>(&_DATA_BUFF[0]);                                                         \
+        if(!test_info::isBenchMarking)                                                                                                                              \
+        {                                                                                                                                                           \
+            DOCTEST_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Woverloaded-shift-op-parentheses")                                                                           \
+            WRAP_IN_TRY(new(_DOCTEST_RES) doctest::detail::Result(doctest::detail::ExpressionDecomposer(doctest::assertType::assert_type) << __VA_ARGS__))          \
+            DOCTEST_CLANG_SUPPRESS_WARNING_POP                                                                                                                      \
+        }                                                                                                                                                           \
+        test_data::Check(*_DOCTEST_RES, doctest::assertType::assert_type, __FILE__, __LINE__, #__VA_ARGS__);                                                        \
+    } while(false)
+
+#define L_CHECK(...) L_CHECK_IMPL(DT_CHECK, __VA_ARGS__)
+
+#define L_REQUIRE(...) L_CHECK_IMPL(DT_REQUIRE, __VA_ARGS__)
 
 #define Benchmark_N(n, ...) legion::Benchmark_IMPL(legion::SanitizeFunctionName(__FULL_FUNC__), n, __VA_ARGS__)
 #define Benchmark(...) legion::Benchmark_IMPL(legion::SanitizeFunctionName(__FULL_FUNC__), 10000, __VA_ARGS__)

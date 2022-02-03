@@ -368,7 +368,7 @@ static void TestECS()
                 L_CHECK(false);
         }
 
-        L_CHECK(count == 100 && count == static_cast<int>(fltr.size()));
+        L_CHECK((count == 100 && count == static_cast<int>(fltr.size())) == true);
         count = 0;
         for (auto& ent : fltr.reverse_range())
         {
