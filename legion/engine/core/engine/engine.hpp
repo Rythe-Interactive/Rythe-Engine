@@ -29,8 +29,6 @@ namespace legion::core
     struct engine_id
     {
         friend class Engine;
-        template<typename CharType, typename TraitsType>
-        friend std::basic_ostream<CharType, TraitsType>& operator<<(std::basic_ostream<CharType, TraitsType>&, engine_id);
     private:
         id_type m_id;
 
@@ -39,12 +37,14 @@ namespace legion::core
     public:
         RULE_OF_5_NOEXCEPT(engine_id);
 
-        operator id_type() { return m_id; }
+        id_type value() const noexcept { return m_id; }
+
+        operator id_type() const noexcept { return m_id; }
     };
 
     template <class CharType, class TraitsType>
     std::basic_ostream<CharType, TraitsType>& operator<<(std::basic_ostream<CharType, TraitsType>& stream, engine_id id) {
-        return stream << id.m_id;
+        return stream << id.value();
     }
 
     struct this_engine
@@ -56,6 +56,7 @@ namespace legion::core
 
     public:
         static pointer<Engine> get_context();
+        static engine_id& id();
         static int& exit_code();
         static argh::parser& cliargs();
 
@@ -80,7 +81,7 @@ namespace legion::core
 
         std::atomic_bool m_shouldRestart;
 
-        static size_type m_runningInstances;
+        static size_type m_initializedInstances;
         static async::spinlock m_startupShutdownLock;
 
         static id_type generateId();
@@ -113,6 +114,8 @@ namespace legion::core
 
         ~Engine() = default;
 
+        void makeCurrentContext();
+
         /**@brief Reports an engine module.
          * @tparam ModuleType The module you want to report.
          * @param args The arguments you want to pass to the module constructor.
@@ -120,6 +123,9 @@ namespace legion::core
          */
         template <typename ModuleType, typename... Args CNDOXY(inherits_from<ModuleType, Module> = 0)>
         void reportModule(Args&&...args);
+
+        void initialize();
+        void uninitialize();
 
         /**@brief Runs engine loop.
          */
@@ -158,9 +164,7 @@ namespace fmt
         template <typename FormatContext>
         auto format(const legion::core::engine_id& id, FormatContext& ctx)
         {
-            std::ostringstream oss;
-            oss << id;
-            return format_to(ctx.out(), "{}", oss.str());
+            return format_to(ctx.out(), "{}", id.value());
         }
 
     };

@@ -125,7 +125,7 @@ namespace legion
     template<typename Callable, typename... Args>
     inline L_ALWAYS_INLINE void Benchmark_IMPL(const std::string& func, size_type n, Callable c, Args&&... args)
     {
-        if (Engine::cliargs["nobenchmark"])
+        if (this_engine::cliargs()["nobenchmark"])
             return;
 
         test_data::subdomaintimes.clear();

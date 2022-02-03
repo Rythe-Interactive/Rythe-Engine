@@ -14,6 +14,11 @@ namespace legion::core
         return { m_ptr };
     }
 
+    engine_id& this_engine::id()
+    {
+        return m_ptr->id;
+    }
+
     int& this_engine::exit_code()
     {
         return m_ptr->exitCode;
@@ -34,7 +39,7 @@ namespace legion::core
         m_ptr->shutdown();
     }
 
-    size_type Engine::m_runningInstances = 0;
+    size_type Engine::m_initializedInstances = 0;
     async::spinlock Engine::m_startupShutdownLock{};
 
     id_type Engine::generateId()
@@ -90,39 +95,65 @@ namespace legion::core
         return *this;
     }
 
-    void Engine::run(bool low_power, uint minThreads)
+    void Engine::makeCurrentContext()
     {
         this_engine::m_ptr = this;
+    }
+
+    void Engine::initialize()
+    {
+        log::undecoratedInfo(
+            "==========================\n"
+            "| Initializing engine... |\n"
+            "==========================");
+
+        {
+            async::lock_guard guard(m_startupShutdownLock);
+            if (m_initializedInstances == 0)
+                initializationSequence()();
+
+            m_initializedInstances++;
+        }
+
+        {
+            auto& logData = log::impl::get();
+            async::readwrite_guard guard(logData.threadNamesLock);
+            logData.threadNames[std::this_thread::get_id()] = "Initialization";
+        }
+
+        for (const auto& [priority, moduleList] : m_modules)
+            for (auto& module : moduleList)
+                module->setup();
+
+        for (const auto& [priority, moduleList] : m_modules)
+            for (auto& module : moduleList)
+                module->init();
+
+
+        {
+            auto& logData = log::impl::get();
+            async::readwrite_guard guard(logData.threadNamesLock);
+            logData.threadNames[std::this_thread::get_id()] = "Main thread: " + std::to_string(id.value());
+        }
+    }
+
+    void Engine::uninitialize()
+    {
+        async::lock_guard guard(m_startupShutdownLock);
+        m_initializedInstances--;
+
+        if (m_initializedInstances == 0)
+            shutdownSequence()();
+    }
+
+    void Engine::run(bool low_power, uint minThreads)
+    {
+        makeCurrentContext();
         do
         {
             m_shouldRestart.store(false, std::memory_order_relaxed);
 
-            log::undecoratedInfo(
-                "==========================\n"
-                "| Initializing engine... |\n"
-                "==========================");
-
-            {
-                async::lock_guard guard(m_startupShutdownLock);
-                if (m_runningInstances == 0)
-                    initializationSequence()();
-
-                m_runningInstances++;
-            }
-
-            {
-                auto& logData = log::impl::get();
-                async::readwrite_guard guard(logData.threadNamesLock);
-                logData.threadNames[std::this_thread::get_id()] = "Initialization";
-            }
-
-            for (const auto& [priority, moduleList] : m_modules)
-                for (auto& module : moduleList)
-                    module->setup();
-
-            for (const auto& [priority, moduleList] : m_modules)
-                for (auto& module : moduleList)
-                    module->init();
+            initialize();
 
             log::undecoratedInfo(
                 "==============================\n"
@@ -131,13 +162,7 @@ namespace legion::core
 
             exitCode = scheduling::Scheduler::run(*this, low_power, minThreads);
 
-            {
-                async::lock_guard guard(m_startupShutdownLock);
-                m_runningInstances--;
-
-                if (m_runningInstances == 0)
-                    shutdownSequence()();
-            }
+            uninitialize();
 
         } while (m_shouldRestart.load(std::memory_order_relaxed));
     }

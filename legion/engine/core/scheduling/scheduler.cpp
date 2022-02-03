@@ -191,7 +191,7 @@ namespace legion::core::scheduling
             while ((ptr = createThread(Scheduler::threadMain, std::ref(engine), m_lowPower, name + std::to_string(instance.m_jobPoolSize))) != nullptr)
                 logData.threadNames[ptr->get_id()] = name + std::to_string(instance.m_jobPoolSize++);
 
-            logData.threadNames[std::this_thread::get_id()] = "Main thread";
+            logData.threadNames[std::this_thread::get_id()] = "Main thread: " + std::to_string(this_engine::id().value());
         }
 
         instance.m_start.store(true, std::memory_order_release);
