@@ -23,7 +23,11 @@ namespace legion::core::compute {
             log::error("clGetPlatformIDs failed: {}", ret == CL_INVALID_VALUE ? "CL_INVALID_VALUE (params are bad)" : "CL_OUT_OF_HOST_MEMORY");
             return;
         }
-
+        else if (ret_num_platforms == 0)
+        {
+            log::error("clGetPlatformIDs failed: no platforms available");
+            return;
+        }
 
         //get a suitable computing device (this should find the best device in the average pc)
         ret = clGetDeviceIDs(instance.m_platform_id, CL_DEVICE_TYPE_DEFAULT, 1, &instance.m_device_id, &ret_num_devices);
@@ -31,6 +35,7 @@ namespace legion::core::compute {
         //error checking for clGetDeviceIDs
         if (ret != CL_SUCCESS)
         {
+            instance.m_device_id = nullptr;
             std::string error = "Unknown Error " + std::to_string(ret);
             switch (ret)
             {
@@ -46,6 +51,11 @@ namespace legion::core::compute {
             log::error("clGetDeviceIDs failed: {}", error);
             return;
         }
+        else if (ret_num_devices == 0)
+        {
+            log::error("clGetDeviceIDs failed: no devices available");
+            return;
+        }
 
 
         //create the computing context
@@ -54,6 +64,7 @@ namespace legion::core::compute {
         //error checking for clCreateContext
         if (ret != CL_SUCCESS)
         {
+            instance.m_context = nullptr;
             std::string error = "Unknown Error " + std::to_string(ret);
             switch (ret)
             {
@@ -74,34 +85,40 @@ namespace legion::core::compute {
 
     void Context::onShutdown()
     {
-        auto ret = clReleaseContext(instance.m_context);
-
-        if (ret != CL_SUCCESS)
+        if (instance.m_context)
         {
-            std::string error = "Unknown Error " + std::to_string(ret);
-            switch (ret)
-            {
-            case CL_INVALID_CONTEXT:       error = "CL_INVALID_CONTEXT "; break;
-            default: break;
-            }
+            auto ret = clReleaseContext(instance.m_context);
 
-            log::error("clReleaseContext failed: {}", error);
+            if (ret != CL_SUCCESS)
+            {
+                std::string error = "Unknown Error " + std::to_string(ret);
+                switch (ret)
+                {
+                case CL_INVALID_CONTEXT:       error = "CL_INVALID_CONTEXT "; break;
+                default: break;
+                }
+
+                log::error("clReleaseContext failed: {}", error);
+            }
         }
 
-        ret = clReleaseDevice(instance.m_device_id);
-
-        if (ret != CL_SUCCESS)
+        if (instance.m_device_id)
         {
-            std::string error = "Unknown Error " + std::to_string(ret);
-            switch (ret)
-            {
-            case CL_INVALID_DEVICE:      error = "CL_INVALID_DEVICE"; break;
-            case CL_OUT_OF_RESOURCES:    error = "CL_OUT_OF_RESOURCES"; break;
-            case CL_OUT_OF_HOST_MEMORY:  error = "CL_OUT_OF_HOST_MEMORY"; break;
-            default: break;
-            }
+            auto ret = clReleaseDevice(instance.m_device_id);
 
-            log::error("clReleaseDevice failed: {}", error);
+            if (ret != CL_SUCCESS)
+            {
+                std::string error = "Unknown Error " + std::to_string(ret);
+                switch (ret)
+                {
+                case CL_INVALID_DEVICE:      error = "CL_INVALID_DEVICE"; break;
+                case CL_OUT_OF_RESOURCES:    error = "CL_OUT_OF_RESOURCES"; break;
+                case CL_OUT_OF_HOST_MEMORY:  error = "CL_OUT_OF_HOST_MEMORY"; break;
+                default: break;
+                }
+
+                log::error("clReleaseDevice failed: {}", error);
+            }
         }
     }
 
