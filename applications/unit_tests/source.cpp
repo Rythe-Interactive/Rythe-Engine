@@ -19,15 +19,12 @@ int main(int argc, char** argv)
     Engine engine(argc, argv);
     engine.makeCurrentContext();
     engine.initialize();
+
     doctest::Context ctx;
     ctx.applyCommandLine(argc, argv);
-
-    auto exitCode = ctx.run();
+    ctx.run();
 
     engine.uninitialize();
 
-    if (exitCode == 0)
-        return engine.exitCode;
-    else
-        return exitCode;
+    return engine.exitCode;
 }

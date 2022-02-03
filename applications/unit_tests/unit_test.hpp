@@ -91,12 +91,10 @@ namespace legion
 
     inline L_ALWAYS_INLINE void DoCheck(const doctest::detail::Result& value, doctest::assertType::Enum assrt, cstring file, int line, const char* expr)
     {
-        DOCTEST_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Woverloaded-shift-op-parentheses")
-            doctest::detail::ResultBuilder _DOCTEST_RB(assrt, file,
-                line, expr);
+        doctest::detail::ResultBuilder _DOCTEST_RB(assrt, file, line, expr);
         _DOCTEST_RB.setResult(value);
-            DOCTEST_ASSERT_LOG_AND_REACT(_DOCTEST_RB);
-        DOCTEST_CLANG_SUPPRESS_WARNING_POP
+        _DOCTEST_RB.log();
+        _DOCTEST_RB.react();
     }
 
     inline L_ALWAYS_INLINE bool NoPrint(cstring val)
