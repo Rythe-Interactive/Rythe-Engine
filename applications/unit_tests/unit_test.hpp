@@ -27,7 +27,7 @@ namespace legion
 #endif
     }
 
-    using CheckFunc = void(*)(bool, cstring, int);
+    using CheckFunc = void(*)(bool, cstring, int, const char*);
     using SubDomainFunc = bool(*)(cstring);
 
     struct test_data
@@ -81,17 +81,24 @@ namespace legion
         constexpr operator bool() const noexcept { return true; }
     };
 
-    inline L_ALWAYS_INLINE void NoOpt(bool value, L_MAYBEUNUSED cstring file, L_MAYBEUNUSED int line)
+    inline L_ALWAYS_INLINE void NoOpt(bool value, L_MAYBEUNUSED cstring file, L_MAYBEUNUSED int line, L_MAYBEUNUSED const char* expr)
     {
-        if(!value)
+        if (!value)
             DoNotOptimize(value);
 
         DoNotOptimize(value);
     }
 
-    inline L_ALWAYS_INLINE void DoCheck(bool value, cstring file, int line)
+    inline L_ALWAYS_INLINE void DoCheck(bool value, cstring file, int line, const char* expr)
     {
-        CHECK_SPEC(file, line, value);
+        DOCTEST_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Woverloaded-shift-op-parentheses")
+            doctest::detail::ResultBuilder _DOCTEST_RB(doctest::assertType::DT_CHECK, file,
+                line, expr);
+        DOCTEST_WRAP_IN_TRY(_DOCTEST_RB.setResult(
+            doctest::detail::ExpressionDecomposer(doctest::assertType::DT_CHECK)
+            << value))
+            DOCTEST_ASSERT_LOG_AND_REACT(_DOCTEST_RB);
+        DOCTEST_CLANG_SUPPRESS_WARNING_POP
     }
 
     inline L_ALWAYS_INLINE bool NoPrint(cstring val)
@@ -181,7 +188,7 @@ namespace legion
         std::invoke(c, std::forward<Args>(args)...);
     }
 
-#define L_CHECK(b) test_data::Check(b, __FILE__, __LINE__)
+#define L_CHECK(...) test_data::Check((__VA_ARGS__), __FILE__, __LINE__, #__VA_ARGS__)
 
 #define Benchmark_N(n, ...) legion::Benchmark_IMPL(legion::SanitizeFunctionName(__FULL_FUNC__), n, __VA_ARGS__)
 #define Benchmark(...) legion::Benchmark_IMPL(legion::SanitizeFunctionName(__FULL_FUNC__), 10000, __VA_ARGS__)
