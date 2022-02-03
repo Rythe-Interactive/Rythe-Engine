@@ -199,6 +199,9 @@ namespace legion::core::ecs
         // Mark entity as recyclable and invalidate ID.
         instance.m_recyclableEntities.push(target->id);
         target->id = invalid_id;
+
+        // Shouldn't be necessary, but idk linux is drunk...
+        FilterRegistry::markEntityDestruction(entity{ nullptr });
     }
 
     void Registry::destroyEntity(id_type target, bool recurse)

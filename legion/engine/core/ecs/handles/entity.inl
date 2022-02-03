@@ -7,7 +7,7 @@ namespace std
 {
     inline L_ALWAYS_INLINE size_t hash<legion::core::ecs::entity>::operator()(legion::core::ecs::entity const& handle) const noexcept
     {
-        return handle->id;
+        return handle.valid() ? handle->id : invalid_id;
     }
 }
 #endif
