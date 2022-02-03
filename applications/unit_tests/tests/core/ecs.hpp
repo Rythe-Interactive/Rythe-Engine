@@ -382,6 +382,11 @@ static void TestECS()
             log::info("filter size: {}", fltr.size());
 
         L_CHECK(fltr.size() == 0);
+
+        if (fltr.size() != 0)
+            for (auto& ent : fltr)
+                log::error("Entity leaked: {}", static_cast<id_type>(ent));
+
         L_CHECK(tcFamily->m_components.empty());
     }
 }
