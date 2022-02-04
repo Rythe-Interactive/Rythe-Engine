@@ -11,11 +11,16 @@ struct test_comp
 static void TestECS()
 {
     using namespace legion;
+
     ecs::Registry::restart();
-    ecs::component_pool<test_comp>::reserve(1000);
-    ecs::component_pool<position>::reserve(1000);
-    ecs::component_pool<rotation>::reserve(1000);
-    ecs::component_pool<scale>::reserve(1000);
+    auto* tcFamily = ecs::Registry::getFamily<test_comp>();
+    tcFamily->reserve(1000);
+    auto* posFamily = ecs::Registry::getFamily<position>();
+    posFamily->reserve(1000);
+    auto* rotFamily = ecs::Registry::getFamily<rotation>();
+    rotFamily->reserve(1000);
+    auto* scalFamily = ecs::Registry::getFamily<scale>();
+    scalFamily->reserve(1000);
 
     LEGION_SUBTEST("Basic component and entity behaviour")
     {
@@ -36,7 +41,7 @@ static void TestECS()
         L_CHECK(comp->value == 0);
         comp->value++;
         L_CHECK(comp->value == 1);
-        L_CHECK(ecs::component_pool<test_comp>::contains_direct(ent));
+        L_CHECK(tcFamily->contains(ent));
         L_CHECK(ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
 
         auto comp2 = ent.get_component<test_comp>();
@@ -50,7 +55,7 @@ static void TestECS()
         L_CHECK(!comp);
         L_CHECK(!comp2);
         L_CHECK(!ent.has_component<test_comp>());
-        L_CHECK(!ecs::component_pool<test_comp>::contains_direct(ent));
+        L_CHECK(!tcFamily->contains(ent));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
 
         auto startVal = test_comp{ 13 };
@@ -66,22 +71,22 @@ static void TestECS()
         comp.destroy();
         L_CHECK(!comp);
         L_CHECK(!ent.has_component<test_comp>());
-        L_CHECK(!ecs::component_pool<test_comp>::contains_direct(ent));
+        L_CHECK(!tcFamily->contains(ent));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
 
         ent.add_component<test_comp>();
-        L_CHECK(ecs::component_pool<test_comp>::contains_direct(ent));
+        L_CHECK(tcFamily->contains(ent));
         L_CHECK(ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
         ent.destroy();
         L_CHECK(!ent);
         L_CHECK(ent == invalid_id);
         L_CHECK(ent == nullptr);
         L_CHECK(!(ent != nullptr));
-        L_CHECK(!ecs::component_pool<test_comp>::contains_direct(ent));
+        L_CHECK(!tcFamily->contains(ent));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
 
         auto ent2 = ecs::Registry::createEntity();
-        L_CHECK(!ecs::component_pool<test_comp>::contains_direct(ent2));
+        L_CHECK(!tcFamily->contains(ent2));
         L_CHECK(!ecs::Registry::entityComposition(ent2->id).count(make_hash<test_comp>()));
         L_CHECK(!ent2.has_component<test_comp>());
         ent2.destroy();
@@ -117,10 +122,10 @@ static void TestECS()
         L_CHECK(comp->value == 0);
         comp->value++;
         L_CHECK(comp->value == 1);
-        L_CHECK(ecs::component_pool<test_comp>::contains_direct(ent));
-        L_CHECK(ecs::component_pool<position>::contains_direct(ent));
-        L_CHECK(ecs::component_pool<rotation>::contains_direct(ent));
-        L_CHECK(ecs::component_pool<scale>::contains_direct(ent));
+        L_CHECK(tcFamily->contains(ent));
+        L_CHECK(posFamily->contains(ent));
+        L_CHECK(rotFamily->contains(ent));
+        L_CHECK(scalFamily->contains(ent));
         L_CHECK(ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
         L_CHECK(ecs::Registry::entityComposition(entId).count(make_hash<position>()));
         L_CHECK(ecs::Registry::entityComposition(entId).count(make_hash<rotation>()));
@@ -137,7 +142,7 @@ static void TestECS()
         L_CHECK(!comp);
         L_CHECK(!comp2);
         L_CHECK(!ent.has_component<test_comp>());
-        L_CHECK(!ecs::component_pool<test_comp>::contains_direct(ent));
+        L_CHECK(!tcFamily->contains(ent));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
 
         L_CHECK(ent.has_component<transform>());
@@ -148,9 +153,9 @@ static void TestECS()
         L_CHECK(!comp);
         L_CHECK(!comp2);
         L_CHECK(!ent.has_component<transform>());
-        L_CHECK(!ecs::component_pool<position>::contains_direct(ent));
-        L_CHECK(!ecs::component_pool<rotation>::contains_direct(ent));
-        L_CHECK(!ecs::component_pool<scale>::contains_direct(ent));
+        L_CHECK(!posFamily->contains(ent));
+        L_CHECK(!rotFamily->contains(ent));
+        L_CHECK(!scalFamily->contains(ent));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<position>()));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<rotation>()));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<scale>()));
@@ -160,9 +165,9 @@ static void TestECS()
         L_CHECK(ent.has_component<transform>());
         tempBool = ent.has_component<rotation, scale, position>();
         L_CHECK(tempBool);
-        L_CHECK(ecs::component_pool<position>::contains_direct(ent));
-        L_CHECK(ecs::component_pool<rotation>::contains_direct(ent));
-        L_CHECK(ecs::component_pool<scale>::contains_direct(ent));
+        L_CHECK(posFamily->contains(ent));
+        L_CHECK(rotFamily->contains(ent));
+        L_CHECK(scalFamily->contains(ent));
         L_CHECK(ecs::Registry::entityComposition(entId).count(make_hash<position>()));
         L_CHECK(ecs::Registry::entityComposition(entId).count(make_hash<rotation>()));
         L_CHECK(ecs::Registry::entityComposition(entId).count(make_hash<scale>()));
@@ -171,9 +176,9 @@ static void TestECS()
         L_CHECK(!ent.has_component<transform>());
         tempBool = !ent.has_component<rotation, position, scale>();
         L_CHECK(tempBool);
-        L_CHECK(!ecs::component_pool<position>::contains_direct(ent));
-        L_CHECK(!ecs::component_pool<rotation>::contains_direct(ent));
-        L_CHECK(!ecs::component_pool<scale>::contains_direct(ent));
+        L_CHECK(!posFamily->contains(ent));
+        L_CHECK(!rotFamily->contains(ent));
+        L_CHECK(!scalFamily->contains(ent));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<position>()));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<rotation>()));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<scale>()));
@@ -197,42 +202,42 @@ static void TestECS()
         comp.destroy();
         L_CHECK(!comp);
         L_CHECK(!ent.has_component<test_comp>());
-        L_CHECK(!ecs::component_pool<test_comp>::contains_direct(ent));
+        L_CHECK(!tcFamily->contains(ent));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
 
         transf.destroy();
         L_CHECK(!transf);
         L_CHECK(!ent.has_component<transform>());
-        L_CHECK(!ecs::component_pool<position>::contains_direct(ent));
-        L_CHECK(!ecs::component_pool<rotation>::contains_direct(ent));
-        L_CHECK(!ecs::component_pool<scale>::contains_direct(ent));
+        L_CHECK(!posFamily->contains(ent));
+        L_CHECK(!rotFamily->contains(ent));
+        L_CHECK(!scalFamily->contains(ent));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<position>()));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<rotation>()));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<scale>()));
 
         ent.add_component<test_comp>();
-        L_CHECK(ecs::component_pool<test_comp>::contains_direct(ent));
+        L_CHECK(tcFamily->contains(ent));
         L_CHECK(ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
         ent.destroy();
         L_CHECK(!ent);
         L_CHECK(ent == invalid_id);
         L_CHECK(ent == nullptr);
         L_CHECK(!(ent != nullptr));
-        L_CHECK(!ecs::component_pool<test_comp>::contains_direct(ent));
+        L_CHECK(!tcFamily->contains(ent));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
-        L_CHECK(!ecs::component_pool<position>::contains_direct(ent));
-        L_CHECK(!ecs::component_pool<rotation>::contains_direct(ent));
-        L_CHECK(!ecs::component_pool<scale>::contains_direct(ent));
+        L_CHECK(!posFamily->contains(ent));
+        L_CHECK(!rotFamily->contains(ent));
+        L_CHECK(!scalFamily->contains(ent));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<position>()));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<rotation>()));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<scale>()));
 
         auto ent2 = ecs::Registry::createEntity();
-        L_CHECK(!ecs::component_pool<test_comp>::contains_direct(ent2));
+        L_CHECK(!tcFamily->contains(ent2));
         L_CHECK(!ecs::Registry::entityComposition(ent2->id).count(make_hash<test_comp>()));
-        L_CHECK(!ecs::component_pool<position>::contains_direct(ent2));
-        L_CHECK(!ecs::component_pool<rotation>::contains_direct(ent2));
-        L_CHECK(!ecs::component_pool<scale>::contains_direct(ent2));
+        L_CHECK(!posFamily->contains(ent2));
+        L_CHECK(!rotFamily->contains(ent2));
+        L_CHECK(!scalFamily->contains(ent2));
         L_CHECK(!ecs::Registry::entityComposition(ent2->id).count(make_hash<position>()));
         L_CHECK(!ecs::Registry::entityComposition(ent2->id).count(make_hash<rotation>()));
         L_CHECK(!ecs::Registry::entityComposition(ent2->id).count(make_hash<scale>()));
@@ -340,11 +345,11 @@ static void TestECS()
             L_CHECK(false);
 
 
-        L_CHECK(ecs::component_pool<test_comp>::m_components.empty());
+        L_CHECK(tcFamily->m_components.empty());
 
         for (size_type i = 0; i < 100; i++)
         {
-            L_CHECK(ecs::component_pool<test_comp>::m_components.size() == i);
+            L_CHECK(tcFamily->m_components.size() == i);
 
             auto ent = ecs::Registry::createEntity();
             ent.add_component<test_comp>();
@@ -363,7 +368,7 @@ static void TestECS()
                 L_CHECK(false);
         }
 
-        L_CHECK(count == 100 && count == static_cast<int>(fltr.size()));
+        L_CHECK((count == 100 && count == static_cast<int>(fltr.size())) == true);
         count = 0;
         for (auto& ent : fltr.reverse_range())
         {
@@ -377,7 +382,12 @@ static void TestECS()
             log::info("filter size: {}", fltr.size());
 
         L_CHECK(fltr.size() == 0);
-        L_CHECK(ecs::component_pool<test_comp>::m_components.empty());
+
+        if (fltr.size() != 0)
+            for (auto& ent : fltr)
+                log::error("Entity leaked: {}", ent.valid()? std::to_string(ent->id) : "nullptr");
+
+        L_CHECK(tcFamily->m_components.empty());
     }
 }
 

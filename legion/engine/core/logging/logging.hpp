@@ -2,6 +2,7 @@
 
 #define SPDLOG_HEADER_ONLY
 #include <sstream>
+#include <thread>
 
 #include <Optick/optick.h>
 
@@ -14,7 +15,6 @@
 
 #include <core/platform/platform.hpp>
 #include <core/types/types.hpp>
-#include <thread>
 #include <core/math/math.hpp>
 #include <core/common/exception.hpp>
 #include <core/async/rw_spinlock.hpp>

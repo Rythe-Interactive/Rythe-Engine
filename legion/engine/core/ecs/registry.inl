@@ -3,351 +3,306 @@
 
 namespace legion::core::ecs
 {
-    template<typename component_type, typename... Args>
-    inline L_ALWAYS_INLINE component_pool<component_type>* Registry::tryEmplaceFamily(Args&&... args)
+    template<typename ComponentType, typename... Args>
+    inline L_ALWAYS_INLINE void Registry::registerComponentType(Args&&... args)
     {
-        auto& families = getFamilies();
-        if (families.count(make_hash<component_type>())) // Check and fetch in order to avoid a possibly unnecessary allocation and deletion.
-            return static_cast<component_pool<component_type>*>(families.at(make_hash<component_type>()).get());
+        auto& [typeId, componentType] = *(componentTypes().try_emplace(typeHash<ComponentType>(), std::make_unique<component_type<ComponentType>>(std::forward<Args>(args)...)).first);
+        if (initialized())
+        {
+            tryEmplaceFamily(typeId, componentType->create_pool());
+        }
+    }
 
-        instance.m_familyNames.emplace(make_hash<component_type>(), std::string(nameOfType<component_type>()));
+    template<typename ComponentType0, typename ComponentType1, typename... ComponentTypes, typename... Args>
+    inline L_ALWAYS_INLINE void Registry::registerComponentType(Args&&... args)
+    {
+        registerComponentType<ComponentType0>(std::forward<Args>(args)...);
+        registerComponentType<ComponentType1, ComponentTypes...>(std::forward<Args>(args)...);
+    }
+
+    template<typename ComponentType, typename... Args>
+    inline L_ALWAYS_INLINE component_pool<ComponentType>* Registry::getFamily(Args&&... args)
+    {
+        id_type typeId = typeHash<ComponentType>();
+        auto& families = getFamilies();
+        if (families.count(typeId)) // Check and fetch in order to avoid a possibly unnecessary allocation and deletion.
+            return dynamic_cast<component_pool<ComponentType>*>(families.at(typeId).get());
 
         // Allocate and emplace if no item was found.
-        return static_cast<component_pool<component_type>*>(
-            families.emplace(
-                make_hash<component_type>(),
-                std::unique_ptr<component_pool_base>(new component_pool<component_type>(std::forward<Args>(args)...))
-            ).first->second.get() // std::pair<iterator, bool>.first --> iterator<std::pair<key, value>>->second --> std::unique_ptr.get() --> component_pool_base* 
-            );
+        auto& [_, componentType] = *(componentTypes().try_emplace(typeId, std::make_unique<component_type<ComponentType>>(std::forward<Args>(args)...)).first);
+        return dynamic_cast<component_pool<ComponentType>*>(families.emplace(
+            typeId,
+            std::move(componentType->create_pool())
+        ).first->second.get()); // std::pair<iterator, bool>.first --> iterator<std::pair<key, value>>->second --> std::unique_ptr.get() --> component_pool_base*
     }
 
-    template<typename component_type, typename... Args>
-    inline L_ALWAYS_INLINE void ecs::Registry::registerComponentType(Args&&... args)
+    template<typename ComponentType>
+    inline L_ALWAYS_INLINE component_ref_t<ComponentType> Registry::createComponent(entity target)
     {
-        getFamilies().try_emplace(
-            make_hash<component_type>(),
-            std::unique_ptr<component_pool_base>(new component_pool<component_type>(std::forward<Args>(args)...))
-        );
-        instance.m_familyNames.emplace(make_hash<component_type>(), std::string(nameOfType<component_type>()));
-    }
-
-    template<typename component_type0, typename component_type1, typename... component_types, typename... Args>
-    inline L_ALWAYS_INLINE void ecs::Registry::registerComponentType(Args&&... args)
-    {
-        registerComponentType<component_type0>(std::forward<Args>(args)...);
-        registerComponentType<component_type1, component_types...>(std::forward<Args>(args)...);
-    }
-
-    template<typename component_type, typename... Args>
-    inline L_ALWAYS_INLINE component_pool<component_type>* ecs::Registry::getFamily(Args&&... args)
-    {
-        return tryEmplaceFamily<component_type>(std::forward<Args>(args)...);
-    }
-
-    template<typename component_type>
-    inline L_ALWAYS_INLINE component_ref_t<component_type> Registry::createComponent(entity target)
-    {
-        if constexpr (is_archetype_v<component_type>)
+        if constexpr (is_archetype_v<ComponentType>)
         {
-            return component_type::create(target);
+            return ComponentType::create(target);
         }
         else
         {
-            OPTICK_EVENT();
+            id_type typeId = typeHash<ComponentType>();
 
             // Check and emplace component family if it doesn't exist yet.
             static bool checked = false; // Prevent unnecessary unordered_map lookups.
-            if (!checked && !getFamilies().count(make_hash<component_type>()))
+            if (!checked && !getFamilies().count(typeId))
             {
                 checked = true;
-                registerComponentType<component_type>();
+                registerComponentType<ComponentType>();
             }
 
             // Update entity composition.
-            instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
+            instance.m_entityCompositions.at(target).insert(typeId);
             // Update filters.
-            FilterRegistry::markComponentAdd<component_type>(target);
+            FilterRegistry::markComponentAdd<ComponentType>(target);
             // Actually create and return the component. (this uses the direct function which avoids use of virtual indirection)
-            return component_pool<component_type>::create_component_direct(target);
+            return *reinterpret_cast<ComponentType*>(getFamily(typeId)->create_component(target));
         }
     }
 
     namespace detail
     {
-        template<typename component_type>
+        template<typename ComponentType>
         inline L_ALWAYS_INLINE auto _create_component_ref(entity target)
         {
-            if constexpr (is_archetype_v<component_type>)
+            if constexpr (is_archetype_v<ComponentType>)
             {
-                return Registry::createComponent<component_type>(target);
+                return Registry::createComponent<ComponentType>(target);
             }
             else
             {
-                return std::ref(Registry::createComponent<component_type>(target));
+                return std::ref(Registry::createComponent<ComponentType>(target));
             }
         }
     }
 
-    template<typename component_type0, typename component_type1, typename... component_typeN>
-    inline L_ALWAYS_INLINE component_ref_tuple<component_type0, component_type1, component_typeN...> Registry::createComponent(entity target)
+    template<typename ComponentType0, typename ComponentType1, typename... ComponentTypeN>
+    inline L_ALWAYS_INLINE component_ref_tuple<ComponentType0, ComponentType1, ComponentTypeN...> Registry::createComponent(entity target)
     {
-        return std::make_tuple(detail::_create_component_ref<component_type0>(target), detail::_create_component_ref<component_type1>(target), detail::_create_component_ref<component_typeN>(target)...);
+        return std::make_tuple(detail::_create_component_ref<ComponentType0>(target), detail::_create_component_ref<ComponentType1>(target), detail::_create_component_ref<ComponentTypeN>(target)...);
     }
 
-    template<typename component_type>
-    inline L_ALWAYS_INLINE component_ref_t<component_type> Registry::createComponent(entity target, component_type&& value)
+    template<typename ComponentType>
+    inline L_ALWAYS_INLINE component_ref_t<ComponentType> Registry::createComponent(entity target, ComponentType&& value)
     {
-        if constexpr (is_archetype_v<component_type>)
+        if constexpr (is_archetype_v<ComponentType>)
         {
-            return component_type::create(target, std::forward<component_type>(value));
+            return ComponentType::create(target, std::forward<ComponentType>(value));
         }
         else
         {
-            OPTICK_EVENT();
+            id_type typeId = typeHash<ComponentType>();
 
             // Check and emplace component family if it doesn't exist yet.
             static bool checked = false; // Prevent unnecessary unordered_map lookups.
-            if (!checked && !getFamilies().count(make_hash<component_type>()))
+            if (!checked && !getFamilies().count(typeId))
             {
                 checked = true;
-                registerComponentType<component_type>();
+                registerComponentType<ComponentType>();
             }
 
             // Update entity composition.
-            instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
+            instance.m_entityCompositions.at(target).insert(typeId);
             // Update filters.
-            FilterRegistry::markComponentAdd<component_type>(target);
-            // Actually create and return the component. (this uses the direct function which avoids use of virtual indirection)
-            return component_pool<component_type>::create_component_direct(target, std::forward<component_type>(value));
+            FilterRegistry::markComponentAdd<ComponentType>(target);
+            // Actually create and return the component.
+            return reinterpret_cast<component_pool<ComponentType>*>(getFamily(typeId))->create_component(target, std::forward<ComponentType>(value));
         }
     }
 
-    template<typename component_type>
-    inline L_ALWAYS_INLINE component_ref_t<component_type> Registry::createComponent(entity target, const component_type& value)
+    template<typename ComponentType>
+    inline L_ALWAYS_INLINE component_ref_t<ComponentType> Registry::createComponent(entity target, const ComponentType& value)
     {
-        if constexpr (is_archetype_v<component_type>)
+        if constexpr (is_archetype_v<ComponentType>)
         {
-            return component_type::create(target, value);
+            return ComponentType::create(target, value);
         }
         else
         {
-            OPTICK_EVENT();
+            id_type typeId = typeHash<ComponentType>();
 
             // Check and emplace component family if it doesn't exist yet.
             static bool checked = false; // Prevent unnecessary unordered_map lookups.
-            if (!checked && !getFamilies().count(make_hash<component_type>()))
+            if (!checked && !getFamilies().count(typeId))
             {
                 checked = true;
-                registerComponentType<component_type>();
+                registerComponentType<ComponentType>();
             }
 
             // Update entity composition.
-            instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
+            instance.m_entityCompositions.at(target).insert(typeId);
             // Update filters.
-            FilterRegistry::markComponentAdd<component_type>(target);
-            // Actually create and return the component. (this uses the direct function which avoids use of virtual indirection)
-            return component_pool<component_type>::create_component_direct(target, value);
+            FilterRegistry::markComponentAdd<ComponentType>(target);
+            // Actually create and return the component.
+            return reinterpret_cast<component_pool<ComponentType>*>(getFamily(typeId))->create_component(target, value);
         }
     }
 
-    template<typename archetype_type, typename component_type0, typename component_type1, typename... component_typeN>
-    inline L_ALWAYS_INLINE typename archetype_type::ref_group Registry::createComponent(entity target, component_type0&& value0, component_type1&& value1, component_typeN&&... valueN)
+    template<typename archetype_type, typename ComponentType0, typename ComponentType1, typename... ComponentTypeN>
+    inline L_ALWAYS_INLINE typename archetype_type::ref_group Registry::createComponent(entity target, ComponentType0&& value0, ComponentType1&& value1, ComponentTypeN&&... valueN)
     {
-        return archetype_type::create(target, std::forward<component_type0>(value0), std::forward<component_type1>(value1), std::forward<component_typeN>(valueN)...);
+        return archetype_type::create(target, std::forward<ComponentType0>(value0), std::forward<ComponentType1>(value1), std::forward<ComponentTypeN>(valueN)...);
     }
 
     namespace detail
     {
-        template<typename component_type>
-        inline L_ALWAYS_INLINE auto _create_component_ref(entity target, component_type&& value)
+        template<typename ComponentType>
+        inline L_ALWAYS_INLINE auto _create_component_ref(entity target, ComponentType&& value)
         {
-            if constexpr (is_archetype_v<component_type>)
+            if constexpr (is_archetype_v<ComponentType>)
             {
-                return Registry::createComponent<remove_cvr_t<component_type>>(target, std::forward<component_type>(value));
+                return Registry::createComponent<remove_cvr_t<ComponentType>>(target, std::forward<ComponentType>(value));
             }
             else
             {
-                return std::ref(Registry::createComponent<remove_cvr_t<component_type>>(target, std::forward<component_type>(value)));
+                return std::ref(Registry::createComponent<remove_cvr_t<ComponentType>>(target, std::forward<ComponentType>(value)));
             }
         }
     }
 
-    template<typename component_type0, typename component_type1, typename... component_typeN>
-    inline L_ALWAYS_INLINE component_ref_tuple<component_type0, component_type1, component_typeN...> Registry::createComponent(entity target, component_type0&& value0, component_type1&& value1, component_typeN&&... valueN)
+    template<typename ComponentType0, typename ComponentType1, typename... ComponentTypeN>
+    inline L_ALWAYS_INLINE component_ref_tuple<ComponentType0, ComponentType1, ComponentTypeN...> Registry::createComponent(entity target, ComponentType0&& value0, ComponentType1&& value1, ComponentTypeN&&... valueN)
     {
-        return std::make_tuple(detail::_create_component_ref(target, std::forward<component_type0>(value0)),
-            detail::_create_component_ref(target, std::forward<component_type1>(value1)),
-            detail::_create_component_ref(target, std::forward<component_typeN>(valueN))...);
+        return std::make_tuple(detail::_create_component_ref(target, std::forward<ComponentType0>(value0)),
+            detail::_create_component_ref(target, std::forward<ComponentType1>(value1)),
+            detail::_create_component_ref(target, std::forward<ComponentTypeN>(valueN))...);
     }
 
-    template<typename component_type0, typename component_type1, typename... component_typeN>
-    inline L_ALWAYS_INLINE component_ref_tuple<component_type0, component_type1, component_typeN...> Registry::createComponent(entity target, const component_type0& value0, const component_type1& value1, const component_typeN&... valueN)
+    template<typename ComponentType0, typename ComponentType1, typename... ComponentTypeN>
+    inline L_ALWAYS_INLINE component_ref_tuple<ComponentType0, ComponentType1, ComponentTypeN...> Registry::createComponent(entity target, const ComponentType0& value0, const ComponentType1& value1, const ComponentTypeN&... valueN)
     {
         return std::make_tuple(detail::_create_component_ref(target, value0),
             detail::_create_component_ref(target, value1),
             detail::_create_component_ref(target, valueN)...);
     }
 
-    //template<typename component_type>
-    //inline L_ALWAYS_INLINE component_type& Registry::createComponent(entity target, const serialization::component_prototype<component_type>& prototype)
-    //{
-    //    OPTICK_EVENT();
-    //    // Check and emplace component family if it doesn't exist yet.
-    //    static bool checked = false; // Prevent unnecessary unordered_map lookups.
-    //    if (!checked && !getFamilies().count(make_hash<component_type>()))
-    //    {
-    //        checked = true;
-    //        registerComponentType<component_type>();
-    //    }
-
-    //    // Update entity composition.
-    //    instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
-    //    // Update filters.
-    //    FilterRegistry::markComponentAdd<component_type>(target);
-    //    // Actually create and return the component using the prototype. (this uses the direct function which avoids use of virtual indirection)
-    //    return component_pool<component_type>::create_component_direct(target, prototype);
-    //}
-
-    //template<typename component_type>
-    //inline L_ALWAYS_INLINE component_type& Registry::createComponent(entity target, serialization::component_prototype<component_type>&& prototype)
-    //{
-    //    OPTICK_EVENT();
-    //    // Check and emplace component family if it doesn't exist yet.
-    //    static bool checked = false; // Prevent unnecessary unordered_map lookups.
-    //    if (!checked && !getFamilies().count(make_hash<component_type>()))
-    //    {
-    //        checked = true;
-    //        registerComponentType<component_type>();
-    //    }
-
-    //    // Update entity composition.
-    //    instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
-    //    // Update filters.
-    //    FilterRegistry::markComponentAdd<component_type>(target);
-    //    // Actually create and return the component using the prototype. (this uses the direct function which avoids use of virtual indirection)
-    //    return component_pool<component_type>::create_component_direct(target, std::move(prototype));
-    //}
-
-    template<typename component_type>
+    template<typename ComponentType>
     inline L_ALWAYS_INLINE void Registry::destroyComponent(entity target)
     {
-        OPTICK_EVENT();
-        if constexpr (is_archetype_v<component_type>)
+        if constexpr (is_archetype_v<ComponentType>)
         {
-            component_type::destroy(target);
+            ComponentType::destroy(target);
         }
         else
         {
+            id_type typeId = typeHash<ComponentType>();
+
             // Check and emplace component family if it doesn't exist yet.
             static bool checked = false; // Prevent unnecessary unordered_map lookups.
-            if (!checked && !getFamilies().count(make_hash<component_type>()))
+            if (!checked && !getFamilies().count(typeId))
             {
                 checked = true;
-                registerComponentType<component_type>();
+                registerComponentType<ComponentType>();
             }
 
             // Update entity composition.
-            instance.m_entityCompositions.at(target).erase(make_hash<component_type>());
+            instance.m_entityCompositions.at(target).erase(typeId);
             // Update filters.
-            FilterRegistry::markComponentErase<component_type>(entity{ &Registry::entityData(target) });
-            // Actually destroy the component. (this uses the direct function which avoids use of virtual indirection)
-            component_pool<component_type>::destroy_component_direct(target);
+            FilterRegistry::markComponentErase<ComponentType>(entity{ &Registry::entityData(target) });
+            // Actually destroy the component.
+            getFamily(typeId)->destroy_component(target);
         }
     }
 
     namespace detail
     {
-        template<typename component_type>
+        template<typename ComponentType>
         inline L_ALWAYS_INLINE void _destroy_comp_impl(entity target)
         {
-            Registry::destroyComponent<component_type>(target);
+            Registry::destroyComponent<ComponentType>(target);
         }
 
-        template<typename component_type0, typename component_type1,  typename... component_typeN>
+        template<typename ComponentType0, typename ComponentType1,  typename... ComponentTypeN>
         inline L_ALWAYS_INLINE void _destroy_comp_impl(entity target)
         {
-            Registry::destroyComponent<component_type0>(target);
-            _destroy_comp_impl<component_type1, component_typeN...>(target);
+            Registry::destroyComponent<ComponentType0>(target);
+            _destroy_comp_impl<ComponentType1, ComponentTypeN...>(target);
         }
     }
 
-    template<typename component_type0, typename component_type1, typename... component_typeN>
+    template<typename ComponentType0, typename ComponentType1, typename... ComponentTypeN>
     inline L_ALWAYS_INLINE void Registry::destroyComponent(entity target)
     {
-        detail::_destroy_comp_impl<component_type0, component_type1, component_typeN...>(target);
+        detail::_destroy_comp_impl<ComponentType0, ComponentType1, ComponentTypeN...>(target);
     }
 
-    template<typename component_type>
+    template<typename ComponentType>
     inline L_ALWAYS_INLINE bool Registry::hasComponent(entity target)
     {
-        OPTICK_EVENT();
-        if constexpr (is_archetype_v<component_type>)
+        if constexpr (is_archetype_v<ComponentType>)
         {
-            return component_type::has(target);
+            return ComponentType::has(target);
         }
         else
         {
+            id_type typeId = typeHash<ComponentType>();
+
             // Check and emplace component family if it doesn't exist yet.
             static bool checked = false; // Prevent unnecessary unordered_map lookups.
-            if (!checked && !getFamilies().count(make_hash<component_type>()))
+            if (!checked && !getFamilies().count(typeId))
             {
                 checked = true;
-                registerComponentType<component_type>();
+                registerComponentType<ComponentType>();
             }
-            // Check if a component is existent. (this uses the direct function which avoids use of virtual indirection)
-            return component_pool<component_type>::contains_direct(target);
+            // Check if a component is existent.
+            return getFamily(typeId)->contains(target);
         }
     }
 
-    template<typename component_type0, typename component_type1, typename... component_typeN>
+    template<typename ComponentType0, typename ComponentType1, typename... ComponentTypeN>
     inline L_ALWAYS_INLINE bool Registry::hasComponent(entity target)
     {
-        return (hasComponent<component_type0>(target) && hasComponent<component_type1>(target) && (hasComponent<component_typeN>(target) && ...));
+        return (hasComponent<ComponentType0>(target) && hasComponent<ComponentType1>(target) && (hasComponent<ComponentTypeN>(target) && ...));
     }
 
 
-    template<typename component_type>
-    inline L_ALWAYS_INLINE component_ref_t<component_type> Registry::getComponent(entity target)
+    template<typename ComponentType>
+    inline L_ALWAYS_INLINE component_ref_t<ComponentType> Registry::getComponent(entity target)
     {
-        OPTICK_EVENT();
-        if constexpr (is_archetype_v<component_type>)
+        if constexpr (is_archetype_v<ComponentType>)
         {
-            return component_type::get(target);
+            return ComponentType::get(target);
         }
         else
         {
+            id_type typeId = typeHash<ComponentType>();
+
             // Check and emplace component family if it doesn't exist yet.
             static bool checked = false; // Prevent unnecessary unordered_map lookups.
-            if (!checked && !getFamilies().count(make_hash<component_type>()))
+            if (!checked && !getFamilies().count(typeId))
             {
                 checked = true;
-                registerComponentType<component_type>();
+                registerComponentType<ComponentType>();
             }
 
-            // Fetch the component. (this uses the direct function which avoids use of virtual indirection)
-            return component_pool<component_type>::get_component_direct(target);
+            // Fetch the component.
+            return *reinterpret_cast<ComponentType*>(getFamily(typeId)->get_component(target));
         }
     }
 
     namespace detail
     {
-        template<typename component_type>
+        template<typename ComponentType>
         inline L_ALWAYS_INLINE auto _get_component_ref(entity target)
         {
-            if constexpr (is_archetype_v<component_type>)
+            if constexpr (is_archetype_v<ComponentType>)
             {
-                return Registry::getComponent<remove_cvr_t<component_type>>(target);
+                return Registry::getComponent<remove_cvr_t<ComponentType>>(target);
             }
             else
             {
-                return std::ref(Registry::getComponent<remove_cvr_t<component_type>>(target));
+                return std::ref(Registry::getComponent<remove_cvr_t<ComponentType>>(target));
             }
         }
     }
 
-    template<typename component_type0, typename component_type1, typename... component_typeN>
-    inline L_ALWAYS_INLINE component_ref_tuple<component_type0, component_type1, component_typeN... > getComponent(entity target)
+    template<typename ComponentType0, typename ComponentType1, typename... ComponentTypeN>
+    inline L_ALWAYS_INLINE component_ref_tuple<ComponentType0, ComponentType1, ComponentTypeN... > getComponent(entity target)
     {
-        return std::make_tuple(detail::_get_component_ref<component_type0>(target), detail::_get_component_ref<component_type1>(target), detail::_get_component_ref<component_typeN>(target)...);
+        return std::make_tuple(detail::_get_component_ref<ComponentType0>(target), detail::_get_component_ref<ComponentType1>(target), detail::_get_component_ref<ComponentTypeN>(target)...);
     }
 }

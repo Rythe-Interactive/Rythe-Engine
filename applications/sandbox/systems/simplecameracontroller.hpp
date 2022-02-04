@@ -58,6 +58,7 @@ public:
         bindToEvent<player_look_x, &SimpleCameraController::onPlayerLookX>();
         bindToEvent<player_look_y, &SimpleCameraController::onPlayerLookY>();
         bindToEvent<exit_action, &SimpleCameraController::onExit>();
+        bindToEvent<restart_action, &SimpleCameraController::onRestart>();
         bindToEvent<player_speedup, &SimpleCameraController::onSpeedUp>();
         bindToEvent<fullscreen_action, &SimpleCameraController::onFullscreen>();
         bindToEvent<escape_cursor_action, &SimpleCameraController::onEscapeCursor>();
@@ -121,7 +122,7 @@ public:
             return;
 
         if (action.released())
-            Engine::restart();
+            this_engine::restart();
     }
 
     void onExit(exit_action& action)

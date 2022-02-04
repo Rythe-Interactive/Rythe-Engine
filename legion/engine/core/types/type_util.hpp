@@ -300,7 +300,6 @@ namespace legion::core
         template<typename T>
         id_type typeHashImpl()
         {
-            OPTICK_EVENT();
             return nameHash(nameOfType<T>());
         }
     }

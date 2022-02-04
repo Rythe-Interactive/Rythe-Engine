@@ -82,8 +82,7 @@ namespace legion::core::events
         static void unbindFromEvent(id_type id, const delegate<void(event_base&)>& callback);
     };
 
-    OnEngineInit(EventBus, &EventBus::init);
-    OnEngineShutdown(EventBus, &EventBus::shutdown);
+    ReportSubSystem(EventBus);
 }
 
 #include <core/events/eventbus.inl>

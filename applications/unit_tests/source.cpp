@@ -1,5 +1,3 @@
-#define LEGION_ENTRY
-#define LEGION_SHOW_CONSOLE
 #define LEGION_LOG_WARN
 
 #include <core/core.hpp>
@@ -11,39 +9,22 @@
 #include "tests/core/ecs.hpp"
 #include "tests/core/containers/delegate.hpp"
 
-using namespace legion;
-
-class Exitus : public Module {
-public:
-    void setup() override
-    {
-        reportSystem<ExitHelper>();
-    }
-
-    priority_type priority() override { return PRIORITY_MAX; };
-
-    class ExitHelper : public System<ExitHelper>
-    {
-    public:
-        void setup()
-        {
-            //raiseEvent<events::exit>();
-        }
-    };
-};
-
-void LEGION_CCONV reportModules(Engine* engine)
+int main(int argc, char** argv)
 {
+    using namespace legion::core;
+    log::setup();
+
+    enterRealtimePriority();
+
+    Engine engine(argc, argv);
+    engine.makeCurrentContext();
+    engine.initialize();
+
     doctest::Context ctx;
-    ctx.applyCommandLine(static_cast<int>(engine->cliargs.size()), engine->cliargs.data());
+    ctx.applyCommandLine(argc, argv);
+    ctx.run();
 
-    engine->exitCode = ctx.run();
+    engine.uninitialize();
 
-    if (ctx.shouldExit())
-        engine->reportModule<Exitus>();
-
-    schd::Scheduler::exit(0);
-    //std::exit(res);
-
-// additional application code
+    return engine.exitCode;
 }

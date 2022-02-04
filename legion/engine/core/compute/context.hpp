@@ -145,6 +145,5 @@ namespace legion::core::compute
         cl_device_id m_device_id = nullptr;
     };
 
-    OnEngineInit(Context, &Context::init);
-    OnEngineShutdown(Context, &Context::shutdown);
+    ReportSubSystem(Context);
 }

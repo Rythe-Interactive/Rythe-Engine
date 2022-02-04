@@ -40,7 +40,6 @@ namespace legion::core::ecs
     template<typename... component_types>
     inline id_type FilterRegistry::generateFilterImpl()
     {
-        init();
         // Get the id.
         constexpr id_type id = generateId<component_types...>();
         // Register the component types if it they aren't yet.
@@ -52,10 +51,13 @@ namespace legion::core::ecs
         auto& lists = entityLists();
         lists.emplace(id, hashed_sparse_set<entity>{});
 
-        // Check for any already existing entities that should be in this filter.
-        for (auto& [entId, composition] : Registry::entityCompositions())
-            if (filter_info<component_types...>{}.contains(composition))
-                lists.at(id).insert(entity{ &Registry::entityData(entId) });
+        if (initialized())
+        {
+            // Check for any already existing entities that should be in this filter.
+            for (auto& [entId, composition] : Registry::entityCompositions())
+                if (filter_info<component_types...>{}.contains(composition))
+                    lists.at(id).insert(entity{ &Registry::entityData(entId) });
+        }
 
         return id;
     }

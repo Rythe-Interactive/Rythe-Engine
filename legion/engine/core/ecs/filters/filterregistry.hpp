@@ -16,7 +16,7 @@
 
 namespace legion::core::ecs
 {
-    template<typename... component_types>
+    template<typename... ComponentTypes>
     struct filter;
 
     /**@class FilterRegistry
@@ -28,10 +28,10 @@ namespace legion::core::ecs
         AllowPrivateOnShutdown;
         SubSystemInstance(FilterRegistry);
     public:
-        template<typename... component_types>
+        template<typename... ComponentTypes>
         friend struct filter_info;
 
-        template<typename... component_types>
+        template<typename... ComponentTypes>
         friend struct filter;
 
         /**@brief Message that a certain component was added to an entity. This will update all filters that might be interested in this entity.
@@ -47,17 +47,17 @@ namespace legion::core::ecs
         static void markComponentErase(id_type componentId, entity target);
 
         /**@brief Message that a certain component was added to an entity. This will update all filters that might be interested in this entity.
-         * @tparam component_type Type of component that was added.
+         * @tparam ComponentType Type of component that was added.
          * @param target Entity that was changed.
          */
-        template<typename component_type>
+        template<typename ComponentType>
         static void markComponentAdd(entity target);
 
         /**@brief Message that a certain component was removed from an entity. This will update all filters that might be interested in this entity.
-         * @tparam component_type Type of component that was removed.
+         * @tparam ComponentType Type of component that was removed.
          * @param target Entity that was changed.
          */
-        template<typename component_type>
+        template<typename ComponentType>
         static void markComponentErase(entity target);
 
         /**@brief Message that a certain entity was destroyed. This will erase the entity from all interested filters.
@@ -82,21 +82,20 @@ namespace legion::core::ecs
         static std::unordered_map<id_type, entity_set>& entityLists();
         static std::vector<std::unique_ptr<filter_info_base>>& filters();
 
-        template<typename component_type>
+        template<typename ComponentType>
         constexpr static id_type generateId() noexcept;
 
-        template<typename component_type0, typename component_type1, typename... component_types>
+        template<typename ComponentType0, typename ComponentType1, typename... ComponentTypes>
         constexpr static id_type generateId() noexcept;
 
-        template<typename... component_types>
+        template<typename... ComponentTypes>
         static id_type generateFilterImpl();
 
-        template<typename... component_types>
+        template<typename... ComponentTypes>
         static id_type generateFilter();
     };
 
-    OnEngineInit(FilterRegistry, &FilterRegistry::init);
-    OnEngineShutdown(FilterRegistry, &FilterRegistry::shutdown);
+    ReportSubSystem(FilterRegistry);
 }
 
 #include <core/ecs/filters/filter_info.inl>

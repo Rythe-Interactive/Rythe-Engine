@@ -19,7 +19,7 @@ namespace legion::core
     class CoreModule final : public Module
     {
     public:
-        virtual void setup()
+        virtual void setup() override
         {
             filesystem::provider_registry::domain_create_resolver<filesystem::basic_resolver>("assets://", "./assets");
             filesystem::provider_registry::domain_create_resolver<filesystem::basic_resolver>("engine://", "./engine");

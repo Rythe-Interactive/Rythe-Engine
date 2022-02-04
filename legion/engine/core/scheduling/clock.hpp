@@ -62,6 +62,5 @@ namespace legion::core::scheduling
         static void tick();
     };
 
-    OnEngineInit(Clock, &Clock::init);
-    OnEngineShutdown(Clock, &Clock::shutdown);
+    ReportSubSystem(Clock);
 }

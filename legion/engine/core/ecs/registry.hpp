@@ -13,6 +13,7 @@
 #include <core/engine/enginesubsystem.hpp>
 
 #include <core/ecs/containers/component_pool.hpp>
+#include <core/ecs/data/component_type.hpp>
 #include <core/ecs/handles/entity.hpp>
 #include <core/ecs/handles/component.hpp>
 #include <core/ecs/data/entity_data.hpp>
@@ -40,7 +41,7 @@ namespace legion::core::ecs
         // All recyclable entities that are dead.
         std::queue<id_type> m_recyclableEntities;
 
-        std::unordered_map<id_type, std::string> m_familyNames;
+        std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_componentFamilies;
 
         // Keep track of what the next new entity ID should be.
         id_type m_nextEntityId = world_entity_id + 1; // First entity should have ID 2; 0 is invalid and 1 is world.
@@ -49,12 +50,10 @@ namespace legion::core::ecs
          */
         std::unordered_map<id_type, std::unordered_set<id_type>> m_entityCompositions;
 
-        /**@brief Inserts in-place if the component family does not exist, returns existing item if the family exists.
-         * @param args Arguments to forward to the constructor of the component family.
-         * @return Pointer to the newly inserted family if one didn't exist. Pointer to the existing item if one did exist.
-         */
-        template<typename component_type, typename... Args>
-        static component_pool<component_type>* tryEmplaceFamily(Args&&... args);
+        static component_pool_base* tryEmplaceFamily(id_type id, std::unique_ptr<component_pool_base>&& ptr);
+
+
+        static std::unordered_map<id_type, std::unique_ptr<component_type_base>>& componentTypes();
 
         L_NODISCARD static id_type getNextEntityId();
 
@@ -74,24 +73,24 @@ namespace legion::core::ecs
          * @note This function generally not necessary to call manually. All templated functions will try to register
          *       an unknown component type before they attempt their operation.
          * @note For a struct to work as a component it needs to be default constructible.
-         * @tparam component_type Type of struct you with to register as a component.
+         * @tparam ComponentType Type of struct you with to register as a component.
          */
-        template<typename component_type, typename... Args>
+        template<typename ComponentType, typename... Args>
         static void registerComponentType(Args&&... args);
 
         /**@brief Manually registers a component type. Allows use of non templated functions for this component type.
          * @note This function generally not necessary to call manually. All templated functions will try to register
          *       an unknown component type before they attempt their operation.
          * @note For a struct to work as a component it needs to be default constructible.
-         * @tparam component_type Type of struct you with to register as a component.
+         * @tparam ComponentType Type of struct you with to register as a component.
          */
-        template<typename component_type0, typename component_type1, typename... component_types, typename... Args>
+        template<typename ComponentType0, typename ComponentType1, typename... ComponentTypes, typename... Args>
         static void registerComponentType(Args&&... args);
 
         /**@brief Get a pointer to the family of a certain component type.
          */
-        template<typename component_type, typename... Args>
-        L_NODISCARD static component_pool<component_type>* getFamily(Args&&... args);
+        template<typename ComponentType, typename... Args>
+        L_NODISCARD static component_pool<ComponentType>* getFamily(Args&&... args);
 
         /**@brief Non templated way to get a pointer to the family of a certain component type.
          * @note Will throw an exception if non of the templated functions have been called
@@ -100,7 +99,7 @@ namespace legion::core::ecs
          */
         L_NODISCARD static component_pool_base* getFamily(id_type typeId);
 
-        L_NODISCARD static std::string getFamilyName(id_type id);
+        L_NODISCARD static const std::string& getFamilyName(id_type id);
 
         /**@brief Gets the container with all the component storage families.
          */
@@ -118,19 +117,6 @@ namespace legion::core::ecs
         L_NODISCARD static entity createEntity(entity parent);
 
         L_NODISCARD static entity createEntity(const std::string& name, entity parent);
-
-        /**@brief Creates empty entity with a specific entity as its parent. Entity is serialized from a prototype.
-         *        This function will also create any components or child entities in the prototype structure.
-         * @param parent Entity to assign as the parent of the new entity.
-         * @param prototype Prototype to serialize entity from. 
-         */
-        //static entity createEntity(entity parent, const serialization::entity_prototype& prototype);
-
-        /**@brief Creates empty entity with the world as its parent. Entity is serialized from a prototype.
-         *        This function will also create any components or child entities in the prototype structure.
-         * @param prototype Prototype to serialize entity from.
-         */
-        //static entity createEntity(const serialization::entity_prototype& prototype);
 
         /**@brief Destroys an entity and all its components.
          * @param target Entity to destroy.
@@ -165,45 +151,34 @@ namespace legion::core::ecs
         L_NODISCARD static entity getEntity(id_type target);
 
         /**@brief Creates a new component of a certain type for a specific entity.
-         * @tparam component_type Type of component to create.
+         * @tparam ComponentType Type of component to create.
          * @param target Entity to create the component for.
          * @return Reference to the created component.
          */
-        template<typename component_type>
-        static component_ref_t<component_type> createComponent(entity target);
+        template<typename ComponentType>
+        static component_ref_t<ComponentType> createComponent(entity target);
 
-        template<typename component_type0, typename component_type1, typename... component_typeN>
-        static component_ref_tuple<component_type0, component_type1, component_typeN...> createComponent(entity target);
+        template<typename ComponentType0, typename ComponentType1, typename... ComponentTypeN>
+        static component_ref_tuple<ComponentType0, ComponentType1, ComponentTypeN...> createComponent(entity target);
 
         /**@brief Adds a precreated component of a certain type to a specific entity.
-         * @tparam component_type Type of component to create.
+         * @tparam ComponentType Type of component to create.
          * @param target Entity to create the component for.
          * @param value Component value to use.
          * @return Reference to the created component.
          */
-        template<typename component_type>
-        static component_ref_t<component_type> createComponent(entity target, component_type&& value);
-        template<typename component_type>
-        static component_ref_t<component_type> createComponent(entity target, const component_type& value);
+        template<typename ComponentType>
+        static component_ref_t<ComponentType> createComponent(entity target, ComponentType&& value);
+        template<typename ComponentType>
+        static component_ref_t<ComponentType> createComponent(entity target, const ComponentType& value);
 
-        template<typename archetype_type, typename component_type0, typename component_type1, typename... component_typeN>
-        static typename archetype_type::ref_group createComponent(entity target, component_type0&& value0, component_type1&& value1, component_typeN&&... valueN);
+        template<typename archetype_type, typename ComponentType0, typename ComponentType1, typename... ComponentTypeN>
+        static typename archetype_type::ref_group createComponent(entity target, ComponentType0&& value0, ComponentType1&& value1, ComponentTypeN&&... valueN);
 
-        template<typename component_type0, typename component_type1, typename... component_typeN>
-        static component_ref_tuple<component_type0, component_type1, component_typeN...> createComponent(entity target, component_type0&& value0, component_type1&& value1, component_typeN&&... valueN);
-        template<typename component_type0, typename component_type1, typename... component_typeN>
-        static component_ref_tuple<component_type0, component_type1, component_typeN...> createComponent(entity target, const component_type0& value0, const component_type1& value1, const component_typeN&... valueN);
-
-        /**@brief Creates a new component of a certain type for a specific entity. Component is serialized from a prototype.
-         * @tparam component_type Type of component to create.
-         * @param target Entity to create the component for.
-         * @param prototype Prototype to serialize component from.
-         * @return Reference to the created component.
-         */
-        //template<typename component_type>
-        //static component_type& createComponent(entity target, const serialization::component_prototype<component_type>& prototype);
-        //template<typename component_type>
-        //static component_type& createComponent(entity target, serialization::component_prototype<component_type>&& prototype);
+        template<typename ComponentType0, typename ComponentType1, typename... ComponentTypeN>
+        static component_ref_tuple<ComponentType0, ComponentType1, ComponentTypeN...> createComponent(entity target, ComponentType0&& value0, ComponentType1&& value1, ComponentTypeN&&... valueN);
+        template<typename ComponentType0, typename ComponentType1, typename... ComponentTypeN>
+        static component_ref_tuple<ComponentType0, ComponentType1, ComponentTypeN...> createComponent(entity target, const ComponentType0& value0, const ComponentType1& value1, const ComponentTypeN&... valueN);
 
         /**@brief Creates a new component of a certain type for a specific entity.
          * @param typeId Type hash of component type to create.
@@ -212,23 +187,14 @@ namespace legion::core::ecs
          */
         static void* createComponent(id_type typeId, entity target);
 
-        /**@brief Creates a new component of a certain type for a specific entity. Component is serialized from a prototype.
-         * @param typeId Type hash of component type to create.
-         * @param target Entity to create the component for.
-         * @param prototype Prototype to serialize component from.
-         * @return Pointer to the created component.
-         */
-        //static void* createComponent(id_type typeId, entity target, const serialization::component_prototype_base& prototype);
-        //static void* createComponent(id_type typeId, entity target, serialization::component_prototype_base&& prototype);
-
         /**@brief Destroys a certain component on a specific entity.
-         * @tparam component_type Type of the component to destroy.
+         * @tparam ComponentType Type of the component to destroy.
          * @param target Entity to destroy and remove the component from.
          */
-        template<typename component_type>
+        template<typename ComponentType>
         static void destroyComponent(entity target);
 
-        template<typename component_type0, typename component_type1, typename... component_typeN>
+        template<typename ComponentType0, typename ComponentType1, typename... ComponentTypeN>
         static void destroyComponent(entity target);
 
         /**@brief Destroys a certain component on a specific entity.
@@ -238,14 +204,14 @@ namespace legion::core::ecs
         static void destroyComponent(id_type typeId, entity target);
 
         /**@brief Checks if a specific entity has a certain component.
-         * @tparam component_type Type of the component to check for.
+         * @tparam ComponentType Type of the component to check for.
          * @param target Entity to check the component for.
          * @return True if the target has the component, false if not.
          */
-        template<typename component_type>
+        template<typename ComponentType>
         L_NODISCARD static bool hasComponent(entity target);
 
-        template<typename component_type0, typename component_type1, typename... component_typeN>
+        template<typename ComponentType0, typename ComponentType1, typename... ComponentTypeN>
         L_NODISCARD static bool hasComponent(entity target);
 
         /**@brief Checks if a specific entity has a certain component.
@@ -256,15 +222,15 @@ namespace legion::core::ecs
         L_NODISCARD static bool hasComponent(id_type typeId, entity target);
 
         /**@brief Gets a reference to an existing component.
-         * @tparam component_type Type of the component to fetch.
+         * @tparam ComponentType Type of the component to fetch.
          * @param target Entity to get the component from.
          * @return Reference to the component.
          */
-        template<typename component_type>
-        L_NODISCARD static component_ref_t<component_type> getComponent(entity target);
+        template<typename ComponentType>
+        L_NODISCARD static component_ref_t<ComponentType> getComponent(entity target);
 
-        template<typename component_type0, typename component_type1, typename... component_typeN>
-        L_NODISCARD static component_ref_tuple<component_type0, component_type1, component_typeN... > getComponent(entity target);
+        template<typename ComponentType0, typename ComponentType1, typename... ComponentTypeN>
+        L_NODISCARD static component_ref_tuple<ComponentType0, ComponentType1, ComponentTypeN... > getComponent(entity target);
 
         /**@brief Gets a pointer to an existing component.
          * @param typeId Type hash of the component to fetch.
@@ -274,8 +240,7 @@ namespace legion::core::ecs
         L_NODISCARD static void* getComponent(id_type typeId, entity target);
     };
 
-    OnEngineInit(Registry, &Registry::init);
-    OnEngineShutdown(Registry, &Registry::shutdown);
+    ReportSubSystem(Registry);
 
     /**@brief World entity. All entities and scenes are eventually parented to this entity.
      */
