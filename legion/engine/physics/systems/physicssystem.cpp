@@ -21,10 +21,18 @@ namespace legion::physics
 
     void PhysicsSystem::setup()
     {
-        createProcess<&PhysicsSystem::fixedUpdate>("Physics", m_timeStep);
-
         m_broadPhase = std::make_unique<BroadphaseUniformGridNoCaching>(math::vec3(3, 3, 3));
+    }
 
+    void PhysicsSystem::update(legion::time::span deltaTime)
+    {
+        accumulator += deltaTime;
+
+        while (accumulator > m_timeStep)
+        {
+            accumulator -= m_timeStep;
+            fixedUpdate(m_timeStep);
+        }
     }
 
     void PhysicsSystem::runPhysicsPipeline(
