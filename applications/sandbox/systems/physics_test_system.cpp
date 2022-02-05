@@ -293,6 +293,8 @@ namespace legion::physics
             indices.push_back(i);
         }
 
+        newMesh.calculate_tangents(&newMesh);
+
         sub_mesh newSubMesh;
         newSubMesh.indexCount = newMesh.indices.size();
         newSubMesh.indexOffset = 0;
