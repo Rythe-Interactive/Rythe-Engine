@@ -35,6 +35,9 @@ namespace legion::physics
 
         //SCENES
 
+        void initializeLitMaterial(rendering::material_handle& materialToInitialize, rendering::shader_handle& litShader,
+            const fs::view& albedoFile, const fs::view& normalFile, const fs::view& roughnessFile);
+
         void quickhullTestScene();
 
         void BoxStackScene();

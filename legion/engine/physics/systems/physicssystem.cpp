@@ -26,12 +26,16 @@ namespace legion::physics
 
     void PhysicsSystem::update(legion::time::span deltaTime)
     {
-        accumulator += deltaTime;
+        m_accumulator += deltaTime;
 
-        while (accumulator > m_timeStep)
+        int currentFrameFixedUpdateCount = 0;
+
+        while (m_accumulator > m_timeStep && currentFrameFixedUpdateCount < m_maxTimeStepPerFrame)
         {
-            accumulator -= m_timeStep;
+            m_accumulator -= m_timeStep;
             fixedUpdate(m_timeStep);
+
+            currentFrameFixedUpdateCount++;
         }
     }
 

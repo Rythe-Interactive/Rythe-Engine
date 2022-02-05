@@ -135,7 +135,9 @@ namespace legion::physics
         static std::unique_ptr<BroadPhaseCollisionAlgorithm> m_broadPhase;
 
         const float m_timeStep = 0.02f;
-        float accumulator = 0.0f;
+        float m_accumulator = 0.0f;
+
+        size_t m_maxTimeStepPerFrame = 3;
                 
         math::ivec3 uniformGridCellSize = math::ivec3(1, 1, 1);
 

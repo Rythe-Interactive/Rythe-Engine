@@ -20,18 +20,12 @@ namespace legion::physics
         auto litShader = rendering::ShaderCache::create_shader("lit", fs::view("engine://shaders/default_lit.shs"));
         vertexColor = rendering::MaterialCache::create_material("vertexColor", "assets://shaders/vertexcolor.shs"_view);
 
-        textureH = rendering::MaterialCache::create_material("texture", fs::view("engine://shaders/default_lit.shs") );
-        textureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/split-test.png"_view));
-
         /////////////////
         woodTextureH = rendering::MaterialCache::create_material("texture2", "assets://shaders/texture.shs"_view);
         woodTextureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/test-albedo.png"_view));
 
         rockTextureH = rendering::MaterialCache::create_material("rock", "assets://shaders/texture.shs"_view);
         rockTextureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/rock.png"_view));
-
-        concreteH = rendering::MaterialCache::create_material("concrete", "assets://shaders/texture.shs"_view);
-        concreteH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/concrete.png"_view));
 
         brickH = rendering::MaterialCache::create_material("brick", "assets://shaders/texture.shs"_view);
         brickH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/plaster/plasterColor.png"_view));
@@ -42,48 +36,16 @@ namespace legion::physics
 
         //Legion Default
 
-        textureH = rendering::MaterialCache::create_material("LegionDefault", litShader);
-        textureH.set_param("alphaCutoff", 0.5f);
-        textureH.set_param("useAlbedoTex", true);
-        textureH.set_param("useRoughnessTex", true);
-        textureH.set_param("useNormal", true);
-
-        textureH.set_param("useEmissiveTex", false);
-        textureH.set_param("useAmbientOcclusion", false);
-        textureH.set_param("useHeight", false);
-        textureH.set_param("useMetallicTex", false);
-        textureH.set_param("useMetallicRoughness", false);
-
-        textureH.set_param("metallicValue", 0.0f);
-        textureH.set_param("emissiveColor", math::colors::black);
-
-        textureH.set_param("albedoTex", rendering::TextureCache::create_texture("assets://textures/split-test.png"_view));
-        textureH.set_param("normalTex", rendering::TextureCache::create_texture("assets://textures/tile/tileNormal.png"_view));
-        textureH.set_param("roughnessTex", rendering::TextureCache::create_texture("assets://textures/tile/tileRoughness.png"_view));
-        textureH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-
+        initializeLitMaterial(textureH, litShader,
+            "assets://textures/split-test.png"_view, "assets://textures/tile/tileNormal.png"_view, "assets://textures/tile/tileRoughness.png"_view);
 
         //log::debug("------------------------------ TILE -------------");
- 
-        tileH = rendering::MaterialCache::create_material("tile", litShader);
-        tileH.set_param("alphaCutoff", 0.5f);
-        tileH.set_param("useAlbedoTex", true);
-        tileH.set_param("useRoughnessTex", true);
-        tileH.set_param("useNormal", true);
 
-        tileH.set_param("useEmissiveTex", false);
-        tileH.set_param("useAmbientOcclusion", false);
-        tileH.set_param("useHeight", false);
-        tileH.set_param("useMetallicTex", false);
-        tileH.set_param("useMetallicRoughness", false);
+        initializeLitMaterial(tileH, litShader,
+            "assets://textures/tile/tileColor.png"_view, "assets://textures/tile/tileNormal.png"_view, "assets://textures/tile/tileRoughness.png"_view);
 
-        tileH.set_param("metallicValue", 0.0f);
-        tileH.set_param("emissiveColor", math::colors::black);
-
-        tileH.set_param("albedoTex", rendering::TextureCache::create_texture("assets://textures/tile/tileColor.png"_view));
-        tileH.set_param("normalTex", rendering::TextureCache::create_texture("assets://textures/tile/tileNormal.png"_view));
-        tileH.set_param("roughnessTex", rendering::TextureCache::create_texture("assets://textures/tile/tileRoughness.png"_view));
-        tileH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+        initializeLitMaterial(concreteH, litShader,
+            "assets://textures/concrete.png"_view, "assets://textures/tile/tileNormal.png"_view, "assets://textures/tile/tileRoughness.png"_view);
 
         wireFrameH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.shs"_view);
         #pragma endregion
@@ -139,8 +101,8 @@ namespace legion::physics
 
         createProcess<&PhysicsTestSystem::colliderDraw>("Physics",0.02f);
 
-        quickhullTestScene();
-        //BoxStackScene();
+        //quickhullTestScene();
+        BoxStackScene();
         //stabilityComparisonScene();
         //monkeyStackScene();
 
@@ -178,7 +140,7 @@ namespace legion::physics
     {
         if (!m_throwingHullActivated || action.value) { return; }
 
-        //log::debug("spawnRandomConvexHullOnCamerLocation");
+        log::debug("spawnRandomConvexHullOnCamerLocation");
 
         //create entity
         auto ent = createEntity();
@@ -326,7 +288,6 @@ namespace legion::physics
 
         }
 
-
         for (int i = 0; i < vertices.size(); i++)
         {
             indices.push_back(i);
@@ -335,31 +296,50 @@ namespace legion::physics
         sub_mesh newSubMesh;
         newSubMesh.indexCount = newMesh.indices.size();
         newSubMesh.indexOffset = 0;
+        newSubMesh.materialIndex = 0;
 
         newMesh.submeshes.push_back(newSubMesh);
-
 
         static int procCount = 0;
         std::string name = std::string("QuickhullMesh") + std::to_string(procCount);
 
         procCount++;
-        //TODO re enable the adding of the mesh renderer after the recursive template bug has been fixed
-        //core::assets::asset<mesh> meshAsset = core::assets::AssetCache<mesh>::create(name,newMesh);
-        //auto modelH = rendering::ModelCache::create_model(meshAsset);
-        //count++;
-        
-        //create renderable
-        //mesh_filter meshFilter = mesh_filter(modelH.get_mesh());
 
-        //ent.add_component<rendering::mesh_renderable>(meshFilter, rendering::mesh_renderer(concreteH));
-        //using extents of face, define uvs
-
-        //randomly select texture
-
-        //set rendering mesh
+        core::assets::asset<mesh> meshAsset = core::assets::AssetCache<mesh>::create(name,newMesh);
+        auto modelH = rendering::ModelCache::create_model(meshAsset);
+       
+        ent.add_component(rendering::mesh_renderer(concreteH,modelH));
     }
 
     rendering::material_handle defaultStairMaterial;
+
+    void PhysicsTestSystem::initializeLitMaterial(rendering::material_handle& materialToInitialize, rendering::shader_handle& litShader,
+        const fs::view& albedoFile, const fs::view& normalFile, const fs::view& roughnessFile)
+    {
+        static size_t litCount = 0;
+
+        materialToInitialize = rendering::MaterialCache::create_material("LitMaterial" + litCount, litShader);
+        materialToInitialize.set_param("alphaCutoff", 0.5f);
+        materialToInitialize.set_param("useAlbedoTex", true);
+        materialToInitialize.set_param("useRoughnessTex", true);
+        materialToInitialize.set_param("useNormal", true);
+
+        materialToInitialize.set_param("useEmissiveTex", false);
+        materialToInitialize.set_param("useAmbientOcclusion", false);
+        materialToInitialize.set_param("useHeight", false);
+        materialToInitialize.set_param("useMetallicTex", false);
+        materialToInitialize.set_param("useMetallicRoughness", false);
+
+        materialToInitialize.set_param("metallicValue", 0.0f);
+        materialToInitialize.set_param("emissiveColor", math::colors::black);
+
+        materialToInitialize.set_param("albedoTex", rendering::TextureCache::create_texture(albedoFile));
+        materialToInitialize.set_param("normalTex", rendering::TextureCache::create_texture(normalFile));
+        materialToInitialize.set_param("roughnessTex", rendering::TextureCache::create_texture(roughnessFile));
+        materialToInitialize.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+
+        litCount++;
+    }
 
     void PhysicsTestSystem::quickhullTestScene()
     {
@@ -828,7 +808,7 @@ namespace legion::physics
             rbH.localInverseInertiaTensor = inverseInertia;
         }
 
-        ent.add_component<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(materials));
+        ent.add_component(rendering::mesh_renderer(materials,cubeH));
 
         auto& entPhysicsComponent = ent.add_component<physics::physicsComponent>().get();
 
