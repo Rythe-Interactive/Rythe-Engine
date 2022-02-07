@@ -15,13 +15,6 @@
 
 namespace legion::physics
 {
-    struct MeshLine
-    {
-        math::vec3 start;
-        math::vec3 end;
-        math::color Color;
-    };
-
     class PhysicsSystem final : public System<PhysicsSystem>
     {
     public:
@@ -38,12 +31,7 @@ namespace legion::physics
      
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
-            static time::timer physicsTimer;
-            //log::debug("{}ms", physicsTimer.restart().milliseconds());
             OPTICK_EVENT();
-
-            //static time::timer pt;
-            //log::debug("frametime: {}ms", pt.restart().milliseconds());
 
             ecs::component_container<rigidbody> rigidbodies;
             std::vector<byte> hasRigidBodies;
