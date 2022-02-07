@@ -150,34 +150,6 @@ namespace legion::physics
             for (auto& manifold : manifoldsToSolve)
             {
                 std::sort(manifold.contacts.begin(), manifold.contacts.end(), &detail::greater_penetration);
-
-                for (size_t i = 0; i < manifold.contacts.size(); i++)
-                {
-                    math::color finalColor;
-
-                    if (i == 0)
-                    {
-                        finalColor = math::colors::red;
-                    }
-
-                    if (i == 1)
-                    {
-                        finalColor = math::colors::blue;
-                    }
-
-                    if (i == 2)
-                    {
-                        finalColor = math::colors::green;
-                    }
-
-                    if (i == 3)
-                    {
-                        finalColor = math::colors::magenta;
-                    }
-
-                    debug::drawLine(manifold.contacts[i].RefWorldContact,
-                        manifold.contacts[i].RefWorldContact + math::vec3(0, 0.1f, 0), finalColor, 3.0f, 0.0f, true);
-                }
             }
 
             {
