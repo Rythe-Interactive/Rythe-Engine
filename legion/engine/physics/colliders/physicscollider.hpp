@@ -75,7 +75,6 @@ namespace legion::physics
         virtual void PopulateContactPointsWith(
             ConvexCollider* convexCollider, physics_manifold& manifold) {};
 
-
         /** @brief Given the transform of the entity that the collider is attached to, draws a visual representation
         * of the collider.
         * @note This is called internally by PhysicsSysten
@@ -83,8 +82,6 @@ namespace legion::physics
         virtual void DrawColliderRepresentation(const math::mat4& transform, math::color usedColor, float width, float time, bool ignoreDepth = false) {};
 
         virtual void UpdateTransformedTightBoundingVolume(const math::mat4& transform) {};
-
-        virtual void UpdateLocalAABB() {};
 
         inline virtual std::vector<HalfEdgeFace*>& GetHalfEdgeFaces()
         {
