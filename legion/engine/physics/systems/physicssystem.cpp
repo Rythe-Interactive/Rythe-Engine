@@ -28,14 +28,14 @@ namespace legion::physics
     {
         m_accumulator += deltaTime;
 
-        int currentFrameFixedUpdateCount = 0;
+        size_type currentInterval = 0;
 
-        while (m_accumulator > m_timeStep && currentFrameFixedUpdateCount < m_maxTimeStepPerFrame)
+        while (m_accumulator > m_timeStep && currentInterval < m_maxInterval)
         {
             m_accumulator -= m_timeStep;
             fixedUpdate(m_timeStep);
 
-            currentFrameFixedUpdateCount++;
+            currentInterval++;
         }
     }
 

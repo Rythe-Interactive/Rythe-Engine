@@ -6,9 +6,9 @@ namespace legion::physics::constants
 {
     static math::vec3 gravity = math::vec3(0, -9.81, 0);
 
-    static constexpr int contactSolverIterationCount = 9;
+    static constexpr size_type contactSolverIterationCount = 9;
 
-    static constexpr int frictionSolverIterationCount = 4;
+    static constexpr size_type frictionSolverIterationCount = 4;
 
     static constexpr float faceToFacePenetrationBias = 0.005f;
 

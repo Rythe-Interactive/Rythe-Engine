@@ -40,9 +40,7 @@ namespace legion::physics
                 OPTICK_EVENT("Fetching data");
 
                 rigidbody emptyRigidbody;
-                std::reference_wrapper<rigidbody> wrapperToEmptyBody = emptyRigidbody;
-
-                rigidbodies.resize(manifoldPrecursorQuery.size(), wrapperToEmptyBody);
+                rigidbodies.resize(manifoldPrecursorQuery.size(), std::ref(emptyRigidbody));
                 hasRigidBodies.resize(manifoldPrecursorQuery.size());
 
                 queueJobs(manifoldPrecursorQuery.size(), [&]() {
@@ -125,7 +123,7 @@ namespace legion::physics
         const float m_timeStep = 0.02f;
         float m_accumulator = 0.0f;
 
-        size_t m_maxTimeStepPerFrame = 3;
+        const size_type m_maxInterval = 3;
                 
         math::ivec3 uniformGridCellSize = math::ivec3(1, 1, 1);
 
