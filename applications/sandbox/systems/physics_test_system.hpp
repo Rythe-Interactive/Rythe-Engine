@@ -31,9 +31,10 @@ namespace legion::physics
 
         bool m_throwingHullActivated = false;
 
-        void CreateElongatedFloor(math::vec3 position,math::quat rot, math::vec3 scale, rendering::material_handle mat, bool hasCollider =true);
-
         //SCENES
+
+        void initializeLitMaterial(rendering::material_handle& materialToInitialize, rendering::shader_handle& litShader,
+            const fs::view& albedoFile, const fs::view& normalFile, const fs::view& roughnessFile);
 
         void quickhullTestScene();
 

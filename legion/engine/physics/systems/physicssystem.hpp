@@ -15,13 +15,6 @@
 
 namespace legion::physics
 {
-    struct MeshLine
-    {
-        math::vec3 start;
-        math::vec3 end;
-        math::color Color;
-    };
-
     class PhysicsSystem final : public System<PhysicsSystem>
     {
     public:
@@ -33,16 +26,12 @@ namespace legion::physics
         //TODO move implementation to a seperate cpp file
 
         virtual void setup();
-     
 
+        void update(legion::time::span deltaTime);
+     
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
-            static time::timer physicsTimer;
-            //log::debug("{}ms", physicsTimer.restart().milliseconds());
             OPTICK_EVENT();
-
-            //static time::timer pt;
-            //log::debug("frametime: {}ms", pt.restart().milliseconds());
 
             ecs::component_container<rigidbody> rigidbodies;
             std::vector<byte> hasRigidBodies;
@@ -50,7 +39,8 @@ namespace legion::physics
             {
                 OPTICK_EVENT("Fetching data");
 
-                rigidbodies.reserve(manifoldPrecursorQuery.size());
+                rigidbody emptyRigidbody;
+                rigidbodies.resize(manifoldPrecursorQuery.size(), std::ref(emptyRigidbody));
                 hasRigidBodies.resize(manifoldPrecursorQuery.size());
 
                 queueJobs(manifoldPrecursorQuery.size(), [&]() {
@@ -129,9 +119,12 @@ namespace legion::physics
     private:
 
         static std::unique_ptr<BroadPhaseCollisionAlgorithm> m_broadPhase;
+
         const float m_timeStep = 0.02f;
+        float m_accumulator = 0.0f;
 
-
+        const size_type m_maxInterval = 3;
+                
         math::ivec3 uniformGridCellSize = math::ivec3(1, 1, 1);
 
         /** @brief Performs the entire physics pipeline (
@@ -155,7 +148,6 @@ namespace legion::physics
         void constructManifoldsWithPrecursors(ecs::component_container<rigidbody>& rigidbodies, std::vector<byte>& hasRigidBodies, physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,
             std::vector<physics_manifold>& manifoldsToSolve, bool isRigidbodyInvolved, bool isTriggerInvolved);
        
-
         void constructManifoldWithCollider(
             ecs::component_container<rigidbody>& rigidbodies, std::vector<byte>& hasRigidBodies,
             PhysicsCollider* colliderA, PhysicsCollider* colliderB
@@ -305,7 +297,6 @@ namespace legion::physics
                 }
             }
         }
-
     };
 }
 

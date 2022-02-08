@@ -19,47 +19,24 @@ namespace legion::physics
    
         auto litShader = rendering::ShaderCache::create_shader("lit", fs::view("engine://shaders/default_lit.shs"));
         vertexColor = rendering::MaterialCache::create_material("vertexColor", "assets://shaders/vertexcolor.shs"_view);
-        textureH = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
-        textureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/split-test.png"_view));
 
-        /////////////////
         woodTextureH = rendering::MaterialCache::create_material("texture2", "assets://shaders/texture.shs"_view);
         woodTextureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/test-albedo.png"_view));
 
         rockTextureH = rendering::MaterialCache::create_material("rock", "assets://shaders/texture.shs"_view);
         rockTextureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/rock.png"_view));
 
-        concreteH = rendering::MaterialCache::create_material("concrete", "assets://shaders/texture.shs"_view);
-        concreteH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/concrete.png"_view));
-
         brickH = rendering::MaterialCache::create_material("brick", "assets://shaders/texture.shs"_view);
         brickH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/plaster/plasterColor.png"_view));
 
-        //auto litShader = rendering::ShaderCache::create_shader("lit", fs::view("engine://shaders/default_lit.shs"));
-       /* tileH = rendering::MaterialCache::create_material("tile", "assets://shaders/texture.shs"_view);
-        tileH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/tile/tileColor.png"_view)); */
+        initializeLitMaterial(textureH, litShader,
+            "assets://textures/split-test.png"_view, "assets://textures/tile/tileNormal.png"_view, "assets://textures/tile/tileRoughness.png"_view);
 
-        //log::debug("------------------------------ TILE -------------");
- 
-        tileH = rendering::MaterialCache::create_material("tile", litShader);
-        tileH.set_param("alphaCutoff", 0.5f);
-        tileH.set_param("useAlbedoTex", true);
-        tileH.set_param("useRoughnessTex", true);
-        tileH.set_param("useNormal", true);
+        initializeLitMaterial(tileH, litShader,
+            "assets://textures/tile/tileColor.png"_view, "assets://textures/tile/tileNormal.png"_view, "assets://textures/tile/tileRoughness.png"_view);
 
-        tileH.set_param("useEmissiveTex", false);
-        tileH.set_param("useAmbientOcclusion", false);
-        tileH.set_param("useHeight", false);
-        tileH.set_param("useMetallicTex", false);
-        tileH.set_param("useMetallicRoughness", false);
-
-        tileH.set_param("metallicValue", 0.0f);
-        tileH.set_param("emissiveColor", math::colors::black);
-
-        tileH.set_param("albedoTex", rendering::TextureCache::create_texture("assets://textures/tile/tileColor.png"_view));
-        tileH.set_param("normalTex", rendering::TextureCache::create_texture("assets://textures/tile/tileNormal.png"_view));
-        tileH.set_param("roughnessTex", rendering::TextureCache::create_texture("assets://textures/tile/tileRoughness.png"_view));
-        tileH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+        initializeLitMaterial(concreteH, litShader,
+            "assets://textures/concrete.png"_view, "assets://textures/tile/tileNormal.png"_view, "assets://textures/tile/tileRoughness.png"_view);
 
         wireFrameH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.shs"_view);
         #pragma endregion
@@ -112,14 +89,11 @@ namespace legion::physics
             sun.add_component<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, -1), math::vec3::zero), scale());
         }
 
-
         createProcess<&PhysicsTestSystem::colliderDraw>("Physics",0.02f);
 
-        quickhullTestScene();
+        //quickhullTestScene();
         //BoxStackScene();
-        //stabilityComparisonScene();
-        //monkeyStackScene();
-
+        stabilityComparisonScene();
     }
 
     void PhysicsTestSystem::colliderDraw(time::span dt)
@@ -154,8 +128,6 @@ namespace legion::physics
     {
         if (!m_throwingHullActivated || action.value) { return; }
 
-        //log::debug("spawnRandomConvexHullOnCamerLocation");
-
         //create entity
         auto ent = createEntity();
 
@@ -163,16 +135,16 @@ namespace legion::physics
         auto [positionH, rotationH, scaleH] = ent.add_component<transform>();
 
         //get camera position and set transform to camera postiion 
-        ecs::filter<rendering::camera, transform> cameraQuery;
+        ecs::filter<rendering::camera> cameraQuery;
 
-        math::vec3 cameraDirection;
+        math::vec3 cameraDirection; 
 
+        //assume the first camera is the player controlled camera
         for (auto ent : cameraQuery)
         {
             auto [positionCamH, rotationCamH, scaleCamH] = ent.get_component<transform>();
             cameraDirection = rotationCamH.get() * math::vec3(0, 0, 1);
             positionH = positionCamH.get() + cameraDirection * 2.5f;
-            
         }
 
         //randomly generated a number of vertices
@@ -193,9 +165,7 @@ namespace legion::physics
                 math::vec3 forwardVal = dis(generator) * forward;
 
                 quickhullVertices.push_back(rightVal + upVal + forwardVal);
-
             }
-        
         }
 
         {
@@ -205,11 +175,9 @@ namespace legion::physics
             for (auto& vert : quickhullVertices)
             {
                 centroid += vert;
-                //debug::drawLine(positionH.read(), positionH.read() + vert, math::colors::red, 5.0f, FLT_MAX, false);
             }
 
             centroid /= quickhullVertices.size();
-            //debug::drawLine(positionH.read(), positionH.read() + centroid, math::colors::blue, 5.0f, FLT_MAX, false);
 
             for (auto& vert : quickhullVertices)
             {
@@ -217,7 +185,6 @@ namespace legion::physics
             }
         }
       
-
         //add a rigidbody
         rigidbody& rb = ent.add_component<physics::rigidbody>().get();
 
@@ -238,6 +205,8 @@ namespace legion::physics
         std::vector<math::vec3>& vertices = newMesh.vertices;
         std::vector<math::vec2>& uvs = newMesh.uvs;
         std::vector<math::vec3>& normals = newMesh.normals;
+        std::vector<math::color>& colors = newMesh.colors;
+
         int x = 0;
         for (auto face : convexCollider->GetHalfEdgeFaces())
         {
@@ -302,40 +271,65 @@ namespace legion::physics
 
         }
 
-
         for (int i = 0; i < vertices.size(); i++)
         {
             indices.push_back(i);
         }
 
+        for (int i = 0; i < vertices.size(); i++)
+        {
+            colors.push_back(math::color(1.0f, 1.0f, 1.0f));
+        }
+
+        newMesh.calculate_tangents(&newMesh);
+
         sub_mesh newSubMesh;
         newSubMesh.indexCount = newMesh.indices.size();
         newSubMesh.indexOffset = 0;
+        newSubMesh.materialIndex = 0;
 
         newMesh.submeshes.push_back(newSubMesh);
-
 
         static int procCount = 0;
         std::string name = std::string("QuickhullMesh") + std::to_string(procCount);
 
         procCount++;
-        //TODO re enable the adding of the mesh renderer after the recursive template bug has been fixed
-        //core::assets::asset<mesh> meshAsset = core::assets::AssetCache<mesh>::create(name,newMesh);
-        //auto modelH = rendering::ModelCache::create_model(meshAsset);
-        //count++;
-        
-        //create renderable
-        //mesh_filter meshFilter = mesh_filter(modelH.get_mesh());
 
-        //ent.add_component<rendering::mesh_renderable>(meshFilter, rendering::mesh_renderer(concreteH));
-        //using extents of face, define uvs
-
-        //randomly select texture
-
-        //set rendering mesh
+        core::assets::asset<mesh> meshAsset = core::assets::AssetCache<mesh>::create(name,newMesh);
+        auto modelH = rendering::ModelCache::create_model(meshAsset);
+       
+        ent.add_component(rendering::mesh_renderer(concreteH,modelH));
     }
 
     rendering::material_handle defaultStairMaterial;
+
+    void PhysicsTestSystem::initializeLitMaterial(rendering::material_handle& materialToInitialize, rendering::shader_handle& litShader,
+        const fs::view& albedoFile, const fs::view& normalFile, const fs::view& roughnessFile)
+    {
+        static size_t litCount = 0;
+
+        materialToInitialize = rendering::MaterialCache::create_material("LitMaterial" + litCount, litShader);
+        materialToInitialize.set_param("alphaCutoff", 0.5f);
+        materialToInitialize.set_param("useAlbedoTex", true);
+        materialToInitialize.set_param("useRoughnessTex", true);
+        materialToInitialize.set_param("useNormal", true);
+
+        materialToInitialize.set_param("useEmissiveTex", false);
+        materialToInitialize.set_param("useAmbientOcclusion", false);
+        materialToInitialize.set_param("useHeight", false);
+        materialToInitialize.set_param("useMetallicTex", false);
+        materialToInitialize.set_param("useMetallicRoughness", false);
+
+        materialToInitialize.set_param("metallicValue", 0.0f);
+        materialToInitialize.set_param("emissiveColor", math::colors::black);
+
+        materialToInitialize.set_param("albedoTex", rendering::TextureCache::create_texture(albedoFile));
+        materialToInitialize.set_param("normalTex", rendering::TextureCache::create_texture(normalFile));
+        materialToInitialize.set_param("roughnessTex", rendering::TextureCache::create_texture(roughnessFile));
+        materialToInitialize.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+
+        litCount++;
+    }
 
     void PhysicsTestSystem::quickhullTestScene()
     {
@@ -409,7 +403,6 @@ namespace legion::physics
 
         defaultStairMaterial = tileH;
         addStaircase(math::vec3(0.0f, -1, 0.0f), 4.0f, 4.0f);
-
     }
 
     void PhysicsTestSystem::monkeyStackScene()
@@ -426,8 +419,6 @@ namespace legion::physics
         addStaircase(math::vec3(5.0f, -1, 5.0f), 10.0f, 10.0f);
     }
 
-    
-
     void PhysicsTestSystem::addStaircase(math::vec3 position, float breadthMult, float widthMult )
     {
         physics::cube_collider_params cubeParams;
@@ -440,13 +431,12 @@ namespace legion::physics
         auto [positionH, rotationH, scaleH] = ent.add_component<transform>();
         positionH = position;
 
-        //ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
-
         auto& entPhysicsComponent = ent.add_component<physics::physicsComponent>().get();
         entPhysicsComponent.AddBox(cubeParams);
 
         auto ent2 = createEntity();
-        ent2.add_component<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(defaultStairMaterial));
+
+        ent2.add_component(rendering::mesh_renderer(defaultStairMaterial, cubeH));
 
         auto [position2H, rotation2H, scale2H] = ent2.add_component<transform>(); 
         position2H = position;
@@ -465,7 +455,7 @@ namespace legion::physics
         auto [positionH, rotationH, scaleH] = ent.add_component<transform>(); 
         positionH = position;
 
-        ent.add_component<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(TextureH));
+        ent.add_component(rendering::mesh_renderer(tileH,cubeH));
 
         auto& entPhysicsComp = ent.add_component<physics::physicsComponent>().get();
         entPhysicsComp.constructConvexHullFromVertices(cubeH.get_mesh()->vertices);
@@ -550,43 +540,34 @@ namespace legion::physics
 
             newMesh.submeshes.push_back(newSubMesh);
 
-            //TODO re enable the adding of the mesh renderer after the recursive template bug has been fixed
-            //static int count = 0;
-            //core::assets::asset<mesh> meshAsset = core::assets::AssetCache<mesh>::create("PopulateFollowerList " + count,newMesh);
-            //count++;
+            static int count = 0;
+            core::assets::asset<mesh> meshAsset = core::assets::AssetCache<mesh>::create("PopulateFollowerList " + count,newMesh);
+            count++;
 
-            //creaate modelH
-            //auto modelH = rendering::ModelCache::create_model(meshAsset);
+            auto modelH = rendering::ModelCache::create_model(meshAsset);
 
             auto newEnt = createEntity();
 
             rendering::material_handle newMat;
             {
-               /* app::context_guard guard(window);
+                app::context_guard guard(window);
                 auto colorShader = rendering::ShaderCache::create_shader("color" + std::to_string(count), fs::view("assets://shaders/color.shs"));
                 newMat = rendering::MaterialCache::create_material("vertex color" + std::to_string(count), colorShader);
-                newMat.set_param("color", math::color(math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f)));*/
+                newMat.set_param("color", math::color(math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f)));
             }
 
-            //mesh_filter meshFilter = mesh_filter(modelH.get_mesh());
-            //newEnt.add_component<rendering::mesh_renderable>(meshFilter, rendering::mesh_renderer(newMat));
+            newEnt.add_component(rendering::mesh_renderer(newMat,modelH));
 
-            
             auto [positionH, rotationH, scaleH] = newEnt.add_component<transform>(); 
             positionH = posH;
-            //count++;
 
             ObjectToFollow followObj;
             followObj.ent = physicsEnt;
             newEnt.add_component(followObj);
 
-            //newEnt.set_parent(physicsEnt);
             currentContainer.push_back(newEnt);
-
         }
     }
-
-
 
     void PhysicsTestSystem::drawPhysicsColliders()
     {
@@ -611,7 +592,6 @@ namespace legion::physics
                 usedColor = rbColor;
                 useDepth = true;
             }
-
 
             //assemble the local transform matrix of the entity
             math::mat4 localTransform;
@@ -693,9 +673,6 @@ namespace legion::physics
             step++;
             log::debug("PhysicsTestSystem::quickHullStep");
         }
-
-    
-      
     }
 
     void PhysicsTestSystem::AddRigidbodyToQuickhulls(AddRigidbody& action)
@@ -708,8 +685,6 @@ namespace legion::physics
                 ent.add_component<rigidbody>();
             }
         }
-
-
     }
 
     void PhysicsTestSystem::extendedContinuePhysics(extendedPhysicsContinue & action)
@@ -718,11 +693,6 @@ namespace legion::physics
         {
             physics::PhysicsSystem::IsPaused = false;
         }
-        /*else
-        {
-            physics::PhysicsSystem::IsPaused = true;
-        }*/
-
     }
 
     void PhysicsTestSystem::OneTimeContinuePhysics(nextPhysicsTimeStepContinue & action)
@@ -732,48 +702,6 @@ namespace legion::physics
             physics::PhysicsSystem::IsPaused = true;
             physics::PhysicsSystem::oneTimeRunActive = true;
             log::debug(" onNextPhysicsTimeStepRequest");
-        }
-    }
-
-    void PhysicsTestSystem::CreateElongatedFloor(math::vec3 position, math::quat rot, math::vec3 scale,rendering::material_handle mat
-        ,bool hasCollider )
-    {
-        if (hasCollider)
-        {
-            cube_collider_params scaledCubeParams(scale.x, scale.z, scale.y);
-            ecs::entity floor5;
-            {
-                floor5 = createEntity();
-
-                auto& entPhysicsComp = floor5.add_component<physics::physicsComponent>().get();
-                entPhysicsComp.AddBox(scaledCubeParams);
-
-                //floor.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(woodTextureH));
-
-                auto& idH = floor5.add_component<physics::identifier>().get();
-                idH.id = "floor";
-
-
-                auto [positionH, rotationH, scaleH] = floor5.add_component<transform>(); 
-                positionH = position;
-                rotationH = rot;
-                scaleH = math::vec3(1.0f, 1.0f, 1.0f);
-            }
-
-        }
-      
-        ecs::entity floor6;
-        {
-            floor6 = createEntity();
-
-            floor6.add_component<rendering::mesh_renderable>
-                (mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(mat));
-
-            auto [positionH, rotationH, scaleH] = floor6.add_component<transform>(); 
-            positionH = position;
-            rotationH = rot;
-            scaleH = scale;
-
         }
     }
 
@@ -805,7 +733,7 @@ namespace legion::physics
             rbH.localInverseInertiaTensor = inverseInertia;
         }
 
-        ent.add_component<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(materials));
+        ent.add_component(rendering::mesh_renderer(materials,cubeH));
 
         auto& entPhysicsComponent = ent.add_component<physics::physicsComponent>().get();
 
@@ -821,7 +749,4 @@ namespace legion::physics
         auto [positionH, rotationH, scaleH] = ent.add_component<transform>(); 
         positionH = position;
     }
-
 }
-
-

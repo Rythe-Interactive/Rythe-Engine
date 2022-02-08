@@ -9,7 +9,7 @@ namespace legion::physics
         {
             auto dot1 = math::dot(contact1.RefWorldContact - contact1.IncWorldContact, -contact1.collisionNormal);
             auto dot2 = math::dot(contact2.RefWorldContact - contact2.IncWorldContact, -contact2.collisionNormal);
-            return dot1 > dot2;
+            return dot1 < dot2;
         }
     }
 
@@ -21,10 +21,22 @@ namespace legion::physics
 
     void PhysicsSystem::setup()
     {
-        createProcess<&PhysicsSystem::fixedUpdate>("Physics", m_timeStep);
-
         m_broadPhase = std::make_unique<BroadphaseUniformGridNoCaching>(math::vec3(3, 3, 3));
+    }
 
+    void PhysicsSystem::update(legion::time::span deltaTime)
+    {
+        m_accumulator += deltaTime;
+
+        size_type currentInterval = 0;
+
+        while (m_accumulator > m_timeStep && currentInterval < m_maxInterval)
+        {
+            m_accumulator -= m_timeStep;
+            fixedUpdate(m_timeStep);
+
+            currentInterval++;
+        }
     }
 
     void PhysicsSystem::runPhysicsPipeline(

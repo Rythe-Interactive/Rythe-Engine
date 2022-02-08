@@ -228,55 +228,6 @@ namespace legion::physics
         return true;
     }
 
-    float PhysicsStatics::GetPhysicsComponentSupportPointAtDirection(math::vec3 direction, physicsComponent& physicsComponentToUse)
-    {
-        float currentMaximumSupportPoint = std::numeric_limits<float>::lowest();
-
-        //std::vector<math::vec3> vertices;
-        ////for each vertex list of each collider
-        //for (auto collider : *physicsComponentToUse.colliders)
-        //{
-        //    auto [first,second] = collider->GetminMaxLocalAABB();
-        //    vertices.push_back(first);
-        //    vertices.push_back(second);
-        //}
-
-        //for (const auto& vert : vertices)
-        //{
-        //    float dotResult = math::dot(direction, vert);
-
-        //    if (dotResult > currentMaximumSupportPoint)
-        //    {
-        //        currentMaximumSupportPoint = dotResult;
-        //    }
-        //}
-
-        return currentMaximumSupportPoint;
-    }
-
-    std::pair<math::vec3, math::vec3> PhysicsStatics::ConstructAABBFromVertices(const std::vector<math::vec3>& vertices)
-    {
-        math::vec3 min, max;
-
-        ////up
-        //max.y = GetSupportPoint(vertices, math::vec3(0, 1, 0));
-        ////down
-        //min.y = GetSupportPoint(vertices, math::vec3(0, -1, 0));
-
-        ////right
-        //max.x = GetSupportPoint(vertices, math::vec3(1, 0, 0));
-        ////left
-        //min.x = GetSupportPoint(vertices, math::vec3(-1, 0, 0));
-   
-
-        ////forward
-        //max.z = GetSupportPoint(vertices, math::vec3(0, 0, 1));
-        ////backward
-        //min.z = GetSupportPoint(vertices, math::vec3(0, 0, -1));
-
-        return std::make_pair(min,max);
-    }
-
     std::pair<math::vec3, math::vec3> PhysicsStatics::ConstructAABBFromTransformedVertices(const std::vector<math::vec3>& vertices, const math::mat4& transform)
     {
         math::vec3 min, max;
