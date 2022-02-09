@@ -67,7 +67,7 @@ namespace legion::core
                 data.data(), static_cast<int>(data.size()),
                 &size.x, &size.y,
                 reinterpret_cast<int*>(&components),
-                settings.detectComponents ? static_cast<int>(settings.components) : 0);
+                settings.detectComponents ? 0 : static_cast<int>(settings.components));
 
             if (!settings.detectComponents)
                 components = settings.components;
@@ -83,7 +83,7 @@ namespace legion::core
                 data.data(), static_cast<int>(data.size()),
                 &size.x, &size.y,
                 reinterpret_cast<int*>(&components),
-                settings.detectComponents ? static_cast<int>(settings.components) : 0);
+                settings.detectComponents ? 0 : static_cast<int>(settings.components));
 
             if (!settings.detectComponents)
                 components = settings.components;
@@ -99,7 +99,7 @@ namespace legion::core
                 data.data(), static_cast<int>(data.size()),
                 &size.x, &size.y,
                 reinterpret_cast<int*>(&components),
-                settings.detectComponents ? static_cast<int>(settings.components) : 0);
+                settings.detectComponents ? 0 : static_cast<int>(settings.components));
 
             if (!settings.detectComponents)
                 components = settings.components;
