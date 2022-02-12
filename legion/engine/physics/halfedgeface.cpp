@@ -117,10 +117,10 @@ namespace legion::physics
 
         forEachEdgeReverse(collectEdges);
 
-        for (size_t i = 0; i < edges.size(); i++)
+        for (size_type i = 0; i < edges.size(); i++)
         {
-            int nextIndex =( i + 1) % edges.size();
-            int prevIndex = (i - 1) == -1 ? edges.size()-1 : (i - 1);
+            size_type nextIndex = (i + 1) % edges.size();
+            size_type prevIndex = (i == 0ull ? (edges.size() - 1ull) : (i - 1ull));
 
             HalfEdgeEdge* newNext = edges.at(prevIndex);
             HalfEdgeEdge* newPrev = edges.at(nextIndex);
@@ -133,7 +133,6 @@ namespace legion::physics
 
     void HalfEdgeFace::DEBUG_DrawFace(const math::mat4& transform,const math::color& debugColor,float time)
     {
-
         auto drawFunc = [&transform,debugColor,time](HalfEdgeEdge* edge)
         {
             edge->DEBUG_drawEdge(transform, debugColor, time);
@@ -173,6 +172,5 @@ namespace legion::physics
         };
 
         forEachEdge(deleteFunc);
-
     }
 }

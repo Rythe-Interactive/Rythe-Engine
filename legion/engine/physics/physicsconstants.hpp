@@ -24,5 +24,7 @@ namespace legion::physics::constants
 
     static constexpr float sutherlandHodgmanClippingThreshold = 0.01f;
 
+    static constexpr float gaussMapEdgeCheckAngleThres = 0.99862953475f;
+
     static constexpr bool applyWarmStarting = true;
 }

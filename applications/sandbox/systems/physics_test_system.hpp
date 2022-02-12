@@ -2,19 +2,20 @@
 #include <core/core.hpp>
 #include <rendering/components/renderable.hpp>
 #include <physics/cube_collider_params.hpp>
-using namespace legion;
 
-struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
-struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeStepContinue> {};
+namespace lgn = legion;
 
-struct QHULL : public app::input_action<QHULL>{};
-struct AddRigidbody : public app::input_action<AddRigidbody> {};
-struct SpawnRandomHullOnCameraLoc : public app::input_action< SpawnRandomHullOnCameraLoc> {};
-struct SpawnHullActive : public app::input_action< SpawnHullActive> {};
+struct extendedPhysicsContinue : public lgn::app::input_action<extendedPhysicsContinue> {};
+struct nextPhysicsTimeStepContinue : public lgn::app::input_action<nextPhysicsTimeStepContinue> {};
+
+struct QHULL : public lgn::app::input_action<QHULL>{};
+struct AddRigidbody : public lgn::app::input_action<AddRigidbody> {};
+struct SpawnRandomHullOnCameraLoc : public lgn::app::input_action< SpawnRandomHullOnCameraLoc> {};
+struct SpawnHullActive : public lgn::app::input_action< SpawnHullActive> {};
 
 struct ObjectToFollow
 {
-    ecs::entity ent;
+    lgn::ecs::entity ent;
 };
 
 namespace legion::physics
@@ -30,6 +31,9 @@ namespace legion::physics
     private:
 
         bool m_throwingHullActivated = false;
+
+        int m_step = 0;
+        int m_maxStep = 0;
 
         //SCENES
 

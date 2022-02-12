@@ -27,8 +27,6 @@ namespace legion::physics
 
         virtual void setup();
 
-        void update(legion::time::span deltaTime);
-     
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
             OPTICK_EVENT();
@@ -63,18 +61,18 @@ namespace legion::physics
 
             if (!IsPaused)
             {
-                integrateRigidbodies(hasRigidBodies, rigidbodies, deltaTime);
-                runPhysicsPipeline(hasRigidBodies, rigidbodies, physComps, positions, rotations, scales, deltaTime);
-                integrateRigidbodyQueryPositionAndRotation(hasRigidBodies, positions, rotations, rigidbodies, deltaTime);
+                integrateRigidbodies(hasRigidBodies, rigidbodies, m_timeStep);
+                runPhysicsPipeline(hasRigidBodies, rigidbodies, physComps, positions, rotations, scales, m_timeStep);
+                integrateRigidbodyQueryPositionAndRotation(hasRigidBodies, positions, rotations, rigidbodies, m_timeStep);
             }
 
             if (oneTimeRunActive)
             {
                 oneTimeRunActive = false;
 
-                integrateRigidbodies(hasRigidBodies, rigidbodies, deltaTime);
-                runPhysicsPipeline(hasRigidBodies, rigidbodies, physComps, positions, rotations, scales, deltaTime);
-                integrateRigidbodyQueryPositionAndRotation(hasRigidBodies, positions, rotations, rigidbodies, deltaTime);
+                integrateRigidbodies(hasRigidBodies, rigidbodies, m_timeStep);
+                runPhysicsPipeline(hasRigidBodies, rigidbodies, physComps, positions, rotations, scales, m_timeStep);
+                integrateRigidbodyQueryPositionAndRotation(hasRigidBodies, positions, rotations, rigidbodies, m_timeStep);
             }
         }
 
@@ -119,12 +117,8 @@ namespace legion::physics
     private:
 
         static std::unique_ptr<BroadPhaseCollisionAlgorithm> m_broadPhase;
-
         const float m_timeStep = 0.02f;
-        float m_accumulator = 0.0f;
-
-        const size_type m_maxInterval = 3;
-                
+     
         math::ivec3 uniformGridCellSize = math::ivec3(1, 1, 1);
 
         /** @brief Performs the entire physics pipeline (
@@ -187,7 +181,7 @@ namespace legion::physics
                 if (!hasRigidBodies[async::this_job::get_id()])
                     return;
 
-                rigidbody& rb = rigidbodies[async::this_job::get_id()].get();
+                rigidbody& rb = rigidbodies[async::this_job::get_id()];
 
                 ////-------------------- update velocity ------------------//
                 math::vec3 acc = rb.forceAccumulator * rb.inverseMass;

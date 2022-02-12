@@ -9,9 +9,9 @@ namespace legion::physics
     public:
 
         std::vector<math::vec3> outsideVerts;
-        HalfEdgeFace* face = nullptr;
+        core::pointer<HalfEdgeFace> face { nullptr };
 
-        ColliderFaceToVert(HalfEdgeFace* pFace) : face(pFace)
+        ColliderFaceToVert(HalfEdgeFace* pFace) : face{ pFace }
         {
             pFace->faceToVert = this;
         }

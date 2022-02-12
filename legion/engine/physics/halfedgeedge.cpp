@@ -62,7 +62,7 @@ namespace legion::physics
         math::vec3 worldStart = transform * math::vec4(edgePosition, 1);
         math::vec3 worldEnd = transform * math::vec4(nextEdge->edgePosition, 1);
 
-        debug::user_projectDrawLine(worldStart, worldEnd, debugColor, width, time, true);
+        debug::drawLine(worldStart, worldEnd, debugColor, width, time, true);
     }
 
     void HalfEdgeEdge::DEBUG_drawInsetEdge(const math::vec3 spacing, const math::color& debugColor, float time, float width)
@@ -75,7 +75,7 @@ namespace legion::physics
         math::vec3 worldEnd = nextEdge->edgePosition + spacing;
         math::vec3 endDifference = (worldCentroid - worldEnd) * 0.1f;
 
-        debug::user_projectDrawLine(worldStart + startDifference, worldEnd + endDifference, debugColor, width, time, true);
+        debug::drawLine(worldStart + startDifference, worldEnd + endDifference, debugColor, width, time, true);
     }
 
     void HalfEdgeEdge::DEBUG_directionDrawEdge(const math::mat4& transform, const math::color& debugColor, float time, float width)
@@ -88,12 +88,12 @@ namespace legion::physics
         math::vec3 startDifference = (worldCentroid - worldStart) * 0.1f;
         math::vec3 endDifference = (worldCentroid - worldEnd) * 0.1f;
 
-        debug::user_projectDrawLine(worldStart + startDifference, worldEnd + endDifference, debugColor, width, time, true);
+        debug::drawLine(worldStart + startDifference, worldEnd + endDifference, debugColor, width, time, true);
 
         math::vec3 pointStart = worldStart + startDifference;
         math::vec3 diff = worldEnd + endDifference - (worldStart + startDifference);
 
-        debug::user_projectDrawLine(pointStart + diff * 0.75f, worldCentroid, math::colors::red, width, time, true);
+        debug::drawLine(pointStart + diff * 0.75f, worldCentroid, math::colors::red, width, time, true);
     }
 
     void HalfEdgeEdge::suicidalMergeWithPairing(std::vector<math::vec3>& unmergedVertices, math::vec3& normal, float scalingEpsilon)

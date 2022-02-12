@@ -12,7 +12,8 @@ namespace legion::physics
     class PhysicsCollider;
 
     /** @struct physics_manifold
-    * @brief contains the necessary information to detect and resolve a collision
+    * @brief contains the necessary information to detect and resolve a collision.
+    * Only exist within one physics timestep.
     */
     struct physics_manifold
     {
@@ -37,27 +38,8 @@ namespace legion::physics
 
         bool isColliding;
 
-        /*void DEBUG_checkIDAndBreak(std::string firstID,std::string secondID) const
-        {
-            auto idHA = entityA.get_component_handle<identifier>();
-            auto idHB = entityB.get_component_handle<identifier>();
-
-            if (idHA && idHB)
-            {
-                auto str1 = idHA.read().id;
-                auto str2 = idHB.read().id;
-
-                if ((str1 == firstID && str2 == secondID)
-                    || (str2 == firstID && str1 == secondID))
-                {
-                    DebugBreak();
-                }
-            }
-        }*/
-
         bool DEBUG_checkID(std::string firstID, std::string secondID) const
         {
-
             std::string str1, str2;
             GetPairID(str1, str2);
 
@@ -70,8 +52,6 @@ namespace legion::physics
             {
                 return false;
             }
-              
-
         }
 
         void GetPairID(std::string& str1, std::string& str2) const
@@ -84,15 +64,14 @@ namespace legion::physics
 
             if (idHA)
             {
-                str1 = idHA.get().id;
+                str1 = idHA->id;
             }
 
             if (idHB)
             {
-                str2 = idHB.get().id;
+                str2 = idHB->id;
             }
 
         }
-
     };
 }

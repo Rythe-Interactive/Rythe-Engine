@@ -1,7 +1,7 @@
 #include <core/core.hpp>
 #include <physics/physics_statics.hpp>
 #include <rendering/debugrendering.hpp>
-//test
+
 namespace legion::physics
 {
     bool PhysicsStatics::FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
@@ -71,7 +71,7 @@ namespace legion::physics
 
         const auto& vertices = collider->GetVertices();
 
-        for (int vertexIndex = 0 ; vertexIndex < vertices.size(); ++vertexIndex)
+        for (size_type vertexIndex = 0 ; vertexIndex < vertices.size(); ++vertexIndex)
         {
             math::vec3 transformedVert = math::vec4(vertices.at(vertexIndex), 1);
 
@@ -134,10 +134,9 @@ namespace legion::physics
                             edgeADirection = math::normalize( edgeADirection );
                             edgeBDirection = math::normalize( edgeBDirection );
 
-                            static float angleThres = math::cos(math::deg2rad(3.0f));
                             float angle = math::abs( math::dot(edgeADirection, edgeBDirection) );
 
-                            if ( angle > angleThres )
+                            if ( angle > physics::constants::gaussMapEdgeCheckAngleThres)
                             {
                                 continue;
                             }
@@ -517,11 +516,11 @@ namespace legion::physics
         math::vec3& secondDistant = supportVertices.at(1);
 
         //Iterate through support vertices to find the combination of vertices that represent the 2 most distant points
-        for (int i = 0; i < supportVertices.size(); i++)
+        for (size_type i = 0; i < supportVertices.size(); i++)
         {
             math::vec3& first = supportVertices.at(i);
 
-            for (int j = i+1; j < supportVertices.size()-1; j++)
+            for (size_type j = i+1; j < supportVertices.size()-1; j++)
             {
                 math::vec3& second = supportVertices.at(j);
 

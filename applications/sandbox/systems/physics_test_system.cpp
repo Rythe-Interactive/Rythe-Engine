@@ -6,12 +6,14 @@
 #include <physics/physics.hpp>
 #include <random>
 
+using namespace legion;
+
 namespace legion::physics
 {
     void PhysicsTestSystem::setup()
     {
         using namespace legion::core::fs::literals;
-
+        
         app::window& win = ecs::world.get_component<app::window>();
         app::context_guard guard(win);
 
@@ -58,18 +60,17 @@ namespace legion::physics
 
         app::InputSystem::createBinding<extendedPhysicsContinue>(app::inputmap::method::M);
         app::InputSystem::createBinding<nextPhysicsTimeStepContinue>(app::inputmap::method::N);
-        //app::InputSystem::createBinding<spawnEntity>(app::inputmap::method::MOUSE_LEFT);
         app::InputSystem::createBinding<QHULL>(app::inputmap::method::Q);
         app::InputSystem::createBinding<AddRigidbody>(app::inputmap::method::R);
         app::InputSystem::createBinding<SpawnRandomHullOnCameraLoc>(app::inputmap::method::F);
         app::InputSystem::createBinding<SpawnHullActive>(app::inputmap::method::P);
 
         #pragma endregion
-
+        
         #pragma region Function binding
         bindToEvent<extendedPhysicsContinue, &PhysicsTestSystem::extendedContinuePhysics>();
         bindToEvent<nextPhysicsTimeStepContinue, &PhysicsTestSystem::OneTimeContinuePhysics>();
-
+       
         bindToEvent<QHULL, &PhysicsTestSystem::quickHullStep>();
         bindToEvent<AddRigidbody, &PhysicsTestSystem::AddRigidbodyToQuickhulls>();
         bindToEvent< SpawnRandomHullOnCameraLoc, &PhysicsTestSystem::spawnRandomConvexHullOnCameraLocation>();
@@ -91,15 +92,11 @@ namespace legion::physics
 
         createProcess<&PhysicsTestSystem::colliderDraw>("Physics",0.02f);
 
-        //quickhullTestScene();
-        //BoxStackScene();
-        stabilityComparisonScene();
+        quickhullTestScene();
     }
 
     void PhysicsTestSystem::colliderDraw(time::span dt)
     {
-        //drawPhysicsColliders();
-
         ecs::filter<ObjectToFollow> objectToFollowQuery;
 
         for (auto ent : objectToFollowQuery)
@@ -255,8 +252,6 @@ namespace legion::physics
                 uvs.push_back(calculateUV(edge->edgePosition));
                 normals.push_back(normal);
 
-                //log::debug("")
-
                 vertices.push_back(edge->nextEdge->edgePosition);
                 uvs.push_back(calculateUV(edge->nextEdge->edgePosition));
                 normals.push_back(normal);
@@ -264,11 +259,9 @@ namespace legion::physics
                 vertices.push_back(edge->face->centroid);
                 uvs.push_back(calculateUV(edge->face->centroid));
                 normals.push_back(normal);
-
             };
 
             face->forEachEdge(populateMesh);
-
         }
 
         for (int i = 0; i < vertices.size(); i++)
@@ -335,27 +328,16 @@ namespace legion::physics
     {
         math::mat3 elongatedBlockInertia = math::mat3(math::vec3(6.0f, 0, 0), math::vec3(0.0f, 3.0f, 0), math::vec3(0, 0, 6.0f));
 
-        //cube
-        createQuickhullTestObject
-        (math::vec3(0,5.0f, -0.8f),cubeH, wireFrameH);
+        createQuickhullTestObject(math::vec3(0,5.0f, -0.8f),cubeH, wireFrameH);
 
-        //cup
-        createQuickhullTestObject
-        (math::vec3(5.0f, 5.0f, -0.8f), colaH, wireFrameH, elongatedBlockInertia);
+        createQuickhullTestObject(math::vec3(5.0f, 5.0f, -0.8f), colaH, wireFrameH, elongatedBlockInertia);
 
-        //////hammer
-        createQuickhullTestObject
-        (math::vec3(10.0f, 5.0f, -0.8f), hammerH, wireFrameH);
+        createQuickhullTestObject(math::vec3(10.0f, 5.0f, -0.8f), hammerH, wireFrameH);
 
-        ////suzanne
-        createQuickhullTestObject
-        (math::vec3(15.0f, 5.0f, -0.8f), suzzaneH, wireFrameH);
+        createQuickhullTestObject(math::vec3(15.0f, 5.0f, -0.8f), suzzaneH, wireFrameH);
 
-        ////ohio teapot
-        createQuickhullTestObject
-        (math::vec3(20.0f, 5.0f, -0.5f), teapotH, wireFrameH,elongatedBlockInertia);
+        createQuickhullTestObject(math::vec3(20.0f, 5.0f, -0.5f), teapotH, wireFrameH,elongatedBlockInertia);
 
-        
         defaultStairMaterial = textureH;
         addStaircase(math::vec3(8, 2, 0));
 
@@ -641,9 +623,6 @@ namespace legion::physics
         }
     }
 
-    int step = 0;
-    int maxStep = 0;
-
     void PhysicsTestSystem::quickHullStep(QHULL& action)
     {
         if (!action.value)
@@ -665,12 +644,10 @@ namespace legion::physics
                 physicsComponent.colliders.clear();
                 physicsComponent.constructConvexHullFromVertices(meshFilter.get().shared_mesh->vertices);
 
-                //[4] use collider to generate follower objects
-                //PopulateFollowerList(ent,i);
                 i++;
             }
 
-            step++;
+            m_step++;
             log::debug("PhysicsTestSystem::quickHullStep");
         }
     }
