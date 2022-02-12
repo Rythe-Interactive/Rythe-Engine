@@ -62,6 +62,9 @@
     <ClInclude Include="systems\mysystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="autogen\autogen.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="autogen\autogen_prototype_example_comp.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

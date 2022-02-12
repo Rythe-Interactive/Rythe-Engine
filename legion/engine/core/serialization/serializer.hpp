@@ -8,7 +8,6 @@
 #include <core/serialization/serializer_views/bson.hpp>
 #include <core/serialization/serializer_views/yaml.hpp>
 
-
 #include <fstream>
 
 namespace legion::core::serialization

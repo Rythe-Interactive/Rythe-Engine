@@ -5,14 +5,15 @@
 #include <audio/audio.hpp>
 
 #include <core/ecs/handles/entity.hpp>
-
-
-struct [[legion::reflectable]] example_comp 
-{
-    int value = 1;
-};
-
 #include <core/serialization/serialization.hpp>
+
+namespace legion::core
+{
+    struct [[legion::reflectable]] example_comp
+    {
+        int value = 1;
+    };
+}
 
 class ExampleSystem final : public legion::System<ExampleSystem>
 {
@@ -52,13 +53,15 @@ public:
         //Serialization Test
         srl::SerializerRegistry::registerSerializer<example_comp>();
         srl::SerializerRegistry::registerSerializer<ecs::entity>();
-        //srl::SerializerRegistry::registerSerializer<position>();
-        //srl::SerializerRegistry::registerSerializer<rotation>();
-        //srl::SerializerRegistry::registerSerializer<velocity>();
-        //srl::SerializerRegistry::registerSerializer<scale>();
+        srl::SerializerRegistry::registerSerializer<position>();
+        srl::SerializerRegistry::registerSerializer<rotation>();
+        srl::SerializerRegistry::registerSerializer<velocity>();
+        srl::SerializerRegistry::registerSerializer<scale>();
 
         auto rootEnt = createEntity();
         rootEnt->name = "Root";
+        rootEnt.add_component<position, rotation, scale>();
+        rootEnt.add_component<velocity>();
         auto comp = rootEnt.add_component<example_comp>().get();
         comp.value = 420;
 
@@ -75,22 +78,17 @@ public:
             }
         }
 
-        reflector refl = make_reflector<example_comp>(comp);
-        int val = *refl.members[0].primitive.template cast<int>();
-        log::debug("value: " + val);
-
-
         srl::write<srl::yaml>(fs::view("assets://scenes/scene1.yaml"), rootEnt, "scene");
         srl::write<srl::json>(fs::view("assets://scenes/scene1.json"), rootEnt, "scene");
         srl::write<srl::bson>(fs::view("assets://scenes/scene1.bson"), rootEnt, "scene");
 
-        //ecs::Registry::destroyEntity(rootEnt);
+        ecs::Registry::destroyEntity(rootEnt);
 
-        //auto result4 = srl::load<srl::bson, ecs::entity>(fs::view("assets://scenes/scene1.bson"), "scene");
+        auto result4 = srl::load<srl::bson, ecs::entity>(fs::view("assets://scenes/scene1.bson"), "scene");
 
-        //srl::write<srl::yaml>(fs::view("assets://scenes/scene2.yaml"), *result4, "scene");
-        //srl::write<srl::json>(fs::view("assets://scenes/scene2.json"), *result4, "scene");
-        //srl::write<srl::bson>(fs::view("assets://scenes/scene2.bson"), *result4, "scene");
+        srl::write<srl::yaml>(fs::view("assets://scenes/scene2.yaml"), *result4, "scene");
+        srl::write<srl::json>(fs::view("assets://scenes/scene2.json"), *result4, "scene");
+        srl::write<srl::bson>(fs::view("assets://scenes/scene2.bson"), *result4, "scene");
 
         /////////////////////////////////////////////////////////
     }

@@ -1,14 +1,14 @@
 #pragma once
 #include "autogen_reflector_example_comp.hpp"
+#include "../../sandbox\systems\examplesystem.hpp"
 namespace legion::core
 {
-    L_NODISCARD auto make_reflector(example_comp& obj)->std::conditional_t<std::is_const_v<example_comp>, const reflector, reflector>
+    L_NODISCARD reflector make_reflector(example_comp& obj)
     {
         reflector refl;
         refl.typeId = typeHash<example_comp>();
         refl.typeName = "example_comp";
-        refl.members = std::vector<member_reference>
-        {
+        refl.members = std::vector<member_reference>{
             member_reference
             {
                 "value",
@@ -18,14 +18,13 @@ namespace legion::core
         ;refl.data = std::addressof(obj);
         return refl;
     }
-    L_NODISCARD const auto make_reflector(const example_comp& obj)
+    L_NODISCARD const reflector make_reflector(const example_comp& obj)
     {
         ptr_type address = reinterpret_cast<ptr_type>(std::addressof(obj));
         reflector refl;
         refl.typeId = typeHash<example_comp>();
         refl.typeName = "example_comp";
-        refl.members = std::vector<member_reference>
-        {
+        refl.members = std::vector<member_reference>{
             member_reference
             {
                 "value",

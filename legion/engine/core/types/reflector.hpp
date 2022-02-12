@@ -118,13 +118,9 @@ namespace legion::core
     };
 
     template<typename T>
-    L_NODISCARD extern auto make_reflector(T& obj)->std::conditional_t<std::is_const_v<T>, const reflector, reflector>
-    {
-        reflector refl;
-        refl.typeId = typeHash<T>();
-        refl.typeName = typeid(obj).name();
-        refl.members = std::vector<member_reference>();
-        //refl.data = std::addressof(obj);
-        return refl;
-    }
+    L_NODISCARD extern auto make_reflector(T& obj)->std::conditional_t<std::is_const_v<T>, const reflector, reflector>;
 }
+#if !defined(L_AUTOGENACTIVE)
+#include <core/autogen/autogen.hpp>
+#endif
+
