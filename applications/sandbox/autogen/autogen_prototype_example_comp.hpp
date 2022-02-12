@@ -1,6 +1,6 @@
 #pragma once
 #include <core/types/prototype.hpp>
-#include "../systems\examplesystem.hpp"
+#include "../../sandbox\systems\examplesystem.hpp"
 struct example_comp;
 namespace legion::core
 {

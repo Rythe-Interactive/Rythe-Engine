@@ -2,7 +2,7 @@
 #include "autogen_reflector_example_comp.hpp"
 namespace legion::core
 {
-    L_NODISCARD reflector make_reflector(example_comp& obj)
+    L_NODISCARD auto make_reflector(example_comp& obj)->std::conditional_t<std::is_const_v<example_comp>, const reflector, reflector>
     {
         reflector refl;
         refl.typeId = typeHash<example_comp>();
@@ -18,7 +18,7 @@ namespace legion::core
         ;refl.data = std::addressof(obj);
         return refl;
     }
-    L_NODISCARD reflector make_reflector(const example_comp& obj)
+    L_NODISCARD const auto make_reflector(const example_comp& obj)
     {
         ptr_type address = reinterpret_cast<ptr_type>(std::addressof(obj));
         reflector refl;

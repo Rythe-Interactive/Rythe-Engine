@@ -4,10 +4,15 @@
 #include <core/data/mesh.hpp>
 #include <core/logging/logging.hpp>
 
+namespace legion
+{
+    struct reflectable_attribute {};
+#define reflectable reflectable_attribute
+}
 
 namespace legion::core
 {
-    struct position : public math::vec3
+    struct [[legion::reflectable]] position : public math::vec3
     {
         position() : math::vec3(0, 0, 0) {}
         position(const position&) = default;
@@ -33,7 +38,7 @@ namespace legion::core
         }
     };
 
-    struct rotation : public math::quat
+    struct [[legion::reflectable]] rotation : public math::quat
     {
         rotation() : math::quat(1, 0, 0, 0) {}
         rotation(float w, float x, float y, float z) : math::quat(w, x, y, z) {}
@@ -92,7 +97,7 @@ namespace legion::core
         return math::conjugate(math::normalize(math::toQuat(math::lookAt(position, center, up))));
     }
 
-    struct scale : public math::vec3
+    struct [[legion::reflectable]] scale : public math::vec3
     {
         scale() : math::vec3(1, 1, 1) {}
         scale(float x, float y, float z) : math::vec3(x, y, z) {}
@@ -155,7 +160,7 @@ namespace legion::core
 
     };
 
-    struct velocity : public math::vec3
+    struct [[legion::reflectable]] velocity : public math::vec3
     {
         velocity() : math::vec3(0, 0, 0) {}
         velocity(const velocity&) = default;

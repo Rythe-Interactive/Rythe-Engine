@@ -6,56 +6,11 @@
 
 #include <core/ecs/handles/entity.hpp>
 
-namespace legion
-{
-    struct reflectable_attribute {};
-#define reflectable reflectable_attribute
-}
 
 struct [[legion::reflectable]] example_comp 
 {
     int value = 1;
 };
-
-namespace legion::core
-{
-    //template<>
-    //L_NODISCARD reflector make_reflector<example_comp>(example_comp& obj)
-    //{
-    //    reflector refl;
-    //    refl.typeId = typeHash<example_comp>();
-    //    refl.typeName = "example_comp";
-    //    refl.members = std::vector<member_reference>
-    //    {
-    //        member_reference
-    //        {
-    //            "value",
-    //            primitive_reference{ typeHash<int>(), &obj.value }
-    //        }
-    //    };
-    //    refl.data = std::addressof(obj);
-    //    return refl;
-    //}
-
-    //template<>
-    //L_NODISCARD const reflector make_reflector<const example_comp>(const example_comp& obj)
-    //{
-    //    ptr_type adress = reinterpret_cast<ptr_type>(std::addressof(obj));
-    //    reflector refl;
-    //    refl.typeId = typeHash<example_comp>();
-    //    refl.typeName = "example_comp";
-    //    refl.members = std::vector<member_reference>
-    //    {
-    //        member_reference
-    //        {
-    //            "value",
-    //            primitive_reference{ typeHash<int>(), &obj.value }
-    //        }
-    //    };
-    //    refl.data = reinterpret_cast<void*>(adress);
-    //    return refl;
-    //}
-}
 
 #include <core/serialization/serialization.hpp>
 
@@ -104,7 +59,8 @@ public:
 
         auto rootEnt = createEntity();
         rootEnt->name = "Root";
-        rootEnt.add_component<example_comp>();
+        auto comp = rootEnt.add_component<example_comp>().get();
+        comp.value = 420;
 
         for (int i = 0; i < 3; i++)
         {
@@ -119,17 +75,22 @@ public:
             }
         }
 
+        reflector refl = make_reflector<example_comp>(comp);
+        int val = *refl.members[0].primitive.template cast<int>();
+        log::debug("value: " + val);
+
+
         srl::write<srl::yaml>(fs::view("assets://scenes/scene1.yaml"), rootEnt, "scene");
         srl::write<srl::json>(fs::view("assets://scenes/scene1.json"), rootEnt, "scene");
         srl::write<srl::bson>(fs::view("assets://scenes/scene1.bson"), rootEnt, "scene");
 
-        ecs::Registry::destroyEntity(rootEnt);
+        //ecs::Registry::destroyEntity(rootEnt);
 
-        auto result4 = srl::load<srl::bson, ecs::entity>(fs::view("assets://scenes/scene1.bson"), "scene");
+        //auto result4 = srl::load<srl::bson, ecs::entity>(fs::view("assets://scenes/scene1.bson"), "scene");
 
-        srl::write<srl::yaml>(fs::view("assets://scenes/scene2.yaml"), *result4, "scene");
-        srl::write<srl::json>(fs::view("assets://scenes/scene2.json"), *result4, "scene");
-        srl::write<srl::bson>(fs::view("assets://scenes/scene2.bson"), *result4, "scene");
+        //srl::write<srl::yaml>(fs::view("assets://scenes/scene2.yaml"), *result4, "scene");
+        //srl::write<srl::json>(fs::view("assets://scenes/scene2.json"), *result4, "scene");
+        //srl::write<srl::bson>(fs::view("assets://scenes/scene2.bson"), *result4, "scene");
 
         /////////////////////////////////////////////////////////
     }

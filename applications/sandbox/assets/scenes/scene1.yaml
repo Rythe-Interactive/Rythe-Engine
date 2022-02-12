@@ -14,7 +14,6 @@ scene:
                         []
                     components:
                         -   type_name: example_comp
-                            value: 0
                 -   type_name: legion::core::ecs::entity_data
                     name: 9
                     active: true
@@ -35,7 +34,6 @@ scene:
                         []
                     components:
                         -   type_name: example_comp
-                            value: 1
                 -   type_name: legion::core::ecs::entity_data
                     name: 12
                     active: true
@@ -56,7 +54,6 @@ scene:
                         []
                     components:
                         -   type_name: example_comp
-                            value: 2
                 -   type_name: legion::core::ecs::entity_data
                     name: 15
                     active: true
@@ -68,4 +65,3 @@ scene:
                 []
     components:
         -   type_name: example_comp
-            value: 1
