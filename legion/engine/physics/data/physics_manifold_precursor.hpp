@@ -5,7 +5,8 @@
 namespace legion::physics
 {
     /** @struct physics_manifold_precursor
-    * @brief contains the necessary data to create a physics_manifold
+    * @brief contains the necessary data to create a physics_manifold.
+    * Only exist within one physics timestep.
     */
     struct physics_manifold_precursor
     {
