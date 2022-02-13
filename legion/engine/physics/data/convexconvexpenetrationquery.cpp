@@ -31,7 +31,7 @@ namespace legion::physics
                 incFace = face;
             }
         }
- 
+        
         //------------------------------- get all world vertex positions in incFace -------------------------------------------------//
         std::vector<ContactVertex> outputContactPoints;
 
