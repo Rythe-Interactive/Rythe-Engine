@@ -30,7 +30,7 @@ namespace legion::physics
         {
             if (!constants::applyWarmStarting) { return; }
 
-            for (auto&& convergenceId : convergenceIdentifiers)
+            for (auto& convergenceId : convergenceIdentifiers)
             {
                 if (convergenceId->refColliderID == contact.refCollider->GetColliderID())
                 {
