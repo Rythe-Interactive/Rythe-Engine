@@ -101,7 +101,7 @@ namespace legion::core::math
             assert_msg("vector subscript out of range", (i >= 0) && (i < size)); return data[i];
         }
 
-        L_ALWAYS_INLINE L_NODISCARD scalar length() const noexcept { return ::legion::core::math::length(*this); }
+        L_NODISCARD L_ALWAYS_INLINE scalar length() const noexcept { return ::legion::core::math::length(*this); }
         L_NODISCARD constexpr scalar length2() const noexcept { return ::legion::core::math::length2(*this); }
     };
 

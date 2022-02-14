@@ -113,7 +113,6 @@
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
     <ClInclude Include="math\geometry.hpp" />
-    <ClInclude Include="math\close_enough.hpp" />
     <ClInclude Include="common\managed_resource.hpp" />
     <ClInclude Include="async\spinlock.hpp" />
     <ClInclude Include="async\rw_spinlock.hpp" />
@@ -197,6 +196,16 @@
     <ClInclude Include="math\vector\swizzle\swizzle4.hpp" />
     <ClInclude Include="math\vector\swizzle\swizzle3.hpp" />
     <ClInclude Include="math\vector\swizzle\swizzle2.hpp" />
+    <ClInclude Include="math\logic\logic.hpp" />
+    <ClInclude Include="math\logic\equality.hpp" />
+    <ClInclude Include="math\util\close_enough.hpp" />
+    <ClInclude Include="math\logic\greater.hpp" />
+    <ClInclude Include="math\logic\any.hpp" />
+    <ClInclude Include="math\logic\all.hpp" />
+    <ClInclude Include="math\vector\swizzle\swizzle1.hpp" />
+    <ClInclude Include="math\util\util.hpp" />
+    <ClInclude Include="math\geometric\normalize_dot.hpp" />
+    <ClInclude Include="math\exponential\inverse_sqrt.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

@@ -22,4 +22,10 @@ namespace legion::core::math
             }
         };
     }
+
+    template<typename _Scalar, size_type _Size>
+    constexpr auto normalize(const vector<_Scalar, _Size>& v) noexcept
+    {
+        return detail::compute_normalize<_Scalar, _Size>::compute(v);
+    }
 }

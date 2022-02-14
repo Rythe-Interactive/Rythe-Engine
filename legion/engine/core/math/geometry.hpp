@@ -1,5 +1,7 @@
 #pragma once
-#include <core/math/close_enough.hpp>
+#include <core/math/vector/vector.hpp>
+#include <core/math/geometric/geometric.hpp>
+#include <core/math/exponential/exponential.hpp>
 
 /**
  * @file geometry.hpp
@@ -156,7 +158,7 @@ namespace legion::core::math
         float positive = 1;
         if (projectionLength < 0) positive = -1;
         // A vector when added to p gives the projected point
-        vec3 towardProjection = -projectionLength * (triNormal / length(triNormal));
+        vec3 towardProjection = (triNormal / length(triNormal)) * -projectionLength;
         // Q is the projection of p onto the plane
         vec3 q = p + towardProjection;
 
@@ -169,7 +171,7 @@ namespace legion::core::math
         double q12Area = triangleSurface(q, triPoint1, triPoint2);
 
         // If the area of q to each set of two points is equal to the triangle surface area, q is on the triangle
-        if (abs(q01Area + q02Area + q12Area) - triangleSurface(triPoint0, triPoint1, triPoint2) < math::epsilon<float>())
+        if (abs(q01Area + q02Area + q12Area) - triangleSurface(triPoint0, triPoint1, triPoint2) < epsilon_v<float>)
         {
             return projectionLength;
         }
@@ -221,7 +223,7 @@ namespace legion::core::math
 
         float cosAngle = dot(triNormal, p - triPoint0) / (distance(p, triPoint0) * length(triNormal));
         float projectionLength = length(p - triPoint0) * cosAngle;
-        vec3 towardProjection = -projectionLength * (triNormal / length(triNormal));
+        vec3 towardProjection = (triNormal / length(triNormal)) * -projectionLength;
         // Q is the projection of p onto the plane
         vec3 q = p + towardProjection;
 
@@ -276,7 +278,7 @@ namespace legion::core::math
             float projectionLength = length(p - points[0]) * cosAngle;
             float positive = 1;
             if (projectionLength < 0) positive = -1;
-            vec3 towardProjection = -projectionLength * (normal / length(normal));
+            vec3 towardProjection = (normal / length(normal)) * -projectionLength;
             // Q is the projection of p onto the plane
             vec3 q = p + towardProjection;
 
@@ -333,7 +335,7 @@ namespace legion::core::math
 
     inline float angleToPlane(const vec3& point, const vec3& planePosition, const vec3& planeNormal)
     {
-        return normalizeDot(planeNormal, point - planePosition);
+        return normalize_dot(planeNormal, point - planePosition);
     }
 
     /**@class plane
@@ -380,7 +382,7 @@ namespace legion::core::math
      * @param normal The normal of the plane
      * @param centroid The center of the the plane
      */
-    inline mat4 planeMatrix(const vec3& p0, const vec3& p1, const vec3& p2, const vec3& centroid)
+    /*inline mat4 planeMatrix(const vec3& p0, const vec3& p1, const vec3& p2, const vec3& centroid)
     {
         vec3 xAxis = p2 - p0;
         vec3 zAxis = p1 - p0;
@@ -411,5 +413,5 @@ namespace legion::core::math
         );
 
         return translation * rot * scale;
-    }
+    }*/
 }

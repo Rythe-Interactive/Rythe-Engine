@@ -202,6 +202,13 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="math\arithmetic\subtraction.hpp" />
     <ClInclude Include="math\basic\abs.hpp" />
     <ClInclude Include="math\basic\basic_funcs.hpp" />
+    <ClInclude Include="math\exponential\inverse_sqrt.hpp" />
+    <ClInclude Include="math\geometric\normalize_dot.hpp" />
+    <ClInclude Include="math\logic\all.hpp" />
+    <ClInclude Include="math\logic\any.hpp" />
+    <ClInclude Include="math\logic\greater.hpp" />
+    <ClInclude Include="math\logic\logic.hpp" />
+    <ClInclude Include="math\logic\equality.hpp" />
     <ClInclude Include="math\exponential\exponential.hpp" />
     <ClInclude Include="math\exponential\pow.hpp" />
     <ClInclude Include="math\exponential\sqrt.hpp" />
@@ -212,7 +219,10 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="math\geometric\length.hpp" />
     <ClInclude Include="math\geometric\normalize.hpp" />
     <ClInclude Include="math\meta.hpp" />
+    <ClInclude Include="math\util\close_enough.hpp" />
     <ClInclude Include="math\util\hash.hpp" />
+    <ClInclude Include="math\util\util.hpp" />
+    <ClInclude Include="math\vector\swizzle\swizzle1.hpp" />
     <ClInclude Include="math\vector\swizzle\swizzle2.hpp" />
     <ClInclude Include="math\vector\swizzle\swizzle3.hpp" />
     <ClInclude Include="math\vector\swizzle\swizzle4.hpp" />
@@ -255,7 +265,6 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="filesystem\view.hpp" />
     <ClInclude Include="compute\program.hpp" />
     <ClInclude Include="logging\logging.hpp" />
-    <ClInclude Include="math\close_enough.hpp" />
     <ClInclude Include="math\color.hpp" />
     <ClInclude Include="math\constants.hpp" />
     <ClInclude Include="math\math.hpp" />

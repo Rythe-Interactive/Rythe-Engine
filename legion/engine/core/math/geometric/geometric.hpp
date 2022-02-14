@@ -4,3 +4,4 @@
 #include <core/math/geometric/dot.hpp>
 #include <core/math/geometric/length.hpp>
 #include <core/math/geometric/normalize.hpp>
+#include <core/math/geometric/normalize_dot.hpp>

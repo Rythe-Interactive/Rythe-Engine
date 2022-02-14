@@ -30,7 +30,7 @@ struct ::std::hash<::legion::core::math::vector<_Scalar, _Size>>
     constexpr ::std::size_t operator()(const ::legion::core::math::vector<_Scalar, _Size>& vec)
     {
         using namespace ::legion::core;
-        size_type seed = hasher(vec[0]);S
+        size_type seed = hasher(vec[0]);
         for (size_type i = 1; i < _Size; i++)
             seed = hash_combine(seed, hasher(vec[i]));
         return seed;

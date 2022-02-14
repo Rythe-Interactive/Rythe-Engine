@@ -1,5 +1,6 @@
 #pragma once
 #include <core/math/vector/vector.hpp>
+#include <core/math/util/hash.hpp>
 
 /**
  * @file color.hpp
@@ -40,23 +41,3 @@ namespace legion::core::math
         const color cornflower  { 0.392f, 0.584f, 0.929f, 1.0f };
     }
 }
-
-#if !defined(DOXY_EXCLUDE)
-namespace std
-{
-    template<>
-    struct hash<legion::core::math::color>
-    {
-        std::size_t operator()(legion::core::math::color const& color) const noexcept
-        {
-            size_t seed = 0;
-            hash<float> hasher;
-            legion::core::math::detail::hash_combine(seed, hasher(color.r));
-            legion::core::math::detail::hash_combine(seed, hasher(color.g));
-            legion::core::math::detail::hash_combine(seed, hasher(color.b));
-            legion::core::math::detail::hash_combine(seed, hasher(color.a));
-            return seed;
-        }
-    };
-}
-#endif

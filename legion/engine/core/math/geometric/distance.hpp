@@ -15,4 +15,16 @@ namespace legion::core::math
     {
         return length2(a - b);
     }
+
+    template<typename _Scalar, size_type _Size>
+    _Scalar distance(const vector<_Scalar, _Size>& a, const vector<_Scalar, _Size>& b) noexcept
+    {
+        return length(a - b);
+    }
+
+    template<typename _Scalar, size_type _Size>
+    constexpr _Scalar distance2(const vector<_Scalar, _Size>& a, const vector<_Scalar, _Size>& b) noexcept
+    {
+        return length2(a - b);
+    }
 }
