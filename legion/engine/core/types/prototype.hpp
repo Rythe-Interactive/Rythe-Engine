@@ -2,6 +2,7 @@
 #include <core/platform/platform.hpp>
 #include <core/types/meta.hpp>
 #include <core/types/primitives.hpp>
+#include <core/types/attributes.hpp>
 
 #include <any>
 
@@ -14,6 +15,7 @@ namespace legion::core
         id_type typeId;
         std::string_view typeName;
         std::vector<member_value> members;
+        std::vector<std::reference_wrapper<const attribute_base>> attributes;
 
         prototype() = default;
         prototype(id_type id, std::string_view name, std::vector<member_value> _members) : typeId(id), typeName(name), members(_members) {}
@@ -49,6 +51,8 @@ namespace legion::core
     {
         bool is_object;
         std::string_view name;
+        std::vector<std::reference_wrapper<const attribute_base>> attributes;
+
         union
         {
             prototype object;

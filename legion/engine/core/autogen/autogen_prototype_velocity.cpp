@@ -1,9 +1,9 @@
-#pragma once
 #include "autogen_prototype_velocity.hpp"
 #include "../../core\defaults\defaultcomponents.hpp"
 namespace legion::core
 {
-    L_NODISCARD prototype make_prototype(const velocity& obj)
+    template<>
+    L_NODISCARD prototype make_prototype<velocity>(const velocity& obj)
     {
         prototype prot;
         prot.typeId = typeHash<velocity>();

@@ -3,6 +3,6 @@
 namespace legion::core
 {
     struct example_comp;
-    L_NODISCARD prototype make_prototype(example_comp& obj);
-    L_NODISCARD prototype make_prototype(const example_comp& obj);
+    template<>
+    L_NODISCARD prototype make_prototype<example_comp>(const example_comp& obj);
 }

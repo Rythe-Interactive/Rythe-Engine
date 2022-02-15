@@ -14,7 +14,7 @@ namespace legion::rendering
     /**@class camera
      * @brief Camera component
      */
-    struct camera
+    struct [[legion::reflectable]] camera
     {
         friend class OldRenderer;
         friend class Renderer;

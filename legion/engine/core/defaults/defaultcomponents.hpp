@@ -4,12 +4,6 @@
 #include <core/data/mesh.hpp>
 #include <core/logging/logging.hpp>
 
-namespace legion
-{
-    struct reflectable_attribute {};
-#define reflectable reflectable_attribute
-}
-
 namespace legion::core
 {
     struct [[legion::reflectable]] position : public math::vec3

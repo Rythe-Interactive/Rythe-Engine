@@ -3,6 +3,6 @@
 namespace legion::core
 {
     struct position;
-    L_NODISCARD prototype make_prototype(position& obj);
-    L_NODISCARD prototype make_prototype(const position& obj);
+    template<>
+    L_NODISCARD prototype make_prototype<position>(const position& obj);
 }

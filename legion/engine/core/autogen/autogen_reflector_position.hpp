@@ -3,6 +3,8 @@
 namespace legion::core
 {
     struct position;
-    L_NODISCARD reflector make_reflector(position& obj);
-    L_NODISCARD const reflector make_reflector(const position& obj);
+    template<>
+    L_NODISCARD reflector make_reflector<position>(position& obj);
+    template<>
+    L_NODISCARD const reflector make_reflector<const position>(const position& obj);
 }

@@ -2,7 +2,7 @@
 #include <core/types/prototype.hpp>
 namespace legion::core
 {
-    struct scale;
+    struct light;
     template<>
-    L_NODISCARD prototype make_prototype<scale>(const scale& obj);
+    L_NODISCARD prototype make_prototype<light>(const light& obj);
 }

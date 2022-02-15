@@ -2,6 +2,7 @@
 #include <core/platform/platform.hpp>
 #include <core/types/meta.hpp>
 #include <core/types/primitives.hpp>
+#include <core/types/attributes.hpp>
 
 namespace legion::core
 {
@@ -12,6 +13,7 @@ namespace legion::core
         id_type typeId;
         std::string_view typeName;
         std::vector<member_reference> members;
+        std::vector<std::reference_wrapper<const attribute_base>> attributes;
         void* data;
 
         reflector() = default;
@@ -73,6 +75,7 @@ namespace legion::core
     {
         bool is_object;
         std::string_view name;
+        std::vector<std::reference_wrapper<const attribute_base>> attributes;
         union
         {
             reflector object;

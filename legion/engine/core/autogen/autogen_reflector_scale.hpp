@@ -3,6 +3,8 @@
 namespace legion::core
 {
     struct scale;
-    L_NODISCARD reflector make_reflector(scale& obj);
-    L_NODISCARD const reflector make_reflector(const scale& obj);
+    template<>
+    L_NODISCARD reflector make_reflector<scale>(scale& obj);
+    template<>
+    L_NODISCARD const reflector make_reflector<const scale>(const scale& obj);
 }

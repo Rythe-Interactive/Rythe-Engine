@@ -1,9 +1,9 @@
-#pragma once
 #include "autogen_reflector_velocity.hpp"
 #include "../../core\defaults\defaultcomponents.hpp"
 namespace legion::core
 {
-    L_NODISCARD reflector make_reflector(velocity& obj)
+    template<>
+    L_NODISCARD reflector make_reflector<velocity>(velocity& obj)
     {
         reflector refl;
         refl.typeId = typeHash<velocity>();
@@ -12,7 +12,8 @@ namespace legion::core
         refl.data = std::addressof(obj);
         return refl;
     }
-    L_NODISCARD const reflector make_reflector(const velocity& obj)
+    template<>
+    L_NODISCARD const reflector make_reflector<const velocity>(const velocity& obj)
     {
         ptr_type address = reinterpret_cast<ptr_type>(std::addressof(obj));
         reflector refl;

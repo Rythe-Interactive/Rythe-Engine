@@ -11,6 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="autogen\autogen_prototype_camera.cpp" />
+    <ClCompile Include="autogen\autogen_prototype_light.cpp" />
+    <ClCompile Include="autogen\autogen_reflector_camera.cpp" />
+    <ClCompile Include="autogen\autogen_reflector_light.cpp" />
     <ClCompile Include="components\light.cpp" />
     <ClCompile Include="data\buffer.cpp" />
     <ClCompile Include="data\framebuffer.cpp" />
@@ -56,11 +60,15 @@
     <ClCompile Include="util\matini.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="autogen\autogen.hpp" />
+    <ClInclude Include="autogen\autogen_prototype_camera.hpp" />
+    <ClInclude Include="autogen\autogen_prototype_light.hpp" />
+    <ClInclude Include="autogen\autogen_reflector_camera.hpp" />
+    <ClInclude Include="autogen\autogen_reflector_light.hpp" />
     <ClInclude Include="components\camera.hpp" />
     <ClInclude Include="components\light.hpp" />
     <ClInclude Include="components\point.hpp" />
     <ClInclude Include="components\pointcloud_renderable.hpp" />
-    <ClInclude Include="data\Octree.hpp" />
     <ClInclude Include="data\postprocessingeffect.hpp" />
     <ClInclude Include="data\screen_quad.hpp" />
     <ClInclude Include="pipeline\default\postfx\depthoffield.hpp" />

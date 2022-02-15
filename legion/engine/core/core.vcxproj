@@ -537,6 +537,7 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="serialization\serializer_views\yaml.hpp" />
     <ClInclude Include="time\main_clock.hpp" />
     <ClInclude Include="time\utils.hpp" />
+    <ClInclude Include="types\attributes.hpp" />
     <ClInclude Include="types\prototype.hpp" />
     <ClInclude Include="types\reflector.hpp" />
     <ClInclude Include="time\stopwatch.hpp" />

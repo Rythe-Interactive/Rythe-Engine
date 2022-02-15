@@ -16,7 +16,8 @@
                         "children": [],
                         "components": [
                             {
-                                "type_name": "example_comp"
+                                "type_name": "legion::core::example_comp",
+                                "value": 0
                             }
                         ]
                     },
@@ -42,7 +43,8 @@
                         "children": [],
                         "components": [
                             {
-                                "type_name": "example_comp"
+                                "type_name": "legion::core::example_comp",
+                                "value": 1
                             }
                         ]
                     },
@@ -68,7 +70,8 @@
                         "children": [],
                         "components": [
                             {
-                                "type_name": "example_comp"
+                                "type_name": "legion::core::example_comp",
+                                "value": 2
                             }
                         ]
                     },
@@ -85,7 +88,20 @@
         ],
         "components": [
             {
-                "type_name": "example_comp"
+                "type_name": "legion::core::scale"
+            },
+            {
+                "type_name": "legion::core::rotation"
+            },
+            {
+                "type_name": "legion::core::position"
+            },
+            {
+                "type_name": "legion::core::velocity"
+            },
+            {
+                "type_name": "legion::core::example_comp",
+                "value": 1
             }
         ]
     }

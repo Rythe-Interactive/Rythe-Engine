@@ -3,6 +3,8 @@
 namespace legion::core
 {
     struct rotation;
-    L_NODISCARD reflector make_reflector(rotation& obj);
-    L_NODISCARD const reflector make_reflector(const rotation& obj);
+    template<>
+    L_NODISCARD reflector make_reflector<rotation>(rotation& obj);
+    template<>
+    L_NODISCARD const reflector make_reflector<const rotation>(const rotation& obj);
 }

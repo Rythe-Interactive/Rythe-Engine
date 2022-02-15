@@ -3,6 +3,6 @@
 namespace legion::core
 {
     struct velocity;
-    L_NODISCARD prototype make_prototype(velocity& obj);
-    L_NODISCARD prototype make_prototype(const velocity& obj);
+    template<>
+    L_NODISCARD prototype make_prototype<velocity>(const velocity& obj);
 }

@@ -26,7 +26,7 @@ namespace legion::rendering
         };
     }
 
-    struct light
+    struct [[legion::reflectable]] light
     {
     private:
         static uint m_lastidx;
@@ -49,7 +49,7 @@ namespace legion::rendering
     protected:
         union
         {
-            detail::light_data m_lightData;
+            [[legion::no_reflect]] detail::light_data m_lightData;
 
             struct
             {

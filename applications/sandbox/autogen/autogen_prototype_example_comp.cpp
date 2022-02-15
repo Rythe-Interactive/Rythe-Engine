@@ -1,9 +1,9 @@
-#pragma once
 #include "autogen_prototype_example_comp.hpp"
 #include "../../sandbox\systems\examplesystem.hpp"
 namespace legion::core
 {
-    L_NODISCARD prototype make_prototype(const example_comp& obj)
+    template<>
+    L_NODISCARD prototype make_prototype<example_comp>(const example_comp& obj)
     {
         prototype prot;
         prot.typeId = typeHash<example_comp>();
