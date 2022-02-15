@@ -76,7 +76,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\;$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>legion-core-d.lib;legion-application-d.lib;legion-rendering-d.lib;legion-audio-d.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;Voro++D.lib;OptickCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>legion-core-d.lib;legion-application-d.lib;legion-rendering-d.lib;legion-audio-d.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;Voro++D.lib;OptickCore.lib;legion-physics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <!--
       <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-networking.lib;legion-physics.lib;legion-rendering.lib;legion-scripting.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;%(AdditionalDependencies);mono-2.0-sgen.lib;OptickCore.lib</AdditionalDependencies>
       -->
@@ -101,7 +101,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\;$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>legion-core.lib;legion-application.lib;legion-rendering.lib;legion-audio.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;Voro++.lib;OptickCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>legion-core.lib;legion-application.lib;legion-rendering.lib;legion-audio.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;Voro++.lib;OptickCore.lib;legion-physics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ProgramDatabaseFile />
       <!--
       <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-networking.lib;legion-physics.lib;legion-rendering.lib;legion-scripting.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;%(AdditionalDependencies);mono-2.0-sgen.lib;OptickCore.lib</AdditionalDependencies>
@@ -111,6 +111,7 @@
   <ItemGroup>
     <ClCompile Include="source.cpp" />
     <ClCompile Include="systems\gui_test.cpp" />
+    <ClCompile Include="systems\physics_test_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data\pp_bloom.hpp" />
@@ -124,6 +125,7 @@
     <ClInclude Include="systems\examplesystem.hpp" />
     <ClInclude Include="systems\gui_test.hpp" />
     <ClInclude Include="systems\mysystem.hpp" />
+    <ClInclude Include="systems\physics_test_system.hpp" />
     <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
     <ClInclude Include="data\pp_blur.hpp" />
     <ClInclude Include="systems\simplecameracontroller.hpp" />

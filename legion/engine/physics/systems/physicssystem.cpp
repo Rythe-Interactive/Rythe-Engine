@@ -3,24 +3,26 @@
 
 namespace legion::physics
 {
+    namespace detail
+    {
+        static inline bool greater_penetration(const physics_contact& contact1, const physics_contact& contact2)
+        {
+            auto dot1 = math::dot(contact1.RefWorldContact - contact1.IncWorldContact, -contact1.collisionNormal);
+            auto dot2 = math::dot(contact2.RefWorldContact - contact2.IncWorldContact, -contact2.collisionNormal);
+            return dot1 < dot2;
+        }
+    }
+
     std::unique_ptr<BroadPhaseCollisionAlgorithm> PhysicsSystem::m_broadPhase = nullptr;
 
-    bool PhysicsSystem::IsPaused = false;
+    bool PhysicsSystem::IsPaused = true;
     bool PhysicsSystem::oneTimeRunActive = false;
 
 
     void PhysicsSystem::setup()
     {
+        m_broadPhase = std::make_unique<BroadphaseUniformGridNoCaching>(math::vec3(3, 3, 3));
         createProcess<&PhysicsSystem::fixedUpdate>("Physics", m_timeStep);
-
-        manifoldPrecursorQuery = createQuery<position, rotation, scale, physicsComponent>();
-
-        //std::make_unique<BroadphaseUniformGrid>(math::vec3(2,2,2),1);
-        //std::make_unique<BroadphaseBruteforce>();
-        //std::make_unique<BroadphaseUniformGridNoCaching>(math::vec3(2, 2, 2));
-
-        m_broadPhase = std::make_unique<BroadphaseUniformGridNoCaching>(math::vec3(2, 2, 2));
-
     }
 
     void PhysicsSystem::runPhysicsPipeline(
@@ -111,87 +113,12 @@ namespace legion::physics
                     }
                 }
             }
-            //log::debug("groupings {}", manifoldPrecursorGrouping.size());
-            //log::debug("total checks {}", totalChecks);
         }
-
-        //------------------------------------------------ Pre Collision Solve Events --------------------------------------------//
-
-
-            //explosion event
-        auto countdownQuery = createQuery<FractureCountdown>();
-        countdownQuery.queryEntities();
-
-        for (auto ent : countdownQuery)
-        {
-            auto fractureCountdown = ent.read_component<FractureCountdown>();
-            fractureCountdown.fractureTime -= 0.02f;
-            //log::debug(" fractureCountdown.fractureTime {}", fractureCountdown.fractureTime);
-
-            if (fractureCountdown.explodeNow || fractureCountdown.fractureTime < 0.0f)
-            {
-                log::debug("Entity is exploding");
-
-                auto fracturerH = ent.get_component_handle<Fracturer>();
-                auto fracturer = fracturerH.read();
-                log::debug("fractureCountdown.explosionPoint {} ", fractureCountdown.explosionPoint);
-                log::debug("fractureCountdown.fractureStrength {} ", fractureCountdown.fractureStrength);
-                FractureParams params(fractureCountdown.explosionPoint, fractureCountdown.fractureStrength);
-
-                fracturer.ExplodeEntity(ent, params);
-
-                fracturerH.write(fracturer);
-
-            }
-
-            ent.write_component(fractureCountdown);
-        }
-
 
         // all manifolds are initially valid
 
         std::vector<byte> manifoldValidity(manifoldsToSolve.size(), true);
 
-        //TODO we are currently hard coding fracture, this should be an event at some point
-        {
-            OPTICK_EVENT("Fracture");
-            for (size_t i = 0; i < manifoldsToSolve.size(); i++)
-            {
-                auto& manifold = manifoldsToSolve.at(i);
-
-                auto& entityHandleA = manifold.entityA;
-                auto& entityHandleB = manifold.entityB;
-
-                auto fracturerHandleA = entityHandleA.get_component_handle<Fracturer>();
-                auto fracturerHandleB = entityHandleB.get_component_handle<Fracturer>();
-
-                bool currentManifoldValidity = manifoldValidity.at(i);
-
-                //log::debug("- A Fracture Check");
-
-                if (fracturerHandleA)
-                {
-                    auto fracturerA = fracturerHandleA.read();
-                    //log::debug(" A is fracturable");
-                    fracturerA.HandleFracture(manifold, currentManifoldValidity, true);
-
-                    fracturerHandleA.write(fracturerA);
-                }
-
-                //log::debug("- B Fracture Check");
-
-                if (fracturerHandleB)
-                {
-                    auto fracturerB = fracturerHandleB.read();
-                    //log::debug(" B is fracturable");
-                    fracturerB.HandleFracture(manifold, currentManifoldValidity, false);
-
-                    fracturerHandleB.write(fracturerB);
-                }
-
-                manifoldValidity.at(i) = currentManifoldValidity;
-            }
-        }
         //-------------------------------------------------- Collision Solver ---------------------------------------------------//
         //for both contact and friction resolution, an iterative algorithm is used.
         //Everytime physics_contact::resolveContactConstraint is called, the rigidbodies in question get closer to the actual
@@ -201,11 +128,15 @@ namespace legion::physics
         //the effective mass remains the same for every iteration of the solver. This means that we can precalculate it before
         //we start the solver
 
-        //log::debug("--------------Logging contacts for manifold -------------------");
         {
             OPTICK_EVENT("Resolve collisions");
 
             initializeManifolds(manifoldsToSolve, manifoldValidity);
+
+            for (auto& manifold : manifoldsToSolve)
+            {
+                std::sort(manifold.contacts.begin(), manifold.contacts.end(), &detail::greater_penetration);
+            }
 
             {
                 OPTICK_EVENT("Resolve contact constraints");
@@ -235,8 +166,8 @@ namespace legion::physics
                 //reset convergance identifiers for all colliders
                 for (auto& manifold : manifoldsToSolve)
                 {
-                    manifold.colliderA->converganceIdentifiers.clear();
-                    manifold.colliderB->converganceIdentifiers.clear();
+                    manifold.colliderA->convergenceIdentifiers.clear();
+                    manifold.colliderB->convergenceIdentifiers.clear();
                 }
 
                 //using the known lambdas of this time step, add it as a convergance identifier
@@ -244,7 +175,7 @@ namespace legion::physics
                 {
                     for (auto& contact : manifold.contacts)
                     {
-                        contact.refCollider->AddConverganceIdentifier(contact);
+                        contact.refCollider->AddConvergenceIdentifier(contact);
                     }
                 }
             }

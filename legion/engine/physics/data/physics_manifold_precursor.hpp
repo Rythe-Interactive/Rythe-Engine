@@ -5,18 +5,19 @@
 namespace legion::physics
 {
     /** @struct physics_manifold_precursor
-    * @brief contains the necessary data to create a physics_manifold
+    * @brief contains the necessary data to create a physics_manifold.
+    * Only exist within one physics timestep.
     */
     struct physics_manifold_precursor
     {
         math::mat4 worldTransform;
-        physicsComponent* physicsComp;
+        physicsComponent* physicsComp = nullptr;
         id_type id;
-        ecs::entity_handle entity;
+        ecs::entity entity;
 
         physics_manifold_precursor() = default;
 
-        physics_manifold_precursor(math::mat4 pWorldTransform, physicsComponent* pPhysicsComp, id_type precursorID, ecs::entity_handle entity) :
+        physics_manifold_precursor(math::mat4 pWorldTransform, physicsComponent* pPhysicsComp, id_type precursorID, ecs::entity entity) :
             worldTransform(pWorldTransform), physicsComp(pPhysicsComp), id(precursorID), entity(entity)
         {
 
