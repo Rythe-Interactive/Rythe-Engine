@@ -1,5 +1,5 @@
 #include "autogen_prototype_scale.hpp"
-#include "../../core\defaults\defaultcomponents.hpp"
+#include "../../core/defaults/defaultcomponents.hpp"
 namespace legion::core
 {
     template<>

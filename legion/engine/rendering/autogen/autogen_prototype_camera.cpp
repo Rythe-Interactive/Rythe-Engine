@@ -1,5 +1,5 @@
 #include "autogen_prototype_camera.hpp"
-#include "../../rendering\components\camera.hpp"
+#include "../../rendering/components/camera.hpp"
 namespace legion::core
 {
     template<>

@@ -1,5 +1,5 @@
 #include "autogen_prototype_example_comp.hpp"
-#include "../../sandbox\systems\examplesystem.hpp"
+#include "../../sandbox/systems/examplesystem.hpp"
 namespace legion::core
 {
     template<>

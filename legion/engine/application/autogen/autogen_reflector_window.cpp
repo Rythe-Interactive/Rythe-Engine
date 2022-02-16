@@ -1,5 +1,5 @@
 #include "autogen_reflector_window.hpp"
-#include "../../application\window\window.hpp"
+#include "../../application/window/window.hpp"
 namespace legion::core
 {
     template<>
