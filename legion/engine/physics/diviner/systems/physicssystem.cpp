@@ -18,11 +18,11 @@ namespace legion::physics
     bool PhysicsSystem::IsPaused = true;
     bool PhysicsSystem::oneTimeRunActive = false;
 
-
     void PhysicsSystem::setup()
     {
         m_broadPhase = std::make_unique<BroadphaseUniformGridNoCaching>(math::vec3(3, 3, 3));
         createProcess<&PhysicsSystem::fixedUpdate>("Physics", m_timeStep);
+
     }
 
     void PhysicsSystem::runPhysicsPipeline(
