@@ -11,7 +11,7 @@ namespace legion::core
 {
     struct [[legion::reflectable]] example_comp
     {
-        int value = 1;
+        [[legion::range]] int value = 1;
     };
 }
 

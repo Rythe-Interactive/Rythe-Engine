@@ -9,7 +9,7 @@
 
 namespace legion::application
 {
-    struct window
+    struct [[legion::reflectable]] window
     {
 
         friend class WindowSystem;

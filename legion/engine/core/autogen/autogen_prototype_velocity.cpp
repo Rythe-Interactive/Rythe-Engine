@@ -3,11 +3,15 @@
 namespace legion::core
 {
     template<>
-    L_NODISCARD prototype make_prototype<velocity>(const velocity& obj)
+    L_NODISCARD prototype make_prototype<legion::core::velocity>(const legion::core::velocity& obj)
     {
         prototype prot;
-        prot.typeId = typeHash<velocity>();
-        prot.typeName = "velocity";
+        prot.typeId = typeHash<legion::core::velocity>();
+        prot.typeName = "legion::core::velocity";
+        {
+            static const reflectable_attribute reflectable_attr{};
+            prot.attributes.push_back(std::cref(reflectable_attr));
+        }
         prot.members = std::vector<member_value>();
         return prot;
     }

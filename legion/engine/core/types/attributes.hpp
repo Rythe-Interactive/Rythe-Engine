@@ -21,4 +21,9 @@ namespace legion::core
     {
 
     };
+
+    struct range_attribute : public attribute<range_attribute>
+    {
+
+    };
 }

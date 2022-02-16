@@ -3,36 +3,54 @@
 namespace legion::core
 {
     template<>
-    L_NODISCARD reflector make_reflector<example_comp>(example_comp& obj)
+    L_NODISCARD reflector make_reflector<legion::core::example_comp>(legion::core::example_comp& obj)
     {
         reflector refl;
-        refl.typeId = typeHash<example_comp>();
-        refl.typeName = "example_comp";
-        refl.members = std::vector<member_reference>{
-            member_reference
-            {
-                "value",
-                primitive_reference {typeHash<int>(), &obj.value}
-            }
+        refl.typeId = typeHash<legion::core::example_comp>();
+        refl.typeName = "legion::core::example_comp";
+        {
+            static const reflectable_attribute reflectable_attr{};
+            refl.attributes.push_back(std::cref(reflectable_attr));
         }
-        ;refl.data = std::addressof(obj);
+        refl.members = std::vector<member_reference>
+        {
+        member_reference
+        {
+            "value",
+            primitive_reference {typeHash<int>(), &obj.value}
+        }
+        };
+        {
+            static const range_attribute range_attr{};
+            refl.members[0].attributes.push_back(std::cref(range_attr));
+        }
+        refl.data = std::addressof(obj);
         return refl;
     }
     template<>
-    L_NODISCARD const reflector make_reflector<const example_comp>(const example_comp& obj)
+    L_NODISCARD const reflector make_reflector<const legion::core::example_comp>(const legion::core::example_comp& obj)
     {
         ptr_type address = reinterpret_cast<ptr_type>(std::addressof(obj));
         reflector refl;
-        refl.typeId = typeHash<example_comp>();
-        refl.typeName = "example_comp";
-        refl.members = std::vector<member_reference>{
-            member_reference
-            {
-                "value",
-                primitive_reference {typeHash<int>(), &obj.value}
-            }
+        refl.typeId = typeHash<legion::core::example_comp>();
+        refl.typeName = "legion::core::example_comp";
+        {
+            static const reflectable_attribute reflectable_attr{};
+            refl.attributes.push_back(std::cref(reflectable_attr));
         }
-        ;refl.data = reinterpret_cast<void*>(address);
+        refl.members = std::vector<member_reference>
+        {
+        member_reference
+        {
+            "value",
+            primitive_reference {typeHash<int>(), &obj.value}
+        }
+        };
+        {
+            static const range_attribute range_attr{};
+            refl.members[0].attributes.push_back(std::cref(range_attr));
+        }
+        refl.data = reinterpret_cast<void*>(address);
         return refl;
     }
 }

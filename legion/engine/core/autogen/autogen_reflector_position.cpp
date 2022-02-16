@@ -3,23 +3,33 @@
 namespace legion::core
 {
     template<>
-    L_NODISCARD reflector make_reflector<position>(position& obj)
+    L_NODISCARD reflector make_reflector<legion::core::position>(legion::core::position& obj)
     {
         reflector refl;
-        refl.typeId = typeHash<position>();
-        refl.typeName = "position";
-        refl.members = std::vector<member_reference>();
+        refl.typeId = typeHash<legion::core::position>();
+        refl.typeName = "legion::core::position";
+        {
+            static const reflectable_attribute reflectable_attr{};
+            refl.attributes.push_back(std::cref(reflectable_attr));
+        }
+        refl.members = std::vector<member_reference>
+        ();
         refl.data = std::addressof(obj);
         return refl;
     }
     template<>
-    L_NODISCARD const reflector make_reflector<const position>(const position& obj)
+    L_NODISCARD const reflector make_reflector<const legion::core::position>(const legion::core::position& obj)
     {
         ptr_type address = reinterpret_cast<ptr_type>(std::addressof(obj));
         reflector refl;
-        refl.typeId = typeHash<position>();
-        refl.typeName = "position";
-        refl.members = std::vector<member_reference>();
+        refl.typeId = typeHash<legion::core::position>();
+        refl.typeName = "legion::core::position";
+        {
+            static const reflectable_attribute reflectable_attr{};
+            refl.attributes.push_back(std::cref(reflectable_attr));
+        }
+        refl.members = std::vector<member_reference>
+        ();
         refl.data = reinterpret_cast<void*>(address);
         return refl;
     }
