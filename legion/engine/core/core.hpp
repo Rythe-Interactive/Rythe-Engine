@@ -29,7 +29,6 @@
 #include <core/engine/module.inl>
 #include <core/serialization/serialization.hpp>
 
-
 namespace legion
 {
     using namespace core;
