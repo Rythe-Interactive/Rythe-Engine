@@ -17,6 +17,8 @@ namespace legion::physics
             registerComponentType<physicsComponent>();
             registerComponentType<rigidbody>();
             registerComponentType<identifier>();
+
+            reportSystem<PhysXPhysicsSystem>();
         }
 
         virtual priority_type priority() override

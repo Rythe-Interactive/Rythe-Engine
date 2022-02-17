@@ -57,6 +57,9 @@
     <ClCompile Include="diviner\broadphasecollisionalgorithms\broadphaseuniformgridnocaching.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="physx\systems\physx_physics_system.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="diviner\cube_collider_params.hpp">
@@ -165,6 +168,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="diviner\data\convex_convergence_identifier.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="physx\systems\physx_physics_system.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
