@@ -24,84 +24,84 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="components\physics_component.cpp">
+    <ClCompile Include="diviner\components\physics_component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="colliders\convexcollider.cpp">
+    <ClCompile Include="diviner\colliders\convexcollider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="halfedgeface.cpp">
+    <ClCompile Include="diviner\halfedgeface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="data\convexconvexpenetrationquery.cpp">
+    <ClCompile Include="diviner\data\convexconvexpenetrationquery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="data\edgepenetrationquery.cpp">
+    <ClCompile Include="diviner\data\edgepenetrationquery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="physics_statics.cpp">
+    <ClCompile Include="diviner\physics_statics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgrid.cpp">
+    <ClCompile Include="diviner\broadphasecollisionalgorithms\broadphaseuniformgrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="systems\physicssystem.cpp">
+    <ClCompile Include="diviner\systems\physicssystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="halfedgeedge.cpp">
+    <ClCompile Include="diviner\halfedgeedge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="data\collider_face_to_vert.cpp">
+    <ClCompile Include="diviner\data\collider_face_to_vert.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.cpp">
+    <ClCompile Include="diviner\broadphasecollisionalgorithms\broadphaseuniformgridnocaching.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cube_collider_params.hpp">
+    <ClInclude Include="diviner\cube_collider_params.hpp">
       <Filter>components</Filter>
     </ClInclude>
     <ClInclude Include="module\physicsmodule.hpp">
       <Filter>module</Filter>
     </ClInclude>
-    <ClInclude Include="components\physics_component.hpp">
+    <ClInclude Include="diviner\components\physics_component.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="colliders\physicscollider.hpp">
+    <ClInclude Include="diviner\colliders\physicscollider.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="colliders\convexcollider.hpp">
+    <ClInclude Include="diviner\colliders\convexcollider.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\physics_manifold.hpp">
+    <ClInclude Include="diviner\data\physics_manifold.hpp">
       <Filter>components</Filter>
     </ClInclude>
-    <ClInclude Include="components\rigidbody.hpp">
+    <ClInclude Include="diviner\components\rigidbody.hpp">
       <Filter>components</Filter>
     </ClInclude>
-    <ClInclude Include="halfedgeface.hpp">
+    <ClInclude Include="diviner\halfedgeface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\edgepenetrationquery.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="physics_statics.hpp">
+    <ClInclude Include="diviner\physics_statics.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\pointer_encapsulator.hpp">
+    <ClInclude Include="diviner\data\pointer_encapsulator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="physics.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="systems\physicssystem.hpp">
+    <ClInclude Include="diviner\systems\physicssystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\edge_label.hpp">
+    <ClInclude Include="diviner\data\edge_label.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\contact_vertex.hpp">
+    <ClInclude Include="diviner\data\contact_vertex.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\convergance_identifier.hpp">
@@ -110,61 +110,61 @@
     <ClInclude Include="data\convex_convergance_identifier.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\convexconvexpenetrationquery.hpp">
+    <ClInclude Include="diviner\data\convexconvexpenetrationquery.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\identifier.hpp">
+    <ClInclude Include="diviner\data\identifier.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="physics_contact.hpp">
+    <ClInclude Include="diviner\physics_contact.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="physicsconstants.hpp">
+    <ClInclude Include="diviner\physicsconstants.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\edgepenetrationquery.hpp">
+    <ClInclude Include="diviner\data\edgepenetrationquery.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="events\events.hpp">
+    <ClInclude Include="diviner\events\events.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\VoronoiAABB.hpp">
+    <ClInclude Include="diviner\data\VoronoiAABB.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="halfedgeedge.hpp">
+    <ClInclude Include="diviner\halfedgeedge.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\convex_convex_collision_info.hpp">
+    <ClInclude Include="diviner\data\convex_convex_collision_info.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\penetrationquery.hpp">
+    <ClInclude Include="diviner\data\penetrationquery.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\physics_manifold_precursor.hpp">
+    <ClInclude Include="diviner\data\physics_manifold_precursor.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="broadphasecollisionalgorithms\broadphasebruteforce.hpp">
+    <ClInclude Include="diviner\broadphasecollisionalgorithms\broadphasebruteforce.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="broadphasecollisionalgorithms\broadphasecollisionalgorithm.hpp">
+    <ClInclude Include="diviner\broadphasecollisionalgorithms\broadphasecollisionalgorithm.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgrid.hpp">
+    <ClInclude Include="diviner\broadphasecollisionalgorithms\broadphaseuniformgrid.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\fractureparams.hpp">
+    <ClInclude Include="diviner\data\fractureparams.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\collider_face_to_vert.hpp">
+    <ClInclude Include="diviner\data\collider_face_to_vert.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.hpp">
+    <ClInclude Include="diviner\broadphasecollisionalgorithms\broadphaseuniformgridnocaching.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\convergence_identifier.hpp">
+    <ClInclude Include="diviner\data\convergence_identifier.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\convex_convergence_identifier.hpp">
+    <ClInclude Include="diviner\data\convex_convergence_identifier.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

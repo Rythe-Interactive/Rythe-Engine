@@ -11,17 +11,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgrid.cpp" />
-    <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.cpp" />
-    <ClCompile Include="colliders\convexcollider.cpp" />
-    <ClCompile Include="data\collider_face_to_vert.cpp" />
-    <ClCompile Include="data\convexconvexpenetrationquery.cpp" />
-    <ClCompile Include="data\edgepenetrationquery.cpp" />
-    <ClCompile Include="halfedgeedge.cpp" />
-    <ClCompile Include="halfedgeface.cpp" />
-    <ClCompile Include="components\physics_component.cpp" />
-    <ClCompile Include="physics_statics.cpp" />
-    <ClCompile Include="systems\physicssystem.cpp" />
+    <ClCompile Include="diviner\broadphasecollisionalgorithms\broadphaseuniformgrid.cpp" />
+    <ClCompile Include="diviner\broadphasecollisionalgorithms\broadphaseuniformgridnocaching.cpp" />
+    <ClCompile Include="diviner\colliders\convexcollider.cpp" />
+    <ClCompile Include="diviner\data\collider_face_to_vert.cpp" />
+    <ClCompile Include="diviner\data\convexconvexpenetrationquery.cpp" />
+    <ClCompile Include="diviner\data\edgepenetrationquery.cpp" />
+    <ClCompile Include="diviner\halfedgeedge.cpp" />
+    <ClCompile Include="diviner\halfedgeface.cpp" />
+    <ClCompile Include="diviner\components\physics_component.cpp" />
+    <ClCompile Include="diviner\physics_statics.cpp" />
+    <ClCompile Include="diviner\systems\physicssystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.vcxproj">
@@ -29,42 +29,42 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="broadphasecollisionalgorithms\broadphasebruteforce.hpp" />
-    <ClInclude Include="broadphasecollisionalgorithms\broadphasecollisionalgorithm.hpp" />
-    <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgrid.hpp" />
-    <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.hpp" />
-    <ClInclude Include="colliders\convexcollider.hpp" />
-    <ClInclude Include="data\contact_vertex.hpp" />
+    <ClInclude Include="diviner\broadphasecollisionalgorithms\broadphasebruteforce.hpp" />
+    <ClInclude Include="diviner\broadphasecollisionalgorithms\broadphasecollisionalgorithm.hpp" />
+    <ClInclude Include="diviner\broadphasecollisionalgorithms\broadphaseuniformgrid.hpp" />
+    <ClInclude Include="diviner\broadphasecollisionalgorithms\broadphaseuniformgridnocaching.hpp" />
+    <ClInclude Include="diviner\colliders\convexcollider.hpp" />
+    <ClInclude Include="diviner\data\contact_vertex.hpp" />
     <ClInclude Include="data\convergance_identifier.hpp" />
-    <ClInclude Include="data\convergence_identifier.hpp" />
-    <ClInclude Include="data\convexconvexpenetrationquery.hpp" />
-    <ClInclude Include="cube_collider_params.hpp" />
+    <ClInclude Include="diviner\data\convergence_identifier.hpp" />
+    <ClInclude Include="diviner\data\convexconvexpenetrationquery.hpp" />
+    <ClInclude Include="diviner\cube_collider_params.hpp" />
     <ClInclude Include="data\convex_convergance_identifier.hpp" />
-    <ClInclude Include="data\convex_convergence_identifier.hpp" />
-    <ClInclude Include="data\convex_convex_collision_info.hpp" />
-    <ClInclude Include="data\edgepenetrationquery.hpp" />
-    <ClInclude Include="data\edge_label.hpp" />
-    <ClInclude Include="data\fractureparams.hpp" />
-    <ClInclude Include="data\identifier.hpp" />
-    <ClInclude Include="data\physics_manifold_precursor.hpp" />
+    <ClInclude Include="diviner\data\convex_convergence_identifier.hpp" />
+    <ClInclude Include="diviner\data\convex_convex_collision_info.hpp" />
+    <ClInclude Include="diviner\data\edgepenetrationquery.hpp" />
+    <ClInclude Include="diviner\data\edge_label.hpp" />
+    <ClInclude Include="diviner\data\fractureparams.hpp" />
+    <ClInclude Include="diviner\data\identifier.hpp" />
+    <ClInclude Include="diviner\data\physics_manifold_precursor.hpp" />
     <ClInclude Include="data\edgepenetrationquery.h" />
-    <ClInclude Include="data\pointer_encapsulator.hpp" />
-    <ClInclude Include="data\collider_face_to_vert.hpp" />
-    <ClInclude Include="data\VoronoiAABB.hpp" />
-    <ClInclude Include="events\events.hpp" />
-    <ClInclude Include="halfedgeedge.hpp" />
-    <ClInclude Include="halfedgeface.hpp" />
-    <ClInclude Include="colliders\physicscollider.hpp" />
-    <ClInclude Include="data\penetrationquery.hpp" />
+    <ClInclude Include="diviner\data\pointer_encapsulator.hpp" />
+    <ClInclude Include="diviner\data\collider_face_to_vert.hpp" />
+    <ClInclude Include="diviner\data\VoronoiAABB.hpp" />
+    <ClInclude Include="diviner\events\events.hpp" />
+    <ClInclude Include="diviner\halfedgeedge.hpp" />
+    <ClInclude Include="diviner\halfedgeface.hpp" />
+    <ClInclude Include="diviner\colliders\physicscollider.hpp" />
+    <ClInclude Include="diviner\data\penetrationquery.hpp" />
     <ClInclude Include="physics.hpp" />
-    <ClInclude Include="physicsconstants.hpp" />
-    <ClInclude Include="physics_contact.hpp" />
-    <ClInclude Include="systems\physicssystem.hpp" />
-    <ClInclude Include="physics_statics.hpp" />
-    <ClInclude Include="data\physics_manifold.hpp" />
-    <ClInclude Include="components\physics_component.hpp" />
+    <ClInclude Include="diviner\physicsconstants.hpp" />
+    <ClInclude Include="diviner\physics_contact.hpp" />
+    <ClInclude Include="diviner\systems\physicssystem.hpp" />
+    <ClInclude Include="diviner\physics_statics.hpp" />
+    <ClInclude Include="diviner\data\physics_manifold.hpp" />
+    <ClInclude Include="diviner\components\physics_component.hpp" />
     <ClInclude Include="module\physicsmodule.hpp" />
-    <ClInclude Include="components\rigidbody.hpp" />
+    <ClInclude Include="diviner\components\rigidbody.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

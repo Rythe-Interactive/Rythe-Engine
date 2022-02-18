@@ -1,7 +1,7 @@
 #pragma once
 #include <core/core.hpp>
 #include <rendering/components/renderable.hpp>
-#include <physics/cube_collider_params.hpp>
+#include <physics/diviner/cube_collider_params.hpp>
 
 namespace lgn = legion;
 
