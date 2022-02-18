@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30225.117
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core", "legion\engine\core\core.vcxproj", "{63D0D607-E99E-40B0-9B27-6E2430B57F7E}"
 EndProject
@@ -48,9 +48,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sandbox", "applications\sandbox\sandbox.vcxproj", "{C578D912-3BEB-4EE1-8AA1-E9EACF7CA441}"
 	ProjectSection(ProjectDependencies) = postProject
 		{63D0D607-E99E-40B0-9B27-6E2430B57F7E} = {63D0D607-E99E-40B0-9B27-6E2430B57F7E}
-		{AB3D3A2D-6510-4345-9D34-0222E46110E6} = {AB3D3A2D-6510-4345-9D34-0222E46110E6}
-		{749C658F-0217-4A86-A205-FD8A35C121B8} = {749C658F-0217-4A86-A205-FD8A35C121B8}
-		{FC6211BB-9E48-496A-8A77-5FF83CAF046D} = {FC6211BB-9E48-496A-8A77-5FF83CAF046D}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unit_tests", "applications\unit_tests\unit_tests.vcxproj", "{A946EE4C-D731-4F82-AEB9-A4BA3B99F941}"

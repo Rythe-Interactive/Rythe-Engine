@@ -4,3 +4,5 @@
 #include <core/math/vector/vector2.hpp>
 #include <core/math/vector/vector3.hpp>
 #include <core/math/vector/vector4.hpp>
+
+#include <core/math/vector/swizzle/swizzle.inl>

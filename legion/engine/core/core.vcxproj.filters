@@ -40,6 +40,7 @@
     <ClCompile Include="data\loaders\objmeshloader.cpp" />
     <ClCompile Include="data\loaders\gltfmeshloader.cpp" />
     <ClCompile Include="time\main_clock.cpp" />
+    <ClCompile Include="math\vector\vector1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -206,6 +207,8 @@
     <ClInclude Include="math\util\util.hpp" />
     <ClInclude Include="math\geometric\normalize_dot.hpp" />
     <ClInclude Include="math\exponential\inverse_sqrt.hpp" />
+    <ClInclude Include="math\basic\fmod.hpp" />
+    <ClInclude Include="math\basic\modf.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -235,5 +238,7 @@
     <None Include="data\image.inl" />
     <None Include="engine\enginesubsystem.inl" />
     <None Include="engine\module.inl" />
+    <None Include="math\vector\swizzle\swizzle.inl" />
+    <None Include="math\vector\vector1.inl" />
   </ItemGroup>
 </Project>

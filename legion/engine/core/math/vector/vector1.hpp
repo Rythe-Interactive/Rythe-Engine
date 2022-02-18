@@ -23,27 +23,21 @@ namespace legion::core::math
             _MATH_SWIZZLE_1_4_(scalar);
         };
 
-        constexpr vector() noexcept : x(static_cast<scalar>(0)) {}
+        constexpr vector() noexcept;
         constexpr vector(const vector&) noexcept = default;
-        constexpr vector(scalar s) noexcept : x(static_cast<scalar>(s)) {}
+        constexpr vector(scalar s) noexcept;
 
         static const vector one;
         static const vector zero;
 
         constexpr vector& operator=(const vector&) noexcept = default;
-        constexpr operator scalar() const noexcept { return x; }
+        constexpr operator scalar() const noexcept;
 
-        constexpr scalar& operator[](size_type i) noexcept(!LEGION_VALIDATION_LEVEL)
-        {
-            assert_msg("vector subscript out of range", (i >= 0) && (i < size)); return data[i];
-        }
-        constexpr const scalar& operator[](size_type i) const noexcept(!LEGION_VALIDATION_LEVEL)
-        {
-            assert_msg("vector subscript out of range", (i >= 0) && (i < size)); return data[i];
-        }
+        constexpr scalar& operator[](size_type i) noexcept(!LEGION_VALIDATION_LEVEL);
+        constexpr const scalar& operator[](size_type i) const noexcept(!LEGION_VALIDATION_LEVEL);
 
-        constexpr scalar length() const noexcept { return x; }
-        constexpr scalar length2() const noexcept { return x * x; }
+        constexpr scalar length() const noexcept;
+        constexpr scalar length2() const noexcept;
     };
 
     template<>
@@ -89,13 +83,10 @@ namespace legion::core::math
         constexpr scalar length2() const noexcept { return x * x; }
     };
 
-    template<typename _Scalar>
-    const vector<_Scalar, 1> vector<_Scalar, 1>::one(static_cast<_Scalar>(1));
-    template<typename _Scalar>
-    const vector<_Scalar, 1> vector<_Scalar, 1>::zero(static_cast<_Scalar>(0));
-
     using float1 = vector<float, 1>;
     using double1 = vector<double, 1>;
     using int1 = vector<int, 1>;
     using bool1 = vector<bool, 1>;
 }
+
+#include <core/math/vector/vector1.inl>

@@ -9,7 +9,7 @@ namespace legion::core::time
         int64 ratio = 3600;
         int64 integer = 0;
 
-        if constexpr (std::numeric_limits<precision>::is_iec559)
+        if constexpr (std::is_floating_point_v<precision>)
         {
             precision integral = 0;
             precision fractional = math::modf(amount, integral);
@@ -31,7 +31,7 @@ namespace legion::core::time
         int64 ratio = 60000;
         int64 integer = 0;
 
-        if constexpr (std::numeric_limits<precision>::is_iec559)
+        if constexpr (std::is_floating_point_v<precision>)
         {
             precision integral = 0;
             precision fractional = math::modf(amount, integral);
@@ -53,7 +53,7 @@ namespace legion::core::time
         int64 ratio = 1000000;
         int64 integer = 0;
 
-        if constexpr (std::numeric_limits<precision>::is_iec559)
+        if constexpr (std::is_floating_point_v<precision>)
         {
             precision integral = 0;
             precision fractional = math::modf(amount, integral);
@@ -75,7 +75,7 @@ namespace legion::core::time
         int64 ratio = 1000000;
         int64 integer = 0;
 
-        if constexpr (std::numeric_limits<precision>::is_iec559)
+        if constexpr (std::is_floating_point_v<precision>)
         {
             precision integral = 0;
             precision fractional = math::modf(amount, integral);
@@ -97,7 +97,7 @@ namespace legion::core::time
         int64 ratio = 1000;
         int64 integer = 0;
 
-        if constexpr (std::numeric_limits<precision>::is_iec559)
+        if constexpr (std::is_floating_point_v<precision>)
         {
             precision integral = 0;
             precision fractional = math::modf(amount, integral);
@@ -116,7 +116,7 @@ namespace legion::core::time
     template<typename precision>
     constexpr time_span<precision> nanoseconds(precision amount) noexcept
     {
-        if constexpr (std::numeric_limits<precision>::is_iec559)
+        if constexpr (std::is_floating_point_v<precision>)
             return time_span<precision>(std::chrono::nanoseconds(math::iround<precision, int64>(amount)));
         else
             return time_span<precision>(std::chrono::nanoseconds(static_cast<int64>(amount)));

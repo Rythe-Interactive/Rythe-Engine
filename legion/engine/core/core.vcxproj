@@ -202,6 +202,8 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="math\arithmetic\subtraction.hpp" />
     <ClInclude Include="math\basic\abs.hpp" />
     <ClInclude Include="math\basic\basic_funcs.hpp" />
+    <ClInclude Include="math\basic\fmod.hpp" />
+    <ClInclude Include="math\basic\modf.hpp" />
     <ClInclude Include="math\exponential\inverse_sqrt.hpp" />
     <ClInclude Include="math\geometric\normalize_dot.hpp" />
     <ClInclude Include="math\logic\all.hpp" />
@@ -325,6 +327,7 @@ del /q ".\xcopyexclude"</Command>
     <ClCompile Include="filesystem\view.cpp" />
     <ClCompile Include="compute\program.cpp" />
     <ClCompile Include="logging\logging.cpp" />
+    <ClCompile Include="math\vector\vector1.cpp" />
     <ClCompile Include="scenemanagement\scenemanager.cpp" />
     <ClCompile Include="scheduling\clock.cpp" />
     <ClCompile Include="scheduling\process.cpp" />
@@ -356,6 +359,8 @@ del /q ".\xcopyexclude"</Command>
     <None Include="engine\module.inl" />
     <None Include="engine\system.inl" />
     <None Include="events\eventbus.inl" />
+    <None Include="math\vector\swizzle\swizzle.inl" />
+    <None Include="math\vector\vector1.inl" />
     <None Include="platform\cpp.hint" />
     <None Include="scheduling\process.inl" />
     <None Include="scheduling\processchain.inl" />

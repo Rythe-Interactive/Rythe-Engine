@@ -17,7 +17,7 @@ namespace legion::core::math
     };
 
     template<typename _Scalar, size_type _Size, size_type... args>
-    struct is_vector<detail::swizzle<_Scalar, _Size, args...>>
+    struct is_vector<swizzle<_Scalar, _Size, args...>>
     {
         constexpr static bool value = true;
     };

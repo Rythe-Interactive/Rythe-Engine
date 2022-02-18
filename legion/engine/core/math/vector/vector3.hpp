@@ -32,11 +32,7 @@ namespace legion::core::math
 
         constexpr vector(scalar _x, scalar _y, scalar _z) noexcept : xyz(_x, _y, _z) {}
 
-        template<typename _Scal, ::std::enable_if_t<!::std::is_same_v<scalar, _Scal>, bool> = true>
-        constexpr vector(const vector<_Scal, size>& other) noexcept
-            : xyz(static_cast<scalar>(other.x), static_cast<scalar>(other.y), static_cast<scalar>(other.z)) {}
-
-        template<typename vec_type, ::std::enable_if_t<is_vector_v<vec_type> && (size != vec_type::size), bool> = true>
+        template<typename vec_type, ::std::enable_if_t<is_vector_v<vec_type> && (size != vec_type::size || !std::is_same_v<scalar, typename vec_type::scalar>), bool> = true>
         constexpr vector(const vec_type& other) noexcept
         {
             if constexpr (size > vec_type::size)

@@ -6,7 +6,7 @@
 
 namespace legion::core::math
 {
-    template<typename _Scalar, size_type _Size>
+    template<typename Scalar, size_type Size>
     struct vector;
 
     template<typename vec_type>
@@ -15,37 +15,14 @@ namespace legion::core::math
     template<typename vec_type>
     constexpr typename vec_type::scalar length2(const vec_type& v) noexcept;
 
-    namespace detail
-    {
-        template<size_type _Counter, typename _Scalar, size_type _Size, typename... _Scalars>
-        constexpr make_sequence_t<::std::tuple, _Scalar, _Size> _construct_tuple_for_array_impl_(const _Scalar(&arr)[_Size], _Scalars... items) noexcept
-        {
-            if constexpr (_Counter < _Size)
-            {
-                return _construct_tuple_for_array_impl_<_Counter + 1, _Scalar, _Size>(arr, items..., arr[_Counter]);
-            }
-            else
-            {
-                return ::std::make_tuple(items...);
-            }
-        }
-
-
-        template<typename _Scalar, size_type _Size>
-        constexpr make_sequence_t<::std::tuple, _Scalar, _Size> _make_tuple_from_array_(const _Scalar(&arr)[_Size]) noexcept
-        {
-            return _construct_tuple_for_array_impl_<0, _Scalar, _Size>(arr);
-        }
-    }
-
-    template<typename _Scalar, size_type _Size>
+    template<typename Scalar, size_type Size>
     struct vector
     {
-        static_assert(std::is_arithmetic<_Scalar>::value, "Scalar must be a numeric type.");
+        static_assert(std::is_arithmetic<Scalar>::value, "Scalar must be a numeric type.");
 
-        using scalar = _Scalar;
-        static constexpr size_type size = _Size;
-        using type = vector<_Scalar, _Size>;
+        using scalar = Scalar;
+        static constexpr size_type size = Size;
+        using type = vector<Scalar, Size>;
 
         scalar data[size];
 
@@ -82,16 +59,6 @@ namespace legion::core::math
 
         constexpr vector& operator=(const vector&) noexcept = default;
 
-        L_NODISCARD constexpr operator typename make_sequence<::std::tuple, _Scalar, _Size>::type() const noexcept
-        {
-            return detail::_make_tuple_from_array_<scalar, size>(data);
-        }
-
-        template<size_type I>
-        L_NODISCARD constexpr scalar& get() noexcept { return data[I]; }
-        template<size_type I>
-        L_NODISCARD constexpr const scalar& get() const noexcept { return data[I]; }
-
         L_NODISCARD constexpr scalar& operator[](size_type i) noexcept(!LEGION_VALIDATION_LEVEL)
         {
             assert_msg("vector subscript out of range", (i >= 0) && (i < size)); return data[i];
@@ -105,34 +72,37 @@ namespace legion::core::math
         L_NODISCARD constexpr scalar length2() const noexcept { return ::legion::core::math::length2(*this); }
     };
 
-    template<typename _Scalar, size_type _Size>
-    const vector<_Scalar, _Size> vector<_Scalar, _Size>::one(static_cast<_Scalar>(1));
+    template<typename Scalar, size_type Size>
+    const vector<Scalar, Size> vector<Scalar, Size>::one(static_cast<Scalar>(1));
 
-    template<typename _Scalar, size_type _Size>
-    const vector<_Scalar, _Size> vector<_Scalar, _Size>::zero(static_cast<_Scalar>(0));
+    template<typename Scalar, size_type Size>
+    const vector<Scalar, Size> vector<Scalar, Size>::zero(static_cast<Scalar>(0));
+
+    template<size_type I, typename Scalar, size_type Size>
+    inline L_ALWAYS_INLINE Scalar& get(vector<Scalar, Size>& val) { return val[I]; }
 }
 
-template<::std::size_t I, typename _Scalar, ::std::size_t _Size>
-struct ::std::tuple_element<I, ::legion::core::math::vector<_Scalar, _Size>> { using type = _Scalar; };
+template<::std::size_t I, typename Scalar, ::std::size_t Size>
+struct ::std::tuple_element<I, ::legion::core::math::vector<Scalar, Size>> { using type = Scalar; };
 
 namespace std
 {
-    template<::std::size_t I, typename _Scalar, ::std::size_t _Size>
-    _Scalar& get(::legion::core::math::vector<_Scalar, _Size>& val) { return val[I]; }
+    template<::std::size_t I, typename Scalar, ::std::size_t Size>
+    inline L_ALWAYS_INLINE Scalar& get(::legion::core::math::vector<Scalar, Size>& val) { return ::legion::core::math::get<I>(val); }
 }
 
-template<typename _Scalar, ::std::size_t _Size>
-struct ::std::tuple_size<::legion::core::math::vector<_Scalar, _Size>>
-    : public std::integral_constant<::std::size_t, _Size> {};
+template<typename Scalar, ::std::size_t Size>
+struct ::std::tuple_size<::legion::core::math::vector<Scalar, Size>>
+    : public std::integral_constant<::std::size_t, Size> {};
 
-template<typename _Scalar, ::std::size_t _Size>
-struct ::std::tuple_size<const ::legion::core::math::vector<_Scalar, _Size>>
-    : public std::integral_constant<::std::size_t, _Size> {};
+template<typename Scalar, ::std::size_t Size>
+struct ::std::tuple_size<const ::legion::core::math::vector<Scalar, Size>>
+    : public std::integral_constant<::std::size_t, Size> {};
 
-template<typename _Scalar, ::std::size_t _Size>
-struct ::std::tuple_size<volatile ::legion::core::math::vector<_Scalar, _Size>>
-    : public std::integral_constant<::std::size_t, _Size> {};
+template<typename Scalar, ::std::size_t Size>
+struct ::std::tuple_size<volatile ::legion::core::math::vector<Scalar, Size>>
+    : public std::integral_constant<::std::size_t, Size> {};
 
-template<typename _Scalar, ::std::size_t _Size>
-struct ::std::tuple_size<const volatile ::legion::core::math::vector<_Scalar, _Size>>
-    : public std::integral_constant<::std::size_t, _Size> {};
+template<typename Scalar, ::std::size_t Size>
+struct ::std::tuple_size<const volatile ::legion::core::math::vector<Scalar, Size>>
+    : public std::integral_constant<::std::size_t, Size> {};

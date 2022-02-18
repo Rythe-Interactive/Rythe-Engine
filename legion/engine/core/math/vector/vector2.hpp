@@ -1,6 +1,7 @@
 #pragma once
 #include <core/math/vector/vector_base.hpp>
 #include <core/math/vector/swizzle/swizzle2.hpp>
+#include <core/math/meta.hpp>
 
 namespace legion::core::math
 {
@@ -31,9 +32,23 @@ namespace legion::core::math
 
         constexpr vector(scalar _x, scalar _y) noexcept : xy(_x, _y) {}
 
-        template<typename _Scal, ::std::enable_if_t<!::std::is_same_v<scalar, _Scal>, bool> = true>
-        constexpr vector(const vector<_Scal, size>& other) noexcept
-            : xy(static_cast<scalar>(other.x), static_cast<scalar>(other.y)) {}
+        template<typename vec_type, ::std::enable_if_t<is_vector_v<vec_type> && (size != vec_type::size || !std::is_same_v<scalar, typename vec_type::scalar>), bool> = true>
+        constexpr vector(const vec_type& other) noexcept
+        {
+            if constexpr (size > vec_type::size)
+            {
+                for (size_type i = 0; i < vec_type::size; i++)
+                    data[i] = static_cast<scalar>(other.data[i]);
+
+                for (size_type i = vec_type::size; i < size; i++)
+                    data[i] = static_cast<scalar>(0);
+            }
+            else
+            {
+                for (size_type i = 0; i < size; i++)
+                    data[i] = static_cast<scalar>(other.data[i]);
+            }
+        }
 
         static const vector up;
         static const vector down;
@@ -83,9 +98,23 @@ namespace legion::core::math
 
         constexpr vector(scalar _x, scalar _y) noexcept : xy(_x, _y) {}
 
-        template<typename _Scal, ::std::enable_if_t<!::std::is_same_v<scalar, _Scal>, bool> = true>
-        constexpr vector(const vector<_Scal, size>& other) noexcept
-            : xy(static_cast<scalar>(other.x), static_cast<scalar>(other.y)) {}
+        template<typename vec_type, ::std::enable_if_t<is_vector_v<vec_type> && (size != vec_type::size || !std::is_same_v<scalar, typename vec_type::scalar>), bool> = true>
+        constexpr vector(const vec_type& other) noexcept
+        {
+            if constexpr (size > vec_type::size)
+            {
+                for (size_type i = 0; i < vec_type::size; i++)
+                    data[i] = static_cast<scalar>(other.data[i]);
+
+                for (size_type i = vec_type::size; i < size; i++)
+                    data[i] = static_cast<scalar>(0);
+            }
+            else
+            {
+                for (size_type i = 0; i < size; i++)
+                    data[i] = static_cast<scalar>(other.data[i]);
+            }
+        }
 
         static const vector up;
         static const vector down;
