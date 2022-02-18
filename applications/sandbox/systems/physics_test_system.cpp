@@ -1,5 +1,5 @@
 #include "physics_test_system.hpp"
-#include <physics/components/physics_component.hpp>
+#include <physics/diviner/components/physics_component.hpp>
 #include <rendering/debugrendering.hpp>
 #include <rendering/components/camera.hpp>
 #include <rendering/rendering.hpp>
