@@ -209,6 +209,8 @@
     <ClInclude Include="math\exponential\inverse_sqrt.hpp" />
     <ClInclude Include="math\basic\fmod.hpp" />
     <ClInclude Include="math\basic\modf.hpp" />
+    <ClInclude Include="math\quaternion\quaternion.hpp" />
+    <ClInclude Include="math\vector\aligned_vector3.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

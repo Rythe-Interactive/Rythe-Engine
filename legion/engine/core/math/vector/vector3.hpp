@@ -5,14 +5,14 @@
 
 namespace legion::core::math
 {
-    template<typename _Scalar>
-    struct vector<_Scalar, 3>
+    template<typename Scalar>
+    struct vector<Scalar, 3>
     {
-        static_assert(std::is_arithmetic<_Scalar>::value, "Scalar must be a numeric type.");
+        static_assert(std::is_arithmetic<Scalar>::value, "Scalar must be a numeric type.");
 
-        using scalar = _Scalar;
+        using scalar = Scalar;
         static constexpr size_type size = 3;
-        using type = vector<_Scalar, 3>;
+        using type = vector<Scalar, 3>;
 
         union
         {
@@ -150,75 +150,25 @@ namespace legion::core::math
         constexpr scalar length2() const noexcept { return this->length(); }
     };
 
-    template<typename _Scalar>
-    const vector<_Scalar, 3> vector<_Scalar, 3>::up(static_cast<_Scalar>(0), static_cast<_Scalar>(1), static_cast<_Scalar>(0));
-    template<typename _Scalar>
-    const vector<_Scalar, 3> vector<_Scalar, 3>::down(static_cast<_Scalar>(0), static_cast<_Scalar>(-1), static_cast<_Scalar>(0));
-    template<typename _Scalar>
-    const vector<_Scalar, 3> vector<_Scalar, 3>::right(static_cast<_Scalar>(1), static_cast<_Scalar>(0), static_cast<_Scalar>(0));
-    template<typename _Scalar>
-    const vector<_Scalar, 3> vector<_Scalar, 3>::left(static_cast<_Scalar>(-1), static_cast<_Scalar>(0), static_cast<_Scalar>(0));
-    template<typename _Scalar>
-    const vector<_Scalar, 3> vector<_Scalar, 3>::forward(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<_Scalar>(1));
-    template<typename _Scalar>
-    const vector<_Scalar, 3> vector<_Scalar, 3>::backward(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<_Scalar>(-1));
-    template<typename _Scalar>
-    const vector<_Scalar, 3> vector<_Scalar, 3>::one(static_cast<_Scalar>(1));
-    template<typename _Scalar>
-    const vector<_Scalar, 3> vector<_Scalar, 3>::zero(static_cast<_Scalar>(0));
+    template<typename Scalar>
+    const vector<Scalar, 3> vector<Scalar, 3>::up(static_cast<Scalar>(0), static_cast<Scalar>(1), static_cast<Scalar>(0));
+    template<typename Scalar>
+    const vector<Scalar, 3> vector<Scalar, 3>::down(static_cast<Scalar>(0), static_cast<Scalar>(-1), static_cast<Scalar>(0));
+    template<typename Scalar>
+    const vector<Scalar, 3> vector<Scalar, 3>::right(static_cast<Scalar>(1), static_cast<Scalar>(0), static_cast<Scalar>(0));
+    template<typename Scalar>
+    const vector<Scalar, 3> vector<Scalar, 3>::left(static_cast<Scalar>(-1), static_cast<Scalar>(0), static_cast<Scalar>(0));
+    template<typename Scalar>
+    const vector<Scalar, 3> vector<Scalar, 3>::forward(static_cast<Scalar>(0), static_cast<Scalar>(0), static_cast<Scalar>(1));
+    template<typename Scalar>
+    const vector<Scalar, 3> vector<Scalar, 3>::backward(static_cast<Scalar>(0), static_cast<Scalar>(0), static_cast<Scalar>(-1));
+    template<typename Scalar>
+    const vector<Scalar, 3> vector<Scalar, 3>::one(static_cast<Scalar>(1));
+    template<typename Scalar>
+    const vector<Scalar, 3> vector<Scalar, 3>::zero(static_cast<Scalar>(0));
 
-    template<typename _Scalar>
-    struct alignas(sizeof(_Scalar) * 4) aligned_vector3 : public vector<float, 3>
-    {
-        static_assert(std::is_arithmetic<_Scalar>::value, "Scalar must be a numeric type.");
-
-        using scalar = _Scalar;
-        static constexpr size_type size = 3;
-        using type = aligned_vector3<_Scalar>;
-
-        byte padding[sizeof(_Scalar)];
-
-        using vector<float, 3>::vector;
-        using vector<float, 3>::operator=;
-        using vector<float, 3>::operator[];
-
-        static const aligned_vector3 up;
-        static const aligned_vector3 down;
-        static const aligned_vector3 right;
-        static const aligned_vector3 left;
-        static const aligned_vector3 forward;
-        static const aligned_vector3 backward;
-        static const aligned_vector3 one;
-        static const aligned_vector3 zero;
-    };
-
-    template<typename _Scalar>
-    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::up(static_cast<_Scalar>(0), static_cast<_Scalar>(1), static_cast<_Scalar>(0));
-    template<typename _Scalar>
-    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::down(static_cast<_Scalar>(0), static_cast<_Scalar>(-1), static_cast<_Scalar>(0));
-    template<typename _Scalar>
-    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::right(static_cast<_Scalar>(1), static_cast<_Scalar>(0), static_cast<_Scalar>(0));
-    template<typename _Scalar>
-    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::left(static_cast<_Scalar>(-1), static_cast<_Scalar>(0), static_cast<_Scalar>(0));
-    template<typename _Scalar>
-    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::forward(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<_Scalar>(1));
-    template<typename _Scalar>
-    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::backward(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<_Scalar>(-1));
-    template<typename _Scalar>
-    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::one(static_cast<_Scalar>(1));
-    template<typename _Scalar>
-    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::zero(static_cast<_Scalar>(0));
-
-    using float3 = vector<float, 3>;
-    using vec3 = vector<float, 3>;
-    using double3 = vector<double, 3>;
-    using dvec3 = vector<double, 3>;
+    using float3 = vector<float32, 3>;
+    using double3 = vector<float64, 3>;
     using int3 = vector<int, 3>;
-    using ivec3 = vector<int, 3>;
     using bool3 = vector<bool, 3>;
-    using bvec3 = vector<bool, 3>;
-    using aligned_float3 = aligned_vector3<float>;
-    using aligned_double3 = aligned_vector3<double>;
-    using aligned_int3 = aligned_vector3<int>;
-    using aligned_bool3 = aligned_vector3<bool>;
 }

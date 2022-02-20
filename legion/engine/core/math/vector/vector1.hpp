@@ -4,14 +4,14 @@
 
 namespace legion::core::math
 {
-    template<typename _Scalar>
-    struct alignas(sizeof(_Scalar) * 1) vector<_Scalar, 1>
+    template<typename Scalar>
+    struct alignas(sizeof(Scalar) * 1) vector<Scalar, 1>
     {
-        static_assert(std::is_arithmetic<_Scalar>::value, "Scalar must be a numeric type.");
+        static_assert(std::is_arithmetic<Scalar>::value, "Scalar must be a numeric type.");
 
-        using scalar = _Scalar;
+        using scalar = Scalar;
         static constexpr size_type size = 1;
-        using type = vector<_Scalar, 1>;
+        using type = vector<Scalar, 1>;
 
         union
         {
@@ -83,8 +83,8 @@ namespace legion::core::math
         constexpr scalar length2() const noexcept { return x * x; }
     };
 
-    using float1 = vector<float, 1>;
-    using double1 = vector<double, 1>;
+    using float1 = vector<float32, 1>;
+    using double1 = vector<float64, 1>;
     using int1 = vector<int, 1>;
     using bool1 = vector<bool, 1>;
 }

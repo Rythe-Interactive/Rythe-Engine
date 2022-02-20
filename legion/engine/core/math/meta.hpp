@@ -10,14 +10,23 @@ namespace legion::core::math
         constexpr static bool value = false;
     };
 
-    template<typename _Scalar, size_type _Size>
-    struct is_vector<vector<_Scalar, _Size>>
+    template<typename Scalar, size_type Size>
+    struct is_vector<vector<Scalar, Size>>
     {
         constexpr static bool value = true;
     };
 
-    template<typename _Scalar, size_type _Size, size_type... args>
-    struct is_vector<swizzle<_Scalar, _Size, args...>>
+    template<typename Scalar, size_type Size, size_type... args>
+    struct is_vector<swizzle<Scalar, Size, args...>>
+    {
+        constexpr static bool value = true;
+    };
+
+    template<typename Scalar>
+    struct alignas(sizeof(Scalar) * 4) aligned_vector3;
+
+    template<typename Scalar>
+    struct is_vector<aligned_vector3<Scalar>>
     {
         constexpr static bool value = true;
     };

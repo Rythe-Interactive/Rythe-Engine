@@ -221,9 +221,11 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="math\geometric\length.hpp" />
     <ClInclude Include="math\geometric\normalize.hpp" />
     <ClInclude Include="math\meta.hpp" />
+    <ClInclude Include="math\quaternion\quaternion.hpp" />
     <ClInclude Include="math\util\close_enough.hpp" />
     <ClInclude Include="math\util\hash.hpp" />
     <ClInclude Include="math\util\util.hpp" />
+    <ClInclude Include="math\vector\aligned_vector3.hpp" />
     <ClInclude Include="math\vector\swizzle\swizzle1.hpp" />
     <ClInclude Include="math\vector\swizzle\swizzle2.hpp" />
     <ClInclude Include="math\vector\swizzle\swizzle3.hpp" />

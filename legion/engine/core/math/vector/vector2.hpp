@@ -5,14 +5,14 @@
 
 namespace legion::core::math
 {
-    template<typename _Scalar>
-    struct alignas(sizeof(_Scalar) * 2) vector<_Scalar, 2>
+    template<typename Scalar>
+    struct alignas(sizeof(Scalar) * 2) vector<Scalar, 2>
     {
-        static_assert(std::is_arithmetic<_Scalar>::value, "Scalar must be a numeric type.");
+        static_assert(std::is_arithmetic<Scalar>::value, "Scalar must be a numeric type.");
 
-        using scalar = _Scalar;
+        using scalar = Scalar;
         static constexpr size_type size = 2;
-        using type = vector<_Scalar, 2>;
+        using type = vector<Scalar, 2>;
 
         union
         {
@@ -144,25 +144,21 @@ namespace legion::core::math
         constexpr scalar angle() const noexcept { return y; }
     };
 
-    template<typename _Scalar>
-    const vector<_Scalar, 2> vector<_Scalar, 2>::up(static_cast<_Scalar>(0), static_cast<_Scalar>(1));
-    template<typename _Scalar>
-    const vector<_Scalar, 2> vector<_Scalar, 2>::down(static_cast<_Scalar>(0), static_cast<_Scalar>(-1));
-    template<typename _Scalar>
-    const vector<_Scalar, 2> vector<_Scalar, 2>::right(static_cast<_Scalar>(1), static_cast<_Scalar>(0));
-    template<typename _Scalar>
-    const vector<_Scalar, 2> vector<_Scalar, 2>::left(static_cast<_Scalar>(-1), static_cast<_Scalar>(0));
-    template<typename _Scalar>
-    const vector<_Scalar, 2> vector<_Scalar, 2>::one(static_cast<_Scalar>(1));
-    template<typename _Scalar>
-    const vector<_Scalar, 2> vector<_Scalar, 2>::zero(static_cast<_Scalar>(0));
+    template<typename Scalar>
+    const vector<Scalar, 2> vector<Scalar, 2>::up(static_cast<Scalar>(0), static_cast<Scalar>(1));
+    template<typename Scalar>
+    const vector<Scalar, 2> vector<Scalar, 2>::down(static_cast<Scalar>(0), static_cast<Scalar>(-1));
+    template<typename Scalar>
+    const vector<Scalar, 2> vector<Scalar, 2>::right(static_cast<Scalar>(1), static_cast<Scalar>(0));
+    template<typename Scalar>
+    const vector<Scalar, 2> vector<Scalar, 2>::left(static_cast<Scalar>(-1), static_cast<Scalar>(0));
+    template<typename Scalar>
+    const vector<Scalar, 2> vector<Scalar, 2>::one(static_cast<Scalar>(1));
+    template<typename Scalar>
+    const vector<Scalar, 2> vector<Scalar, 2>::zero(static_cast<Scalar>(0));
 
-    using float2 = vector<float, 2>;
-    using vec2 = vector<float, 2>;
-    using double2 = vector<double, 2>;
-    using dvec2 = vector<double, 2>;
+    using float2 = vector<float32, 2>;
+    using double2 = vector<float64, 2>;
     using int2 = vector<int, 2>;
-    using ivec2 = vector<int, 2>;
     using bool2 = vector<bool, 2>;
-    using bvec2 = vector<bool, 2>;
 }

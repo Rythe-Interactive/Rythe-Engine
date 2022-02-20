@@ -7,14 +7,14 @@
 
 namespace legion::core::math
 {
-    template<typename _Scalar>
-    struct alignas(sizeof(_Scalar) * 4) vector<_Scalar, 4>
+    template<typename Scalar>
+    struct alignas(sizeof(Scalar) * 4) vector<Scalar, 4>
     {
-        static_assert(std::is_arithmetic<_Scalar>::value, "Scalar must be a numeric type.");
+        static_assert(std::is_arithmetic<Scalar>::value, "Scalar must be a numeric type.");
 
-        using scalar = _Scalar;
+        using scalar = Scalar;
         static constexpr size_type size = 4;
-        using type = vector<_Scalar, 4>;
+        using type = vector<Scalar, 4>;
 
         union
         {
@@ -157,33 +157,29 @@ namespace legion::core::math
         constexpr scalar length2() const noexcept { return this->length() * this->length(); }
     };
 
-    template<typename _Scalar>
-    const vector<_Scalar, 4> vector<_Scalar, 4>::up(static_cast<_Scalar>(0), static_cast<_Scalar>(1), static_cast<_Scalar>(0), static_cast<scalar>(0));
-    template<typename _Scalar>
-    const vector<_Scalar, 4> vector<_Scalar, 4>::down(static_cast<_Scalar>(0), static_cast<_Scalar>(-1), static_cast<_Scalar>(0), static_cast<scalar>(0));
-    template<typename _Scalar>
-    const vector<_Scalar, 4> vector<_Scalar, 4>::right(static_cast<_Scalar>(1), static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<scalar>(0));
-    template<typename _Scalar>
-    const vector<_Scalar, 4> vector<_Scalar, 4>::left(static_cast<_Scalar>(-1), static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<scalar>(0));
-    template<typename _Scalar>
-    const vector<_Scalar, 4> vector<_Scalar, 4>::forward(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<_Scalar>(1), static_cast<scalar>(0));
-    template<typename _Scalar>
-    const vector<_Scalar, 4> vector<_Scalar, 4>::backward(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<_Scalar>(-1), static_cast<scalar>(0));
-    template<typename _Scalar>
-    const vector<_Scalar, 4> vector<_Scalar, 4>::positiveW(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<scalar>(0), static_cast<_Scalar>(1));
-    template<typename _Scalar>
-    const vector<_Scalar, 4> vector<_Scalar, 4>::negativeW(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<scalar>(0), static_cast<_Scalar>(-1));
-    template<typename _Scalar>
-    const vector<_Scalar, 4> vector<_Scalar, 4>::one(static_cast<_Scalar>(1));
-    template<typename _Scalar>
-    const vector<_Scalar, 4> vector<_Scalar, 4>::zero(static_cast<_Scalar>(0));
+    template<typename Scalar>
+    const vector<Scalar, 4> vector<Scalar, 4>::up(static_cast<Scalar>(0), static_cast<Scalar>(1), static_cast<Scalar>(0), static_cast<scalar>(0));
+    template<typename Scalar>
+    const vector<Scalar, 4> vector<Scalar, 4>::down(static_cast<Scalar>(0), static_cast<Scalar>(-1), static_cast<Scalar>(0), static_cast<scalar>(0));
+    template<typename Scalar>
+    const vector<Scalar, 4> vector<Scalar, 4>::right(static_cast<Scalar>(1), static_cast<Scalar>(0), static_cast<Scalar>(0), static_cast<scalar>(0));
+    template<typename Scalar>
+    const vector<Scalar, 4> vector<Scalar, 4>::left(static_cast<Scalar>(-1), static_cast<Scalar>(0), static_cast<Scalar>(0), static_cast<scalar>(0));
+    template<typename Scalar>
+    const vector<Scalar, 4> vector<Scalar, 4>::forward(static_cast<Scalar>(0), static_cast<Scalar>(0), static_cast<Scalar>(1), static_cast<scalar>(0));
+    template<typename Scalar>
+    const vector<Scalar, 4> vector<Scalar, 4>::backward(static_cast<Scalar>(0), static_cast<Scalar>(0), static_cast<Scalar>(-1), static_cast<scalar>(0));
+    template<typename Scalar>
+    const vector<Scalar, 4> vector<Scalar, 4>::positiveW(static_cast<Scalar>(0), static_cast<Scalar>(0), static_cast<scalar>(0), static_cast<Scalar>(1));
+    template<typename Scalar>
+    const vector<Scalar, 4> vector<Scalar, 4>::negativeW(static_cast<Scalar>(0), static_cast<Scalar>(0), static_cast<scalar>(0), static_cast<Scalar>(-1));
+    template<typename Scalar>
+    const vector<Scalar, 4> vector<Scalar, 4>::one(static_cast<Scalar>(1));
+    template<typename Scalar>
+    const vector<Scalar, 4> vector<Scalar, 4>::zero(static_cast<Scalar>(0));
 
-    using float4 = vector<float, 4>;
-    using vec4 = vector<float, 4>;
-    using double4 = vector<double, 4>;
-    using dvec4 = vector<double, 4>;
+    using float4 = vector<float32, 4>;
+    using double4 = vector<float64, 4>;
     using int4 = vector<int, 4>;
-    using ivec4 = vector<int, 4>;
     using bool4 = vector<bool, 4>;
-    using bvec4 = vector<bool, 4>;
 }
