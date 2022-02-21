@@ -22,6 +22,7 @@
     <ClCompile Include="diviner\components\physics_component.cpp" />
     <ClCompile Include="diviner\physics_statics.cpp" />
     <ClCompile Include="diviner\systems\physicssystem.cpp" />
+    <ClCompile Include="physx\systems\physx_physics_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.vcxproj">
@@ -65,6 +66,7 @@
     <ClInclude Include="diviner\components\physics_component.hpp" />
     <ClInclude Include="module\physicsmodule.hpp" />
     <ClInclude Include="diviner\components\rigidbody.hpp" />
+    <ClInclude Include="physx\systems\physx_physics_system.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
