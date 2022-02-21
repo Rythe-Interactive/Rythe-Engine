@@ -1,6 +1,8 @@
 #pragma once
 #include <core/events/event.hpp>
 #include <physics/diviner/data/physics_manifold.hpp>
+#include <physics/data/physics_manifold.hpp>
+#include <physics/dataTemp/rigibody_data.hpp>
 
 namespace legion::physics {
 
@@ -84,5 +86,12 @@ namespace legion::physics {
     struct collision_event : public collision_event_base<collision_event>
     {
         using collision_event_base<collision_event>::collision_event_base;
+    };
+
+    struct modifyRigidbody final : public core::events::event<modifyRigidbody>
+    {
+        rigidbodyData newRigibodyData;
+
+        modifyRigidbody(const rigidbodyData& pRigidbodyData) : newRigibodyData{ pRigidbodyData } { }
     };
 }
