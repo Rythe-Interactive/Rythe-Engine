@@ -9,7 +9,7 @@
 #include <physics/diviner/physics_contact.hpp>
 #include <physics/diviner/components/physics_component.hpp>
 #include <physics/diviner/data/identifier.hpp>
-#include <physics/diviner/events/events.hpp>
+#include <physics/events/events.hpp>
 #include <memory>
 #include <rendering/debugrendering.hpp>
 

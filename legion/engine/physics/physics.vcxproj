@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="dataTemp\rigibody_data.cpp" />
     <ClCompile Include="diviner\broadphasecollisionalgorithms\broadphaseuniformgrid.cpp" />
     <ClCompile Include="diviner\broadphasecollisionalgorithms\broadphaseuniformgridnocaching.cpp" />
     <ClCompile Include="diviner\colliders\convexcollider.cpp" />
@@ -30,6 +31,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dataTemp\rigibody_data.hpp" />
     <ClInclude Include="diviner\broadphasecollisionalgorithms\broadphasebruteforce.hpp" />
     <ClInclude Include="diviner\broadphasecollisionalgorithms\broadphasecollisionalgorithm.hpp" />
     <ClInclude Include="diviner\broadphasecollisionalgorithms\broadphaseuniformgrid.hpp" />
@@ -52,11 +54,12 @@
     <ClInclude Include="diviner\data\pointer_encapsulator.hpp" />
     <ClInclude Include="diviner\data\collider_face_to_vert.hpp" />
     <ClInclude Include="diviner\data\VoronoiAABB.hpp" />
-    <ClInclude Include="diviner\events\events.hpp" />
+    <ClInclude Include="events\events.hpp" />
     <ClInclude Include="diviner\halfedgeedge.hpp" />
     <ClInclude Include="diviner\halfedgeface.hpp" />
     <ClInclude Include="diviner\colliders\physicscollider.hpp" />
     <ClInclude Include="diviner\data\penetrationquery.hpp" />
+    <ClInclude Include="generic_components\generic_rigidbody.h" />
     <ClInclude Include="physics.hpp" />
     <ClInclude Include="diviner\physicsconstants.hpp" />
     <ClInclude Include="diviner\physics_contact.hpp" />

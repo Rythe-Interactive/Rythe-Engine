@@ -1,5 +1,6 @@
 #pragma once
 #include <core/core.hpp>
+#include <core/events/event.hpp>
 
 namespace legion::physics
 {
@@ -9,31 +10,16 @@ namespace legion::physics
 
         friend class rigibodyDataHandle;
 
-        inline void setMass(float mass)
-        {
-            m_mass = mass;
-        }
+        inline void setMass(float mass);
 
-        inline void setInertiaTensor(const math::mat3& inertiaTensor)
-        {
-            m_inertiaTensor = inertiaTensor;
-        }
-
-        inline void setVelocity(const math::vec3& velocity)
-        {
-            m_velocity = velocity;
-        }
-
-        inline void setDrag(float linearDrag)
-        {
-            m_linearDrag = linearDrag;
-        }
-
-        inline void setAngularDrag(float angularDrag)
-        {
-            m_angularDrag = angularDrag;
-        }
-
+        inline void setInertiaTensor(const math::mat3& inertiaTensor);
+        
+        inline void setVelocity(const math::vec3& velocity);
+        
+        inline void setLinearDrag(float linearDrag);
+       
+        inline void setAngularDrag(float angularDrag);
+        
         inline float getMass() { return m_mass; }
 
         inline math::mat3 getInertiaTensor() { return m_inertiaTensor; }
@@ -46,8 +32,6 @@ namespace legion::physics
 
     private:
 
-        inline void sendModifyEvent();
-
         math::vec3 m_velocity = math::vec3(0.0);
         math::vec3 m_angularVelocity = math::vec3(0.0);
 
@@ -56,5 +40,7 @@ namespace legion::physics
         float m_mass = 1.0f;
         float m_linearDrag;
         float m_angularDrag = 0.01f;
+
+        std::vector<std::unique_ptr<core::events::event_base>> m_modifyRigidbodyEvents;
     };
 }
