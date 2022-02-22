@@ -1,7 +1,6 @@
 #pragma once
 #include <core/events/event.hpp>
 #include <physics/diviner/data/physics_manifold.hpp>
-#include <physics/dataTemp/rigibody_data.hpp>
 
 namespace legion::physics {
 

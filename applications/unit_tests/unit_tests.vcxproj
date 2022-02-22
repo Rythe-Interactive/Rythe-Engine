@@ -114,6 +114,7 @@
     <ClInclude Include="tests\core\ecs.hpp" />
     <ClInclude Include="tests\core\filesystem.hpp" />
     <ClInclude Include="tests\core\logicscheduling.hpp" />
+    <ClInclude Include="tests\physics\rigidbody.hpp" />
     <ClInclude Include="unit_test.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

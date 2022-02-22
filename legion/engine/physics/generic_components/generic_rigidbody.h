@@ -9,7 +9,7 @@ namespace legion::physics
     {
     public:
 
-        rigidbodyData m_rigidbodyData;
+        rigidbodyData rigidbodyData;
 
     private:
 

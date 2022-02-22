@@ -60,9 +60,6 @@
     <ClCompile Include="physx\systems\physx_physics_system.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dataTemp\rigibody_data.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="diviner\cube_collider_params.hpp">
