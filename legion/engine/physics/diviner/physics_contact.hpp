@@ -1,6 +1,6 @@
 #pragma once
 
-#include <physics/diviner/components/rigidbody.hpp>
+#include <physics/diviner/components/dvr_internal_rigidbody.hpp>
 #include <core/core.hpp>
 #include <physics/diviner/data/identifier.hpp>
 #include <physics/diviner/data/edge_label.hpp>
@@ -17,8 +17,8 @@ namespace legion::physics
 
         EdgeLabel label;
 
-        rigidbody* rbRef;
-        rigidbody* rbInc;
+        dvrInternalRigidbody* rbRef;
+        dvrInternalRigidbody* rbInc;
 
         math::vec3 RefWorldContact;
         math::vec3 IncWorldContact;
@@ -70,8 +70,8 @@ namespace legion::physics
 
             // C : (Pa - Pb).n = 0
 
-            //Pa is the vector from the centroid of rigidbodyA to the contact point of rigidbodyA
-            //and Pb is the vector from the centroid of rigidbodyB to the contact point of rigidbodyB
+            //Pa is the vector from the centroid of dvrInternalRigidbodyA to the contact point of dvrInternalRigidbodyA
+            //and Pb is the vector from the centroid of dvrInternalRigidbodyB to the contact point of dvrInternalRigidbodyB
             //and n is the collision normal
 
             //Next, in order to apply the aformentioned impulse.We must get the velocity constraint. In order to do so,
@@ -79,8 +79,8 @@ namespace legion::physics
 
             //Cdot: [(Vb + Wb x Rb - (Va + Wa x Ra))] .n + (Pb - Pa) .[Na x Wa]
 
-            //where Ra is the vector from the center of rigidbodyA towards Pa and Rb 
-            //is the vector from the center of rigidbodyB towards Pb. Where every 'V' stands for velocity and every
+            //where Ra is the vector from the center of dvrInternalRigidbodyA towards Pa and Rb 
+            //is the vector from the center of dvrInternalRigidbodyB towards Pb. Where every 'V' stands for velocity and every
             //'W' stands for angular velocity
 
             //the position part of this constraint can be ignored so we get:
@@ -113,10 +113,10 @@ namespace legion::physics
             //[ 0   0   mb  0]
             //[ 0   0   0  Ib]
 
-            //where ma is a 3x3 identity matrix scaled by the mass of the rigidbodyA,
-            //mb is a 3x3 identity matrix scaled by the mass of the rigidbodyB,
-            //where Ia is the 3x3 matrix inertia tensor of the rigidbodyA,
-            //where Ib is the 3x3 matrix inertia tensor of the rigidbodyB,
+            //where ma is a 3x3 identity matrix scaled by the mass of the dvrInternalRigidbodyA,
+            //mb is a 3x3 identity matrix scaled by the mass of the dvrInternalRigidbodyB,
+            //where Ia is the 3x3 matrix inertia tensor of the dvrInternalRigidbodyA,
+            //where Ib is the 3x3 matrix inertia tensor of the dvrInternalRigidbodyB,
 
             //calculate J.V + b
             math::vec3 Ra, Rb, minRaCrossN, RbCrossN;
@@ -152,7 +152,7 @@ namespace legion::physics
             //-------------------------- Restitution Constraint ----------------------------------//
 
             //calculate restitution between the 2 bodies
-            float restCoeff = rigidbody::calculateRestitution(rbRef? rbRef->restitution : 0.3f, rbInc? rbInc->restitution : 0.3f);
+            float restCoeff = dvrInternalRigidbody::calculateRestitution(rbRef? rbRef->restitution : 0.3f, rbInc? rbInc->restitution : 0.3f);
 
             math::vec3 minWaCrossRa = math::cross(-wa, Ra);
             math::vec3 WbCrossRb = math::cross(wb, Rb);
@@ -188,7 +188,7 @@ namespace legion::physics
         {
             OPTICK_EVENT();
 
-            float frictionCoeff = rigidbody::calculateFriction(rbRef ? rbRef->friction : 0.3f, rbInc ? rbInc->friction : 0.3f);
+            float frictionCoeff = dvrInternalRigidbody::calculateFriction(rbRef ? rbRef->friction : 0.3f, rbInc ? rbInc->friction : 0.3f);
             float frictionConstraint = totalLambda * frictionCoeff;
 
             math::vec3 Ra = RefWorldContact - refRBCentroid;
@@ -347,9 +347,9 @@ namespace legion::physics
 
 
 
-        void logRigidbodyState()
+        void logdvrInternalRigidbodyState()
         {
-            log::debug("//--------logRigidbodyState----------//");
+            log::debug("//--------logdvrInternalRigidbodyState----------//");
             log::debug("rbInc->velocity {} ", math::to_string(rbInc->velocity));
             log::debug("rbInc->angularVelocity {} ", math::to_string(rbInc->angularVelocity));
 

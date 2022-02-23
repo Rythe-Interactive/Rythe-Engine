@@ -1,6 +1,6 @@
 #pragma once
 #include <core/core.hpp>
-#include <physics/diviner/components/physics_component.hpp>
+#include <physics/diviner/components/dvr_internal_physics_component.hpp>
 #include <physics/diviner/data/physics_manifold_precursor.hpp>
 #include <physics/diviner/data/physics_manifold.hpp>
 

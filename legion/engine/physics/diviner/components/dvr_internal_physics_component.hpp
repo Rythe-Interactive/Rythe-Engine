@@ -6,7 +6,7 @@
 
 namespace legion::physics
 {
-    struct physicsComponent
+    struct dvrInternalPhysicsComponent
     {
         //physics material
 
@@ -18,8 +18,8 @@ namespace legion::physics
 
         //physics bitmask
 
-        /** @brief given the colliders this physicsComponent, calculates the new local center of mass.
-        * @note This is called internally by the physicsComponent every time a collider is added.
+        /** @brief given the colliders this dvrInternalPhysicsComponent, calculates the new local center of mass.
+        * @note This is called internally by the dvrInternalPhysicsComponent every time a collider is added.
         */
         void calculateNewLocalCenterOfMass();
 

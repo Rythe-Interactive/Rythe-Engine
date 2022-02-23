@@ -125,16 +125,16 @@ namespace legion::physics
         math::mat4& refTransform = manifold.penetrationInformation->isARef ? manifold.transformA : manifold.transformB;
         math::mat4& incTransform = manifold.penetrationInformation->isARef ? manifold.transformB : manifold.transformA;
 
-        physicsComponent* refPhysicsComp = manifold.penetrationInformation->isARef ? manifold.physicsCompA : manifold.physicsCompB;
-        physicsComponent* incPhysicsComp = manifold.penetrationInformation->isARef ? manifold.physicsCompB : manifold.physicsCompA;
+        dvrInternalPhysicsComponent* refPhysicsComp = manifold.penetrationInformation->isARef ? manifold.physicsCompA : manifold.physicsCompB;
+        dvrInternalPhysicsComponent* incPhysicsComp = manifold.penetrationInformation->isARef ? manifold.physicsCompB : manifold.physicsCompA;
 
         PhysicsCollider* refCollider = manifold.penetrationInformation->isARef ? manifold.colliderA : manifold.colliderB;
         PhysicsCollider* incCollider = manifold.penetrationInformation->isARef ? manifold.colliderB : manifold.colliderA;
 
         manifold.penetrationInformation->populateContactList(manifold, refTransform, incTransform, refCollider);
 
-        rigidbody* refRB = manifold.penetrationInformation->isARef ? manifold.rigidbodyA : manifold.rigidbodyB;
-        rigidbody* incRB = manifold.penetrationInformation->isARef ? manifold.rigidbodyB : manifold.rigidbodyA;
+        dvrInternalRigidbody* refRB = manifold.penetrationInformation->isARef ? manifold.dvrInternalRigidbodyA : manifold.dvrInternalRigidbodyB;
+        dvrInternalRigidbody* incRB = manifold.penetrationInformation->isARef ? manifold.dvrInternalRigidbodyB : manifold.dvrInternalRigidbodyA;
 
         math::vec3 refWorldCentroid = refTransform * math::vec4(refPhysicsComp->localCenterOfMass,1);
         math::vec3 incWorldCentroid = incTransform * math::vec4(incPhysicsComp->localCenterOfMass,1);

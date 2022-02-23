@@ -9,8 +9,6 @@ namespace legion::physics
     {
     public:
 
-        friend class rigibodyDataHandle;
-
         inline void setMass(float mass)
         {
             m_mass = mass;
@@ -51,7 +49,7 @@ namespace legion::physics
 
         inline float getAngularDrag() { return m_angularDrag; }
 
-        std::vector<std::unique_ptr<core::events::event_base>>& getModifyEvents() 
+        inline std::vector<std::unique_ptr<core::events::event_base>>& getModifyEvents() 
         {
             return m_modifyRigidbodyEvents;
         }

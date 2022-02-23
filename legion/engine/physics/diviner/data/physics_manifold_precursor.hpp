@@ -1,6 +1,6 @@
 #pragma once
 #include <core/core.hpp>
-#include <physics/diviner/components/physics_component.hpp>
+#include <physics/diviner/components/dvr_internal_physics_component.hpp>
 
 namespace legion::physics
 {
@@ -11,13 +11,13 @@ namespace legion::physics
     struct physics_manifold_precursor
     {
         math::mat4 worldTransform;
-        physicsComponent* physicsComp = nullptr;
+        dvrInternalPhysicsComponent* physicsComp = nullptr;
         id_type id;
         ecs::entity entity;
 
         physics_manifold_precursor() = default;
 
-        physics_manifold_precursor(math::mat4 pWorldTransform, physicsComponent* pPhysicsComp, id_type precursorID, ecs::entity entity) :
+        physics_manifold_precursor(math::mat4 pWorldTransform, dvrInternalPhysicsComponent* pPhysicsComp, id_type precursorID, ecs::entity entity) :
             worldTransform(pWorldTransform), physicsComp(pPhysicsComp), id(precursorID), entity(entity)
         {
 

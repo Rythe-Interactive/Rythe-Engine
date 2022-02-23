@@ -3,11 +3,11 @@
 #include <physics/diviner/broadphasecollisionalgorithms/broadphasecollisionalgorithm.hpp>
 #include <physics/diviner/broadphasecollisionalgorithms/broadphaseuniformgrid.hpp>
 #include <physics/diviner/broadphasecollisionalgorithms/broadphasebruteforce.hpp>
-#include <physics/diviner/components/rigidbody.hpp>
+#include <physics/diviner/components/dvr_internal_rigidbody.hpp>
 #include <physics/diviner/data/physics_manifold_precursor.hpp>
 #include <physics/diviner/data/physics_manifold.hpp>
 #include <physics/diviner/physics_contact.hpp>
-#include <physics/diviner/components/physics_component.hpp>
+#include <physics/diviner/components/dvr_internal_physics_component.hpp>
 #include <physics/diviner/data/identifier.hpp>
 #include <physics/events/events.hpp>
 #include <memory>
@@ -21,7 +21,7 @@ namespace legion::physics
         static bool IsPaused;
         static bool oneTimeRunActive;
 
-        ecs::filter<position, rotation, scale, physicsComponent> manifoldPrecursorQuery;
+        ecs::filter<position, rotation, scale, dvrInternalPhysicsComponent> manifoldPrecursorQuery;
 
         //TODO move implementation to a seperate cpp file
 
@@ -31,30 +31,30 @@ namespace legion::physics
         {
             OPTICK_EVENT();
 
-            ecs::component_container<rigidbody> rigidbodies;
+            ecs::component_container<dvrInternalRigidbody> rigidbodies;
             std::vector<byte> hasRigidBodies;
 
             {
                 OPTICK_EVENT("Fetching data");
 
-                rigidbody emptyRigidbody;
-                rigidbodies.resize(manifoldPrecursorQuery.size(), std::ref(emptyRigidbody));
+                dvrInternalRigidbody emptydvrInternalRigidbody;
+                rigidbodies.resize(manifoldPrecursorQuery.size(), std::ref(emptydvrInternalRigidbody));
                 hasRigidBodies.resize(manifoldPrecursorQuery.size());
 
                 queueJobs(manifoldPrecursorQuery.size(), [&]() {
                     id_type index = async::this_job::get_id();
                     auto entity = manifoldPrecursorQuery[index];
-                    if (entity.has_component<rigidbody>())
+                    if (entity.has_component<dvrInternalRigidbody>())
                     {
                         hasRigidBodies[index] = true;
-                        rigidbodies[index] = entity.get_component<rigidbody>();
+                        rigidbodies[index] = entity.get_component<dvrInternalRigidbody>();
                     }
                     else
                         hasRigidBodies[index] = false;
                     }).wait();
             }
 
-            auto& physComps = manifoldPrecursorQuery.get<physicsComponent>();
+            auto& physComps = manifoldPrecursorQuery.get<dvrInternalPhysicsComponent>();
             auto& positions = manifoldPrecursorQuery.get<position>();
             auto& rotations = manifoldPrecursorQuery.get<rotation>();
             auto& scales = manifoldPrecursorQuery.get<scale>();
@@ -63,7 +63,7 @@ namespace legion::physics
             {
                 integrateRigidbodies(hasRigidBodies, rigidbodies, m_timeStep);
                 runPhysicsPipeline(hasRigidBodies, rigidbodies, physComps, positions, rotations, scales, m_timeStep);
-                integrateRigidbodyQueryPositionAndRotation(hasRigidBodies, positions, rotations, rigidbodies, m_timeStep);
+                integratedvrInternalRigidbodyQueryPositionAndRotation(hasRigidBodies, positions, rotations, rigidbodies, m_timeStep);
             }
 
             if (oneTimeRunActive)
@@ -72,12 +72,12 @@ namespace legion::physics
 
                 integrateRigidbodies(hasRigidBodies, rigidbodies, m_timeStep);
                 runPhysicsPipeline(hasRigidBodies, rigidbodies, physComps, positions, rotations, scales, m_timeStep);
-                integrateRigidbodyQueryPositionAndRotation(hasRigidBodies, positions, rotations, rigidbodies, m_timeStep);
+                integratedvrInternalRigidbodyQueryPositionAndRotation(hasRigidBodies, positions, rotations, rigidbodies, m_timeStep);
             }
         }
 
         void bulkRetrievePreManifoldData(
-            ecs::component_container<physicsComponent>& physComps,
+            ecs::component_container<dvrInternalPhysicsComponent>& physComps,
             ecs::component_container<position>& positions,
             ecs::component_container<rotation>& rotations,
             ecs::component_container<scale>& scales,
@@ -90,12 +90,12 @@ namespace legion::physics
                 id_type index = async::this_job::get_id();
                 math::mat4 transf = math::compose( scales[index].get(), rotations[index].get(), positions[index].get());
                 
-                physicsComponent& individualPhysicsComponent = physComps[index].get();
+                dvrInternalPhysicsComponent& individualdvrInternalPhysicsComponent = physComps[index].get();
 
-                for (auto& collider : individualPhysicsComponent.colliders)
+                for (auto& collider : individualdvrInternalPhysicsComponent.colliders)
                     collider->UpdateTransformedTightBoundingVolume(transf);
 
-                manifoldPrecursors[index] = { transf, &individualPhysicsComponent, index, manifoldPrecursorQuery[index] };
+                manifoldPrecursors[index] = { transf, &individualdvrInternalPhysicsComponent, index, manifoldPrecursorQuery[index] };
                 }).wait();
         }
 
@@ -126,8 +126,8 @@ namespace legion::physics
         */
         void runPhysicsPipeline(
             std::vector<byte>& hasRigidBodies,
-            ecs::component_container<rigidbody>& rigidbodies,
-            ecs::component_container<physicsComponent>& physComps,
+            ecs::component_container<dvrInternalRigidbody>& rigidbodies,
+            ecs::component_container<dvrInternalPhysicsComponent>& physComps,
             ecs::component_container<position>& positions,
             ecs::component_container<rotation>& rotations,
             ecs::component_container<scale>& scales,
@@ -136,14 +136,14 @@ namespace legion::physics
         /**@brief given 2 physics_manifold_precursors precursorA and precursorB, create a manifold for each collider in precursorA
         * with every other collider in precursorB. The manifolds that involve rigidbodies are then pushed into the given manifold list
         * @param manifoldsToSolve [out] a std::vector of physics_manifold that will store the manifolds created
-        * @param isRigidbodyInvolved A bool that indicates whether a rigidbody is involved in this manifold
-        * @param isTriggerInvolved A bool that indicates whether a physicsComponent with a physicsComponent::isTrigger set to true is involved in this manifold
+        * @param isdvrInternalRigidbodyInvolved A bool that indicates whether a dvrInternalRigidbody is involved in this manifold
+        * @param isTriggerInvolved A bool that indicates whether a dvrInternalPhysicsComponent with a dvrInternalPhysicsComponent::isTrigger set to true is involved in this manifold
         */
-        void constructManifoldsWithPrecursors(ecs::component_container<rigidbody>& rigidbodies, std::vector<byte>& hasRigidBodies, physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,
-            std::vector<physics_manifold>& manifoldsToSolve, bool isRigidbodyInvolved, bool isTriggerInvolved);
+        void constructManifoldsWithPrecursors(ecs::component_container<dvrInternalRigidbody>& rigidbodies, std::vector<byte>& hasRigidBodies, physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,
+            std::vector<physics_manifold>& manifoldsToSolve, bool isdvrInternalRigidbodyInvolved, bool isTriggerInvolved);
        
         void constructManifoldWithCollider(
-            ecs::component_container<rigidbody>& rigidbodies, std::vector<byte>& hasRigidBodies,
+            ecs::component_container<dvrInternalRigidbody>& rigidbodies, std::vector<byte>& hasRigidBodies,
             PhysicsCollider* colliderA, PhysicsCollider* colliderB
             , physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB, physics_manifold& manifold)
         {
@@ -155,10 +155,10 @@ namespace legion::physics
             manifold.entityB = precursorB.entity;
 
             if (hasRigidBodies[precursorA.id])
-                manifold.rigidbodyA = &rigidbodies[precursorA.id].get();
+                manifold.dvrInternalRigidbodyA = &rigidbodies[precursorA.id].get();
 
             if (hasRigidBodies[precursorB.id])
-                manifold.rigidbodyB = &rigidbodies[precursorB.id].get();
+                manifold.dvrInternalRigidbodyB = &rigidbodies[precursorB.id].get();
 
             manifold.physicsCompA = precursorA.physicsComp;
             manifold.physicsCompB = precursorB.physicsComp;
@@ -172,16 +172,16 @@ namespace legion::physics
             colliderA->CheckCollision(colliderB, manifold);
         }
 
-        /** @brief gets all the entities with a rigidbody component and calls the integrate function on them
+        /** @brief gets all the entities with a dvrInternalRigidbody component and calls the integrate function on them
         */
-        void integrateRigidbodies(std::vector<byte>& hasRigidBodies, ecs::component_container<rigidbody>& rigidbodies, float deltaTime)
+        void integrateRigidbodies(std::vector<byte>& hasRigidBodies, ecs::component_container<dvrInternalRigidbody>& rigidbodies, float deltaTime)
         {
             OPTICK_EVENT();
             queueJobs(manifoldPrecursorQuery.size(), [&]() {
                 if (!hasRigidBodies[async::this_job::get_id()])
                     return;
 
-                rigidbody& rb = rigidbodies[async::this_job::get_id()];
+                dvrInternalRigidbody& rb = rigidbodies[async::this_job::get_id()];
 
                 ////-------------------- update velocity ------------------//
                 math::vec3 acc = rb.forceAccumulator * rb.inverseMass;
@@ -195,11 +195,11 @@ namespace legion::physics
                 }).wait();
         }
 
-        void integrateRigidbodyQueryPositionAndRotation(
+        void integratedvrInternalRigidbodyQueryPositionAndRotation(
             std::vector<byte>& hasRigidBodies,
             ecs::component_container<position>& positions,
             ecs::component_container<rotation>& rotations,
-            ecs::component_container<rigidbody>& rigidbodies,
+            ecs::component_container<dvrInternalRigidbody>& rigidbodies,
             float deltaTime)
         {
             OPTICK_EVENT();
@@ -208,7 +208,7 @@ namespace legion::physics
                 if (!hasRigidBodies[index])
                     return;
 
-                rigidbody& rb = rigidbodies[index].get();
+                dvrInternalRigidbody& rb = rigidbodies[index].get();
                 position& pos = positions[index].get();
                 rotation& rot = rotations[index].get();
 

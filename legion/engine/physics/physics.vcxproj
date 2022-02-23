@@ -19,7 +19,7 @@
     <ClCompile Include="diviner\data\edgepenetrationquery.cpp" />
     <ClCompile Include="diviner\halfedgeedge.cpp" />
     <ClCompile Include="diviner\halfedgeface.cpp" />
-    <ClCompile Include="diviner\components\physics_component.cpp" />
+    <ClCompile Include="diviner\components\dvr_internal_physics_component.cpp" />
     <ClCompile Include="diviner\physics_statics.cpp" />
     <ClCompile Include="diviner\systems\physicssystem.cpp" />
     <ClCompile Include="physx\systems\physx_physics_system.cpp" />
@@ -65,9 +65,9 @@
     <ClInclude Include="diviner\systems\physicssystem.hpp" />
     <ClInclude Include="diviner\physics_statics.hpp" />
     <ClInclude Include="diviner\data\physics_manifold.hpp" />
-    <ClInclude Include="diviner\components\physics_component.hpp" />
+    <ClInclude Include="diviner\components\dvr_internal_physics_component.hpp" />
     <ClInclude Include="module\physicsmodule.hpp" />
-    <ClInclude Include="diviner\components\rigidbody.hpp" />
+    <ClInclude Include="diviner\components\dvr_internal_rigidbody.hpp" />
     <ClInclude Include="physx\systems\physx_physics_system.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
