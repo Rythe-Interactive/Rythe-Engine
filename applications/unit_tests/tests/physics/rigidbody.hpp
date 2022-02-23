@@ -1,12 +1,12 @@
 #pragma once
 #include "unit_test.hpp"
-#include <physics/generic_components/generic_rigidbody.h>
+#include <physics/components/rigidbody.h>
 
 static void TestRigidbody()
 {
     using namespace legion;
 
-    physics::genericRigidbody genericRigidbody;
+    physics::rigidbody genericRigidbody;
 
     LEGION_SUBTEST("Rigidbody Read and Write")
     {

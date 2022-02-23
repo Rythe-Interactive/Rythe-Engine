@@ -30,7 +30,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dataTemp\rigibody_data.hpp" />
+    <ClInclude Include="data\rigibody_data.hpp" />
     <ClInclude Include="diviner\broadphasecollisionalgorithms\broadphasebruteforce.hpp" />
     <ClInclude Include="diviner\broadphasecollisionalgorithms\broadphasecollisionalgorithm.hpp" />
     <ClInclude Include="diviner\broadphasecollisionalgorithms\broadphaseuniformgrid.hpp" />
@@ -58,7 +58,7 @@
     <ClInclude Include="diviner\halfedgeface.hpp" />
     <ClInclude Include="diviner\colliders\physicscollider.hpp" />
     <ClInclude Include="diviner\data\penetrationquery.hpp" />
-    <ClInclude Include="generic_components\generic_rigidbody.h" />
+    <ClInclude Include="components\rigidbody.h" />
     <ClInclude Include="physics.hpp" />
     <ClInclude Include="diviner\physicsconstants.hpp" />
     <ClInclude Include="diviner\physics_contact.hpp" />

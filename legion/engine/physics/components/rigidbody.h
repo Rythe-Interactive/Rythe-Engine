@@ -1,18 +1,13 @@
 #pragma once
-#include <physics/dataTemp/rigibody_data.hpp>
+#include <physics/data/rigibody_data.hpp>
 
 namespace legion::physics
 {
     constexpr size_type invalid_rigidbody = 0;
 
-    class genericRigidbody
+    struct rigidbody
     {
-    public:
-
         rigidbodyData rigidbodyData;
-
-    private:
-
         size_type rigidbodyIndex = invalid_rigidbody;
     };
 }
