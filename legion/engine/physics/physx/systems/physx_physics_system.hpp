@@ -4,11 +4,6 @@
 namespace physx
 {
     class PxScene;
-    class PxFoundation;
-    class PxPvd;
-    class PxDefaultCpuDispatcher;
-    class PxDefaultAllocator;
-    class PxDefaultErrorCallback;
 };
 
 namespace legion::physics
@@ -17,23 +12,15 @@ namespace legion::physics
     {
     public:
 
-        PhysXPhysicsSystem();
-        ~PhysXPhysicsSystem();
-
         virtual void setup();
+
+        virtual void shutdown();
 
         void fixedUpdate(time::time_span<fast_time> deltaTime);
 
     private:
 
-        struct physXStatics
-        {
-            bool m_isInit = false;
-
-            physx::PxFoundation* foundation = nullptr;
-            physx::PxPvd* pvd = nullptr;
-            physx::PxDefaultCpuDispatcher* dispatcher = nullptr;
-        };
+        struct physx_statics;
 
         void lazyInitPhysXVariables();
 
@@ -45,11 +32,5 @@ namespace legion::physics
 
         physx::PxScene* m_physxScene;
 
-        physx::PxDefaultAllocator* m_defaultAllocator = nullptr;
-        physx::PxDefaultErrorCallback* m_defaultErrorCallback = nullptr;
-
-        static physXStatics sPhysicsStatics;
-
-        static size_type sSelfInstanceCounter;
     };
 };

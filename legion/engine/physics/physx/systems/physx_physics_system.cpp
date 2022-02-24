@@ -5,9 +5,26 @@ namespace legion::physics
 {
     using namespace physx;
 
-    PhysXPhysicsSystem::physXStatics PhysXPhysicsSystem::sPhysicsStatics;
-    size_type PhysXPhysicsSystem::sSelfInstanceCounter = 0;
+    struct physXStatics
+    {
+        static size_type sSelfInstanceCounter;
 
+        static PxFoundation* foundation;
+        static PxPvd* pvd;
+        static PxDefaultCpuDispatcher* dispatcher;
+
+        static PxDefaultAllocator defaultAllocator;
+        static PxDefaultErrorCallback defaultErrorCallback;
+    };
+
+    size_type physXStatics::sSelfInstanceCounter = 0;
+
+    PxFoundation* physXStatics::foundation = nullptr;
+    PxPvd* physXStatics::pvd = nullptr;
+    PxDefaultCpuDispatcher* physXStatics::dispatcher = nullptr;
+    PxDefaultAllocator physXStatics::defaultAllocator;
+    PxDefaultErrorCallback physXStatics::defaultErrorCallback;
+    
     PxPhysics* gPhysics = nullptr;
 
     //PhysX PVD Debugger Related
@@ -15,26 +32,23 @@ namespace legion::physics
     constexpr size_type defaultPVDListeningPort = 5425;
     constexpr size_type defaultPVDHostTimeout = 10;
 
-    PhysXPhysicsSystem::PhysXPhysicsSystem()
-    {
-        sSelfInstanceCounter++;
-    }
-
     void PhysXPhysicsSystem::setup()
     {
+        physXStatics::sSelfInstanceCounter++;
+
         lazyInitPhysXVariables();
         setupDefaultScene();
 
         createProcess<&PhysXPhysicsSystem::fixedUpdate>("Physics", m_timeStep);
     }
 
-    PhysXPhysicsSystem::~PhysXPhysicsSystem()
+    void PhysXPhysicsSystem::shutdown()
     {
         m_physxScene->release();
 
-        sSelfInstanceCounter--;
+        physXStatics::sSelfInstanceCounter--;
 
-        if (sSelfInstanceCounter == 0)
+        if (physXStatics::sSelfInstanceCounter == 0)
         {
             releasePhysXVariables();
         }
@@ -42,34 +56,29 @@ namespace legion::physics
 
     void PhysXPhysicsSystem::lazyInitPhysXVariables()
     {
-        static PxDefaultAllocator sDefaultAllocator;
-        static PxDefaultErrorCallback sDefaultErrorCallback;
-
-        if (!sPhysicsStatics.m_isInit)
+        if (physXStatics::sSelfInstanceCounter == 1)
         {
-            sPhysicsStatics.foundation = PxCreateFoundation(PX_PHYSICS_VERSION, sDefaultAllocator, sDefaultErrorCallback);
+            physXStatics::foundation = PxCreateFoundation(PX_PHYSICS_VERSION,
+                physXStatics::defaultAllocator, physXStatics::defaultErrorCallback);
 
-            sPhysicsStatics.pvd = PxCreatePvd(*sPhysicsStatics.foundation);
+            physXStatics::pvd = PxCreatePvd(*physXStatics::foundation);
             PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate(pvdHost, defaultPVDListeningPort, defaultPVDHostTimeout);
-            sPhysicsStatics.pvd->connect(*transport, PxPvdInstrumentationFlag::eDEBUG);
+            physXStatics::pvd->connect(*transport, PxPvdInstrumentationFlag::eDEBUG);
 
-            sPhysicsStatics.dispatcher = PxDefaultCpuDispatcherCreate(0); //deal with multithreading later on
+            physXStatics::dispatcher = PxDefaultCpuDispatcherCreate(0); //deal with multithreading later on
         }
 
         if (!gPhysics)
         {
-            gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *sPhysicsStatics.foundation, PxTolerancesScale(), true, sPhysicsStatics.pvd);
+            gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *physXStatics::foundation, PxTolerancesScale(), true, physXStatics::pvd);
         }
-
-        m_defaultAllocator = &sDefaultAllocator;
-        m_defaultErrorCallback = &sDefaultErrorCallback;
     }
 
     void PhysXPhysicsSystem::setupDefaultScene()
     {
         PxSceneDesc sceneDesc(gPhysics->getTolerancesScale());
         sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
-        sceneDesc.cpuDispatcher = sPhysicsStatics.dispatcher;
+        sceneDesc.cpuDispatcher = physXStatics::dispatcher;
         sceneDesc.filterShader = PxDefaultSimulationFilterShader;
         sceneDesc.flags |= PxSceneFlag::eENABLE_STABILIZATION;
 
@@ -78,18 +87,18 @@ namespace legion::physics
 
     void PhysXPhysicsSystem::releasePhysXVariables()
     {
-        sPhysicsStatics.dispatcher->release();
+        physXStatics::dispatcher->release();
         gPhysics->release();
 
-        if (sPhysicsStatics.pvd)
+        if (physXStatics::pvd)
         {
-            PxPvdTransport* transport = sPhysicsStatics.pvd->getTransport();
-            sPhysicsStatics.pvd->release();
-            sPhysicsStatics.pvd = nullptr;
+            PxPvdTransport* transport = physXStatics::pvd->getTransport();
+            physXStatics::pvd->release();
+            physXStatics::pvd = nullptr;
             transport->release();
         }
 
-        sPhysicsStatics.foundation->release();
+        physXStatics::foundation->release();
     }
 
     void PhysXPhysicsSystem::fixedUpdate(time::time_span<fast_time> deltaTime)
