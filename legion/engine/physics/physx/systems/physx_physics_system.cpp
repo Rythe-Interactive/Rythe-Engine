@@ -29,7 +29,7 @@ namespace legion::physics
     PxDefaultErrorCallback physXStatics::defaultErrorCallback;
     
     //PhysX PVD Debugger Related
-    constexpr char* pvdHost = "127.0.0.1";
+    constexpr const char* pvdHost = "127.0.0.1";
     constexpr size_type defaultPVDListeningPort = 5425;
     constexpr size_type defaultPVDHostTimeout = 10;
 
