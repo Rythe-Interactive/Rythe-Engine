@@ -20,8 +20,8 @@ namespace legion::physics
 
         //------------------------------------------------------ Related to Edge Categorization  ----------------------------------------------------------------//
         void SplitPolygon(SplittablePolygonPtr splitPolygon
-            , const math::mat4& transform, const math::vec3 cutPosition
-            , const math::vec3 cutNormal, SplitState requestedState
+            , const math::float4x4& transform, const math::float3 cutPosition
+            , const math::float3 cutNormal, SplitState requestedState
             , std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges,bool shouldeDebug)
         {
             BoundaryEdgeInfo polygonDebugInfo;
@@ -117,11 +117,11 @@ namespace legion::physics
 
             //sort them based on support point created by cross product of normal and split normal
 
-            math::vec3 worldCentroid = transform * math::vec4(splitPolygon->localCentroid, 1);
-            math::vec3 worldPolygonNormal = transform * math::vec4(splitPolygon->localNormal, 0);
+            math::float3 worldCentroid = transform * math::float4(splitPolygon->localCentroid, 1);
+            math::float3 worldPolygonNormal = transform * math::float4(splitPolygon->localNormal, 0);
             polygonDebugInfo.worldNormal = worldPolygonNormal;
 
-            math::vec3 polygonNormalCrossCutNormal = math::normalize(math::cross(worldPolygonNormal, cutNormal));
+            math::float3 polygonNormalCrossCutNormal = math::normalize(math::cross(worldPolygonNormal, cutNormal));
 
             //SortingCriterium splittingPlaneSorter(worldCentroid,polygonNormalCrossCutNormal,transform);
 
@@ -129,11 +129,11 @@ namespace legion::physics
             auto initialSorter = [&transform, &worldCentroid, &polygonNormalCrossCutNormal]
             (const std::shared_ptr<MeshHalfEdge>& lhs, std::shared_ptr<MeshHalfEdge>& rhs)
             {
-                math::vec3 aWorldCentroid = lhs->getWorldCentroid(transform);
-                math::vec3 bWorldCentroid = rhs->getWorldCentroid(transform);
+                math::float3 aWorldCentroid = lhs->getWorldCentroid(transform);
+                math::float3 bWorldCentroid = rhs->getWorldCentroid(transform);
 
-                math::vec3 AtoPolygonCentroid = aWorldCentroid - worldCentroid;
-                math::vec3 BtoPolygonCentroid = bWorldCentroid - worldCentroid;
+                math::float3 AtoPolygonCentroid = aWorldCentroid - worldCentroid;
+                math::float3 BtoPolygonCentroid = bWorldCentroid - worldCentroid;
 
                 return
                     math::dot(AtoPolygonCentroid, polygonNormalCrossCutNormal) <
@@ -196,22 +196,22 @@ namespace legion::physics
             //previous sorting direction is dependent on cut tangent.
             //use centroids of first and last split edge as the new sorting direction
 
-            math::vec3 worldFirstEdge = firstSplit->getWorldCentroid(transform);
-            math::vec3 worldSecondEdge = secondSplit->getWorldCentroid(transform);
+            math::float3 worldFirstEdge = firstSplit->getWorldCentroid(transform);
+            math::float3 worldSecondEdge = secondSplit->getWorldCentroid(transform);
 
             //sort effectedUsedEdges based on sorting direction
 
-            math::vec3 sortingCentroid = (worldFirstEdge + worldSecondEdge) / 2.0f;
-            math::vec3 sortingDirection = worldSecondEdge - worldFirstEdge;
+            math::float3 sortingCentroid = (worldFirstEdge + worldSecondEdge) / 2.0f;
+            math::float3 sortingDirection = worldSecondEdge - worldFirstEdge;
 
             auto boundarySorter = [&transform, &sortingCentroid, &sortingDirection]
             (const std::shared_ptr<MeshHalfEdge>& lhs, std::shared_ptr<MeshHalfEdge>& rhs)
             {
-                math::vec3 aWorldCentroid = lhs->getWorldCentroid(transform);
-                math::vec3 bWorldCentroid = rhs->getWorldCentroid(transform);
+                math::float3 aWorldCentroid = lhs->getWorldCentroid(transform);
+                math::float3 bWorldCentroid = rhs->getWorldCentroid(transform);
 
-                math::vec3 AtoPolygonCentroid = aWorldCentroid - sortingCentroid;
-                math::vec3 BtoPolygonCentroid = bWorldCentroid - sortingCentroid;
+                math::float3 AtoPolygonCentroid = aWorldCentroid - sortingCentroid;
+                math::float3 BtoPolygonCentroid = bWorldCentroid - sortingCentroid;
 
                 return
                     math::dot(AtoPolygonCentroid, sortingDirection) <
@@ -234,7 +234,7 @@ namespace legion::physics
                 {
                     auto [first,second]=  meshHalfEdgePtr->getEdgeWorldPositions(transform);
                     float interpolant = (float)i / max;
-                    math::vec3 white = math::vec3(1, 0, 0) * interpolant;
+                    math::float3 white = math::float3(1, 0, 0) * interpolant;
                     //debug::user_projectDrawLine(first, second, math::color(white.x, white.y, white.z, 1), 12.0f, FLT_MAX, true);
                     
                     i++;
@@ -258,8 +258,8 @@ namespace legion::physics
                 = GetFirstAndLastEdgeIntersectionInfo(cutNormal, cutPosition, transform,
                 firstSplit, secondSplit);
 
-            math::vec3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
-            math::vec2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
+            math::float3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
+            math::float2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
 
             meshHalfEdgePtr supportEdge = nullptr;
             //generated half edges using
@@ -322,54 +322,54 @@ namespace legion::physics
 
         //------------------------------------------------------ Edge Categorization Helper Functions ----------------------------------------------------------------//
 
-        std::tuple<math::vec3, math::vec2, math::vec3, math::vec2> GetFirstAndLastEdgeIntersectionInfo(const math::vec3& cutNormal, const math::vec3& cutPosition
-            , const math::mat4 transform,
+        std::tuple<math::float3, math::float2, math::float3, math::float2> GetFirstAndLastEdgeIntersectionInfo(const math::float3& cutNormal, const math::float3& cutPosition
+            , const math::float4x4 transform,
             meshHalfEdgePtr firstEdge, meshHalfEdgePtr secondEdge)
         {
             auto [firstEdgeCurrent, firstEdgeNext] = firstEdge->getEdgeWorldPositions(transform);
             auto [secondEdgeCurrent, secondEdgeNext] = secondEdge->getEdgeWorldPositions(transform);
 
-            math::vec3 firstEdgeIntersection;
+            math::float3 firstEdgeIntersection;
             float firstEdgeInterpolant;
             PhysicsStatics::FindLineToPlaneIntersectionPoint(cutNormal, cutPosition,
                 firstEdgeCurrent, firstEdgeNext, firstEdgeIntersection, firstEdgeInterpolant);
 
-            math::vec2 firstInterpolantUV = math::lerp(firstEdge->uv, firstEdge->nextEdge->uv, firstEdgeInterpolant);
+            math::float2 firstInterpolantUV = math::lerp(firstEdge->uv, firstEdge->nextEdge->uv, firstEdgeInterpolant);
 
-            math::vec3 secondEdgeIntersection;
+            math::float3 secondEdgeIntersection;
             float secondEdgeInterpolant;
             PhysicsStatics::FindLineToPlaneIntersectionPoint(cutNormal, cutPosition,
                 secondEdgeCurrent, secondEdgeNext, secondEdgeIntersection, secondEdgeInterpolant);
 
-            math::vec2 secondInterpolantUV = math::lerp(secondEdge->uv, secondEdge->nextEdge->uv, secondEdgeInterpolant);
+            math::float2 secondInterpolantUV = math::lerp(secondEdge->uv, secondEdge->nextEdge->uv, secondEdgeInterpolant);
 
-            math::vec3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
-            math::vec2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
+            math::float3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
+            math::float2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
 
             return std::make_tuple(firstEdgeIntersection, firstInterpolantUV, secondEdgeIntersection, secondInterpolantUV);
         }
 
         void RegenerateTriangleSplit(bool startFromOutsideIntersection
             , meshHalfEdgePtr firstSplitEdge, meshHalfEdgePtr secondSplitEdge
-            , meshHalfEdgePtr& intersectionEdge, const math::vec3& cutNormal, const math::vec3& cutPosition,
-            const math::mat4& transform)
+            , meshHalfEdgePtr& intersectionEdge, const math::float3& cutNormal, const math::float3& cutPosition,
+            const math::float4x4& transform)
         {
             auto [firstEdgeIntersection, firstInterpolantUV, secondEdgeIntersection, secondInterpolantUV]
                 = GetFirstAndLastEdgeIntersectionInfo(cutNormal, cutPosition, transform,
                     firstSplitEdge, secondSplitEdge);
 
-            math::vec3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
-            math::vec2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
+            math::float3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
+            math::float2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
 
-            const math::mat4 inverseTrans{ math::inverse(transform) };
+            const math::float4x4 inverseTrans{ math::inverse(transform) };
 
             if (!startFromOutsideIntersection)
             {
-                firstSplitEdge->position = inverseTrans * math::vec4(firstEdgeIntersection, 1);
+                firstSplitEdge->position = inverseTrans * math::float4(firstEdgeIntersection, 1);
                 firstSplitEdge->uv = firstInterpolantUV;
 
                 intersectionEdge = std::make_shared<MeshHalfEdge>
-                    (inverseTrans * math::vec4(secondEdgeIntersection, 1), secondInterpolantUV);
+                    (inverseTrans * math::float4(secondEdgeIntersection, 1), secondInterpolantUV);
                 
 
                 MeshHalfEdge::connectIntoTriangle(firstSplitEdge, secondSplitEdge, intersectionEdge);
@@ -377,9 +377,9 @@ namespace legion::physics
             else
             {
                 intersectionEdge = std::make_shared<MeshHalfEdge>
-                    (inverseTrans * math::vec4(firstEdgeIntersection, 1), firstInterpolantUV);
+                    (inverseTrans * math::float4(firstEdgeIntersection, 1), firstInterpolantUV);
 
-                secondSplitEdge->position = inverseTrans * math::vec4(secondEdgeIntersection, 1);
+                secondSplitEdge->position = inverseTrans * math::float4(secondEdgeIntersection, 1);
                 secondSplitEdge->uv = secondInterpolantUV;
 
                 MeshHalfEdge::connectIntoTriangle(firstSplitEdge, intersectionEdge, secondSplitEdge);
@@ -388,10 +388,10 @@ namespace legion::physics
             intersectionEdge->isBoundary = true;
         }
 
-        void BFSIdentifyEffectedEdges(const math::mat4& transform, SplittablePolygonPtr splitPolygon,
+        void BFSIdentifyEffectedEdges(const math::float4x4& transform, SplittablePolygonPtr splitPolygon,
             std::vector<meshHalfEdgePtr>& unEffectedUsedEdges
             , std::vector<meshHalfEdgePtr>& effectedUsedEdges
-            , const math::vec3 cutPosition,const math::vec3 cutNormal,bool keepAbove)
+            , const math::float3 cutPosition,const math::float3 cutNormal,bool keepAbove)
         {
             meshHalfEdgePtr initalEdge = splitPolygon->GetMeshEdges().at(0);
             //intialize unvisited queue
@@ -421,7 +421,7 @@ namespace legion::physics
                     {
                         //if we reach this point the triangle is either completely above the plane or completly below it
                         //we cache it only if its at the correct position
-                        math::vec3 edgePosition = transform * math::vec4(currentEdge->position, 1);
+                        math::float3 edgePosition = transform * math::float4(currentEdge->position, 1);
 
                         if (keepAbove == PhysicsStatics::IsPointAbovePlane(cutNormal, cutPosition, edgePosition))
                         {
@@ -450,8 +450,8 @@ namespace legion::physics
         }
 
         void IdentifyBoundaryEffectedEdges( std::vector<meshHalfEdgePtr>& effectedUsedEdges,
-            const math::mat4 transform, const math::vec3 cutPosition
-            , const math::vec3 cutNormal, bool keepAbove)
+            const math::float4x4 transform, const math::float3 cutPosition
+            , const math::float3 cutNormal, bool keepAbove)
         {
             std::vector<meshHalfEdgePtr> tempEdges{ std::move(effectedUsedEdges) };
             effectedUsedEdges.clear();
@@ -476,14 +476,14 @@ namespace legion::physics
 
         void HandleTriangleSplit(SplittablePolygonPtr splitPolygon,
             std::vector<meshHalfEdgePtr>& splitEdges, std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges,
-            const math::mat4& transform, const math::vec3& cutNormal,const math::vec3& cutPosition, bool keepAbove)
+            const math::float4x4& transform, const math::float3& cutNormal,const math::float3& cutPosition, bool keepAbove)
         {
             auto& meshEdges = splitPolygon->GetMeshEdges();
 
             meshHalfEdgePtr firstEdge = splitEdges.at(0);
             meshHalfEdgePtr secondEdge = splitEdges.at(1);
 
-            math::vec3 edgeWorldPosition = firstEdge->getEdgeWorldPosition(transform);
+            math::float3 edgeWorldPosition = firstEdge->getEdgeWorldPosition(transform);
 
             bool startFromOutsideIntersection =
                 keepAbove == PhysicsStatics::IsPointAbovePlane(cutNormal, cutPosition, edgeWorldPosition);
@@ -512,7 +512,7 @@ namespace legion::physics
 
         //------------------------------------------------------ Related to Quad Organization ----------------------------------------------------------------//
 
-        void InsideIntersectionMeshRegeneration(const math::mat4& transform, std::vector<meshHalfEdgePtr>& effectedBoundaryEdges,
+        void InsideIntersectionMeshRegeneration(const math::float4x4& transform, std::vector<meshHalfEdgePtr>& effectedBoundaryEdges,
             std::vector<meshHalfEdgePtr>& generatedEdges, int i
             , meshHalfEdgePtr& supportEdge,
             const SplitterIntersectionInfo& vertexIntersectionInfo, BoundaryEdgeInfo& debugStuff, std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges
@@ -523,10 +523,10 @@ namespace legion::physics
             debugStuff.base = baseEdge->getEdgeWorldPosition(transform);
 
 
-            /*const math::vec3& initialIntersectionPosition = vertexIntersectionInfo.startIntersectionPosition;
-            const math::vec3& startToEndPosition = vertexIntersectionInfo.startToEndPosition;
-            const math::vec2& initialUVIntersection = vertexIntersectionInfo.startIntersectionUV;
-            const math::vec2& startToEndUV = vertexIntersectionInfo.startToEndUV;*/
+            /*const math::float3& initialIntersectionPosition = vertexIntersectionInfo.startIntersectionPosition;
+            const math::float3& startToEndPosition = vertexIntersectionInfo.startToEndPosition;
+            const math::float2& initialUVIntersection = vertexIntersectionInfo.startIntersectionUV;
+            const math::float2& startToEndUV = vertexIntersectionInfo.startToEndUV;*/
 
             auto [initialIntersectionPosition, startToEndPosition,
                 initialUVIntersection, startToEndUV] = vertexIntersectionInfo.GetIntersectionData();
@@ -559,21 +559,21 @@ namespace legion::physics
             {
                 nextSupportEdge = effectedBoundaryEdges[effectedBoundaryEdges.size() - 1];
 
-                math::vec3 worldPosition =
+                math::float3 worldPosition =
                     (initialIntersectionPosition + startToEndPosition);
 
-                nextSupportEdge->position = math::inverse(transform) * math::vec4((worldPosition), 1);
+                nextSupportEdge->position = math::inverse(transform) * math::float4((worldPosition), 1);
                 nextSupportEdge->uv = initialUVIntersection + startToEndUV;
             }
             else
             {
-                math::vec3 worldPosition = initialIntersectionPosition
+                math::float3 worldPosition = initialIntersectionPosition
                     + startToEndPosition * (float)i / maxData;
 
-                math::vec2 uv = initialUVIntersection + startToEndUV * (float)i / maxData;
+                math::float2 uv = initialUVIntersection + startToEndUV * (float)i / maxData;
 
                 nextSupportEdge = std::make_shared< MeshHalfEdge>(
-                    math::inverse(transform) * math::vec4(worldPosition, 1), uv, owner);
+                    math::inverse(transform) * math::float4(worldPosition, 1), uv, owner);
 
                 generatedEdges.push_back(nextSupportEdge);
             }
@@ -588,13 +588,13 @@ namespace legion::physics
             //i - 1 < 0 ? 0 : i - 1 ;
             float interpolant = (float)currentIndex / maxData;
 
-            math::vec3 worldIntersectionPosition =
+            math::float3 worldIntersectionPosition =
                 initialIntersectionPosition + (startToEndPosition * interpolant);
 
-            math::vec3 localIntersectionPosition = math::inverse(transform)
-                * math::vec4(worldIntersectionPosition, 1);
+            math::float3 localIntersectionPosition = math::inverse(transform)
+                * math::float4(worldIntersectionPosition, 1);
 
-            math::vec2 uv = initialUVIntersection + startToEndUV * interpolant;
+            math::float2 uv = initialUVIntersection + startToEndUV * interpolant;
 
             meshHalfEdgePtr intersectionEdge = std::make_shared< MeshHalfEdge>(
                 localIntersectionPosition, uv, owner);
@@ -645,7 +645,7 @@ namespace legion::physics
 
         }
 
-        void OutsideIntersectionMeshRegeneration(const math::mat4& transform, std::vector<meshHalfEdgePtr>& effectedBoundaryEdges,
+        void OutsideIntersectionMeshRegeneration(const math::float4x4& transform, std::vector<meshHalfEdgePtr>& effectedBoundaryEdges,
             std::vector<meshHalfEdgePtr>& generatedEdges, int i
             , meshHalfEdgePtr& supportEdge,
             const SplitterIntersectionInfo& vertexIntersectionInfo, BoundaryEdgeInfo& debugStuff, std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges
@@ -663,7 +663,7 @@ namespace legion::physics
                 currentSupportEdge = effectedBoundaryEdges[0];
 
                 currentSupportEdge->position = math::inverse(transform) *
-                    math::vec4(initialIntersectionPosition, 1);
+                    math::float4(initialIntersectionPosition, 1);
 
                 currentSupportEdge->uv = initialUVIntersection;
 
@@ -699,13 +699,13 @@ namespace legion::physics
             int currentIndex = i + 1;
             float interpolant = (float)currentIndex / maxData;
 
-            math::vec3 IntersectionEdgePosition =
+            math::float3 IntersectionEdgePosition =
                 initialIntersectionPosition + (startToEndPosition * interpolant);
 
-            math::vec3 localIntersectionEdgePosition =
-                math::inverse(transform) * math::vec4(IntersectionEdgePosition, 1);
+            math::float3 localIntersectionEdgePosition =
+                math::inverse(transform) * math::float4(IntersectionEdgePosition, 1);
 
-            math::vec2 edgeUV = initialUVIntersection + startToEndUV * interpolant;
+            math::float2 edgeUV = initialUVIntersection + startToEndUV * interpolant;
 
             meshHalfEdgePtr intersectionEdge = std::make_shared<MeshHalfEdge>
                 (localIntersectionEdgePosition, edgeUV, owner);

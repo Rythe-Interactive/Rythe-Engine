@@ -8,7 +8,7 @@ namespace legion::physics
 {
     struct ConvexConvexCollisionInfo
     {
-        math::vec3 edgeNormal;
+        math::float3 edgeNormal;
 
         float ARefSeperation, BRefSeperation, aToBEdgeSeperation;
 

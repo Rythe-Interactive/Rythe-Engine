@@ -12,7 +12,7 @@ namespace legion::physics
     class BroadphaseUniformGridNoCaching : public BroadPhaseCollisionAlgorithm
     {
     public:
-        BroadphaseUniformGridNoCaching(math::ivec3 cellSize) : m_cellSize(cellSize)
+        BroadphaseUniformGridNoCaching(math::int3 cellSize) : m_cellSize(cellSize)
         {
         }
 
@@ -25,17 +25,17 @@ namespace legion::physics
 
         /**@brief Sets the cell size which will be used for the virtual grid
          */
-        void setCellSize(math::ivec3 cellSize)
+        void setCellSize(math::int3 cellSize)
         {
             m_cellSize = cellSize;
         }
 
     private:
-        math::ivec3 m_cellSize;
+        math::int3 m_cellSize;
 
         /**@brief Calculates a cell index from a point. i.e. calculates in which cell in the uniform grid a point will be.
          */
-        math::ivec3 calculateCellIndex(const math::vec3 point);
+        math::int3 calculateCellIndex(const math::float3 point);
 
         std::vector<std::vector<physics_manifold_precursor>> manifoldPrecursorGrouping;
     };

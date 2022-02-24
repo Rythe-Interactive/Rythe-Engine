@@ -356,8 +356,8 @@ namespace legion::rendering
 
         id_type id = nameHash(name);
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
-        if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::vec4>())
-            static_cast<material_parameter<math::vec4>*>(submaterial.parameters[id].get())->set_value(value);
+        if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::float4>())
+            static_cast<material_parameter<math::float4>*>(submaterial.parameters[id].get())->set_value(value);
         else
             log::warn("material {} does not have a parameter named {} of type {}", m_name, name, nameOfType<math::color>());
     }
@@ -370,7 +370,7 @@ namespace legion::rendering
 
         id_type id = nameHash(name);
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
-        return submaterial.parameters.count(id) && submaterial.parameters.at(id)->type() == typeHash<math::vec4>();
+        return submaterial.parameters.count(id) && submaterial.parameters.at(id)->type() == typeHash<math::float4>();
     }
 
     template<>
@@ -381,8 +381,8 @@ namespace legion::rendering
 
         id_type id = nameHash(name);
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
-        if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::vec4>())
-            return static_cast<material_parameter<math::vec4>*>(submaterial.parameters[id].get())->get_value();
+        if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::float4>())
+            return static_cast<material_parameter<math::float4>*>(submaterial.parameters[id].get())->get_value();
 
         log::warn("material {} does not have a parameter named {} of type {}", m_name, name, nameOfType<math::color>());
         return math::color();
@@ -400,8 +400,8 @@ namespace legion::rendering
 
         id_type id = submaterial.idOfLocation[location];
 
-        if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::vec4>())
-            static_cast<material_parameter<math::vec4>*>(submaterial.parameters[id].get())->set_value(value);
+        if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::float4>())
+            static_cast<material_parameter<math::float4>*>(submaterial.parameters[id].get())->set_value(value);
         else
             log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<math::color>());
     }
@@ -417,8 +417,8 @@ namespace legion::rendering
             log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<math::color>());
 
         id_type id = submaterial.idOfLocation[location];
-        if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::vec4>())
-            return static_cast<material_parameter<math::vec4>*>(submaterial.parameters[id].get())->get_value();
+        if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::float4>())
+            return static_cast<material_parameter<math::float4>*>(submaterial.parameters[id].get())->get_value();
 
         log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<math::color>());
         return math::color();
@@ -435,7 +435,7 @@ namespace legion::rendering
             return false;
 
         id_type id = submaterial.idOfLocation[location];
-        return submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::vec4>();
+        return submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::float4>();
     }
 
     template<typename T>
@@ -592,19 +592,19 @@ namespace legion::rendering
                 bob.value(static_cast<material_parameter<int>*>(value.get())->get_value()).finish_entry();
                 continue;
             }
-            if (value->type() == typeHash<math::vec3>())
+            if (value->type() == typeHash<math::float3>())
             {
-                bob.value(static_cast<material_parameter<math::vec3>*>(value.get())->get_value()).finish_entry();
+                bob.value(static_cast<material_parameter<math::float3>*>(value.get())->get_value()).finish_entry();
                 continue;
             }
-            if (value->type() == typeHash<math::vec4>())
+            if (value->type() == typeHash<math::float4>())
             {
-                bob.value(static_cast<material_parameter<math::vec4>*>(value.get())->get_value()).finish_entry();
+                bob.value(static_cast<material_parameter<math::float4>*>(value.get())->get_value()).finish_entry();
                 continue;
             }
-            if (value->type() == typeHash<math::ivec3>())
+            if (value->type() == typeHash<math::int3>())
             {
-                bob.value(static_cast<material_parameter<math::ivec3>*>(value.get())->get_value()).finish_entry();
+                bob.value(static_cast<material_parameter<math::int3>*>(value.get())->get_value()).finish_entry();
                 continue;
             }
             if (value->type() == typeHash<math::ivec4>())

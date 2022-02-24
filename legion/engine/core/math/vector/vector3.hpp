@@ -1,5 +1,6 @@
 #pragma once
 #include <core/math/vector/vector_base.hpp>
+#include <core/math/vector/vector_base.inl>
 #include <core/math/vector/swizzle/swizzle3.hpp>
 #include <core/math/meta.hpp>
 
@@ -8,7 +9,7 @@ namespace legion::core::math
     template<typename Scalar>
     struct vector<Scalar, 3>
     {
-        static_assert(std::is_arithmetic<Scalar>::value, "Scalar must be a numeric type.");
+        static_assert(::std::is_arithmetic_v<Scalar>, "Scalar must be a numeric type.");
 
         using scalar = Scalar;
         static constexpr size_type size = 3;
@@ -170,5 +171,6 @@ namespace legion::core::math
     using float3 = vector<float32, 3>;
     using double3 = vector<float64, 3>;
     using int3 = vector<int, 3>;
+    using uint3 = vector<uint, 3>;
     using bool3 = vector<bool, 3>;
 }

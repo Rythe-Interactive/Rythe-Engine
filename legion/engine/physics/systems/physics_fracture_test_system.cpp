@@ -148,7 +148,7 @@ namespace legion::physics
             auto sun = createEntity();
             sun.add_components<rendering::mesh_renderable>(mesh_filter(directionalLightH.get_mesh()), rendering::mesh_renderer(directionalLightMH));
             sun.add_component<rendering::light>(rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
-            sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, -1), math::vec3::zero), scale());
+            sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::float3(1, 1, -1), math::float3::zero), scale());
         }
 
         fractureVideoScene();
@@ -173,12 +173,12 @@ namespace legion::physics
         //    auto transH = entity.get_component_handles<transform>();
         //    
         //    auto [posH, rotH, scaleH] = entity.get_component_handles<transform>();
-        //    const math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
+        //    const math::float4x4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
 
         //    for (auto pol : edgeFinder.meshPolygons)
         //    {
-        //        const math::vec3& worldCentroid = transform * math::vec4(pol->localCentroid, 1);
-        //        const math::vec3& worldNormal = transform * math::vec4(pol->localNormal, 0);
+        //        const math::float3& worldCentroid = transform * math::float4(pol->localCentroid, 1);
+        //        const math::float3& worldNormal = transform * math::float4(pol->localNormal, 0);
 
         //        for (auto edge : pol->GetMeshEdges())
         //        {
@@ -203,10 +203,10 @@ namespace legion::physics
 
         //        if (boundaryCount == 16)
         //        {
-        //            math::vec3 worldCentroid = transform * math::vec4(pol->localCentroid, 1);
+        //            math::float3 worldCentroid = transform * math::float4(pol->localCentroid, 1);
 
         //            //
-        //            debug::user_projectDrawLine(worldCentroid, worldCentroid  + math::vec3(0, 0.1, 0), math::colors::red, 5.0f, 30.0f);
+        //            debug::user_projectDrawLine(worldCentroid, worldCentroid  + math::float3(0, 0.1, 0), math::colors::red, 5.0f, 30.0f);
         //        }
 
         //        //log::debug(" polygon had {} boundary edges ", boundaryCount);
@@ -247,12 +247,12 @@ namespace legion::physics
             splitter.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(TextureH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitter);
-            positionH.write(math::vec3(37, 1.0f, 10.0f));
-            scaleH.write(math::vec3(2.0f));
+            positionH.write(math::float3(37, 1.0f, 10.0f));
+            scaleH.write(math::float3(2.0f));
 
             auto rotation = rotationH.read();
 
-            rotation *= math::angleAxis(math::deg2rad(-60.0f), math::vec3(1, 0, 0));
+            rotation *= math::angleAxis(math::deg2rad(-60.0f), math::float3(1, 0, 0));
 
             splitter.write_component(rotation);
 
@@ -275,12 +275,12 @@ namespace legion::physics
              splitter.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(TextureH));
 
              auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitter);
-             positionH.write(math::vec3(37, 1.5f, 10.0f));
-             scaleH.write(math::vec3(2.0f));
+             positionH.write(math::float3(37, 1.5f, 10.0f));
+             scaleH.write(math::float3(2.0f));
 
              auto rotation = rotationH.read();
 
-             //rotation *= math::angleAxis(math::deg2rad(60.0f), math::vec3(1, 0, 0));
+             //rotation *= math::angleAxis(math::deg2rad(60.0f), math::float3(1, 0, 0));
 
              splitter.write_component(rotation);
 
@@ -304,8 +304,8 @@ namespace legion::physics
             //renderableHandle.write({ cubeH,TextureH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(37, 1.5f, 10.0f));
-            scaleH.write(math::vec3(1.0f));
+            positionH.write(math::float3(37, 1.5f, 10.0f));
+            scaleH.write(math::float3(1.0f));
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
             auto id = idHandle.read();
@@ -334,8 +334,8 @@ namespace legion::physics
             cylinderSplit.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(TextureH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(cylinderSplit);
-            positionH.write(math::vec3(37, 1.3f, 15.0f));
-            scaleH.write(math::vec3(2.0f));
+            positionH.write(math::float3(37, 1.3f, 15.0f));
+            scaleH.write(math::float3(2.0f));
 
         }
 
@@ -353,8 +353,8 @@ namespace legion::physics
             ent.add_components<rendering::mesh_renderable>(mesh_filter(cylinderH.get_mesh()), rendering::mesh_renderer(TextureH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(37, 1.5f, 15.0f));
-            scaleH.write(math::vec3(1.0f));
+            positionH.write(math::float3(37, 1.5f, 15.0f));
+            scaleH.write(math::float3(1.0f));
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
             auto id = idHandle.read();
@@ -392,8 +392,8 @@ namespace legion::physics
 
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(37, 2.5f, 22.0f));
-            scaleH.write(math::vec3(1.0f));
+            positionH.write(math::float3(37, 2.5f, 22.0f));
+            scaleH.write(math::float3(1.0f));
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
             auto id = idHandle.read();
@@ -433,8 +433,8 @@ namespace legion::physics
             auto ent = m_ecs->createEntity();
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+            positionH.write(math::float3(testPos, -3.0f, 15.0f));
+            scaleH.write(math::float3(2.5f, 1.0f, 2.5f));
 
             ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
@@ -456,8 +456,8 @@ namespace legion::physics
             //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
-            scaleH.write(math::vec3(1.0f));
+            positionH.write(math::float3(testPos, -3.0f, 15.0f));
+            scaleH.write(math::float3(1.0f));
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
             auto idComp = idHandle.read();
@@ -485,8 +485,8 @@ namespace legion::physics
             //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToAABBEntLinear);
-            positionH.write(math::vec3(testPos, -0.0f, 15.0f));
-            scaleH.write(math::vec3(1.0f));
+            positionH.write(math::float3(testPos, -0.0f, 15.0f));
+            scaleH.write(math::float3(1.0f));
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(staticToAABBEntLinear);
             auto id = idHandle.read();
@@ -513,8 +513,8 @@ namespace legion::physics
         //    //renderableHandle.write({ cubeH), wireframeH });
 
         //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-        //    positionH.write(math::vec3(testPos+0.5f, -1.0f, 15.0f));
-        //    scaleH.write(math::vec3(1.0f));
+        //    positionH.write(math::float3(testPos+0.5f, -1.0f, 15.0f));
+        //    scaleH.write(math::float3(1.0f));
 
         //    auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
         //    auto id = idHandle.read();
@@ -528,8 +528,8 @@ namespace legion::physics
             auto ent = m_ecs->createEntity();
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 8.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+            positionH.write(math::float3(testPos, -3.0f, 8.0f));
+            scaleH.write(math::float3(2.5f, 1.0f, 2.5f));
 
             ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
         }
@@ -549,8 +549,8 @@ namespace legion::physics
             //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 8.0f));
-            scaleH.write(math::vec3(1.0f));
+            positionH.write(math::float3(testPos, -3.0f, 8.0f));
+            scaleH.write(math::float3(1.0f));
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
             auto idComp = idHandle.read();
@@ -578,8 +578,8 @@ namespace legion::physics
             //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToAABBEntRotation);
-            positionH.write(math::vec3(testPos - 2.7f, -0.0f, 8.0f));
-            scaleH.write(math::vec3(1.0f));
+            positionH.write(math::float3(testPos - 2.7f, -0.0f, 8.0f));
+            scaleH.write(math::float3(1.0f));
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(staticToAABBEntRotation);
             auto id = idHandle.read();
@@ -593,8 +593,8 @@ namespace legion::physics
             auto ent = m_ecs->createEntity();
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 2.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+            positionH.write(math::float3(testPos, -3.0f, 2.0f));
+            scaleH.write(math::float3(2.5f, 1.0f, 2.5f));
 
             ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
         }
@@ -617,8 +617,8 @@ namespace legion::physics
             //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 2.0f));
-            scaleH.write(math::vec3(1.0f));
+            positionH.write(math::float3(testPos, -3.0f, 2.0f));
+            scaleH.write(math::float3(1.0f));
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
             auto id = idHandle.read();
@@ -646,14 +646,14 @@ namespace legion::physics
                 (mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToOBBEnt);
-            positionH.write(math::vec3(testPos, -0.0f, 2.0f));
-            scaleH.write(math::vec3(1.0f));
+            positionH.write(math::float3(testPos, -0.0f, 2.0f));
+            scaleH.write(math::float3(1.0f));
 
             auto rot = rotationH.read();
-            /*rot *= math::angleAxis(math::radians(90.f), math::vec3(0, 0, 1));
-            rot *= math::angleAxis(math::radians(40.f), math::vec3(1, 0, 0));
-            rot *= math::angleAxis(math::radians(42.f), math::vec3(0, 1, 0));*/
-            //rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
+            /*rot *= math::angleAxis(math::radians(90.f), math::float3(0, 0, 1));
+            rot *= math::angleAxis(math::radians(40.f), math::float3(1, 0, 0));
+            rot *= math::angleAxis(math::radians(42.f), math::float3(0, 1, 0));*/
+            //rot *= math::angleAxis(45.f, math::float3(0, 1, 0));
             rotationH.write(rot);
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(staticToOBBEnt);
@@ -672,8 +672,8 @@ namespace legion::physics
             auto ent = m_ecs->createEntity();
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, -4.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+            positionH.write(math::float3(testPos, -3.0f, -4.0f));
+            scaleH.write(math::float3(2.5f, 1.0f, 2.5f));
 
             ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
         }
@@ -696,8 +696,8 @@ namespace legion::physics
             //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, -4.0f));
-            scaleH.write(math::vec3(1.0f));
+            positionH.write(math::float3(testPos, -3.0f, -4.0f));
+            scaleH.write(math::float3(1.0f));
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
             auto id = idHandle.read();
@@ -722,12 +722,12 @@ namespace legion::physics
             //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToEdgeEnt);
-            positionH.write(math::vec3(testPos + 3.0f, 2.0f, -4.0f));
-            scaleH.write(math::vec3(1.0f));
+            positionH.write(math::float3(testPos + 3.0f, 2.0f, -4.0f));
+            scaleH.write(math::float3(1.0f));
 
             auto rot = rotationH.read();
-            rot *= math::angleAxis(45.f, math::vec3(1, 0, 0));
-            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
+            rot *= math::angleAxis(45.f, math::float3(1, 0, 0));
+            rot *= math::angleAxis(45.f, math::float3(0, 1, 0));
             rotationH.write(rot);
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(staticToEdgeEnt);
@@ -744,47 +744,47 @@ namespace legion::physics
         //create floors
         //concreteH
 
-        CreateElongatedFloor(math::vec3(20.0, 0.5f, -14.0f), math::quat(), math::vec3(15, 1, 20), tileH);
+        CreateElongatedFloor(math::float3(20.0, 0.5f, -14.0f), math::quat(), math::float3(15, 1, 20), tileH);
 
-        CreateElongatedFloor(math::vec3(20.0, 0.5f, 5.0f), math::quat(), math::vec3(15, 1, 20), tileH);
+        CreateElongatedFloor(math::float3(20.0, 0.5f, 5.0f), math::quat(), math::float3(15, 1, 20), tileH);
 
-        CreateElongatedFloor(math::vec3(20.0, 3.0f, 22.0f)
-            , math::quat(math::angleAxis(math::deg2rad(-20.0f), math::vec3(1, 0, 0))),
-            math::vec3(15, 1, 20), concreteH);
+        CreateElongatedFloor(math::float3(20.0, 3.0f, 22.0f)
+            , math::quat(math::angleAxis(math::deg2rad(-20.0f), math::float3(1, 0, 0))),
+            math::float3(15, 1, 20), concreteH);
 
-        CreateElongatedFloor(math::vec3(20.0, 6.0f, 40.5f), math::quat(), math::vec3(15, 1, 20), concreteH);
+        CreateElongatedFloor(math::float3(20.0, 6.0f, 40.5f), math::quat(), math::float3(15, 1, 20), concreteH);
 
-        CreateElongatedFloor(math::vec3(20.0, 6.0f, 58.5f), math::quat(), math::vec3(15, 1, 20), tileH);
+        CreateElongatedFloor(math::float3(20.0, 6.0f, 58.5f), math::quat(), math::float3(15, 1, 20), tileH);
 
-        CreateElongatedFloor(math::vec3(20.0, 6.0f, 78.5f), math::quat(), math::vec3(15, 1, 20), tileH);
+        CreateElongatedFloor(math::float3(20.0, 6.0f, 78.5f), math::quat(), math::float3(15, 1, 20), tileH);
 
-        CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::vec3(20.0, 1.5f, -14.0f),
-            math::quat(), textureH, true, false, math::vec3(),10.0f,1.0f);
+        CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::float3(20.0, 1.5f, -14.0f),
+            math::quat(), textureH, true, false, math::float3(),10.0f,1.0f);
 
-        CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::vec3(20.0, 1.5f, -6.0f),
-            math::quat(), textureH, true, false, math::vec3(), 50.0f, 2.0f);
+        CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::float3(20.0, 1.5f, -6.0f),
+            math::quat(), textureH, true, false, math::float3(), 50.0f, 2.0f);
 
-        CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::vec3(20.0, 1.5f, 4.0f),
-            math::quat(), textureH, true, false, math::vec3(),80.0f,3.0f);
+        CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::float3(20.0, 1.5f, 4.0f),
+            math::quat(), textureH, true, false, math::float3(),80.0f,3.0f);
 
         float initialTime = 6.0f;
         for (size_t i = 2; i < 7; i++)
         {
             bool shouldExplode = i % 2 == 0;
 
-            CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::vec3(20.0, i - 0.5f, 13.0f),
-                math::quat(), textureH, shouldExplode, !shouldExplode, math::vec3(),25.0,initialTime);
+            CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::float3(20.0, i - 0.5f, 13.0f),
+                math::quat(), textureH, shouldExplode, !shouldExplode, math::float3(),25.0,initialTime);
         }
 
 
 
-        spawnCubeStack(math::vec3(18.5f, 7.0f, 37.0f));
-        simpleMinecraftHouse(math::vec3(18.0f,7.0f,80.0f));
+        spawnCubeStack(math::float3(18.5f, 7.0f, 37.0f));
+        simpleMinecraftHouse(math::float3(18.0f,7.0f,80.0f));
 
 
 
         //
-        CreateElongatedFloor(math::vec3(20.0, 0.5f, 5.0f), math::quat(), math::vec3(15, 1, 20), concreteH);
+        CreateElongatedFloor(math::float3(20.0, 0.5f, 5.0f), math::quat(), math::float3(15, 1, 20), concreteH);
     }
 
     void PhysicsFractureTestSystem::prematureExplosion(explosion* action)
@@ -821,7 +821,7 @@ namespace legion::physics
 
     }
 
-    void PhysicsFractureTestSystem::spawnCubeStack(math::vec3 start)
+    void PhysicsFractureTestSystem::spawnCubeStack(math::float3 start)
     {
         std::vector<rendering::material_handle> woodInitialThenStone{ woodTextureH,  rockTextureH,  rockTextureH ,  rockTextureH ,woodTextureH };
         std::vector<rendering::material_handle>Stone{ rockTextureH };
@@ -833,28 +833,28 @@ namespace legion::physics
         std::vector<int> window{ 2 };
         std::vector<int> ignoreEmpty;
 
-        math::vec3 impactPoint = start + math::vec3(1.5, 0.5f, 0);
+        math::float3 impactPoint = start + math::float3(1.5, 0.5f, 0);
         float time = 9.0f;
 
         float height = start.y;
-        createFloor(1, 1, math::vec3(start.x , height, start.z),
-            math::vec3(1.0f), cubeH, texture, ignoreEmpty, std::vector<bool>{}, time, impactPoint,true);
-        createFloor(2, 1, math::vec3(start.x+1.0f, height, start.z),
-            math::vec3(1.0f), cubeH, texture, ignoreEmpty, std::vector<bool>{ true, true}, time, impactPoint,false,100.0f);
-        createFloor(1, 1, math::vec3(start.x+3.0f, height, start.z),
-            math::vec3(1.0f), cubeH, texture, ignoreEmpty, std::vector<bool>{}, time, impactPoint, true);
+        createFloor(1, 1, math::float3(start.x , height, start.z),
+            math::float3(1.0f), cubeH, texture, ignoreEmpty, std::vector<bool>{}, time, impactPoint,true);
+        createFloor(2, 1, math::float3(start.x+1.0f, height, start.z),
+            math::float3(1.0f), cubeH, texture, ignoreEmpty, std::vector<bool>{ true, true}, time, impactPoint,false,100.0f);
+        createFloor(1, 1, math::float3(start.x+3.0f, height, start.z),
+            math::float3(1.0f), cubeH, texture, ignoreEmpty, std::vector<bool>{}, time, impactPoint, true);
 
         height += 1.0f;
-        createFloor(3, 1, math::vec3(start.x + 0.5f, height, start.z),
-             math::vec3(1.0f), cubeH, texture, ignoreEmpty, std::vector<bool>{false, true, false}, time,  impactPoint,true, 100.0f);
+        createFloor(3, 1, math::float3(start.x + 0.5f, height, start.z),
+             math::float3(1.0f), cubeH, texture, ignoreEmpty, std::vector<bool>{false, true, false}, time,  impactPoint,true, 100.0f);
 
         height += 1.0f;
-        createFloor(2, 1, math::vec3(start.x + 1.0f, height, start.z),
-            math::vec3(1.0f), cubeH, texture, ignoreEmpty, std::vector<bool>{}, time, impactPoint, true);
+        createFloor(2, 1, math::float3(start.x + 1.0f, height, start.z),
+            math::float3(1.0f), cubeH, texture, ignoreEmpty, std::vector<bool>{}, time, impactPoint, true);
 
         height += 1.0f;
-        createFloor(1, 1, math::vec3(start.x + 1.5f, height, start.z),
-            math::vec3(1.0f), cubeH, texture, ignoreEmpty, std::vector<bool>{},  5.0f, impactPoint, true);
+        createFloor(1, 1, math::float3(start.x + 1.5f, height, start.z),
+            math::float3(1.0f), cubeH, texture, ignoreEmpty, std::vector<bool>{},  5.0f, impactPoint, true);
 
 
     }
@@ -895,15 +895,15 @@ namespace legion::physics
 
             physicsComponent2.AddBox(cubeParams);
 
-            physicsComponent2.AddBox(cube_collider_params(1.0f,1.0f,1.0f,math::vec3(1.0f,-1.0f,1.0f)));
+            physicsComponent2.AddBox(cube_collider_params(1.0f,1.0f,1.0f,math::float3(1.0f,-1.0f,1.0f)));
 
             entPhyHande.write(physicsComponent2);
 
             composite.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(composite);
-            positionH.write(math::vec3(10, 5.0f, 10.0f));
-            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
+            positionH.write(math::float3(10, 5.0f, 10.0f));
+            scaleH.write(math::float3(1.0f, 1.0f, 1.0f));
 
             auto rotation = rotationH.read();
 
@@ -929,8 +929,8 @@ namespace legion::physics
             ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(10, 2.0f, 10.0f));
-            scaleH.write(math::vec3(5.0f, 1.0f,5.0f));
+            positionH.write(math::float3(10, 2.0f, 10.0f));
+            scaleH.write(math::float3(5.0f, 1.0f,5.0f));
 
             auto rotation = rotationH.read();
 
@@ -942,16 +942,16 @@ namespace legion::physics
 
     void PhysicsFractureTestSystem::explosionTest()
     {
-        CreateElongatedFloor(math::vec3(20.0, 1.0f, 9.8f), math::quat(), math::vec3(20, 1, 20),  concreteH);
+        CreateElongatedFloor(math::float3(20.0, 1.0f, 9.8f), math::quat(), math::float3(20, 1, 20),  concreteH);
 
-        smallExplosionEnt = CreateSplitTestBox(physics::cube_collider_params(1.0f,1.0f,1.0f), math::vec3(12.0, 2.0f, 9.8f),
-            math::quat(), textureH, true, false, math::vec3());
+        smallExplosionEnt = CreateSplitTestBox(physics::cube_collider_params(1.0f,1.0f,1.0f), math::float3(12.0, 2.0f, 9.8f),
+            math::quat(), textureH, true, false, math::float3());
 
-        mediumExplosionEnt = CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::vec3(20.0, 2.0f, 9.8f),
-            math::quat(), textureH, true, false, math::vec3());
+        mediumExplosionEnt = CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::float3(20.0, 2.0f, 9.8f),
+            math::quat(), textureH, true, false, math::float3());
 
-        largeExplosionEnt = CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::vec3(28.0, 2.0f, 9.8f),
-            math::quat(), textureH, true, false, math::vec3());
+        largeExplosionEnt = CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::float3(28.0, 2.0f, 9.8f),
+            math::quat(), textureH, true, false, math::float3());
 
 
 
@@ -967,8 +967,8 @@ namespace legion::physics
             for (auto ent : cameraQuery)
             {
                 auto [position, rotation, scale] = ent.get_component_handles<transform>();
-                math::mat4 trans = math::compose(scale.read(), rotation.read(), position.read());
-                math::vec3 dir = math::normalize(trans * math::vec4(0, 0, 1, 0));
+                math::float4x4 trans = math::compose(scale.read(), rotation.read(), position.read());
+                math::float3 dir = math::normalize(trans * math::float4(0, 0, 1, 0));
 
                 dir *= 10;
 
@@ -982,7 +982,7 @@ namespace legion::physics
 
     }
 
-    void PhysicsFractureTestSystem::simpleMinecraftHouse(math::vec3 start)
+    void PhysicsFractureTestSystem::simpleMinecraftHouse(math::float3 start)
     {
         //Floor
         float time = 13.5f;
@@ -996,101 +996,101 @@ namespace legion::physics
         std::vector<int> window{ 2 };
         std::vector<int> ignoreEmpty;
 
-        math::vec3 impactPoint = start + math::vec3(2.5, 3.0f, 2.5);
+        math::float3 impactPoint = start + math::float3(2.5, 3.0f, 2.5);
 
         float level = start.y;
-        createFloor(1, 5, math::vec3(start.x, level, start.z),
-            math::vec3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty,
-            std::vector<bool>{},0.0f,math::vec3(),false,0.0f,false);
+        createFloor(1, 5, math::float3(start.x, level, start.z),
+            math::float3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty,
+            std::vector<bool>{},0.0f,math::float3(),false,0.0f,false);
 
-        createFloor(1, 5, math::vec3(start.x + 1.0f, level, start.z),
-            math::vec3(1.0f), cubeH, Stone, ignoreEmpty,
-            std::vector<bool>{}, 0.0f, math::vec3(), false, 0.0f, false);
+        createFloor(1, 5, math::float3(start.x + 1.0f, level, start.z),
+            math::float3(1.0f), cubeH, Stone, ignoreEmpty,
+            std::vector<bool>{}, 0.0f, math::float3(), false, 0.0f, false);
 
-        createFloor(1, 5, math::vec3(start.x + 2.0f, level, start.z),
-            math::vec3(1.0f), cubeH, Stone, ignoreEmpty,
+        createFloor(1, 5, math::float3(start.x + 2.0f, level, start.z),
+            math::float3(1.0f), cubeH, Stone, ignoreEmpty,
             std::vector<bool>{});
 
-        createFloor(1, 5, math::vec3(start.x + 3.0f, level, start.z),
-            math::vec3(1.0f), cubeH, Stone, ignoreEmpty, std::vector<bool>{});
-        createFloor(1, 5, math::vec3(start.x + 4.0f, level, start.z),
-            math::vec3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty, std::vector<bool>{});
+        createFloor(1, 5, math::float3(start.x + 3.0f, level, start.z),
+            math::float3(1.0f), cubeH, Stone, ignoreEmpty, std::vector<bool>{});
+        createFloor(1, 5, math::float3(start.x + 4.0f, level, start.z),
+            math::float3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty, std::vector<bool>{});
        
         level += 1.0f;
         //first stack
-        createFloor(1, 5, math::vec3(start.x + 0.0f, level, start.z),
-            math::vec3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty,
-            std::vector<bool>{}, 0.0f, math::vec3(), false, 0.0f, false);
+        createFloor(1, 5, math::float3(start.x + 0.0f, level, start.z),
+            math::float3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty,
+            std::vector<bool>{}, 0.0f, math::float3(), false, 0.0f, false);
 
-        createFloor(1, 5, math::vec3(start.x + 1.0f, level, start.z),
-            math::vec3(1.0f), cubeH, Stone, initialOnly,
-            std::vector<bool>{}, 0.0f, math::vec3(), false, 0.0f, false);
+        createFloor(1, 5, math::float3(start.x + 1.0f, level, start.z),
+            math::float3(1.0f), cubeH, Stone, initialOnly,
+            std::vector<bool>{}, 0.0f, math::float3(), false, 0.0f, false);
 
-        createFloor(1, 1, math::vec3(start.x + 2.0f, level, start.z + 4.0f),
-            math::vec3(1.0f), cubeH, Stone, initialOnly, std::vector<bool>{});
+        createFloor(1, 1, math::float3(start.x + 2.0f, level, start.z + 4.0f),
+            math::float3(1.0f), cubeH, Stone, initialOnly, std::vector<bool>{});
 
-        createFloor(1, 5, math::vec3(start.x + 3.0f, level, start.z),
-            math::vec3(1.0f), cubeH, Stone, initialOnly,
+        createFloor(1, 5, math::float3(start.x + 3.0f, level, start.z),
+            math::float3(1.0f), cubeH, Stone, initialOnly,
             std::vector<bool>{true, false}, time, impactPoint, false, strength);
 
-        createFloor(1, 5, math::vec3(start.x + 4.0f, level, start.z),
-            math::vec3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty,
+        createFloor(1, 5, math::float3(start.x + 4.0f, level, start.z),
+            math::float3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty,
             std::vector<bool>{true, true, true, true, true}, time, impactPoint, false, strength);
 
         //window stack
         level += 1.0f;
-        createFloor(1, 5, math::vec3(start.x, level, start.z),
-            math::vec3(1.0f), cubeH, woodInitialThenStone, window,
-            std::vector<bool>{}, 0.0f, math::vec3(), false, 0.0f, false);
+        createFloor(1, 5, math::float3(start.x, level, start.z),
+            math::float3(1.0f), cubeH, woodInitialThenStone, window,
+            std::vector<bool>{}, 0.0f, math::float3(), false, 0.0f, false);
 
-        createFloor(1, 5, math::vec3(start.x + 1.0f, level, start.z),
-            math::vec3(1.0f), cubeH, Stone, initialOnly,
-            std::vector<bool>{}, 0.0f, math::vec3(), false, 0.0f, false);
+        createFloor(1, 5, math::float3(start.x + 1.0f, level, start.z),
+            math::float3(1.0f), cubeH, Stone, initialOnly,
+            std::vector<bool>{}, 0.0f, math::float3(), false, 0.0f, false);
 
-        createFloor(1,  1, math::vec3(start.x + 2.0f, level, start.z + 4.0f),
-            math::vec3(1.0f), cubeH, Stone, initialOnly, std::vector<bool>{});
+        createFloor(1,  1, math::float3(start.x + 2.0f, level, start.z + 4.0f),
+            math::float3(1.0f), cubeH, Stone, initialOnly, std::vector<bool>{});
 
-        createFloor(1, 5, math::vec3(start.x + 3.0f, level, start.z),
-            math::vec3(1.0f), cubeH, Stone, initialOnly, std::vector<bool>{true, true}, time, impactPoint, false, strength);
-        createFloor(1, 5, math::vec3(start.x + 4.0f, level, start.z),
-            math::vec3(1.0f), cubeH, woodInitialThenStone, window,
+        createFloor(1, 5, math::float3(start.x + 3.0f, level, start.z),
+            math::float3(1.0f), cubeH, Stone, initialOnly, std::vector<bool>{true, true}, time, impactPoint, false, strength);
+        createFloor(1, 5, math::float3(start.x + 4.0f, level, start.z),
+            math::float3(1.0f), cubeH, woodInitialThenStone, window,
             std::vector<bool>{true, true, true, true, true}, time, impactPoint, false, strength);
 
         level += 1.0f;
         //third stack
-        createFloor(1, 5, math::vec3(start.x, level, start.z),
-            math::vec3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty,
-            std::vector<bool>{}, 0.0f, math::vec3(), false, 0.0f, false);
+        createFloor(1, 5, math::float3(start.x, level, start.z),
+            math::float3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty,
+            std::vector<bool>{}, 0.0f, math::float3(), false, 0.0f, false);
 
-        createFloor(1, 5, math::vec3(start.x + 1.0f, level, start.z),
-            math::vec3(1.0f), cubeH, Stone, initialOnly,
-            std::vector<bool>{}, 0.0f, math::vec3(), false, 0.0f, false);
+        createFloor(1, 5, math::float3(start.x + 1.0f, level, start.z),
+            math::float3(1.0f), cubeH, Stone, initialOnly,
+            std::vector<bool>{}, 0.0f, math::float3(), false, 0.0f, false);
 
-        createFloor(1, 5, math::vec3(start.x + 2.0f, level, start.z),
-            math::vec3(1.0f), cubeH, Stone, initialOnly, std::vector<bool>{true,false}, time, impactPoint, false, strength);
-        createFloor(1, 5, math::vec3(start.x + 3.0f, level, start.z),
-            math::vec3(1.0f), cubeH, Stone, initialOnly, std::vector<bool>{true, true, true, true, true}, time, impactPoint, false, strength);
-        createFloor(1, 5, math::vec3(start.x + 4.0f, level, start.z),
-            math::vec3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty, std::vector<bool>{true, true, true, true, true}, time, impactPoint, false, strength);
+        createFloor(1, 5, math::float3(start.x + 2.0f, level, start.z),
+            math::float3(1.0f), cubeH, Stone, initialOnly, std::vector<bool>{true,false}, time, impactPoint, false, strength);
+        createFloor(1, 5, math::float3(start.x + 3.0f, level, start.z),
+            math::float3(1.0f), cubeH, Stone, initialOnly, std::vector<bool>{true, true, true, true, true}, time, impactPoint, false, strength);
+        createFloor(1, 5, math::float3(start.x + 4.0f, level, start.z),
+            math::float3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty, std::vector<bool>{true, true, true, true, true}, time, impactPoint, false, strength);
 
         level += 1.0f;
-        createFloor(1, 5, math::vec3(start.x, level, start.z),
-            math::vec3(1.0f), cubeH, Wood, ignoreEmpty,
-            std::vector<bool>{}, 0.0f, math::vec3(), false, 0.0f, false);
+        createFloor(1, 5, math::float3(start.x, level, start.z),
+            math::float3(1.0f), cubeH, Wood, ignoreEmpty,
+            std::vector<bool>{}, 0.0f, math::float3(), false, 0.0f, false);
 
-        createFloor(1, 5, math::vec3(start.x + 1.0f, level, start.z),
-            math::vec3(1.0f), cubeH, Wood, ignoreEmpty,
-            std::vector<bool>{}, 0.0f, math::vec3(), false, 0.0f, false);
+        createFloor(1, 5, math::float3(start.x + 1.0f, level, start.z),
+            math::float3(1.0f), cubeH, Wood, ignoreEmpty,
+            std::vector<bool>{}, 0.0f, math::float3(), false, 0.0f, false);
 
-        createFloor(1, 5, math::vec3(start.x + 2.0f, level, start.z),
-            math::vec3(1.0f), cubeH, Wood, ignoreEmpty, std::vector<bool>{}, time, impactPoint, false, strength);
-        createFloor(1, 5, math::vec3(start.x + 3.0f, level, start.z),
-            math::vec3(1.0f), cubeH, Wood, ignoreEmpty, std::vector<bool>{true, true, true, true, true}, time, impactPoint, false, strength);
-        createFloor(1, 5, math::vec3(start.x + 4.0f, level, start.z),
-            math::vec3(1.0f), cubeH, Wood, ignoreEmpty, std::vector<bool>{true, true, true, true, true}, time, impactPoint, false, strength);
+        createFloor(1, 5, math::float3(start.x + 2.0f, level, start.z),
+            math::float3(1.0f), cubeH, Wood, ignoreEmpty, std::vector<bool>{}, time, impactPoint, false, strength);
+        createFloor(1, 5, math::float3(start.x + 3.0f, level, start.z),
+            math::float3(1.0f), cubeH, Wood, ignoreEmpty, std::vector<bool>{true, true, true, true, true}, time, impactPoint, false, strength);
+        createFloor(1, 5, math::float3(start.x + 4.0f, level, start.z),
+            math::float3(1.0f), cubeH, Wood, ignoreEmpty, std::vector<bool>{true, true, true, true, true}, time, impactPoint, false, strength);
 
         PhysicsSystem::IsPaused = false;
-        //CreateElongatedFloor(math::vec3(5.0, 1.0f, 9.8f), math::quat(), math::vec3(20, 1, 20));
+        //CreateElongatedFloor(math::float3(5.0, 1.0f, 9.8f), math::quat(), math::float3(20, 1, 20));
 
     }
 
@@ -1120,12 +1120,12 @@ namespace legion::physics
             wall.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(wall);
-            positionH.write(math::vec3(0, 12.0f, 10.0f));
-            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
+            positionH.write(math::float3(0, 12.0f, 10.0f));
+            scaleH.write(math::float3(1.0f, 1.0f, 1.0f));
 
             auto rotation = rotationH.read();
-            rotation *= math::angleAxis(math::deg2rad(30.0f), math::vec3(1, 0, 0));
-            rotation *= math::angleAxis(math::deg2rad(50.0f), math::vec3(0, 1, 0));
+            rotation *= math::angleAxis(math::deg2rad(30.0f), math::float3(1, 0, 0));
+            rotation *= math::angleAxis(math::deg2rad(50.0f), math::float3(0, 1, 0));
             wall.write_component(rotation);
 
             auto splitterH = wall.add_component<physics::MeshSplitter>();
@@ -1159,12 +1159,12 @@ namespace legion::physics
             wall2.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(wall2);
-            positionH.write(math::vec3(50.0f, 12.0f, 10.0f));
-            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
+            positionH.write(math::float3(50.0f, 12.0f, 10.0f));
+            scaleH.write(math::float3(1.0f, 1.0f, 1.0f));
 
             auto rotation = rotationH.read();
-            rotation *= math::angleAxis(math::deg2rad(30.0f), math::vec3(1, 0, 0));
-            rotation *= math::angleAxis(math::deg2rad(50.0f), math::vec3(0, 1, 0));
+            rotation *= math::angleAxis(math::deg2rad(30.0f), math::float3(1, 0, 0));
+            rotation *= math::angleAxis(math::deg2rad(50.0f), math::float3(0, 1, 0));
             wall2.write_component(rotation);
 
             auto splitterH = wall2.add_component<physics::MeshSplitter>();
@@ -1198,12 +1198,12 @@ namespace legion::physics
             wall3.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(wall3);
-            positionH.write(math::vec3(200.0f, 12.0f, 10.0f));
-            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
+            positionH.write(math::float3(200.0f, 12.0f, 10.0f));
+            scaleH.write(math::float3(1.0f, 1.0f, 1.0f));
 
             auto rotation = rotationH.read();
-            rotation *= math::angleAxis(math::deg2rad(30.0f), math::vec3(1, 0, 0));
-            rotation *= math::angleAxis(math::deg2rad(50.0f), math::vec3(0, 1, 0));
+            rotation *= math::angleAxis(math::deg2rad(30.0f), math::float3(1, 0, 0));
+            rotation *= math::angleAxis(math::deg2rad(50.0f), math::float3(0, 1, 0));
             wall3.write_component(rotation);
 
             auto splitterH = wall3.add_component<physics::MeshSplitter>();
@@ -1218,29 +1218,29 @@ namespace legion::physics
             //idH.write(id);
         }
 
-        CreateElongatedFloor(math::vec3(0.0f, 1.0f, 10.0f), math::quat(), math::vec3(5.0f, 1.0f, 5.0f),woodTextureH);
+        CreateElongatedFloor(math::float3(0.0f, 1.0f, 10.0f), math::quat(), math::float3(5.0f, 1.0f, 5.0f),woodTextureH);
 
-        rotation rot = math::angleAxis(math::deg2rad(90.0f), math::vec3(1, 0, 0));
-        CreateElongatedFloor(math::vec3(0.0f, 2.0f, 7.0f), rot, math::vec3(5.0f, 1.0f, 5.0f), woodTextureH);
+        rotation rot = math::angleAxis(math::deg2rad(90.0f), math::float3(1, 0, 0));
+        CreateElongatedFloor(math::float3(0.0f, 2.0f, 7.0f), rot, math::float3(5.0f, 1.0f, 5.0f), woodTextureH);
 
         ////////////////////////////////////////////////
-        CreateElongatedFloor(math::vec3(50.0f, 1.0f, 10.0f), math::quat(), math::vec3(5.0f, 1.0f, 5.0f), woodTextureH);
-        CreateElongatedFloor(math::vec3(50.0f, 2.0f, 7.0f), rot, math::vec3(5.0f, 1.0f, 5.0f), woodTextureH);
+        CreateElongatedFloor(math::float3(50.0f, 1.0f, 10.0f), math::quat(), math::float3(5.0f, 1.0f, 5.0f), woodTextureH);
+        CreateElongatedFloor(math::float3(50.0f, 2.0f, 7.0f), rot, math::float3(5.0f, 1.0f, 5.0f), woodTextureH);
 
         /////////////////////////////////////////////////////
-        CreateElongatedFloor(math::vec3(200.0f, 1.0f, 10.0f), math::quat(), math::vec3(5.0f, 1.0f, 5.0f), woodTextureH);
-        CreateElongatedFloor(math::vec3(200.0f, 2.0f, 7.0f), rot, math::vec3(5.0f, 1.0f, 5.0f), woodTextureH);
+        CreateElongatedFloor(math::float3(200.0f, 1.0f, 10.0f), math::quat(), math::float3(5.0f, 1.0f, 5.0f), woodTextureH);
+        CreateElongatedFloor(math::float3(200.0f, 2.0f, 7.0f), rot, math::float3(5.0f, 1.0f, 5.0f), woodTextureH);
 
-        CreateElongatedFloor(math::vec3(-50.0f, 0.0f, -50.0f), math::quat(), math::vec3(90.0f, 5.0f, 90.0f), woodTextureH);
+        CreateElongatedFloor(math::float3(-50.0f, 0.0f, -50.0f), math::quat(), math::float3(90.0f, 5.0f, 90.0f), woodTextureH);
 
         ///////// small,medium,big
-        CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::vec3(-50.0f, 15.0f, -50.0f),
+        CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::float3(-50.0f, 15.0f, -50.0f),
             math::quat(),textureH, false);
 
-        CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::vec3(-35.0f, 15.0f, -35.0f),
+        CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::float3(-35.0f, 15.0f, -35.0f),
             math::quat(), textureH, false);
 
-        CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::vec3(-15.0f, 15.0f, -15.0f),
+        CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::float3(-15.0f, 15.0f, -15.0f),
             math::quat(), textureH, false);
 
 
@@ -1262,10 +1262,10 @@ namespace legion::physics
                                                        //WALL
         //-------------------------------------------------------------------------------------------------------------------------------//
 
-        /*CreateSplitTestBox(cubeParams, math::vec3(0.0f, 2.0f, 9.8f),
+        /*CreateSplitTestBox(cubeParams, math::float3(0.0f, 2.0f, 9.8f),
             math::quat(), true);
 
-        CreateSplitTestBox(cubeParams, math::vec3(0.0f, 3.0f, 9.8f),
+        CreateSplitTestBox(cubeParams, math::float3(0.0f, 3.0f, 9.8f),
             math::quat(), true);*/
 
  
@@ -1282,7 +1282,7 @@ namespace legion::physics
             auto rbH = block.add_component<physics::rigidbody>();
 
             auto rb = rbH.read();
-            rb.velocity = math::vec3(6, 0, 0);
+            rb.velocity = math::float3(6, 0, 0);
             rb.setMass(3.0f);
             rbH.write(rb);
 
@@ -1296,22 +1296,22 @@ namespace legion::physics
             block.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(block);
-            positionH.write(math::vec3(-3.0f, 3.0f, 9.8f));
-            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
+            positionH.write(math::float3(-3.0f, 3.0f, 9.8f));
+            scaleH.write(math::float3(1.0f, 1.0f, 1.0f));
 
             auto rotation = rotationH.read();
-            rotation *= math::angleAxis(math::deg2rad(45.0f), math::vec3(0, 1, 0));
-            rotation *= math::angleAxis(math::deg2rad(-60.0f), math::vec3(1, 0, 0));
+            rotation *= math::angleAxis(math::deg2rad(45.0f), math::float3(0, 1, 0));
+            rotation *= math::angleAxis(math::deg2rad(-60.0f), math::float3(1, 0, 0));
             block.write_component(rotation);
 
            
 
         }
 
-        CreateElongatedFloor(math::vec3(0, 1.0f, 9.8f), math::quat(), math::vec3(5,1,5), concreteH);
+        CreateElongatedFloor(math::float3(0, 1.0f, 9.8f), math::quat(), math::float3(5,1,5), concreteH);
     }
 
-    void PhysicsFractureTestSystem::CreateElongatedFloor(math::vec3 position, math::quat rot, math::vec3 scale,rendering::material_handle mat
+    void PhysicsFractureTestSystem::CreateElongatedFloor(math::float3 position, math::quat rot, math::float3 scale,rendering::material_handle mat
         ,bool hasCollider )
     {
         if (hasCollider)
@@ -1338,7 +1338,7 @@ namespace legion::physics
                 auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(floor5);
                 positionH.write(position);
                 rotationH.write(rot);
-                scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
+                scaleH.write(math::float3(1.0f, 1.0f, 1.0f));
             }
 
         }
@@ -1378,9 +1378,9 @@ namespace legion::physics
         }
     }
 
-    ecs::entity_handle PhysicsFractureTestSystem::CreateSplitTestBox(physics::cube_collider_params cubeParams,math::vec3 position,
+    ecs::entity_handle PhysicsFractureTestSystem::CreateSplitTestBox(physics::cube_collider_params cubeParams,math::float3 position,
         math::quat rotation, rendering::material_handle mat, bool isFracturable,bool hasRigidbody
-        ,math::vec3 velocity,float explosionStrength,float explosionTime, math::vec3 impactPoint, bool hasCollider)
+        ,math::float3 velocity,float explosionStrength,float explosionTime, math::float3 impactPoint, bool hasCollider)
     {
         auto ent = m_ecs->createEntity();
   
@@ -1422,7 +1422,7 @@ namespace legion::physics
 
         auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
         positionH.write(position);
-        scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
+        scaleH.write(math::float3(1.0f, 1.0f, 1.0f));
         rotationH.write(rotation);
 
         if (isFracturable)
@@ -1436,10 +1436,10 @@ namespace legion::physics
         return  ent;
     }
 
-    void PhysicsFractureTestSystem::createFloor(int xCount, int yCount, math::vec3 start,
-        math::vec3 offset, rendering::model_handle cubeH,std::vector< rendering::material_handle> materials,
+    void PhysicsFractureTestSystem::createFloor(int xCount, int yCount, math::float3 start,
+        math::float3 offset, rendering::model_handle cubeH,std::vector< rendering::material_handle> materials,
         std::vector<int> ignoreJ, std::vector<bool> shouldFracture, float fractureTime ,
-        math::vec3 impactPoint ,bool hasRigidbodies, float strength, bool hasCollider)
+        math::float3 impactPoint ,bool hasRigidbodies, float strength, bool hasCollider)
     {
         int k = 0;
         for (size_t i = 0; i < xCount; i++)
@@ -1470,8 +1470,8 @@ namespace legion::physics
 
                 auto material_handle = materials.at(  j%materials.size());
                 CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), start
-                    + math::vec3(offset.x * i, 0, offset.z * j),
-                    math::quat(), material_handle, shouldFractureFlag, hasRigidbodies, math::vec3(), strength,fractureTime,impactPoint,hasCollider);
+                    + math::float3(offset.x * i, 0, offset.z * j),
+                    math::quat(), material_handle, shouldFractureFlag, hasRigidbodies, math::float3(), strength,fractureTime,impactPoint,hasCollider);
                 k++;
             }
         }

@@ -12,13 +12,13 @@ namespace legion::core::math
     /**
      * @brief Calcualtes shortest distance from point to line segment
      */
-    inline float pointToLineSegment2D(const vec2& point, const vec2& lineOrigin, const vec2& lineEnd)
+    inline float pointToLineSegment2D(const float2& point, const float2& lineOrigin, const float2& lineEnd)
     {
         if (point == lineOrigin || point == lineEnd) return 0.0f;
-        vec2 lineDirection = lineEnd - lineOrigin;
-        vec2 lineNormal = vec2(-lineDirection.y, lineDirection.x);
+        float2 lineDirection = lineEnd - lineOrigin;
+        float2 lineNormal = float2(-lineDirection.y, lineDirection.x);
 
-        vec2 toLineOrigin = point - lineOrigin;
+        float2 toLineOrigin = point - lineOrigin;
 
         if (dot(toLineOrigin, lineDirection) <= 0.0)
         {
@@ -26,7 +26,7 @@ namespace legion::core::math
             // Return to line start
             return length(toLineOrigin);
         }
-        vec2 toLineEnd = point - lineEnd;
+        float2 toLineEnd = point - lineEnd;
 
         if (dot(toLineEnd, lineDirection) >= 0.0)
         {
@@ -42,11 +42,11 @@ namespace legion::core::math
     /**
      * @brief Calculate shortest distance from point to infinite line
      */
-    inline float pointToLine2D(const vec2& point, const vec2& lineOrigin, const vec2& lineEnd)
+    inline float pointToLine2D(const float2& point, const float2& lineOrigin, const float2& lineEnd)
     {
         if (point == lineOrigin || point == lineEnd) return 0.0f;
-        vec2 lineDirection = lineEnd - lineOrigin;
-        vec2 lineNormal = vec2(-lineDirection.y, lineDirection.x);
+        float2 lineDirection = lineEnd - lineOrigin;
+        float2 lineNormal = float2(-lineDirection.y, lineDirection.x);
 
         return dot(point - lineOrigin, normalize(lineNormal));
     }
@@ -56,12 +56,12 @@ namespace legion::core::math
      * @param lineOrigin - The origin of the line
      * @param lineEnd - The end of the line
      */
-    inline float pointToLineSegment(const vec3& point, const vec3& lineOrigin, const vec3& lineEnd)
+    inline float pointToLineSegment(const float3& point, const float3& lineOrigin, const float3& lineEnd)
     {
         // Check if the point is equal to the start or end of the line
         if (point == lineOrigin || point == lineEnd) return 0.0f;
-        vec3 dir = lineEnd - lineOrigin;
-        vec3 toLineOrigin = point - lineOrigin;
+        float3 dir = lineEnd - lineOrigin;
+        float3 toLineOrigin = point - lineOrigin;
 
         if (dot(toLineOrigin, dir) <= 0.0)
         {
@@ -69,7 +69,7 @@ namespace legion::core::math
             // Use distance to start of the line
             return length(toLineOrigin);
         }
-        vec3 toLineEnd = point - lineEnd;
+        float3 toLineEnd = point - lineEnd;
         if (dot(toLineEnd, dir) >= 0.0f)
         {
             // Projected point is beyond end of line
@@ -84,28 +84,28 @@ namespace legion::core::math
      */
     struct line_segment
     {
-        line_segment(vec3 origin, vec3 end) :
+        line_segment(float3 origin, float3 end) :
             origin(origin), end(end)
         {
         }
 
         // Line origin, line start
-        vec3 origin;
+        float3 origin;
         // Line end
-        vec3 end;
+        float3 end;
 
-        inline vec3 direction() const
+        inline float3 direction() const
         {
             return end - origin;
         }
 
         /**@brief Calculates the closest distance between point p and this line
          */
-        float distanceToPoint(const vec3& p) const
+        float distanceToPoint(const float3& p) const
         {
             if (p == origin || p == end) return 0.0f;
-            vec3 dir = direction();
-            vec3 toLineOrigin = p - origin;
+            float3 dir = direction();
+            float3 toLineOrigin = p - origin;
 
             if (dot(toLineOrigin, dir) <= 0.0)
             {
@@ -113,7 +113,7 @@ namespace legion::core::math
                 // Use distance to start of the line
                 return length(toLineOrigin);
             }
-            vec3 toLineEnd = p - end;
+            float3 toLineEnd = p - end;
             if (dot(toLineEnd, dir) >= 0.0f)
             {
                 // Projected point is beyond end of line
@@ -126,7 +126,7 @@ namespace legion::core::math
 
     /**@brief Calculates the size of a triangles surface area
      */
-    inline float triangleSurface(const vec3& p0, const vec3& p1, const vec3& p2)
+    inline float triangleSurface(const float3& p0, const float3& p1, const float3& p2)
     {
         if (p0 == p1 || p0 == p2 || p1 == p2) return 0.0;
         // side lengths
@@ -144,7 +144,7 @@ namespace legion::core::math
      * @param triPoint2 - The last triangle point
      * @param triNormal - The triangle plane normal
      */
-    inline float pointToTriangle(const vec3& p, const vec3& triPoint0, const vec3& triPoint1, const vec3& triPoint2, const vec3& triNormal,bool debug = false)
+    inline float pointToTriangle(const float3& p, const float3& triPoint0, const float3& triPoint1, const float3& triPoint2, const float3& triNormal,bool debug = false)
     {
         if (p == triPoint0 ||
             p == triPoint1 ||
@@ -158,9 +158,9 @@ namespace legion::core::math
         float positive = 1;
         if (projectionLength < 0) positive = -1;
         // A vector when added to p gives the projected point
-        vec3 towardProjection = (triNormal / length(triNormal)) * -projectionLength;
+        float3 towardProjection = (triNormal / length(triNormal)) * -projectionLength;
         // Q is the projection of p onto the plane
-        vec3 q = p + towardProjection;
+        float3 q = p + towardProjection;
 
         // We need to determine if projected p is inside the triangle.
         // By putting point q (projected point p) on the triangle, three new triangles are created
@@ -201,9 +201,9 @@ namespace legion::core::math
      * @param triPoint1 - The second triangle point
      * @param triPoint2 - The last triangle point
      */
-    inline float pointToTriangle(const vec3& p, const vec3& triPoint0, const vec3& triPoint1, const vec3& triPoint2)
+    inline float pointToTriangle(const float3& p, const float3& triPoint0, const float3& triPoint1, const float3& triPoint2)
     {
-        vec3 normal = normalize(cross(triPoint1 - triPoint0, triPoint2 - triPoint0));
+        float3 normal = normalize(cross(triPoint1 - triPoint0, triPoint2 - triPoint0));
         return pointToTriangle(p, triPoint0, triPoint1, triPoint2, normal);
     }
 
@@ -215,7 +215,7 @@ namespace legion::core::math
      * @param triNormal - The normal of the triangle plane
      * @return whther the point can be projected onto the triangle
      */
-    inline bool pointProjectionOntoTriangle(const vec3& p, const vec3& triPoint0, const vec3& triPoint1, const vec3& triPoint2, const vec3& triNormal)
+    inline bool pointProjectionOntoTriangle(const float3& p, const float3& triPoint0, const float3& triPoint1, const float3& triPoint2, const float3& triNormal)
     {
         if (p == triPoint0 ||
             p == triPoint1 ||
@@ -223,9 +223,9 @@ namespace legion::core::math
 
         float cosAngle = dot(triNormal, p - triPoint0) / (distance(p, triPoint0) * length(triNormal));
         float projectionLength = length(p - triPoint0) * cosAngle;
-        vec3 towardProjection = (triNormal / length(triNormal)) * -projectionLength;
+        float3 towardProjection = (triNormal / length(triNormal)) * -projectionLength;
         // Q is the projection of p onto the plane
-        vec3 q = p + towardProjection;
+        float3 q = p + towardProjection;
 
         // Old way of finding if the point is in the triangle
         double q01Area = triangleSurface(q, triPoint0, triPoint1);
@@ -245,7 +245,7 @@ namespace legion::core::math
      */
     struct triangle
     {
-        triangle(vec3 p0, vec3 p1, vec3 p2)
+        triangle(float3 p0, float3 p1, float3 p2)
         {
             points[0] = p0;
             points[1] = p1;
@@ -253,7 +253,7 @@ namespace legion::core::math
             normal = normalize(cross(p1 - p0, p2 - p0));
         }
 
-        triangle(vec3 p0, vec3 p1, vec3 p2, vec3 normal)
+        triangle(float3 p0, float3 p1, float3 p2, float3 normal)
         {
             points[0] = p0;
             points[1] = p1;
@@ -262,13 +262,13 @@ namespace legion::core::math
         }
 
         // The three points of the triangle
-        vec3 points[3];
+        float3 points[3];
         // The normalized normal of the triangle plane
-        vec3 normal;
+        float3 normal;
 
         /**@brief Calculates the closest distance between point p and this triangle
          */
-        float distanceToPoint(const vec3& p) const
+        float distanceToPoint(const float3& p) const
         {
             if (p == points[0] ||
                 p == points[1] ||
@@ -278,9 +278,9 @@ namespace legion::core::math
             float projectionLength = length(p - points[0]) * cosAngle;
             float positive = 1;
             if (projectionLength < 0) positive = -1;
-            vec3 towardProjection = (normal / length(normal)) * -projectionLength;
+            float3 towardProjection = (normal / length(normal)) * -projectionLength;
             // Q is the projection of p onto the plane
-            vec3 q = p + towardProjection;
+            float3 q = p + towardProjection;
 
             // Old way of finding if the point is in the triangle
             double q01Area = triangleSurface(q, points[0], points[1]);
@@ -328,12 +328,12 @@ namespace legion::core::math
      * @param planePosition - A point on the plane
      * @param planeNormal - The plane normal
      */
-    inline float pointToPlane(const vec3& point, const vec3& planePosition, const vec3& planeNormal)
+    inline float pointToPlane(const float3& point, const float3& planePosition, const float3& planeNormal)
     {
         return dot(normalize(planeNormal), point - planePosition);
     }
 
-    inline float angleToPlane(const vec3& point, const vec3& planePosition, const vec3& planeNormal)
+    inline float angleToPlane(const float3& point, const float3& planePosition, const float3& planeNormal)
     {
         return normalize_dot(planeNormal, point - planePosition);
     }
@@ -343,7 +343,7 @@ namespace legion::core::math
      */
     struct plane
     {
-        plane(vec3 position, vec3 normal) :
+        plane(float3 position, float3 normal) :
             position(position)
         {
             normal = normalize(normal);
@@ -353,20 +353,20 @@ namespace legion::core::math
          * @brief Uses p0 for the plane position 
          * @brief Calculates a normal using math::cross
          */
-        plane(vec3 p0, vec3 p1, vec3 p2)
+        plane(float3 p0, float3 p1, float3 p2)
         {
             position = p0;
             normal = normalize(cross(p1 - p0, p2 - p0));
         }
 
         // Position on the plane, or a point on the plane
-        vec3 position;
+        float3 position;
         // Normalized normal of the plane
-        vec3 normal;
+        float3 normal;
 
         /**@brief Calculates the closest distance between point p and this plane
          */
-        float distanceToPoint(const vec3& p) const
+        float distanceToPoint(const float3& p) const
         {
             return dot(normal, p-position);
         }
@@ -382,30 +382,30 @@ namespace legion::core::math
      * @param normal The normal of the plane
      * @param centroid The center of the the plane
      */
-    /*inline mat4 planeMatrix(const vec3& p0, const vec3& p1, const vec3& p2, const vec3& centroid)
+    /*inline float4x4 planeMatrix(const float3& p0, const float3& p1, const float3& p2, const float3& centroid)
     {
-        vec3 xAxis = p2 - p0;
-        vec3 zAxis = p1 - p0;
+        float3 xAxis = p2 - p0;
+        float3 zAxis = p1 - p0;
 
-        mat4 scale(
+        float4x4 scale(
             length(xAxis), 0, 0, 0,
             0, length(zAxis), 0, 0,
             0, 0, 1, 0,
             0, 0, 0, 1
             );
 
-        vec3 rotX = xAxis / length(xAxis);
-        vec3 rotZ = zAxis / length(zAxis);
-        vec3 rotY = cross(rotX, rotZ);
+        float3 rotX = xAxis / length(xAxis);
+        float3 rotZ = zAxis / length(zAxis);
+        float3 rotY = cross(rotX, rotZ);
 
-        mat4 rot(
+        float4x4 rot(
             rotX.x, rotX.y, rotX.z, 0,
             rotY.x, rotY.y, rotY.z, 0,
             rotZ.x, rotZ.y, rotZ.z, 0,
             0, 0, 0, 1
         );
 
-        mat4 translation(
+        float4x4 translation(
             1, 0, 0, centroid.x,
             0, 1, 0, centroid.y,
             0, 0, 1, centroid.z,

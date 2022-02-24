@@ -14,7 +14,7 @@ namespace legion::core::math
             static constexpr size_type size = Size;
             using value_type = vector<Scalar, size>;
 
-            inline L_ALWAYS_INLINE static value_type computef(const value_type& val, Scalar m) noexcept
+            L_NODISCARD inline L_ALWAYS_INLINE static value_type computef(const value_type& val, Scalar m) noexcept
             {
                 value_type result;
                 for (size_type i = 0; i < size; i++)
@@ -22,7 +22,7 @@ namespace legion::core::math
                 return result;
             }
 
-            inline L_ALWAYS_INLINE static value_type computef(const value_type& val, const value_type& m) noexcept
+            L_NODISCARD inline L_ALWAYS_INLINE static value_type computef(const value_type& val, const value_type& m) noexcept
             {
                 value_type result;
                 for (size_type i = 0; i < size; i++)
@@ -30,7 +30,7 @@ namespace legion::core::math
                 return result;
             }
 
-            constexpr static value_type compute(const value_type& val, Scalar m) noexcept
+            L_NODISCARD constexpr static value_type compute(const value_type& val, Scalar m) noexcept
             {
                 value_type result;
                 for (size_type i = 0; i < size; i++)
@@ -38,7 +38,7 @@ namespace legion::core::math
                 return result;
             }
 
-            constexpr static value_type compute(const value_type& val, const value_type& m) noexcept
+            L_NODISCARD constexpr static value_type compute(const value_type& val, const value_type& m) noexcept
             {
                 value_type result;
                 for (size_type i = 0; i < size; i++)
@@ -46,10 +46,37 @@ namespace legion::core::math
                 return result;
             }
         };
+
+        template<typename Scalar>
+        struct compute_mod<Scalar, 1u>
+        {
+            static constexpr size_type size = 1u;
+            using value_type = vector<Scalar, size>;
+
+            L_NODISCARD inline L_ALWAYS_INLINE static Scalar computef(const value_type& val, Scalar m) noexcept
+            {
+                return ::std::fmod(val[0], m);
+            }
+
+            L_NODISCARD inline L_ALWAYS_INLINE static Scalar computef(const value_type& val, const value_type& m) noexcept
+            {
+                return ::std::fmod(val[0], m[0]);
+            }
+
+            L_NODISCARD constexpr static Scalar compute(const value_type& val, Scalar m) noexcept
+            {
+                return val[0] % m;
+            }
+
+            L_NODISCARD constexpr static Scalar compute(const value_type& val, const value_type& m) noexcept
+            {
+                return val[0] % m[0];
+            }
+        };
     }
 
     template<typename T>
-    inline L_ALWAYS_INLINE static T fmod(const T& val, const T& m)
+    L_NODISCARD inline L_ALWAYS_INLINE static auto fmod(const T& val, const T& m)
     {
         if constexpr (is_vector_v<T>)
         {
@@ -64,14 +91,14 @@ namespace legion::core::math
     }
 
     template<typename vec_type, std::enable_if_t<is_vector_v<vec_type>, bool> = true>
-    inline L_ALWAYS_INLINE static auto fmod(const vec_type& val, typename vec_type::scalar m)
+    L_NODISCARD inline L_ALWAYS_INLINE static auto fmod(const vec_type& val, typename vec_type::scalar m)
     {
         static_assert(::std::is_floating_point_v<typename vec_type::scalar>, "Value must be floating point in order to use fmod, use mod instead.");
         return detail::compute_mod<typename vec_type::scalar, vec_type::size>::computef(val, m);
     }
 
     template<typename T>
-    inline L_ALWAYS_INLINE static T mod(const T& val, const T& m)
+    L_NODISCARD inline L_ALWAYS_INLINE static auto mod(const T& val, const T& m)
     {
         if constexpr (is_vector_v<T>)
         {
@@ -87,7 +114,7 @@ namespace legion::core::math
     }
 
     template<typename vec_type, std::enable_if_t<is_vector_v<vec_type>, bool> = true>
-    inline L_ALWAYS_INLINE static auto mod(const vec_type& val, typename vec_type::scalar m)
+    L_NODISCARD inline L_ALWAYS_INLINE static auto mod(const vec_type& val, typename vec_type::scalar m)
     {
         if constexpr (::std::is_floating_point_v<typename vec_type::scalar>)
             return detail::compute_mod<typename vec_type::scalar, vec_type::size>::computef(val, m);
@@ -96,13 +123,13 @@ namespace legion::core::math
     }
 
     template<typename vec_type, std::enable_if_t<is_vector_v<vec_type>, bool> = true>
-    inline L_ALWAYS_INLINE auto operator%(const vec_type& val, typename vec_type::scalar m)
+    L_NODISCARD inline L_ALWAYS_INLINE auto operator%(const vec_type& val, typename vec_type::scalar m)
     {
         return mod(val, m);
     }
 
     template<typename vec_type, std::enable_if_t<is_vector_v<vec_type>, bool> = true>
-    inline L_ALWAYS_INLINE auto operator%(const vec_type& val, const vec_type& m)
+    L_NODISCARD inline L_ALWAYS_INLINE auto operator%(const vec_type& val, const vec_type& m)
     {
         return mod(val, m);
     }

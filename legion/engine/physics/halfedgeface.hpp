@@ -21,11 +21,11 @@ namespace legion::physics
         };
 
         HalfEdgeEdge* startEdge;
-        math::vec3 normal;
-        math::vec3 centroid;
+        math::float3 normal;
+        math::float3 centroid;
         math::color DEBUG_color;
         
-        HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
+        HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::float3 newNormal);
 
         /**@brief Deletes all the edges of this face
          * Warning: pairing edges are not deleted because their face may still exist
@@ -102,7 +102,7 @@ namespace legion::physics
             if (relation == face_angle_relation::concave) return "concave";
         }
 
-        void DEBUG_DrawFace(const math::mat4& transform, const math::color& debugColor,  float time = 20.0f);
+        void DEBUG_DrawFace(const math::float4x4& transform, const math::color& debugColor,  float time = 20.0f);
 
         ~HalfEdgeFace();
     };

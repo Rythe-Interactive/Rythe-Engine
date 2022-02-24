@@ -28,7 +28,7 @@ namespace legion::rendering
 
 
         auto renderSize = color_texture.get_texture().size();
-        m_fxaaShader.get_uniform<math::vec2>(texelSizeId).set_value(math::vec2(1.f / renderSize.x, 1.f / renderSize.y));
+        m_fxaaShader.get_uniform<math::float2>(texelSizeId).set_value(math::float2(1.f / renderSize.x, 1.f / renderSize.y));
 
         m_fxaaShader.get_uniform<float>(blurConstraintId).set_value(8.f);
         m_fxaaShader.get_uniform<float>(reductionScaleId).set_value(1.f/8.f);

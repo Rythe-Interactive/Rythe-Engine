@@ -29,7 +29,7 @@ namespace legion::rendering
          * @param resolution Resolution of the renderbuffer.
          * @param samples Amount of samples to use for multi-sampling. Leave this 0 to disable multi-sampling.
          */
-        renderbuffer(GLenum internalformat, math::ivec2 resolution, uint samples = 0);
+        renderbuffer(GLenum internalformat, math::int2 resolution, uint samples = 0);
 
         /**@brief Main allocating constructor. This constructor actually creates the GPU side renderbuffer.
          * @note Read more at <a href="http://docs.gl/gl4/glRenderbufferStorage">docs.gl.</a>
@@ -71,11 +71,11 @@ namespace legion::rendering
 
         /**@brief Returns the current resolution of the renderbuffer.
          */
-        L_NODISCARD math::ivec2 size() const;
+        L_NODISCARD math::int2 size() const;
 
         /**@brief Resizes the renderbuffer to a new resolution. This reallocates VRAM and thus invalidates all data in the renderbuffer.
          */
-        void resize(math::ivec2 newSize) const;
+        void resize(math::int2 newSize) const;
 
     };
 }

@@ -63,11 +63,11 @@ namespace legion::core
      */
     struct mesh
     {
-        std::vector<math::vec3> vertices;
+        std::vector<math::float3> vertices;
         std::vector<math::color> colors;
-        std::vector<math::vec3> normals;
-        std::vector<math::vec2> uvs;
-        std::vector<math::vec3> tangents;
+        std::vector<math::float3> normals;
+        std::vector<math::float2> uvs;
+        std::vector<math::float3> tangents;
         std::vector<uint> indices;
         material_list materials;
 
@@ -89,6 +89,6 @@ namespace legion::core
         bool keepNativeCoords = false;
         bool flipVerticalTexcoords = true;
         winding_order windingOrder = winding_order::clockwise;
-        math::mat4 transform = math::mat4(1.f);
+        math::float4x4 transform = math::float4x4(1.f);
     };
 }

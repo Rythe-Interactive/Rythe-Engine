@@ -20,18 +20,18 @@ namespace legion::physics
         rigidbody* rbRef;
         rigidbody* rbInc;
 
-        math::vec3 RefWorldContact;
-        math::vec3 IncWorldContact;
+        math::float3 RefWorldContact;
+        math::float3 IncWorldContact;
 
-        math::vec3 refRBCentroid;
-        math::vec3 incRBCentroid;
+        math::float3 refRBCentroid;
+        math::float3 incRBCentroid;
 
-        math::mat4 refTransform;
-        math::mat4 incTransform;
+        math::float4x4 refTransform;
+        math::float4x4 incTransform;
 
-        math::vec3 collisionNormal;
-        math::vec3 tangentNormal1;
-        math::vec3 tangentNormal2;
+        math::float3 collisionNormal;
+        math::float3 tangentNormal1;
+        math::float3 tangentNormal2;
 
         float totalLambda = 0.0f;
         float tangent1Lambda = 0.0f;
@@ -48,8 +48,8 @@ namespace legion::physics
         {
             OPTICK_EVENT();
 
-            math::vec3 Ra = RefWorldContact - refRBCentroid;
-            math::vec3 Rb = IncWorldContact - incRBCentroid;
+            math::float3 Ra = RefWorldContact - refRBCentroid;
+            math::float3 Rb = IncWorldContact - incRBCentroid;
 
             ApplyImpulse(collisionNormal, totalLambda, Ra, Rb);
             ApplyImpulse(tangentNormal1, tangent1Lambda, Ra, Rb);
@@ -119,15 +119,15 @@ namespace legion::physics
             //where Ib is the 3x3 matrix inertia tensor of the rigidbodyB,
 
             //calculate J.V + b
-            math::vec3 Ra, Rb, minRaCrossN, RbCrossN;
+            math::float3 Ra, Rb, minRaCrossN, RbCrossN;
             calculateJacobianComponents(collisionNormal, Ra, minRaCrossN, Rb, RbCrossN);
 
-            math::vec3 va, wa, vb, wb;
+            math::float3 va, wa, vb, wb;
 
-            va = rbRef ? rbRef->velocity : math::vec3::zero;
-            wa = rbRef ? rbRef->angularVelocity : math::vec3::zero;
-            vb = rbInc ? rbInc->velocity : math::vec3::zero;
-            wb = rbInc ? rbInc->angularVelocity : math::vec3::zero;
+            va = rbRef ? rbRef->velocity : math::float3::zero;
+            wa = rbRef ? rbRef->angularVelocity : math::float3::zero;
+            vb = rbInc ? rbInc->velocity : math::float3::zero;
+            wb = rbInc ? rbInc->angularVelocity : math::float3::zero;
 
             float JVx = math::dot(-collisionNormal, va);
             float JVy = math::dot(minRaCrossN, wa);
@@ -154,8 +154,8 @@ namespace legion::physics
             //calculate restitution between the 2 bodies
             float restCoeff = rigidbody::calculateRestitution(rbRef? rbRef->restitution : 0.3f, rbInc? rbInc->restitution : 0.3f);
 
-            math::vec3 minWaCrossRa = math::cross(-wa, Ra);
-            math::vec3 WbCrossRb = math::cross(wb, Rb);
+            math::float3 minWaCrossRa = math::cross(-wa, Ra);
+            math::float3 WbCrossRb = math::cross(wb, Rb);
 
             //restitution is based on the relative velocities of the 2 rigidbodies
             float dotResult = math::dot((-va + minWaCrossRa + vb + WbCrossRb), collisionNormal);
@@ -191,8 +191,8 @@ namespace legion::physics
             float frictionCoeff = rigidbody::calculateFriction(rbRef ? rbRef->friction : 0.3f, rbInc ? rbInc->friction : 0.3f);
             float frictionConstraint = totalLambda * frictionCoeff;
 
-            math::vec3 Ra = RefWorldContact - refRBCentroid;
-            math::vec3 Rb = IncWorldContact - incRBCentroid;
+            math::float3 Ra = RefWorldContact - refRBCentroid;
+            math::float3 Rb = IncWorldContact - incRBCentroid;
 
             //calculate friction constraint for tangent1
             {
@@ -240,11 +240,11 @@ namespace legion::physics
 
             //--------------------------- pre calculate contact constraint effective mass -----------------------------------//
 
-            tangentNormal1 = math::cross(collisionNormal, math::vec3(1, 0, 0));
+            tangentNormal1 = math::cross(collisionNormal, math::float3(1, 0, 0));
 
             if (math::epsilonEqual(math::length(tangentNormal1), 0.0f, 0.01f))
             {
-                tangentNormal1 = math::cross(collisionNormal, math::vec3(0, 1, 0));
+                tangentNormal1 = math::cross(collisionNormal, math::float3(0, 1, 0));
             }
 
             tangentNormal1 = math::normalize(tangentNormal1);
@@ -256,17 +256,17 @@ namespace legion::physics
             tangent2EffectiveMass = calculateEffectiveMassOnNormal(tangentNormal2);
         }
 
-        float calculateJVConstraint(const math::vec3& normal)
+        float calculateJVConstraint(const math::float3& normal)
         {
-            math::vec3 Ra, Rb, minRaCrossN, RbCrossN;
+            math::float3 Ra, Rb, minRaCrossN, RbCrossN;
             calculateJacobianComponents(normal, Ra, minRaCrossN, Rb, RbCrossN);
 
-            math::vec3 va, wa, vb, wb;
+            math::float3 va, wa, vb, wb;
 
-            va = rbRef ? rbRef->velocity : math::vec3::zero;
-            wa = rbRef ? rbRef->angularVelocity : math::vec3::zero;
-            vb = rbInc ? rbInc->velocity : math::vec3::zero;
-            wb = rbInc ? rbInc->angularVelocity : math::vec3::zero;
+            va = rbRef ? rbRef->velocity : math::float3::zero;
+            wa = rbRef ? rbRef->angularVelocity : math::float3::zero;
+            vb = rbInc ? rbInc->velocity : math::float3::zero;
+            wb = rbInc ? rbInc->angularVelocity : math::float3::zero;
 
             float JVx = math::dot(-normal, va);
             float JVy = math::dot(minRaCrossN, wa);
@@ -276,9 +276,9 @@ namespace legion::physics
             return -(JVx + JVy + JVz + JVw);
         }
 
-        float calculateEffectiveMassOnNormal(math::vec3& normal)
+        float calculateEffectiveMassOnNormal(math::float3& normal)
         {
-            math::vec3 Ra, Rb, minRaCrossN, RbCrossN;
+            math::float3 Ra, Rb, minRaCrossN, RbCrossN;
             calculateJacobianComponents(normal, Ra, minRaCrossN, Rb, RbCrossN);
 
             float maUnit = rbRef ? rbRef->inverseMass : 0.0f;
@@ -291,10 +291,10 @@ namespace legion::physics
             math::mat3 Ib = rbInc ? rbInc->globalInverseInertiaTensor : math::mat3(0.0f);
 
             //calculate M^-1 J^T
-            math::vec3 jx = ma * -normal;
-            math::vec3 jy = Ia * minRaCrossN;
-            math::vec3 jz = mb * normal;
-            math::vec3 jw = Ib * RbCrossN;
+            math::float3 jx = ma * -normal;
+            math::float3 jy = Ia * minRaCrossN;
+            math::float3 jz = mb * normal;
+            math::float3 jw = Ib * RbCrossN;
 
             //calculate effective mass
             float efMx = math::dot(-normal, jx);
@@ -309,17 +309,17 @@ namespace legion::physics
         /* @brief Given a normal indicating the impulse direction, the vectors ra and rb that indicate the contact vectors,
         * and a lambda that indicates the scalar value of the impulse, applies impulses to the colliding rigidbodies
         */
-        void ApplyImpulse(const math::vec3& normal, const float lambda,
-            const math::vec3& ra, const math::vec3& rb)
+        void ApplyImpulse(const math::float3& normal, const float lambda,
+            const math::float3& ra, const math::float3& rb)
         {
 
-            math::vec3 linearImpulse = normal * lambda;
+            math::float3 linearImpulse = normal * lambda;
 
-            math::vec3 torqueDirectionA = math::cross(-ra, normal);
-            math::vec3 torqueDirectionB = math::cross(rb, normal);
+            math::float3 torqueDirectionA = math::cross(-ra, normal);
+            math::float3 torqueDirectionB = math::cross(rb, normal);
 
-            math::vec3 angularImpulseA = torqueDirectionA * lambda;      
-            math::vec3 angularImpulseB = torqueDirectionB * lambda;
+            math::float3 angularImpulseA = torqueDirectionA * lambda;      
+            math::float3 angularImpulseB = torqueDirectionB * lambda;
 
             if (rbRef)
             {
@@ -335,8 +335,8 @@ namespace legion::physics
             }
         }
 
-        void calculateJacobianComponents(const math::vec3 normal,
-            math::vec3& Ra, math::vec3& minRaCrossN, math::vec3& Rb, math::vec3& RbCrossN)
+        void calculateJacobianComponents(const math::float3 normal,
+            math::float3& Ra, math::float3& minRaCrossN, math::float3& Rb, math::float3& RbCrossN)
         {
             Ra = RefWorldContact - refRBCentroid;
             Rb = IncWorldContact - incRBCentroid;

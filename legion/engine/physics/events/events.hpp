@@ -32,7 +32,7 @@ namespace legion::physics {
 
         /** @brief gets the centers of the colliders in local space
          */
-        L_NODISCARD std::pair<math::vec3,math::vec3> centers() const noexcept
+        L_NODISCARD std::pair<math::float3,math::float3> centers() const noexcept
         {
             return std::make_pair(
                 manifold->colliderA->GetLocalCentroid(),

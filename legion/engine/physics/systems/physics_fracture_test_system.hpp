@@ -28,12 +28,12 @@ namespace legion::physics
 
     private:
 
-        void CreateElongatedFloor(math::vec3 position,math::quat rot, math::vec3 scale, rendering::material_handle mat, bool hasCollider =true);
+        void CreateElongatedFloor(math::float3 position,math::quat rot, math::float3 scale, rendering::material_handle mat, bool hasCollider =true);
 
-        ecs::entity_handle CreateSplitTestBox(physics::cube_collider_params cubeParams, math::vec3 position,
+        ecs::entity_handle CreateSplitTestBox(physics::cube_collider_params cubeParams, math::float3 position,
             math::quat rotation, rendering::material_handle mat, bool isFracturable, bool hasRigidbody = false
-            , math::vec3 velocity = math::vec3(), float explosionStrength = 0.0f, float explosionTime = FLT_MAX,
-            math::vec3 impactPoint = math::vec3(-69.0f,0.0f,0.0f), bool hasCollider = true);
+            , math::float3 velocity = math::float3(), float explosionStrength = 0.0f, float explosionTime = FLT_MAX,
+            math::float3 impactPoint = math::float3(-69.0f,0.0f,0.0f), bool hasCollider = true);
 
         void OnSplit(physics_split_test* action);
 
@@ -53,7 +53,7 @@ namespace legion::physics
 
         void OneTimeContinuePhysics(nextPhysicsTimeStepContinue * action);
 
-        void spawnCubeStack(math::vec3 start);
+        void spawnCubeStack(math::float3 start);
 
         void compositeColliderTest();
 
@@ -61,12 +61,12 @@ namespace legion::physics
 
         void spawnEntityOnCameraForward(spawnEntity * action);
 
-        void simpleMinecraftHouse(math::vec3 start);
+        void simpleMinecraftHouse(math::float3 start);
 
-        void createFloor(int xCount, int yCount, math::vec3 start,
-            math::vec3 offset, rendering::model_handle cubeH, std::vector< rendering::material_handle> materials
+        void createFloor(int xCount, int yCount, math::float3 start,
+            math::float3 offset, rendering::model_handle cubeH, std::vector< rendering::material_handle> materials
             , std::vector<int> ignoreJ, std::vector<bool> shouldFracture , float fractureTime = FLT_MAX,
-            math::vec3 impactPoint = math::vec3(), bool hasRigidbodies = false,float strength =0.0f,bool hasCollider = true);
+            math::float3 impactPoint = math::float3(), bool hasRigidbodies = false,float strength =0.0f,bool hasCollider = true);
 
         void smallExplosionTest(smallExplosion*action);
         void mediumExplosionTest(mediumExplosion*action);

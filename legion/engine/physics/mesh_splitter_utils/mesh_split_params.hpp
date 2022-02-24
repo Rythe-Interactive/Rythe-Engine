@@ -6,14 +6,14 @@ namespace legion::physics
 {
     struct MeshSplitParams
     {
-        MeshSplitParams(math::vec3 pPlanePosition,math::vec3 pPlaneNormal)
+        MeshSplitParams(math::float3 pPlanePosition,math::float3 pPlaneNormal)
             : planePostion(pPlanePosition), planeNormal(pPlaneNormal)
         {
 
         }
 
-        math::vec3 planePostion;
-        math::vec3 planeNormal;
+        math::float3 planePostion;
+        math::float3 planeNormal;
     };
 }
 

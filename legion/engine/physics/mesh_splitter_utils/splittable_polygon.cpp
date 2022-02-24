@@ -6,7 +6,7 @@
 namespace legion::physics
 {
     SplittablePolygon::SplittablePolygon
-    (std::vector<std::shared_ptr<MeshHalfEdge>>& pEdgesInMesh,math::vec3 pNormal)
+    (std::vector<std::shared_ptr<MeshHalfEdge>>& pEdgesInMesh,math::float3 pNormal)
         : edgesInPolygon(std::move(pEdgesInMesh)), localNormal(pNormal)
     {
         debugColor = math::color(math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f));
@@ -65,7 +65,7 @@ namespace legion::physics
     
 
     void SplittablePolygon::CalculatePolygonSplit
-    (const math::mat4& transform, math::vec3 planePosition, math::vec3 planeNormal, bool keepBelow)
+    (const math::float4x4& transform, math::float3 planePosition, math::float3 planeNormal, bool keepBelow)
     {
         int aboveCount = 0;
         int belowCount = 0;
@@ -73,7 +73,7 @@ namespace legion::physics
         for (auto edge : edgesInPolygon)
         {
             
-            math::vec3 worldPosition = transform * math::vec4(edge->position, 1);
+            math::float3 worldPosition = transform * math::float4(edge->position, 1);
 
             float distToPlane = PhysicsStatics::PointDistanceToPlane
             (planeNormal, planePosition, worldPosition);
@@ -113,13 +113,13 @@ namespace legion::physics
 
     }
 
-    void SplittablePolygon::IdentifyBoundaries(const math::mat4& transform)
+    void SplittablePolygon::IdentifyBoundaries(const math::float4x4& transform)
     {
         for (auto edge : edgesInPolygon)
         {
             bool edgeIsBoundary = true;
-            math::vec3 transformedNormal = edge->calculateEdgeNormal(transform);
-            math::vec3 transformedOtherNormal = edge->pairingEdge->calculateEdgeNormal(transform);
+            math::float3 transformedNormal = edge->calculateEdgeNormal(transform);
+            math::float3 transformedOtherNormal = edge->pairingEdge->calculateEdgeNormal(transform);
 
             if (edge->pairingEdge)
             {
@@ -139,13 +139,13 @@ namespace legion::physics
         return m_SplitState;
     }
 
-    void SplittablePolygon::DEBUG_drawEdgeBoundaryInset(const math::mat4& transform)
+    void SplittablePolygon::DEBUG_drawEdgeBoundaryInset(const math::float4x4& transform)
     {
         static float inset = 0.05f;
 
         for (auto edge : edgesInPolygon)
         {
-            math::vec3 worldCentroid = transform * math::vec4(localCentroid, 1);
+            math::float3 worldCentroid = transform * math::float4(localCentroid, 1);
 
             if (edge->isBoundary)
             {

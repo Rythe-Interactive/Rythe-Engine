@@ -132,7 +132,7 @@ namespace legion::rendering
         if (vao == -1)
             glGenVertexArrays(1, &vao);
 
-        static std::unordered_map<float, std::tuple<std::vector<uint>, std::vector<math::color>, std::vector<math::vec3>>> lineBatches;
+        static std::unordered_map<float, std::tuple<std::vector<uint>, std::vector<math::color>, std::vector<math::float3>>> lineBatches;
         for (auto& [width, data] : lineBatches)
         {
             auto& [ignoreDepths, colors, vertices] = data;
@@ -177,11 +177,11 @@ namespace legion::rendering
             size_type vertexCount = vertices.size();
             if (vertexCount > vertexBufferSize)
             {
-                glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(math::vec3), 0, GL_DYNAMIC_DRAW);
+                glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(math::float3), 0, GL_DYNAMIC_DRAW);
                 vertexBufferSize = vertexCount;
             }
 
-            glBufferSubData(GL_ARRAY_BUFFER, 0, vertexCount * sizeof(math::vec3), vertices.data());
+            glBufferSubData(GL_ARRAY_BUFFER, 0, vertexCount * sizeof(math::float3), vertices.data());
             glEnableVertexAttribArray(SV_POSITION);
             glVertexAttribPointer(SV_POSITION, 3, GL_FLOAT, GL_FALSE, 0, 0);
 

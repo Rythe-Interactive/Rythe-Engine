@@ -95,7 +95,7 @@ namespace fmt
     };
 
     template <>
-    struct formatter<legion::core::math::vec2> {
+    struct formatter<legion::core::math::float2> {
         // Presentation format: 'f' - fixed, 'e' - exponential.
         char presentation = 'f';
 
@@ -132,7 +132,7 @@ namespace fmt
         // Formats the point p using the parsed format specification (presentation)
         // stored in this formatter.
         template <typename FormatContext>
-        auto format(const legion::core::math::vec2& p, FormatContext& ctx) {
+        auto format(const legion::core::math::float2& p, FormatContext& ctx) {
             // auto format(const point &p, FormatContext &ctx) -> decltype(ctx.out()) // c++11
               // ctx.out() is an output iterator to write to.
             return format_to(
@@ -143,7 +143,7 @@ namespace fmt
     };
 
     template <>
-    struct formatter<legion::core::math::ivec2> {
+    struct formatter<legion::core::math::int2> {
 
         constexpr const char* parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
@@ -157,7 +157,7 @@ namespace fmt
         }
 
         template <typename FormatContext>
-        auto format(const legion::core::math::ivec2& p, FormatContext& ctx) {
+        auto format(const legion::core::math::int2& p, FormatContext& ctx) {
             return format_to(
                 ctx.out(),
                 "({}, {})",
@@ -166,7 +166,7 @@ namespace fmt
     };
 
     template <>
-    struct formatter<legion::core::math::vec3> {
+    struct formatter<legion::core::math::float3> {
         char presentation = 'f';
 
         constexpr const char* parse(format_parse_context& ctx) {
@@ -184,7 +184,7 @@ namespace fmt
         }
 
         template <typename FormatContext>
-        auto format(const legion::core::math::vec3& p, FormatContext& ctx) {
+        auto format(const legion::core::math::float3& p, FormatContext& ctx) {
             return format_to(
                 ctx.out(),
                 presentation == 'f' ? "({:.1f}, {:.1f}, {:.1f})" : "({:.1e}, {:.1e}, {:.1e})",
@@ -193,7 +193,7 @@ namespace fmt
     };
 
     template <>
-    struct formatter<legion::core::math::ivec3> {
+    struct formatter<legion::core::math::int3> {
 
         constexpr const char* parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
@@ -207,7 +207,7 @@ namespace fmt
         }
 
         template <typename FormatContext>
-        auto format(const legion::core::math::ivec3& p, FormatContext& ctx) {
+        auto format(const legion::core::math::int3& p, FormatContext& ctx) {
             return format_to(
                 ctx.out(),
                 "({}, {}, {})",
@@ -216,7 +216,7 @@ namespace fmt
     };
 
     template <>
-    struct formatter<legion::core::math::vec4> {
+    struct formatter<legion::core::math::float4> {
         char presentation = 'f';
 
         constexpr const char* parse(format_parse_context& ctx) {
@@ -234,7 +234,7 @@ namespace fmt
         }
 
         template <typename FormatContext>
-        auto format(const legion::core::math::vec4& p, FormatContext& ctx) {
+        auto format(const legion::core::math::float4& p, FormatContext& ctx) {
             return format_to(
                 ctx.out(),
                 presentation == 'f' ? "({:.1f}, {:.1f}, {:.1f}, {:.1f})" : "({:.1e}, {:.1e}, {:.1e}, {:.1e})",
@@ -264,8 +264,8 @@ namespace fmt
         auto format(const legion::core::math::quat& p, FormatContext& ctx) {
             return format_to(
                 ctx.out(),
-                presentation == 'f' ? "(({:.1f}, {:.1f}, {:.1f}),r: {:.1f})" : "(({:.1e}, {:.1e}, {:.1e}),r: {:.1e})",
-                p.x, p.y, p.z, p.w);
+                presentation == 'f' ? "(({:.1f}, {:.1f}, {:.1f}), {:.1f})" : "(({:.1e}, {:.1e}, {:.1e}), {:.1e})",
+                p.i, p.j, p.k, p.w);
         }
     };
 

@@ -19,8 +19,8 @@ namespace legion::physics
 {
     struct MeshLine
     {
-        math::vec3 start;
-        math::vec3 end;
+        math::float3 start;
+        math::float3 end;
         math::color Color;
     };
 
@@ -117,10 +117,10 @@ namespace legion::physics
                 {
                     auto [posH,rotH,scaleH] = ent.get_component_handles<transform>();
                     debug::drawLine
-                    (posH.read(), posH.read() + math::vec3(0, 5, 0), math::colors::red, 20.0f, 0.0f, true);
+                    (posH.read(), posH.read() + math::float3(0, 5, 0), math::colors::red, 20.0f, 0.0f, true);
 
                     auto splitter = splitterHandle.read();
-                    math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
+                    math::float4x4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
 
                     splitter.DEBUG_DrawPolygonData(transform);
                 }
@@ -141,7 +141,7 @@ namespace legion::physics
 
             m_scheduler->queueJobs(physComps.size(), [&]() {
                 id_type index = async::this_job::get_id();
-                math::mat4 transf;
+                math::float4x4 transf;
                 math::compose(transf, scales[index], rotations[index], positions[index]);
 
                 for (auto& collider : physComps[index].colliders)
@@ -172,7 +172,7 @@ namespace legion::physics
         const float m_timeStep = 0.02f;
 
 
-        math::ivec3 uniformGridCellSize = math::ivec3(1, 1, 1);
+        math::int3 uniformGridCellSize = math::int3(1, 1, 1);
 
         /** @brief Performs the entire physics pipeline (
          * Broadphase Collision Detection, Narrowphase Collision Detection, and the Collision Resolution)
@@ -242,11 +242,11 @@ namespace legion::physics
                 auto& rb = rigidbodies[async::this_job::get_id()];
 
                 ////-------------------- update velocity ------------------//
-                math::vec3 acc = rb.forceAccumulator * rb.inverseMass;
+                math::float3 acc = rb.forceAccumulator * rb.inverseMass;
                 rb.velocity += (acc + constants::gravity) * deltaTime;
 
                 ////-------------------- update angular velocity ------------------//
-                math::vec3 angularAcc = rb.torqueAccumulator * rb.globalInverseInertiaTensor;
+                math::float3 angularAcc = rb.torqueAccumulator * rb.globalInverseInertiaTensor;
                 rb.angularVelocity += (angularAcc)*deltaTime;
 
                 rb.resetAccumulators();
@@ -279,7 +279,7 @@ namespace legion::physics
 
                 if (!math::epsilonEqual(dtAngle, 0.0f, math::epsilon<float>()))
                 {
-                    math::vec3 axis = math::normalize(rb.angularVelocity);
+                    math::float3 axis = math::normalize(rb.angularVelocity);
 
                     math::quat glmQuat = math::angleAxis(dtAngle, axis);
                     rot = glmQuat * rot;

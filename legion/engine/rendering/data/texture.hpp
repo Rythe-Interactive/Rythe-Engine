@@ -77,7 +77,7 @@ namespace legion::rendering
      */
     struct texture_data
     {
-        math::ivec2 size;
+        math::int2 size;
         texture_type type;
 
         std::vector<math::color> pixels;
@@ -99,8 +99,8 @@ namespace legion::rendering
 
         static void to_resource(fs::basic_resource* resource, const texture& value);
         static void from_resource(texture* value, const fs::basic_resource& resource);
-        math::ivec2 size() const;
-        void resize(math::ivec2 size) const;
+        math::int2 size() const;
+        void resize(math::int2 size) const;
     };
 
     /**@class texture_handle
@@ -171,7 +171,7 @@ namespace legion::rendering
          */
         static texture_handle create_texture(const std::string& name, const fs::view& file, texture_import_settings settings = default_texture_settings);
         static texture_handle create_texture(const fs::view& file, texture_import_settings settings = default_texture_settings);
-        static texture_handle create_texture(const std::string& name, math::ivec2 size, texture_import_settings settings = default_texture_settings);
+        static texture_handle create_texture(const std::string& name, math::int2 size, texture_import_settings settings = default_texture_settings);
 
         /**@brief Create a new texture from an image if a texture with the same name doesn't exist yet.
          * @param name Name of the image and identifying name for the texture.

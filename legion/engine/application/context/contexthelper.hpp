@@ -47,11 +47,11 @@ namespace legion::application
         static int getError(cstring* desc);
         static GLFWmonitor* getPrimaryMonitor();
         static GLFWmonitor* getCurrentMonitor(GLFWwindow* window);
-        static void setWindowMonitor(GLFWwindow* window, GLFWmonitor* monitor, math::ivec2 pos, math::ivec2 size, int refreshRate);
+        static void setWindowMonitor(GLFWwindow* window, GLFWmonitor* monitor, math::int2 pos, math::int2 size, int refreshRate);
         static const GLFWvidmode* getPrimaryVideoMode();
         static const GLFWvidmode* getVideoMode(GLFWmonitor* monitor);
         static void windowHint(int hint, int value);
-        static GLFWwindow* createWindow(math::ivec2 dim, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
+        static GLFWwindow* createWindow(math::int2 dim, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
         static GLFWwindow* createWindow(int width, int height, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
         /**@brief Request the input thread to give focus to this window.
          */
@@ -65,10 +65,10 @@ namespace legion::application
         static void setWindowIcon(GLFWwindow* window, int count, const GLFWimage* images);
         static void setWindowAttrib(GLFWwindow* window, int attrib, int value);
         static void setWindowPos(GLFWwindow* window, int x, int y);
-        static void setWindowPos(GLFWwindow* window, math::ivec2 pos);
-        static math::ivec2 getWindowPos(GLFWwindow* window);
+        static void setWindowPos(GLFWwindow* window, math::int2 pos);
+        static math::int2 getWindowPos(GLFWwindow* window);
         static void destroyWindow(GLFWwindow* window);
-        static math::ivec2 getFramebufferSize(GLFWwindow* window);
+        static math::int2 getFramebufferSize(GLFWwindow* window);
         static void swapBuffers(GLFWwindow* window);
         static void swapInterval(int interval);
         static void pollEvents();

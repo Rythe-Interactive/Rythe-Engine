@@ -7,7 +7,7 @@ namespace legion::core::math
     template<typename Scalar>
     struct alignas(sizeof(Scalar) * 1) vector<Scalar, 1>
     {
-        static_assert(std::is_arithmetic<Scalar>::value, "Scalar must be a numeric type.");
+        static_assert(::std::is_arithmetic_v<Scalar>, "Scalar must be a numeric type.");
 
         using scalar = Scalar;
         static constexpr size_type size = 1;
@@ -86,6 +86,7 @@ namespace legion::core::math
     using float1 = vector<float32, 1>;
     using double1 = vector<float64, 1>;
     using int1 = vector<int, 1>;
+    using uint1 = vector<uint, 1>;
     using bool1 = vector<bool, 1>;
 }
 

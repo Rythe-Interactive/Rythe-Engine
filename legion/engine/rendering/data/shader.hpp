@@ -122,21 +122,21 @@ namespace legion::rendering
     }
 
     template<>
-    inline void uniform<math::vec2>::set_value(const math::vec2& value)
+    inline void uniform<math::float2>::set_value(const math::float2& value)
     {
         if (is_valid())
             glUniform2fv(m_location, 1, math::value_ptr(value));
     }
 
     template<>
-    inline void uniform<math::vec3>::set_value(const math::vec3& value)
+    inline void uniform<math::float3>::set_value(const math::float3& value)
     {
         if (is_valid())
             glUniform3fv(m_location, 1, math::value_ptr(value));
     }
 
     template<>
-    inline void uniform<math::vec4>::set_value(const math::vec4& value)
+    inline void uniform<math::float4>::set_value(const math::float4& value)
     {
         if (is_valid())
             glUniform4fv(m_location, 1, math::value_ptr(value));
@@ -150,14 +150,14 @@ namespace legion::rendering
     }
 
     template<>
-    inline void uniform<math::ivec2>::set_value(const math::ivec2& value)
+    inline void uniform<math::int2>::set_value(const math::int2& value)
     {
         if (is_valid())
             glUniform2iv(m_location, 1, math::value_ptr(value));
     }
 
     template<>
-    inline void uniform<math::ivec3>::set_value(const math::ivec3& value)
+    inline void uniform<math::int3>::set_value(const math::int3& value)
     {
         if (is_valid())
             glUniform3iv(m_location, 1, math::value_ptr(value));
@@ -181,14 +181,14 @@ namespace legion::rendering
     inline void uniform<math::bvec2>::set_value(const math::bvec2& value)
     {
         if (is_valid())
-            glUniform2iv(m_location, 1, math::value_ptr(math::ivec2(value)));
+            glUniform2iv(m_location, 1, math::value_ptr(math::int2(value)));
     }
 
     template<>
     inline void uniform<math::bvec3>::set_value(const math::bvec3& value)
     {
         if (is_valid())
-            glUniform3iv(m_location, 1, math::value_ptr(math::ivec3(value)));
+            glUniform3iv(m_location, 1, math::value_ptr(math::int3(value)));
     }
 
     template<>
@@ -213,7 +213,7 @@ namespace legion::rendering
     }
 
     template<>
-    inline void uniform<math::mat4>::set_value(const math::mat4& value)
+    inline void uniform<math::float4x4>::set_value(const math::float4x4& value)
     {
         if (is_valid())
             glUniformMatrix4fv(m_location, 1, false, math::value_ptr(value));

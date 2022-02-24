@@ -1,6 +1,7 @@
 #pragma once
 
 #include <core/math/vector/vector.hpp>
+#include <core/math/quaternion/quaternion.hpp>
 
 #include <core/math/arithmetic/arithmetic.hpp>
 #include <core/math/basic/basic_funcs.hpp>

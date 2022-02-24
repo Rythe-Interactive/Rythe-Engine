@@ -180,7 +180,7 @@ namespace legion::audio
 
             const position& p = entity.get_component<position>();
             position& previousP = m_sourcePositions.at(sourceHandle);
-            const math::vec3 vel = previousP - p;
+            const math::float3 vel = previousP - p;
             previousP = p;
             alSource3f(source.m_sourceId, AL_POSITION, p.x, p.y, p.z);
             alSource3f(source.m_sourceId, AL_VELOCITY, vel.x, vel.y, vel.z);
@@ -287,7 +287,7 @@ namespace legion::audio
 
             setListener(p, r);
 
-            math::vec3 vel = m_listenerPosition - p;
+            math::float3 vel = m_listenerPosition - p;
             m_listenerPosition = p;
             alListener3f(AL_VELOCITY, vel.x, vel.y, vel.z);
         }
@@ -456,8 +456,8 @@ namespace legion::audio
         //rotation
         math::mat3 mat3 = math::toMat3(r);
         // Invert z axis here for left-right hand coord system conversion
-        math::vec3 forward = mat3 * math::vec3(0.f, 0.f, -1.f);
-        math::vec3 up = mat3 * math::vec3(0.f, 1.f, 0.f);
+        math::float3 forward = mat3 * math::float3(0.f, 0.f, -1.f);
+        math::float3 up = mat3 * math::float3(0.f, 1.f, 0.f);
         ALfloat ori[] = { forward.x, forward.y, forward.z, up.x, up.y, up.z };
         alListenerfv(AL_ORIENTATION, ori);
         alcMakeContextCurrent(nullptr);

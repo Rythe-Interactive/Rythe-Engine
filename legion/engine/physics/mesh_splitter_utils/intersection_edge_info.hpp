@@ -26,9 +26,9 @@ namespace legion::physics
         meshHalfEdgePtr centroidEdge = nullptr;
 
         //the position of the nextEdge of 'pairingToConnectTo'
-        math::vec3 first;
+        math::float3 first;
         //the position of the edge of 'pairingToConnectTo'
-        math::vec3 second;
+        math::float3 second;
 
         
     };

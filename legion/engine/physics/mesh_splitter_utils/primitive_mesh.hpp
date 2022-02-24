@@ -22,7 +22,7 @@ namespace legion::physics
 
     private:
 
-        void populateMesh(mesh& mesh,const math::mat4& originalTransform,math::vec3& outOffset,math::vec3& scale);
+        void populateMesh(mesh& mesh,const math::float4x4& originalTransform,math::float3& outOffset,math::float3& scale);
 
         rendering::material_handle originalMaterial;
 

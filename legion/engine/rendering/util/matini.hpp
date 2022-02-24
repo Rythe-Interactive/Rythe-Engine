@@ -32,9 +32,9 @@ namespace legion::rendering {
 
             IniBuilder& value(float v)                  { return glyph(std::to_string(v) + " "); }
             IniBuilder& value(int v)                    { return glyph(std::to_string(v) + " "); }
-            IniBuilder& value(math::vec3 v)             { return value(v.x).value(v.y).value(v.z); }
-            IniBuilder& value(math::ivec3 v)            { return value(v.x).value(v.y).value(v.z); }
-            IniBuilder& value(math::vec4 v)             { return value(v.x).value(v.y).value(v.z).value(v.w); }
+            IniBuilder& value(math::float3 v)             { return value(v.x).value(v.y).value(v.z); }
+            IniBuilder& value(math::int3 v)            { return value(v.x).value(v.y).value(v.z); }
+            IniBuilder& value(math::float4 v)             { return value(v.x).value(v.y).value(v.z).value(v.w); }
             IniBuilder& value(math::ivec4 v)            { return value(v.x).value(v.y).value(v.z).value(v.w); }
             IniBuilder& value(bool b)                   { return glyph(b ? "true " : "false "); }
             IniBuilder& value(const std::string& v)     { return glyph(v + " "); }

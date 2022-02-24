@@ -11,10 +11,10 @@ namespace legion::core::math
     namespace detail
     {
         template<typename T>
-        inline L_ALWAYS_INLINE static T _abs_impl_(T val)
+        L_NODISCARD inline L_ALWAYS_INLINE static auto _abs_impl_(T val)
         {
             using value_type = remove_cvr_t<T>;
-            if constexpr (std::is_floating_point_v<value_type>)
+            if constexpr (::std::is_floating_point_v<value_type>)
             {
                 value_type copy = val;
                 byte* significantByte = reinterpret_cast<byte*>(&copy);
@@ -36,9 +36,9 @@ namespace legion::core::math
             static constexpr size_type size = Size;
             using value_type = vector<Scalar, size>;
 
-            static value_type compute(const value_type& val) noexcept
+            L_NODISCARD static value_type compute(const value_type& val) noexcept
             {
-                if constexpr (!std::numeric_limits<Scalar>::is_signed)
+                if constexpr (!::std::is_signed_v<Scalar>)
                 {
                     return val;
                 }
@@ -51,23 +51,42 @@ namespace legion::core::math
                 }
             }
         };
+
+        template<typename Scalar>
+        struct compute_abs<Scalar, 1u>
+        {
+            static constexpr size_type size = 1u;
+            using value_type = vector<Scalar, size>;
+
+            L_NODISCARD static Scalar compute(const value_type& val) noexcept
+            {
+                if constexpr (!::std::is_signed_v<Scalar>)
+                {
+                    return val;
+                }
+                else
+                {
+                    return detail::_abs_impl_(val[0u]);
+                }
+            }
+        };
     }
 
     template<typename T>
-    inline L_ALWAYS_INLINE static T abs(T val)
+    L_NODISCARD inline L_ALWAYS_INLINE static auto abs(T val)
     {
-        if constexpr (!std::numeric_limits<T>::is_signed)
+        using value_type = remove_cvr_t<T>;
+        if constexpr (is_vector_v<value_type>)
+        {
+            return detail::compute_abs<typename value_type::scalar, value_type::size>::compute(val);
+        }
+        else if constexpr (!::std::is_signed_v<value_type>)
         {
             return val;
         }
-        else if constexpr (std::is_arithmetic_v<T>)
-        {
-            return detail::_abs_impl_(val);
-        }
         else
         {
-            using value_type = remove_cvr_t<T>;
-            return detail::compute_abs<typename value_type::scalar, value_type::size>::compute(val);
-        }
+            return detail::_abs_impl_(val);
+        }        
     }
 }

@@ -204,6 +204,7 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="math\basic\basic_funcs.hpp" />
     <ClInclude Include="math\basic\fmod.hpp" />
     <ClInclude Include="math\basic\modf.hpp" />
+    <ClInclude Include="math\basic\round.hpp" />
     <ClInclude Include="math\exponential\inverse_sqrt.hpp" />
     <ClInclude Include="math\geometric\normalize_dot.hpp" />
     <ClInclude Include="math\logic\all.hpp" />
@@ -220,6 +221,7 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="math\geometric\geometric.hpp" />
     <ClInclude Include="math\geometric\length.hpp" />
     <ClInclude Include="math\geometric\normalize.hpp" />
+    <ClInclude Include="math\logic\not.hpp" />
     <ClInclude Include="math\meta.hpp" />
     <ClInclude Include="math\quaternion\quaternion.hpp" />
     <ClInclude Include="math\util\close_enough.hpp" />
@@ -361,8 +363,10 @@ del /q ".\xcopyexclude"</Command>
     <None Include="engine\module.inl" />
     <None Include="engine\system.inl" />
     <None Include="events\eventbus.inl" />
+    <None Include="math\arithmetic\multiplication.inl" />
     <None Include="math\vector\swizzle\swizzle.inl" />
     <None Include="math\vector\vector1.inl" />
+    <None Include="math\vector\vector_base.inl" />
     <None Include="platform\cpp.hint" />
     <None Include="scheduling\process.inl" />
     <None Include="scheduling\processchain.inl" />

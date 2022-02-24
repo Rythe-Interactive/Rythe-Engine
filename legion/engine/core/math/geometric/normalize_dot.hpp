@@ -4,9 +4,9 @@
 
 namespace legion::core::math
 {
-    template<typename _Scalar, size_type _Size>
-    L_ALWAYS_INLINE static _Scalar normalize_dot(const vector<_Scalar, _Size>& a, const vector<_Scalar, _Size>& b) noexcept
+    template<typename vec_type0, typename vec_type1, std::enable_if_t<is_vector_v<vec_type0>&& is_vector_v<vec_type1>, bool> = true>
+    L_ALWAYS_INLINE static auto normalize_dot(const vec_type0& a, const vec_type1& b) noexcept
     {
-        return dot(a, b) * inv_sqrt(dot(a, a) * dot(b, b));
+        return dot(a, b) / sqrt(dot(a, a) * dot(b, b));
     }
 }

@@ -7,11 +7,11 @@ namespace legion::core::math
 {
     namespace detail
     {
-        template<typename _Scalar, size_type _Size>
+        template<typename Scalar, size_type Size>
         struct compute_negate
         {
-            static constexpr size_type size = _Size;
-            using value_type = vector<_Scalar, size>;
+            static constexpr size_type size = Size;
+            using value_type = vector<Scalar, size>;
 
             L_NODISCARD constexpr static value_type compute(const value_type& a) noexcept
             {
@@ -19,6 +19,18 @@ namespace legion::core::math
                 for (size_type i = 0; i < size; i++)
                     result[i] = -a[i];
                 return result;
+            }
+        };
+
+        template<typename Scalar>
+        struct compute_negate<Scalar, 1u>
+        {
+            static constexpr size_type size = 1u;
+            using value_type = vector<Scalar, size>;
+
+            L_NODISCARD constexpr static Scalar compute(const value_type& a) noexcept
+            {
+                return -a[0];
             }
         };
     }

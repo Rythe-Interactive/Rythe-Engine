@@ -3,7 +3,7 @@
 #include <rendering/debugrendering.hpp>
 namespace legion::physics
 {
-    void PhysicsStatics::DetectConvexConvexCollision(ConvexCollider* convexA, ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB
+    void PhysicsStatics::DetectConvexConvexCollision(ConvexCollider* convexA, ConvexCollider* convexB, const math::float4x4& transformA, const math::float4x4& transformB
         , ConvexConvexCollisionInfo& outCollisionInfo,physics_manifold& manifold)
     {
         //'this' is colliderB and 'convexCollider' is colliderA
@@ -42,7 +42,7 @@ namespace legion::physics
         manifold.isColliding = true;
     }
 
-    float PhysicsStatics::GetSupportPoint(const std::vector<math::vec3>& vertices, const math::vec3& direction,math::vec3& outVec)
+    float PhysicsStatics::GetSupportPoint(const std::vector<math::float3>& vertices, const math::float3& direction,math::float3& outVec)
     {
         float currentMaximumSupportPoint = std::numeric_limits<float>::lowest();
 
@@ -60,14 +60,14 @@ namespace legion::physics
         return currentMaximumSupportPoint;
     }
 
-    bool PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(ConvexCollider* convexA, ConvexCollider* convexB, const math::mat4& transformA,
-        const math::mat4& transformB, PointerEncapsulator<HalfEdgeEdge>& refEdge, PointerEncapsulator<HalfEdgeEdge>& incEdge,
-        math::vec3& seperatingAxisFound, float& maximumSeperation, bool shouldDebug)
+    bool PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(ConvexCollider* convexA, ConvexCollider* convexB, const math::float4x4& transformA,
+        const math::float4x4& transformB, PointerEncapsulator<HalfEdgeEdge>& refEdge, PointerEncapsulator<HalfEdgeEdge>& incEdge,
+        math::float3& seperatingAxisFound, float& maximumSeperation, bool shouldDebug)
     {
         float currentMinimumSeperation = std::numeric_limits<float>::max();
 
-        math::vec3 centroidDir = transformA * math::vec4(convexA->GetLocalCentroid(), 0);
-        math::vec3 positionA = math::vec3(transformA[3]) + centroidDir;
+        math::float3 centroidDir = transformA * math::float4(convexA->GetLocalCentroid(), 0);
+        math::float3 positionA = math::float3(transformA[3]) + centroidDir;
 
         int facei = 0;
         int facej = 0;
@@ -105,15 +105,15 @@ namespace legion::physics
                         if (attemptBuildMinkowskiFace(edgeA, edgeB, transformA, transformB))
                         {
                             //get world edge direction
-                            math::vec3 edgeADirection = transformA * math::vec4(edgeA->getLocalEdgeDirection(), 0);
+                            math::float3 edgeADirection = transformA * math::float4(edgeA->getLocalEdgeDirection(), 0);
 
-                            math::vec3 edgeBDirection = transformB * math::vec4(edgeB->getLocalEdgeDirection(), 0);
+                            math::float3 edgeBDirection = transformB * math::float4(edgeB->getLocalEdgeDirection(), 0);
 
                             edgeADirection = math::normalize(edgeADirection);
                             edgeBDirection = math::normalize(edgeBDirection);
 
                             //get the seperating axis
-                            math::vec3 seperatingAxis = math::cross(edgeADirection, edgeBDirection);
+                            math::float3 seperatingAxis = math::cross(edgeADirection, edgeBDirection);
 
                             if (math::epsilonEqual(math::length(seperatingAxis), 0.0f, math::epsilon<float>()))
                             {
@@ -123,8 +123,8 @@ namespace legion::physics
                             seperatingAxis = math::normalize(seperatingAxis);
 
                             //get world edge position
-                            math::vec3 edgeAtransformedPosition = transformA * math::vec4(edgeA->edgePosition, 1);
-                            math::vec3 edgeBtransformedPosition = transformB * math::vec4(edgeB->edgePosition, 1);
+                            math::float3 edgeAtransformedPosition = transformA * math::float4(edgeA->edgePosition, 1);
+                            math::float3 edgeBtransformedPosition = transformB * math::float4(edgeB->edgePosition, 1);
 
                             //check if its pointing in the right direction 
                             if (math::dot(seperatingAxis, edgeAtransformedPosition - positionA) < 0)
@@ -155,17 +155,17 @@ namespace legion::physics
         return currentMinimumSeperation > 0.0f;
     }
 
-    bool PhysicsStatics::DetectConvexSphereCollision(ConvexCollider* convexA, const math::mat4& transformA, math::vec3 sphereWorldPosition, float sphereRadius,
+    bool PhysicsStatics::DetectConvexSphereCollision(ConvexCollider* convexA, const math::float4x4& transformA, math::float3 sphereWorldPosition, float sphereRadius,
         float& maximumSeperation)
     {
         //-----------------  check if the seperating axis is the line generated between the centroid of the hull and sphereWorldPosition ------------------//
 
-        math::vec3 worldHullCentroid = transformA * math::vec4(convexA->GetLocalCentroid(), 1);
-        math::vec3 centroidSeperatingAxis = math::normalize(worldHullCentroid - sphereWorldPosition);
+        math::float3 worldHullCentroid = transformA * math::float4(convexA->GetLocalCentroid(), 1);
+        math::float3 centroidSeperatingAxis = math::normalize(worldHullCentroid - sphereWorldPosition);
 
-        math::vec3 seperatingPlanePosition = sphereWorldPosition + centroidSeperatingAxis * sphereRadius;
+        math::float3 seperatingPlanePosition = sphereWorldPosition + centroidSeperatingAxis * sphereRadius;
 
-        math::vec3 worldSupportPoint;
+        math::float3 worldSupportPoint;
         GetSupportPoint(seperatingPlanePosition, -centroidSeperatingAxis, convexA, transformA, worldSupportPoint);
 
         float seperation = math::dot(worldSupportPoint - seperatingPlanePosition, centroidSeperatingAxis);
@@ -182,8 +182,8 @@ namespace legion::physics
 
         for (auto faceA : convexA->GetHalfEdgeFaces())
         {
-            math::vec3 worldFaceCentroid = transformA * math::vec4(faceA->centroid, 1);
-            math::vec3 worldFaceNormal = math::normalize(transformA * math::vec4(faceA->normal, 0));
+            math::float3 worldFaceCentroid = transformA * math::float4(faceA->centroid, 1);
+            math::float3 worldFaceNormal = math::normalize(transformA * math::float4(faceA->normal, 0));
 
             float seperation = PointDistanceToPlane(worldFaceNormal, worldFaceCentroid, seperatingPlanePosition );
 
@@ -203,19 +203,19 @@ namespace legion::physics
         return true;
     }
 
-    std::pair< math::vec3, math::vec3> PhysicsStatics::ConstructAABBFromPhysicsComponentWithTransform
-    (ecs::component<physicsComponent> physicsComponentToUse,const math::mat4& transform)
+    std::pair< math::float3, math::float3> PhysicsStatics::ConstructAABBFromPhysicsComponentWithTransform
+    (ecs::component<physicsComponent> physicsComponentToUse,const math::float4x4& transform)
     {
-        math::vec3 min, max;
+        math::float3 min, max;
 
         //auto physicsComponent = physicsComponentToUse.read();
 
         ////get up
-        //math::vec3 invTransUp = math::normalize( math::inverse(transform) * math::vec4(math::vec3(0, 1, 0), 0) );
+        //math::float3 invTransUp = math::normalize( math::inverse(transform) * math::float4(math::float3(0, 1, 0), 0) );
         //max.y = GetPhysicsComponentSupportPointAtDirection(invTransUp, physicsComponent);
         //
         ////get down
-        //math::vec3 invTransDown = math::normalize(math::inverse(transform) * math::vec4(math::vec3(0, -1, 0), 0));
+        //math::float3 invTransDown = math::normalize(math::inverse(transform) * math::float4(math::float3(0, -1, 0), 0));
         //min.y = GetPhysicsComponentSupportPointAtDirection(invTransUp, physicsComponent);
 
         ////get right
@@ -233,11 +233,11 @@ namespace legion::physics
         return std::make_pair(min,max);
     }
 
-    float PhysicsStatics::GetPhysicsComponentSupportPointAtDirection(math::vec3 direction, physicsComponent& physicsComponentToUse)
+    float PhysicsStatics::GetPhysicsComponentSupportPointAtDirection(math::float3 direction, physicsComponent& physicsComponentToUse)
     {
         float currentMaximumSupportPoint = std::numeric_limits<float>::lowest();
 
-        //std::vector<math::vec3> vertices;
+        //std::vector<math::float3> vertices;
         ////for each vertex list of each collider
         //for (auto collider : *physicsComponentToUse.colliders)
         //{
@@ -259,78 +259,78 @@ namespace legion::physics
         return currentMaximumSupportPoint;
     }
 
-    std::pair<math::vec3, math::vec3> PhysicsStatics::ConstructAABBFromVertices(const std::vector<math::vec3>& vertices)
+    std::pair<math::float3, math::float3> PhysicsStatics::ConstructAABBFromVertices(const std::vector<math::float3>& vertices)
     {
-        math::vec3 min, max;
+        math::float3 min, max;
 
         ////up
-        //max.y = GetSupportPoint(vertices, math::vec3(0, 1, 0));
+        //max.y = GetSupportPoint(vertices, math::float3(0, 1, 0));
         ////down
-        //min.y = GetSupportPoint(vertices, math::vec3(0, -1, 0));
+        //min.y = GetSupportPoint(vertices, math::float3(0, -1, 0));
 
         ////right
-        //max.x = GetSupportPoint(vertices, math::vec3(1, 0, 0));
+        //max.x = GetSupportPoint(vertices, math::float3(1, 0, 0));
         ////left
-        //min.x = GetSupportPoint(vertices, math::vec3(-1, 0, 0));
+        //min.x = GetSupportPoint(vertices, math::float3(-1, 0, 0));
    
 
         ////forward
-        //max.z = GetSupportPoint(vertices, math::vec3(0, 0, 1));
+        //max.z = GetSupportPoint(vertices, math::float3(0, 0, 1));
         ////backward
-        //min.z = GetSupportPoint(vertices, math::vec3(0, 0, -1));
+        //min.z = GetSupportPoint(vertices, math::float3(0, 0, -1));
 
         return std::make_pair(min,max);
     }
 
-    std::pair<math::vec3, math::vec3> PhysicsStatics::ConstructAABBFromTransformedVertices(const std::vector<math::vec3>& vertices, const math::mat4& transform)
+    std::pair<math::float3, math::float3> PhysicsStatics::ConstructAABBFromTransformedVertices(const std::vector<math::float3>& vertices, const math::float4x4& transform)
     {
-        math::vec3 min, max;
-        math::vec3 worldPos = transform[3];
+        math::float3 min, max;
+        math::float3 worldPos = transform[3];
 
-        math::vec3 outVec;
+        math::float3 outVec;
         //up
-        math::vec3 invTransUp = math::normalize(math::inverse(transform) * math::vec4(0, 1, 0, 0));
+        math::float3 invTransUp = math::normalize(math::inverse(transform) * math::float4(0, 1, 0, 0));
         GetSupportPoint(vertices, invTransUp, outVec);
-        max.y = (transform * math::vec4( outVec,1)).y;
+        max.y = (transform * math::float4( outVec,1)).y;
 
         //down
-        math::vec3 invTransDown = math::normalize(math::inverse(transform) * math::vec4(0, -1, 0, 0));
+        math::float3 invTransDown = math::normalize(math::inverse(transform) * math::float4(0, -1, 0, 0));
         GetSupportPoint(vertices, invTransDown, outVec);
-        min.y = (transform * math::vec4(outVec, 1)).y;
+        min.y = (transform * math::float4(outVec, 1)).y;
 
         //right
-        math::vec3 invTransRight = math::normalize(math::inverse(transform) * math::vec4(1, 0, 0, 0));
+        math::float3 invTransRight = math::normalize(math::inverse(transform) * math::float4(1, 0, 0, 0));
         GetSupportPoint(vertices, invTransRight, outVec);
-        max.x = (transform * math::vec4(outVec, 1)).x;
+        max.x = (transform * math::float4(outVec, 1)).x;
 
         //left
-        math::vec3 invTransLeft = math::normalize(math::inverse(transform) * math::vec4(-1, 0, 0, 0));
+        math::float3 invTransLeft = math::normalize(math::inverse(transform) * math::float4(-1, 0, 0, 0));
         GetSupportPoint(vertices, invTransLeft, outVec);
-        min.x = (transform * math::vec4(outVec, 1)).x;
+        min.x = (transform * math::float4(outVec, 1)).x;
 
         //forward
-        math::vec3 invTransForward = math::normalize(math::inverse(transform) * math::vec4(0, 0, 1, 0));
+        math::float3 invTransForward = math::normalize(math::inverse(transform) * math::float4(0, 0, 1, 0));
         GetSupportPoint(vertices, invTransForward, outVec);
-        max.z = (transform * math::vec4(outVec, 1)).z;
+        max.z = (transform * math::float4(outVec, 1)).z;
 
         //backward
-        math::vec3 invTransBackward = math::normalize(math::inverse(transform) * math::vec4(0, 0, -1, 0));
+        math::float3 invTransBackward = math::normalize(math::inverse(transform) * math::float4(0, 0, -1, 0));
         GetSupportPoint(vertices, invTransBackward, outVec);
-        min.z = (transform * math::vec4(outVec, 1)).z;
+        min.z = (transform * math::float4(outVec, 1)).z;
 
       
 
         return std::make_pair(min, max);
     }
 
-    std::pair<math::vec3, math::vec3> PhysicsStatics::CombineAABB(const std::pair<math::vec3, math::vec3>& first, const std::pair<math::vec3, math::vec3>& second)
+    std::pair<math::float3, math::float3> PhysicsStatics::CombineAABB(const std::pair<math::float3, math::float3>& first, const std::pair<math::float3, math::float3>& second)
     {
         auto& firstLow = first.first;
         auto& firstHigh = first.second;
         auto& secondLow = second.first;
         auto& secondHigh = second.second;
-        math::vec3 lowBounds = secondLow;
-        math::vec3 highBounds = secondHigh;
+        math::float3 lowBounds = secondLow;
+        math::float3 highBounds = secondHigh;
         if (firstLow.x < secondLow.x)   lowBounds.x    = firstLow.x;
         if (firstLow.y < secondLow.y)   lowBounds.y    = firstLow.y;
         if (firstLow.z < secondLow.z)   lowBounds.z    = firstLow.z;

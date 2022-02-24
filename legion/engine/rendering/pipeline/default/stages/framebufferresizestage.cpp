@@ -128,7 +128,7 @@ namespace legion::rendering
         static bool useTexture1 = false;
 
         float renderScale = m_renderScale.load(std::memory_order_acquire);
-        math::ivec2 framebufferSize = context.framebufferSize();
+        math::int2 framebufferSize = context.framebufferSize();
         framebufferSize.x *= renderScale;
         framebufferSize.y *= renderScale;
 

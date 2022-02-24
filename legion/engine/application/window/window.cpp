@@ -31,12 +31,12 @@ namespace legion::application
         return m_isFullscreen;
     }
 
-    math::ivec2 window::size() const
+    math::int2 window::size() const
     {
         return m_size;
     }
 
-    math::ivec2 window::framebufferSize() const
+    math::int2 window::framebufferSize() const
     {
         return ContextHelper::getFramebufferSize(handle);
     }

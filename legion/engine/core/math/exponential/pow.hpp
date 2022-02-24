@@ -8,13 +8,21 @@ namespace legion::core::math
 {
     namespace detail
     {
-        template<typename _Scalar, size_type _Size>
+        template<typename Scalar, size_type Size>
         struct compute_pow
         {
-            static constexpr size_type size = _Size;
-            using value_type = vector<_Scalar, size>;
+            static constexpr size_type size = Size;
+            using value_type = vector<Scalar, size>;
 
-            L_ALWAYS_INLINE static value_type compute(const value_type& v, _Scalar s) noexcept
+            L_ALWAYS_INLINE static value_type compute(const value_type& v, const value_type& s) noexcept
+            {
+                value_type result;
+                for (size_type i; i < size; i++)
+                    result[i] = ::std::pow(v[i], s[i]);
+                return result;
+            }
+
+            L_ALWAYS_INLINE static value_type compute(const value_type& v, Scalar s) noexcept
             {
                 value_type result;
                 for (size_type i; i < size; i++)
@@ -23,58 +31,90 @@ namespace legion::core::math
             }
         };
 
-        template<typename _Scalar>
-        struct compute_pow<_Scalar, 1>
+        template<typename Scalar>
+        struct compute_pow<Scalar, 1u>
         {
-            static constexpr size_type size = 1;
-            using value_type = vector<_Scalar, size>;
+            static constexpr size_type size = 1u;
+            using value_type = vector<Scalar, size>;
 
-            L_ALWAYS_INLINE static value_type compute(const value_type& v, _Scalar s) noexcept
+            L_ALWAYS_INLINE static value_type compute(const value_type& v, const value_type& s) noexcept
             {
-                return ::std::pow(v.x, s);
+                return ::std::pow(v[0], s[0]);
+            }
+
+            L_ALWAYS_INLINE static Scalar compute(const value_type& v, Scalar s) noexcept
+            {
+                return ::std::pow(v[0], s);
             }
         };
 
-        template<typename _Scalar>
-        struct compute_pow<_Scalar, 2>
+        template<typename Scalar>
+        struct compute_pow<Scalar, 2u>
         {
-            static constexpr size_type size = 2;
-            using value_type = vector<_Scalar, size>;
+            static constexpr size_type size = 2u;
+            using value_type = vector<Scalar, size>;
 
-            L_ALWAYS_INLINE static value_type compute(const value_type& v, _Scalar s) noexcept
+            L_ALWAYS_INLINE static value_type compute(const value_type& v, const value_type& s) noexcept
             {
-                return value_type{ ::std::pow(v.x, s), ::std::pow(v.y, s) };
+                return value_type{ ::std::pow(v[0], s[0]), ::std::pow(v[1], s[1]) };
+            }
+
+            L_ALWAYS_INLINE static value_type compute(const value_type& v, Scalar s) noexcept
+            {
+                return value_type{ ::std::pow(v[0], s), ::std::pow(v[1], s) };
             }
         };
 
-        template<typename _Scalar>
-        struct compute_pow<_Scalar, 3>
+        template<typename Scalar>
+        struct compute_pow<Scalar, 3u>
         {
-            static constexpr size_type size = 3;
-            using value_type = vector<_Scalar, size>;
+            static constexpr size_type size = 3u;
+            using value_type = vector<Scalar, size>;
 
-            L_ALWAYS_INLINE static value_type compute(const value_type& v, _Scalar s) noexcept
+            L_ALWAYS_INLINE static value_type compute(const value_type& v, const value_type& s) noexcept
             {
-                return value_type{ ::std::pow(v.x, s), ::std::pow(v.y, s), ::std::pow(v.z, s) };
+                return value_type{ ::std::pow(v[0], s[0]), ::std::pow(v[1], s[1]), ::std::pow(v[2], s[2]) };
+            }
+
+            L_ALWAYS_INLINE static value_type compute(const value_type& v, Scalar s) noexcept
+            {
+                return value_type{ ::std::pow(v[0], s), ::std::pow(v[1], s), ::std::pow(v[2], s) };
             }
         };
 
-        template<typename _Scalar>
-        struct compute_pow<_Scalar, 4>
+        template<typename Scalar>
+        struct compute_pow<Scalar, 4u>
         {
-            static constexpr size_type size = 4;
-            using value_type = vector<_Scalar, size>;
+            static constexpr size_type size = 4u;
+            using value_type = vector<Scalar, size>;
 
-            L_ALWAYS_INLINE static value_type compute(const value_type& v, _Scalar s) noexcept
+            L_ALWAYS_INLINE static value_type compute(const value_type& v, const value_type& s) noexcept
             {
-                return value_type{ ::std::pow(v.x, s), ::std::pow(v.y, s), ::std::pow(v.z, s), ::std::pow(v.w, s) };
+                return value_type{ ::std::pow(v[0], s[0]), ::std::pow(v[1], s[1]), ::std::pow(v[2], s[2]), ::std::pow(v[3], s[3]) };
+            }
+
+            L_ALWAYS_INLINE static value_type compute(const value_type& v, Scalar s) noexcept
+            {
+                return value_type{ ::std::pow(v[0], s), ::std::pow(v[1], s), ::std::pow(v[2], s), ::std::pow(v[3], s) };
             }
         };
     }
 
-    template<typename _Scalar, size_type _Size>
-    L_ALWAYS_INLINE static vector<_Scalar, _Size> pow(const vector<_Scalar, _Size>& v) noexcept
+    template<typename vec_type, ::std::enable_if_t<is_vector_v<vec_type>, bool> = true>
+    L_ALWAYS_INLINE static auto pow(const vec_type& v, typename vec_type::scalar s) noexcept
     {
-        return detail::compute_pow<_Scalar, _Size>::compute(v);
+        return detail::compute_pow<typename vec_type::scalar, vec_type::size>::compute(v, s);
+    }
+
+    template<typename vec_type0, typename vec_type1, std::enable_if_t<is_vector_v<vec_type0>&& is_vector_v<vec_type1>, bool> = true>
+    L_ALWAYS_INLINE static auto pow(const vec_type0& v, const vec_type1& s) noexcept
+    {
+        return detail::compute_pow<typename vec_type0::scalar, vec_type0::size>::compute(v, s);
+    }
+
+    template<typename Scalar, ::std::enable_if_t<!is_vector_v<remove_cvr_t<Scalar>>, bool> = true>
+    L_ALWAYS_INLINE static auto pow(Scalar v, Scalar s) noexcept
+    {
+        return detail::compute_pow<Scalar, 1u>::compute(v, s);
     }
 }

@@ -18,7 +18,7 @@ namespace legion::physics
          * This can be usefull since every empty cell still takes up space in lists. when a new object is added to the list the list may have to be moved in memory, 
          * which takes time. By keeping the lists small and removing empty cells lists require less moving.
          */
-        BroadphaseUniformGrid(math::ivec3 cellSize, size_type emptyCellDestroyThreshold = 0) : m_cellSize(cellSize), m_emptyCellDestroyThreshold(emptyCellDestroyThreshold)
+        BroadphaseUniformGrid(math::int3 cellSize, size_type emptyCellDestroyThreshold = 0) : m_cellSize(cellSize), m_emptyCellDestroyThreshold(emptyCellDestroyThreshold)
         {
         }
 
@@ -39,7 +39,7 @@ namespace legion::physics
 
         /**@brief Sets the cell size which will be used for the virtual grid
          */
-        void setCellSize(math::ivec3 cellSize)
+        void setCellSize(math::int3 cellSize)
         {
             // Grid size changes, therefore our cached data is no longer valid
             cellIndices.clear();
@@ -55,24 +55,24 @@ namespace legion::physics
         void debugDraw() override;
 
     private:
-        math::ivec3 m_cellSize;
+        math::int3 m_cellSize;
         size_type m_emptyCellDestroyThreshold = 0;
 
         /**@brief Calculates a cell index from a point. i.e. calculates in which cell in the uniform grid a point will be. 
          */
-        math::ivec3 calculateCellIndex(const math::vec3 point);
+        math::int3 calculateCellIndex(const math::float3 point);
 
-        // Stores the cell index (ivec3) to the index in the m_groupings list.
-        std::unordered_map<math::ivec3, int> cellIndices;
+        // Stores the cell index (int3) to the index in the m_groupings list.
+        std::unordered_map<math::int3, int> cellIndices;
 
         // All the entites in the cells. Using this new entities can be detected.
         std::unordered_set<id_type> m_collectedEntities;
         // Stores the old positions of the collected entities. This way we can check if an object moved.
-        std::unordered_map<id_type, math::vec3> m_oldPositions;
+        std::unordered_map<id_type, math::float3> m_oldPositions;
         // Stores all the cells that an entity occupies. An entity can be on the edge of mulitple cells and therefore be in multiple cells at once.
-        std::unordered_map<id_type, std::unordered_set<math::ivec3>> m_entityOccupiedCells;
+        std::unordered_map<id_type, std::unordered_set<math::int3>> m_entityOccupiedCells;
 
         // All the empty cells. This list is used to check how many empty cells there are.
-        std::unordered_set<math::ivec3> m_emptyCells;
+        std::unordered_set<math::int3> m_emptyCells;
     };
 }

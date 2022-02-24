@@ -20,10 +20,10 @@ namespace legion::rendering
         retrieveBinaryData(value->type, start);
     }
 
-    math::ivec2 texture::size() const
+    math::int2 texture::size() const
     {
         OPTICK_EVENT();
-        math::ivec2 texSize;
+        math::int2 texSize;
         glBindTexture(static_cast<GLenum>(type), textureId);
         glGetTexLevelParameteriv(static_cast<GLenum>(type), 0, GL_TEXTURE_WIDTH, &texSize.x);
         glGetTexLevelParameteriv(static_cast<GLenum>(type), 0, GL_TEXTURE_HEIGHT, &texSize.y);
@@ -31,7 +31,7 @@ namespace legion::rendering
         return texSize;
     }
 
-    void texture::resize(math::ivec2 newSize) const
+    void texture::resize(math::int2 newSize) const
     {
         OPTICK_EVENT();
         glBindTexture(static_cast<GLenum>(type), textureId);
@@ -91,7 +91,7 @@ namespace legion::rendering
                 texture = m_textures[id];
         }
         texture_data data{};
-        math::ivec2 texSize = texture.size();
+        math::int2 texSize = texture.size();
         data.size.x = texSize.x;
         data.size.y = texSize.y;
         data.type = texture.type;
@@ -152,7 +152,7 @@ namespace legion::rendering
         return create_texture(file.get_filename(), file, settings);
     }
 
-    texture_handle TextureCache::create_texture(const std::string& name, math::ivec2 size, texture_import_settings settings)
+    texture_handle TextureCache::create_texture(const std::string& name, math::int2 size, texture_import_settings settings)
     {
         OPTICK_EVENT();
         id_type id = nameHash(name);

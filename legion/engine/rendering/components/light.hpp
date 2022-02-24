@@ -18,9 +18,9 @@ namespace legion::rendering
             float attenuation;
             float intensity;
             uint index;
-            math::vec3 direction;
+            math::float3 direction;
             float falloff;
-            math::vec3 position;
+            math::float3 position;
             float angle;
             math::color color;
         };
@@ -57,9 +57,9 @@ namespace legion::rendering
                 float m_attenuation;
                 float m_intensity;
                 uint m_index;
-                math::vec3 m_direction;
+                math::float3 m_direction;
                 float m_falloff;
-                math::vec3 m_position;
+                math::float3 m_position;
                 float m_angle;
                 math::color m_color;
             };

@@ -211,6 +211,8 @@
     <ClInclude Include="math\basic\modf.hpp" />
     <ClInclude Include="math\quaternion\quaternion.hpp" />
     <ClInclude Include="math\vector\aligned_vector3.hpp" />
+    <ClInclude Include="math\basic\round.hpp" />
+    <ClInclude Include="math\logic\not.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -242,5 +244,7 @@
     <None Include="engine\module.inl" />
     <None Include="math\vector\swizzle\swizzle.inl" />
     <None Include="math\vector\vector1.inl" />
+    <None Include="math\vector\vector_base.inl" />
+    <None Include="math\arithmetic\multiplication.inl" />
   </ItemGroup>
 </Project>

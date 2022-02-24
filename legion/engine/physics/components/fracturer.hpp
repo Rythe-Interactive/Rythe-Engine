@@ -45,28 +45,28 @@ namespace legion::physics
         void InstantiateColliderMeshPairingWithEntity(ecs::entity_handle ent,
             std::vector< FracturerColliderToMeshPairing>& colliderToMeshPairings);
 
-        void GetVoronoiPoints(std::vector<std::vector<math::vec3>>& groupedPoints,
-            std::vector<math::vec3>& voronoiPoints, math::vec3 min, math::vec3 max);
+        void GetVoronoiPoints(std::vector<std::vector<math::float3>>& groupedPoints,
+            std::vector<math::float3>& voronoiPoints, math::float3 min, math::float3 max);
 
         void InstantiateVoronoiColliders(std::vector<std::shared_ptr<ConvexCollider>>& voronoiColliders
-            , std::vector<std::vector<math::vec3>>& groupedPoints);
+            , std::vector<std::vector<math::float3>>& groupedPoints);
 
         void GenerateFractureFragments(std::vector<ecs::entity_handle>& entitiesGenerated
             , std::vector< FracturerColliderToMeshPairing>& colliderToMeshPairings
             , std::vector< std::shared_ptr<ConvexCollider>>& voronoiColliders
             , ecs::entity_handle fracturedEnt);
 
-        void QuadrantVoronoi(math::vec3& min, math::vec3& max, std::vector<math::vec3>& voronoiPoints);
+        void QuadrantVoronoi(math::float3& min, math::float3& max, std::vector<math::float3>& voronoiPoints);
 
-        void BalancedVoronoi(math::vec3& min, math::vec3& max, std::vector<math::vec3>& voronoiPoints);
+        void BalancedVoronoi(math::float3& min, math::float3& max, std::vector<math::float3>& voronoiPoints);
 
-        math::vec3 GetImpactPointFromManifold(physics_manifold& manifold);
+        math::float3 GetImpactPointFromManifold(physics_manifold& manifold);
 
         int fractureCount = 0;
 
-        std::vector<std::vector<math::vec3>> verticesList;
+        std::vector<std::vector<math::float3>> verticesList;
         std::vector<std::shared_ptr<ConvexCollider>> debugVectorcolliders;
-        std::vector<math::mat4> transforms;
+        std::vector<math::float4x4> transforms;
         static ecs::EcsRegistry* registry;
     };
 

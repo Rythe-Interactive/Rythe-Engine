@@ -5,10 +5,10 @@ namespace legion::physics
 {
     struct ContactVertex
     {
-        math::vec3 position;
+        math::float3 position;
         EdgeLabel label;
 
-        ContactVertex(const math::vec3& pPosition, const EdgeLabel& pLabel) : position(pPosition)
+        ContactVertex(const math::float3& pPosition, const EdgeLabel& pLabel) : position(pPosition)
         {
             label = pLabel;
         }

@@ -184,12 +184,12 @@ namespace legion::core
         return common::success;
     }
 
-    image::image(const math::ivec2& res, channel_format format, image_components comp, const data_view<byte>& data)
+    image::image(const math::int2& res, channel_format format, image_components comp, const data_view<byte>& data)
         : m_resolution(res), m_format(format), m_components(comp), m_data(data)
     {
     }
 
-    const math::ivec2& image::resolution() const noexcept
+    const math::int2& image::resolution() const noexcept
     {
         return m_resolution;
     }
@@ -250,12 +250,12 @@ namespace legion::core
                 {
                 case channel_format::eight_bit:
                 {
-                    *colorPtr = static_cast<byte>(math::iround(colors[i].r * 255.f));
+                    *colorPtr = math::iround<byte>(colors[i].r * 255.f);
                     break;
                 }
                 case channel_format::sixteen_bit:
                 {
-                    *reinterpret_cast<uint16*>(colorPtr) = static_cast<uint16>(math::iround(colors[i].r * 65535.f));
+                    *reinterpret_cast<uint16*>(colorPtr) = math::iround<uint16>(colors[i].r * 65535.f);
                     break;
                 }
                 case channel_format::float_hdr:
@@ -278,14 +278,14 @@ namespace legion::core
                 {
                 case channel_format::eight_bit:
                 {
-                    *gPtr = static_cast<byte>(math::iround(colors[i].r * 255.f));
-                    *aPtr = static_cast<byte>(math::iround(colors[i].a * 255.f));
+                    *gPtr = math::iround<byte>(colors[i].r * 255.f);
+                    *aPtr = math::iround<byte>(colors[i].a * 255.f);
                     break;
                 }
                 case channel_format::sixteen_bit:
                 {
-                    *reinterpret_cast<uint16*>(gPtr) = static_cast<uint16>(math::iround(colors[i].r * 65535.f));
-                    *reinterpret_cast<uint16*>(aPtr) = static_cast<uint16>(math::iround(colors[i].a * 65535.f));
+                    *reinterpret_cast<uint16*>(gPtr) = math::iround<uint16>(colors[i].r * 65535.f);
+                    *reinterpret_cast<uint16*>(aPtr) = math::iround<uint16>(colors[i].a * 65535.f);
                     break;
                 }
                 case channel_format::float_hdr:
@@ -310,16 +310,16 @@ namespace legion::core
                 {
                 case channel_format::eight_bit:
                 {
-                    *rPtr = static_cast<byte>(math::iround(colors[i].r * 255.f));
-                    *gPtr = static_cast<byte>(math::iround(colors[i].g * 255.f));
-                    *bPtr = static_cast<byte>(math::iround(colors[i].b * 255.f));
+                    *rPtr = math::iround<byte>(colors[i].r * 255.f);
+                    *gPtr = math::iround<byte>(colors[i].g * 255.f);
+                    *bPtr = math::iround<byte>(colors[i].b * 255.f);
                     break;
                 }
                 case channel_format::sixteen_bit:
                 {
-                    *reinterpret_cast<uint16*>(rPtr) = static_cast<uint16>(math::iround(colors[i].r * 65535.f));
-                    *reinterpret_cast<uint16*>(gPtr) = static_cast<uint16>(math::iround(colors[i].g * 65535.f));
-                    *reinterpret_cast<uint16*>(bPtr) = static_cast<uint16>(math::iround(colors[i].b * 65535.f));
+                    *reinterpret_cast<uint16*>(rPtr) = math::iround<uint16>(colors[i].r * 65535.f);
+                    *reinterpret_cast<uint16*>(gPtr) = math::iround<uint16>(colors[i].g * 65535.f);
+                    *reinterpret_cast<uint16*>(bPtr) = math::iround<uint16>(colors[i].b * 65535.f);
                     break;
                 }
                 case channel_format::float_hdr:
@@ -346,18 +346,18 @@ namespace legion::core
                 {
                 case channel_format::eight_bit:
                 {
-                    *rPtr = static_cast<byte>(math::iround(colors[i].r * 255.f));
-                    *gPtr = static_cast<byte>(math::iround(colors[i].g * 255.f));
-                    *bPtr = static_cast<byte>(math::iround(colors[i].b * 255.f));
-                    *aPtr = static_cast<byte>(math::iround(colors[i].a * 255.f));
+                    *rPtr = math::iround<byte>(colors[i].r * 255.f);
+                    *gPtr = math::iround<byte>(colors[i].g * 255.f);
+                    *bPtr = math::iround<byte>(colors[i].b * 255.f);
+                    *aPtr = math::iround<byte>(colors[i].a * 255.f);
                     break;
                 }
                 case channel_format::sixteen_bit:
                 {
-                    *reinterpret_cast<uint16*>(rPtr) = static_cast<uint16>(math::iround(colors[i].r * 65535.f));
-                    *reinterpret_cast<uint16*>(gPtr) = static_cast<uint16>(math::iround(colors[i].g * 65535.f));
-                    *reinterpret_cast<uint16*>(bPtr) = static_cast<uint16>(math::iround(colors[i].b * 65535.f));
-                    *reinterpret_cast<uint16*>(aPtr) = static_cast<uint16>(math::iround(colors[i].a * 65535.f));
+                    *reinterpret_cast<uint16*>(rPtr) = math::iround<uint16>(colors[i].r * 65535.f);
+                    *reinterpret_cast<uint16*>(gPtr) = math::iround<uint16>(colors[i].g * 65535.f);
+                    *reinterpret_cast<uint16*>(bPtr) = math::iround<uint16>(colors[i].b * 65535.f);
+                    *reinterpret_cast<uint16*>(aPtr) = math::iround<uint16>(colors[i].a * 65535.f);
                     break;
                 }
                 case channel_format::float_hdr:

@@ -8,98 +8,86 @@ namespace legion::core::math
 {
     namespace detail
     {
-        template<typename _Scalar, size_type _Size>
+        template<typename Scalar, size_type Size>
         struct compute_inv_sqrt
         {
-            static constexpr size_type size = _Size;
-            using value_type = vector<_Scalar, size>;
+            static constexpr size_type size = Size;
+            using value_type = vector<Scalar, size>;
 
             L_ALWAYS_INLINE static value_type compute(const value_type& v) noexcept
             {
                 value_type result;
                 for (size_type i; i < size; i++)
-                    result[i] = static_cast<_Scalar>(1) / ::std::sqrt(v[i]);
+                    result[i] = static_cast<Scalar>(1) / ::std::sqrt(v[i]);
                 return result;
             }
         };
 
-        template<typename _Scalar>
-        struct compute_inv_sqrt<_Scalar, 1>
+        template<typename Scalar>
+        struct compute_inv_sqrt<Scalar, 1u>
         {
-            static constexpr size_type size = 1;
-            using value_type = vector<_Scalar, size>;
+            static constexpr size_type size = 1u;
+            using value_type = vector<Scalar, size>;
 
-            L_ALWAYS_INLINE static value_type compute(const value_type& v) noexcept
+            L_ALWAYS_INLINE static Scalar compute(const value_type& v) noexcept
             {
-                return static_cast<_Scalar>(1) / ::std::sqrt(v.x);
+                return static_cast<Scalar>(1) / ::std::sqrt(v[0]);
             }
         };
 
-        template<typename _Scalar>
-        struct compute_inv_sqrt<_Scalar, 2>
+        template<typename Scalar>
+        struct compute_inv_sqrt<Scalar, 2u>
         {
-            static constexpr size_type size = 2;
-            using value_type = vector<_Scalar, size>;
+            static constexpr size_type size = 2u;
+            using value_type = vector<Scalar, size>;
 
             L_ALWAYS_INLINE static value_type compute(const value_type& v) noexcept
             {
-                return value_type{ static_cast<_Scalar>(1) / ::std::sqrt(v.x), static_cast<_Scalar>(1) / ::std::sqrt(v.y) };
+                return value_type{ static_cast<Scalar>(1) / ::std::sqrt(v[0]), static_cast<Scalar>(1) / ::std::sqrt(v[1]) };
             }
         };
 
-        template<typename _Scalar>
-        struct compute_inv_sqrt<_Scalar, 3>
+        template<typename Scalar>
+        struct compute_inv_sqrt<Scalar, 3u>
         {
-            static constexpr size_type size = 3;
-            using value_type = vector<_Scalar, size>;
-
-            L_ALWAYS_INLINE static value_type compute(const value_type& v) noexcept
-            {
-                return value_type{
-                    static_cast<_Scalar>(1) / ::std::sqrt(v.x),
-                    static_cast<_Scalar>(1) / ::std::sqrt(v.y),
-                    static_cast<_Scalar>(1) / ::std::sqrt(v.z) };
-            }
-        };
-
-        template<typename _Scalar>
-        struct compute_inv_sqrt<_Scalar, 4>
-        {
-            static constexpr size_type size = 4;
-            using value_type = vector<_Scalar, size>;
+            static constexpr size_type size = 3u;
+            using value_type = vector<Scalar, size>;
 
             L_ALWAYS_INLINE static value_type compute(const value_type& v) noexcept
             {
                 return value_type{
-                    static_cast<_Scalar>(1) / ::std::sqrt(v.x),
-                    static_cast<_Scalar>(1) / ::std::sqrt(v.y),
-                    static_cast<_Scalar>(1) / ::std::sqrt(v.z),
-                    static_cast<_Scalar>(1) / ::std::sqrt(v.w) };
+                    static_cast<Scalar>(1) / ::std::sqrt(v[0]),
+                    static_cast<Scalar>(1) / ::std::sqrt(v[1]),
+                    static_cast<Scalar>(1) / ::std::sqrt(v[2]) };
+            }
+        };
+
+        template<typename Scalar>
+        struct compute_inv_sqrt<Scalar, 4u>
+        {
+            static constexpr size_type size = 4u;
+            using value_type = vector<Scalar, size>;
+
+            L_ALWAYS_INLINE static value_type compute(const value_type& v) noexcept
+            {
+                return value_type{
+                    static_cast<Scalar>(1) / ::std::sqrt(v[0]),
+                    static_cast<Scalar>(1) / ::std::sqrt(v[1]),
+                    static_cast<Scalar>(1) / ::std::sqrt(v[2]),
+                    static_cast<Scalar>(1) / ::std::sqrt(v[3]) };
             }
         };
     }
 
-    template<typename _Scalar, size_type _Size>
-    L_ALWAYS_INLINE static vector<_Scalar, _Size> inv_sqrt(const vector<_Scalar, _Size>& v) noexcept
+    template<typename vec_type, ::std::enable_if_t<is_vector_v<vec_type>, bool> = true>
+    L_ALWAYS_INLINE static auto inverse_sqrt(const vec_type& v) noexcept
     {
-        return detail::compute_inv_sqrt<_Scalar, _Size>::compute(v);
+        return detail::compute_inv_sqrt<typename vec_type::scalar, vec_type::size>::compute(v);
     }
 
-    template<typename _Scalar, size_type _Size>
-    L_ALWAYS_INLINE static vector<_Scalar, _Size> inverse_sqrt(const vector<_Scalar, _Size>& v) noexcept
+    template<typename Scalar>
+    L_ALWAYS_INLINE static Scalar inverse_sqrt(Scalar v) noexcept
     {
-        return detail::compute_inv_sqrt<_Scalar, _Size>::compute(v);
-    }
-
-    template<typename _Scalar>
-    L_ALWAYS_INLINE static vector<_Scalar, 1> inv_sqrt(_Scalar v) noexcept
-    {
-        return detail::compute_inv_sqrt<_Scalar, 1>::compute(v);
-    }
-
-    template<typename _Scalar>
-    L_ALWAYS_INLINE static vector<_Scalar, 1> inverse_sqrt(_Scalar v) noexcept
-    {
-        return detail::compute_inv_sqrt<_Scalar, 1>::compute(v);
+        return detail::compute_inv_sqrt<Scalar, 1>::compute(v);
     }
 }

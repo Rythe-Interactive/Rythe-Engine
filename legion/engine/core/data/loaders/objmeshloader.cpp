@@ -11,16 +11,15 @@ namespace legion::core::detail
     struct vertex_hash
     {
         id_type hash;
-        vertex_hash(math::vec3 vertex, math::color color, math::vec3 normal, math::vec2 uv)
+        vertex_hash(math::float3 vertex, math::color color, math::float3 normal, math::float2 uv)
         {
-            std::hash<math::vec3> vec3Hasher;
+            std::hash<math::float3> vec3Hasher;
             std::hash<math::color> colorHasher;
-            std::hash<math::vec2> vec2Hasher;
-            hash = 0;
-            math::detail::hash_combine(hash, vec3Hasher(vertex));
-            math::detail::hash_combine(hash, colorHasher(color));
-            math::detail::hash_combine(hash, vec3Hasher(normal));
-            math::detail::hash_combine(hash, vec2Hasher(uv));
+            std::hash<math::float2> vec2Hasher;
+            hash = vec3Hasher(vertex);
+            hash = hash_combine(hash, colorHasher(color));
+            hash = hash_combine(hash, vec3Hasher(normal));
+            hash = hash_combine(hash, vec2Hasher(uv));
         }
 
         bool operator==(const vertex_hash& other) const
@@ -147,7 +146,7 @@ namespace legion::core
             material.alphaCutoff = 0.5f;
             material.doubleSided = false;
 
-            material.albedoValue = math::color(srcMat.diffuse[0], srcMat.diffuse[1], srcMat.diffuse[2]);
+            material.albedoValue = math::color(srcMat.diffuse[0], srcMat.diffuse[1], srcMat.diffuse[2], 1.f);
             if (!srcMat.diffuse_texname.empty())
             {
                 auto imgResult = assets::load<image>(fs::view(contextPath + srcMat.diffuse_texname));
@@ -197,7 +196,7 @@ namespace legion::core
 
             material.metallicRoughnessMap = assets::invalid_asset<image>;
 
-            material.emissiveValue = math::color(srcMat.emission[0], srcMat.emission[1], srcMat.emission[2]);
+            material.emissiveValue = math::color(srcMat.emission[0], srcMat.emission[1], srcMat.emission[2], 1.f);
             if (!srcMat.emissive_texname.empty())
             {
                 auto imgResult = assets::load<image>(fs::view(contextPath + srcMat.emissive_texname));
@@ -259,7 +258,7 @@ namespace legion::core
 
         const float percentagePerShape = 10.f / static_cast<float>(shapes.size());
 
-        math::mat4 transform = settings.transform;
+        math::float4x4 transform = settings.transform;
 
         // Iterate submeshes.
         for (auto& shape : shapes)
@@ -290,19 +289,19 @@ namespace legion::core
                 const uint uvIndex = static_cast<uint>((uvCount + (indexData.texcoord_index * 2)) % uvCount);
 
                 // Extract the actual vertex data. (We flip the X axis to convert it to our left handed coordinate system.)
-                math::vec3 vertex(attributes.vertices[vertexIndex + 0], attributes.vertices[vertexIndex + 1], attributes.vertices[vertexIndex + 2]);
+                math::float3 vertex(attributes.vertices[vertexIndex + 0], attributes.vertices[vertexIndex + 1], attributes.vertices[vertexIndex + 2]);
 
                 math::color color = math::colors::white;
                 if (vertexIndex + 2 < attributes.colors.size())
-                    color = math::color(attributes.colors[vertexIndex + 0], attributes.colors[vertexIndex + 1], attributes.colors[vertexIndex + 2]);
+                    color = math::color(attributes.colors[vertexIndex + 0], attributes.colors[vertexIndex + 1], attributes.colors[vertexIndex + 2], 1.f);
 
-                math::vec3 normal = math::vec3::up;
+                math::float3 normal = math::float3::up;
                 if (normalIndex + 2 < attributes.normals.size())
-                    normal = math::vec3(attributes.normals[normalIndex + 0], attributes.normals[normalIndex + 1], attributes.normals[normalIndex + 2]);
+                    normal = math::float3(attributes.normals[normalIndex + 0], attributes.normals[normalIndex + 1], attributes.normals[normalIndex + 2]);
 
-                math::vec2 uv{};
+                math::float2 uv{};
                 if (uvIndex + 1 < attributes.texcoords.size())
-                    uv = math::vec2(attributes.texcoords[uvIndex + 0], attributes.texcoords[uvIndex + 1]);
+                    uv = math::float2(attributes.texcoords[uvIndex + 0], attributes.texcoords[uvIndex + 1]);
 
                 // Create a hash to check for doubles.
                 detail::vertex_hash hash(vertex, color, normal, uv);
@@ -315,9 +314,9 @@ namespace legion::core
                     vertices.push_back(hash);
 
                     // Append vertex data.
-                    data.vertices.push_back((transform * math::vec4(vertex.x, vertex.y, vertex.z, 1.f)).xyz());
+                    data.vertices.push_back((transform * math::float4(vertex.x, vertex.y, vertex.z, 1.f)).xyz());
                     data.colors.push_back(color);
-                    data.normals.push_back((transform * math::vec4(normal.x, normal.y, normal.z, 0.f)).xyz());
+                    data.normals.push_back((transform * math::float4(normal.x, normal.y, normal.z, 0.f)).xyz());
 
                     if (!settings.flipVerticalTexcoords)
                         uv.y = 1.f - uv.y;

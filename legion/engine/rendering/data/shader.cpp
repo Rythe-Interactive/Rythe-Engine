@@ -62,22 +62,22 @@ namespace legion::rendering
                     uniform = new rendering::uniform<float>(id, name, type, location);
                     break;
                 case GL_FLOAT_VEC2:
-                    uniform = new rendering::uniform<math::vec2>(id, name, type, location);
+                    uniform = new rendering::uniform<math::float2>(id, name, type, location);
                     break;
                 case GL_FLOAT_VEC3:
-                    uniform = new rendering::uniform<math::vec3>(id, name, type, location);
+                    uniform = new rendering::uniform<math::float3>(id, name, type, location);
                     break;
                 case GL_FLOAT_VEC4:
-                    uniform = new rendering::uniform<math::vec4>(id, name, type, location);
+                    uniform = new rendering::uniform<math::float4>(id, name, type, location);
                     break;
                 case GL_INT:
                     uniform = new rendering::uniform<int>(id, name, type, location);
                     break;
                 case GL_INT_VEC2:
-                    uniform = new rendering::uniform<math::ivec2>(id, name, type, location);
+                    uniform = new rendering::uniform<math::int2>(id, name, type, location);
                     break;
                 case GL_INT_VEC3:
-                    uniform = new rendering::uniform<math::ivec3>(id, name, type, location);
+                    uniform = new rendering::uniform<math::int3>(id, name, type, location);
                     break;
                 case GL_INT_VEC4:
                     uniform = new rendering::uniform<math::ivec4>(id, name, type, location);
@@ -101,7 +101,7 @@ namespace legion::rendering
                     uniform = new rendering::uniform<math::mat3>(id, name, type, location);
                     break;
                 case GL_FLOAT_MAT4:
-                    uniform = new rendering::uniform<math::mat4>(id, name, type, location);
+                    uniform = new rendering::uniform<math::float4x4>(id, name, type, location);
                     break;
                 default:
                     continue;

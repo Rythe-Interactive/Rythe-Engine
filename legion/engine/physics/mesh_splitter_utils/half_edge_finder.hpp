@@ -15,7 +15,7 @@ namespace legion::physics
         * populates the meshHalfEdges queue with the created meshHalfEdgePtrs
         */
         void FindHalfEdge
-        (mesh& mesh, const math::mat4& transform,
+        (mesh& mesh, const math::float4x4& transform,
             std::queue<meshHalfEdgePtr>& meshHalfEdges)
         {
             VertexIndexToHalfEdgePtr indexToEdgeMap;
@@ -27,7 +27,7 @@ namespace legion::physics
             std::vector<int> uniqueIndex;
 
             // stores the unique vertices of the mesh
-            std::vector<math::vec3> uniquePositions;
+            std::vector<math::float3> uniquePositions;
 
             int uniqueIndexCount = -1;
 
@@ -36,15 +36,15 @@ namespace legion::physics
 
             for (int i = 0; i < vertices.size(); ++i)
             {
-                math::vec3 position = vertices.at(i);
+                math::float3 position = vertices.at(i);
 
                 bool isVectorSeen = false;
 
                 //have we found this vector before?
                 for (int j = 0; j < uniquePositions.size(); j++)
                 {
-                    math::vec3 transformedPos = transform * math::vec4(position, 1);
-                    math::vec3 uniqueTransformedPos = transform * math::vec4(uniquePositions[j], 1);
+                    math::float3 transformedPos = transform * math::float4(position, 1);
+                    math::float3 uniqueTransformedPos = transform * math::float4(uniquePositions[j], 1);
 
                     float dist = math::distance(uniqueTransformedPos, transformedPos);
 

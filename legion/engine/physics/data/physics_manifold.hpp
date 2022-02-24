@@ -18,8 +18,8 @@ namespace legion::physics
     {
         std::vector<physics_contact> contacts;
 
-        math::mat4 transformA;
-        math::mat4 transformB;
+        math::float4x4 transformA;
+        math::float4x4 transformB;
 
         PhysicsCollider* colliderA;
         PhysicsCollider* colliderB;

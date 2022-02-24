@@ -98,5 +98,6 @@ namespace legion::core::math
     using aligned_float3 = aligned_vector3<float32>;
     using aligned_double3 = aligned_vector3<float64>;
     using aligned_int3 = aligned_vector3<int>;
+    using aligned_uint3 = aligned_vector3<uint>;
     using aligned_bool3 = aligned_vector3<bool>;
 }

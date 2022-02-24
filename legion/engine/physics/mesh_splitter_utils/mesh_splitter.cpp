@@ -20,7 +20,7 @@ namespace legion::physics
             //auto renderable = renderable.read();
             mesh& mesh = meshFilter.read().get().second;
 
-            const math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
+            const math::float4x4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
             //debugHelper.DEBUG_transform = transform;
           
             HalfEdgeFinder edgeFinder;
@@ -55,7 +55,7 @@ namespace legion::physics
         int currentDebug = 0;
 
         auto [posH, rotH, scaleH] = owner.get_component_handles<transform>();
-        const math::mat4& transform = math::compose(scaleH.read(), rotH.read(), posH.read());
+        const math::float4x4& transform = math::compose(scaleH.read(), rotH.read(), posH.read());
 
         //-------------------------------- copy polygons of original mesh and add it to the output list -----------------------------------------//
 
@@ -100,8 +100,8 @@ namespace legion::physics
         }
     }
 
-    void MeshSplitter::SplitPolygons(std::vector<SplittablePolygonPtr>& polygonsToSplit, const math::vec3& planeNormal, const math::vec3& planePosition,
-        const math::mat4& transform, std::vector<std::vector<SplittablePolygonPtr>>& resultingIslands, bool keepBelow, bool shouldDebug)
+    void MeshSplitter::SplitPolygons(std::vector<SplittablePolygonPtr>& polygonsToSplit, const math::float3& planeNormal, const math::float3& planePosition,
+        const math::float4x4& transform, std::vector<std::vector<SplittablePolygonPtr>>& resultingIslands, bool keepBelow, bool shouldDebug)
     {
     
         //log::debug("SplitPolygons");
@@ -143,7 +143,7 @@ namespace legion::physics
             FindFirstIntersectingOrRequestedState
             (initialFound, requestedState, polygonsToSplit);
 
-        /*if (math::distance(planeNormal, math::vec3(-1, 0, 0)) < 0.01f)
+        /*if (math::distance(planeNormal, math::float3(-1, 0, 0)) < 0.01f)
         {
             DebugBreak();
         }*/
@@ -199,7 +199,7 @@ namespace legion::physics
             }
             
 
-            math::vec3 localNormal = transform * math::vec4(planeNormal, 0);
+            math::float3 localNormal = transform * math::float4(planeNormal, 0);
             SplittablePolygonPtr intersectionPolygon = CreateIntersectionPolygon(generatedIntersectionEdges, math::normalize(localNormal));
             intersectionPolygon->isVisited = true;
             intersectionPolygon->ResetEdgeVisited();
@@ -212,10 +212,10 @@ namespace legion::physics
                 if (shouldDebug)
                 {
                     float interpolant = (float)i / max;
-                    math::vec3 color = math::color(1, 0, 1) * interpolant;
+                    math::float3 color = math::color(1, 0, 1) * interpolant;
                     //log::debug("generatedIntersectionEdges {} ", generatedIntersectionEdges.size());
-                   /* math::vec3 first = debugHelper.DEBUG_transform * math::vec4(intersectionInfo.first, 1);
-                    math::vec3 second = debugHelper.DEBUG_transform * math::vec4(intersectionInfo.second, 1);*/
+                   /* math::float3 first = debugHelper.DEBUG_transform * math::float4(intersectionInfo.first, 1);
+                    math::float3 second = debugHelper.DEBUG_transform * math::float4(intersectionInfo.second, 1);*/
 
                     /*debug::user_projectDrawLine(first + (second-first) * 0.05f, second + (first - second) * 0.05f, math::color(color.x,color.y,color.z,1.0f),
                         math::linearRand(8.0f,12.0f), FLT_MAX, true);*/
@@ -414,7 +414,7 @@ namespace legion::physics
         //while can find intersection polygon
         while (foundUnvisited)
         {
-            std::vector< math::vec3> DEBUG_ONLY_polygonPositions;
+            std::vector< math::float3> DEBUG_ONLY_polygonPositions;
             std::vector< SplittablePolygonPtr> intersectionIsland;
             std::queue< SplittablePolygonPtr> unvisitedPolygons;
             unvisitedPolygons.push(initialPolygon);
@@ -454,14 +454,14 @@ namespace legion::physics
         }
     }
 
-    void MeshSplitter::SplitPolygon(SplittablePolygonPtr splitPolygon, const math::mat4& transform, const math::vec3 cutPosition,
-        const math::vec3 cutNormal, SplitState requestedState, std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges, bool shouldDebug)
+    void MeshSplitter::SplitPolygon(SplittablePolygonPtr splitPolygon, const math::float4x4& transform, const math::float3 cutPosition,
+        const math::float3 cutNormal, SplitState requestedState, std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges, bool shouldDebug)
     {
         IntersectingPolygonOrganizer polygonOrganizer;
         polygonOrganizer.SplitPolygon(splitPolygon, transform, cutPosition, cutNormal, requestedState, generatedIntersectionEdges,shouldDebug);
     }
 
-    void MeshSplitter::DEBUG_DrawPolygonData(const math::mat4& transform)
+    void MeshSplitter::DEBUG_DrawPolygonData(const math::float4x4& transform)
     {
         for (auto polygon : meshPolygons)
         {

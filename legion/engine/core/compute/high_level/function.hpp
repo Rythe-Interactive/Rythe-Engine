@@ -213,7 +213,7 @@ namespace legion::core::compute {
          * @return Ok() if the kernel succeeded or Err() otherwise
          */
         template <typename... Args>
-        common::result<void, void> operator()(std::variant<size_type, math::ivec2, math::ivec3> dispatch_size, Args&&... args)
+        common::result<void, void> operator()(std::variant<size_type, math::int2, math::int3> dispatch_size, Args&&... args)
         {
             OPTICK_EVENT();
             dvar dim;
@@ -222,12 +222,12 @@ namespace legion::core::compute {
             {
                 dim = std::make_tuple(std::get<0>(dispatch_size));
             }
-            else if (std::holds_alternative<math::ivec2>(dispatch_size))
+            else if (std::holds_alternative<math::int2>(dispatch_size))
             {
                 dim = std::make_tuple(static_cast<size_type>(std::get<1>(dispatch_size)[0]),
                     static_cast<size_type>(std::get<1>(dispatch_size)[1]));
             }
-            else if (std::holds_alternative<math::ivec3>(dispatch_size))
+            else if (std::holds_alternative<math::int3>(dispatch_size))
             {
                 dim = std::make_tuple(static_cast<size_type>(std::get<2>(dispatch_size)[0]),
                     static_cast<size_type>(std::get<2>(dispatch_size)[1]),

@@ -2,6 +2,7 @@
 #include <immintrin.h>
 
 #include <core/math/vector/vector_base.hpp>
+#include <core/math/vector/vector_base.inl>
 #include <core/math/vector/swizzle/swizzle4.hpp>
 #include <core/math/meta.hpp>
 
@@ -10,7 +11,7 @@ namespace legion::core::math
     template<typename Scalar>
     struct alignas(sizeof(Scalar) * 4) vector<Scalar, 4>
     {
-        static_assert(std::is_arithmetic<Scalar>::value, "Scalar must be a numeric type.");
+        static_assert(::std::is_arithmetic_v<Scalar>, "Scalar must be a numeric type.");
 
         using scalar = Scalar;
         static constexpr size_type size = 4;
@@ -181,5 +182,6 @@ namespace legion::core::math
     using float4 = vector<float32, 4>;
     using double4 = vector<float64, 4>;
     using int4 = vector<int, 4>;
+    using uint4 = vector<uint, 4>;
     using bool4 = vector<bool, 4>;
 }

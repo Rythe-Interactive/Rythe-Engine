@@ -80,9 +80,9 @@ namespace legion::physics
         * of the collider.
         * @note This is called internally by PhysicsSysten
         */
-        virtual void DrawColliderRepresentation(const math::mat4& transform, math::color usedColor, float width, float time, bool ignoreDepth = false) {};
+        virtual void DrawColliderRepresentation(const math::float4x4& transform, math::color usedColor, float width, float time, bool ignoreDepth = false) {};
 
-        virtual void UpdateTransformedTightBoundingVolume(const math::mat4& transform) {};
+        virtual void UpdateTransformedTightBoundingVolume(const math::float4x4& transform) {};
 
         virtual void UpdateLocalAABB() {};
 
@@ -91,27 +91,27 @@ namespace legion::physics
             return dummyHalfEdges;
         }
 
-        L_NODISCARD math::vec3 GetLocalCentroid() const noexcept
+        L_NODISCARD math::float3 GetLocalCentroid() const noexcept
         {
             return localColliderCentroid;
         }
 
         //
-        std::pair<math::vec3, math::vec3> GetMinMaxLocalAABB() const
+        std::pair<math::float3, math::float3> GetMinMaxLocalAABB() const
         {
             return minMaxLocalAABB;
         }
 
-        std::pair<math::vec3, math::vec3> GetMinMaxWorldAABB() const
+        std::pair<math::float3, math::float3> GetMinMaxWorldAABB() const
         {
             return minMaxWorldAABB;
         }
 
     protected:
 
-        math::vec3 localColliderCentroid = math::vec3(0, 0, 0);
-        std::pair<math::vec3, math::vec3> minMaxLocalAABB;
-        std::pair<math::vec3, math::vec3> minMaxWorldAABB;
+        math::float3 localColliderCentroid = math::float3(0, 0, 0);
+        std::pair<math::float3, math::float3> minMaxLocalAABB;
+        std::pair<math::float3, math::float3> minMaxWorldAABB;
     private:
 
         int id = -1;

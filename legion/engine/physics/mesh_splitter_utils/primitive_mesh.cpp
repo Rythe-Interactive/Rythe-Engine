@@ -16,14 +16,14 @@ namespace legion::physics
     ecs::entity_handle PrimitiveMesh::InstantiateNewGameObject()
     {
         auto [originalPosH, originalRotH, originalScaleH] = originalEntity.get_component_handles<transform>();
-        math::mat4 trans = math::compose(originalScaleH.read(), originalRotH.read(), originalPosH.read());
+        math::float4x4 trans = math::compose(originalScaleH.read(), originalRotH.read(), originalPosH.read());
       
         auto ent = m_ecs->createEntity();
-        math::vec3 offset;
+        math::float3 offset;
 
         mesh newMesh;
 
-        math::vec3 scale = originalScaleH.read();
+        math::float3 scale = originalScaleH.read();
         populateMesh(newMesh, trans, offset, scale);
       
         newMesh.calculate_tangents(&newMesh);
@@ -47,13 +47,13 @@ namespace legion::physics
         //create transform
       
         auto [posH, rotH ,scaleH] = m_ecs->createComponents<transform>(ent);
-        math::vec3 newEntityPos = originalPosH.read() + offset;
+        math::float3 newEntityPos = originalPosH.read() + offset;
         posH.write(newEntityPos);
         rotH.write(originalRotH.read());
         //scaleH.write(originalScaleH.read());
 
-        math::vec3 initialPos = originalPosH.read();
-        //+ math::vec3(7, 0, 0)
+        math::float3 initialPos = originalPosH.read();
+        //+ math::float3(7, 0, 0)
         originalPosH.write(initialPos );
         //m_ecs->destroyEntity(originalEntity);
 
@@ -66,12 +66,12 @@ namespace legion::physics
     }
 
     void PrimitiveMesh::populateMesh(mesh& mesh,
-        const math::mat4& originalTransform , math::vec3& outOffset,math::vec3& scale)
+        const math::float4x4& originalTransform , math::float3& outOffset,math::float3& scale)
     {
         std::vector<uint>& indices = mesh.indices;
-        std::vector<math::vec3>& vertices = mesh.vertices;
-        std::vector<math::vec2>& uvs = mesh.uvs;
-        std::vector<math::vec3>& normals = mesh.normals;
+        std::vector<math::float3>& vertices = mesh.vertices;
+        std::vector<math::float2>& uvs = mesh.uvs;
+        std::vector<math::float3>& normals = mesh.normals;
 
         //for each polygon in splittable polygon
 
@@ -126,7 +126,7 @@ namespace legion::physics
         }
 
         //get centroid of vertices
-        math::vec3 worldCentroid = math::vec3();
+        math::float3 worldCentroid = math::float3();
 
         for (const auto& vertex : vertices)
         {
@@ -135,12 +135,12 @@ namespace legion::physics
 
         worldCentroid /= static_cast<float>(vertices.size());
 
-        worldCentroid = originalTransform * math::vec4(worldCentroid, 1);
-        math::vec3 originalPosition = originalTransform[3];
+        worldCentroid = originalTransform * math::float4(worldCentroid, 1);
+        math::float3 originalPosition = originalTransform[3];
 
         outOffset = worldCentroid - originalPosition;
 
-        math::vec3 localOffset = math::inverse(originalTransform) * math::vec4(outOffset, 0);
+        math::float3 localOffset = math::inverse(originalTransform) * math::float4(outOffset, 0);
 
         //shift vertices by offset
         for (auto& vertex : vertices)
@@ -157,11 +157,11 @@ namespace legion::physics
 
         for (int i = 0; i < vertices.size(); i+=3)
         {
-            math::vec3& v1 = vertices.at(i);
-            math::vec3& v2 = vertices.at(i+1);
-            math::vec3& v3 = vertices.at(i+2);
+            math::float3& v1 = vertices.at(i);
+            math::float3& v2 = vertices.at(i+1);
+            math::float3& v3 = vertices.at(i+2);
 
-            math::vec3 normal = math::cross(v2 - v1, v3 - v1);
+            math::float3 normal = math::cross(v2 - v1, v3 - v1);
 
             normals.push_back(normal);
         }

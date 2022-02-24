@@ -397,7 +397,7 @@ namespace legion::rendering
 
             app::window& win = targetWin.get();
 
-            math::ivec2 viewportSize;
+            math::int2 viewportSize;
             {
                 if (!app::WindowSystem::windowStillExists(win.handle))
                     continue;
@@ -415,11 +415,11 @@ namespace legion::rendering
             rotation& camRot = ent.get_component<rotation>();
             scale& camScale = ent.get_component<scale>();
 
-            math::mat4 view(1.f);
+            math::float4x4 view(1.f);
             math::compose(view, camScale, camRot, camPos);
             view = math::inverse(view);
 
-            math::mat4 projection = cam.get_projection(((float)viewportSize.x) / viewportSize.y);
+            math::float4x4 projection = cam.get_projection(((float)viewportSize.x) / viewportSize.y);
 
             camera::camera_input cam_input_data(view, projection, camPos, camRot.forward(), cam.nearz, cam.farz, viewportSize);
 

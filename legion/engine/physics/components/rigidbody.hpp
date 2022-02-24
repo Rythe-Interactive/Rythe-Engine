@@ -11,22 +11,22 @@ namespace legion::physics
 
         //linear motion component
         float inverseMass = 1.0f;
-        math::vec3 velocity = math::vec3(0.0);
-        math::vec3 acc = math::vec3(0.0);
+        math::float3 velocity = math::float3(0.0);
+        math::float3 acc = math::float3(0.0);
         float linearDrag;
 
         //angular motion component
         math::mat3 localInverseInertiaTensor = math::mat3(6.0f);
         math::mat3 globalInverseInertiaTensor = localInverseInertiaTensor;
 
-        math::vec3 angularAcc = math::vec3(0.0);
-        math::vec3 angularVelocity = math::vec3(0.0);
+        math::float3 angularAcc = math::float3(0.0);
+        math::float3 angularVelocity = math::float3(0.0);
         float angularDrag = 0.01f;
 
         //force application component
-        math::vec3 forceAccumulator = math::vec3(0.0);
-        math::vec3 torqueAccumulator = math::vec3(0.0);
-        math::vec3 globalCentreOfMass = math::vec3(0.0);
+        math::float3 forceAccumulator = math::float3(0.0);
+        math::float3 torqueAccumulator = math::float3(0.0);
+        math::float3 globalCentreOfMass = math::float3(0.0);
 
         float restitution = 0.3f;
         float friction = 0.3f;
@@ -59,17 +59,17 @@ namespace legion::physics
         * length of 'force'.
         * @note This does NOT cause torque
         */
-        void addForce(math::vec3 force)
+        void addForce(math::float3 force)
         {
             forceAccumulator += force;
         }
 
         /** @brief Adds a force in the direction of 'force' and
         */
-        void addForceAt(math::vec3 worldForcePosition, math::vec3 force)
+        void addForceAt(math::float3 worldForcePosition, math::float3 force)
         {
             forceAccumulator += force;
-            math::vec3 axis = worldForcePosition - globalCentreOfMass;
+            math::float3 axis = worldForcePosition - globalCentreOfMass;
             torqueAccumulator += math::cross(axis, force);
         }
 
@@ -90,8 +90,8 @@ namespace legion::physics
 
         void resetAccumulators()
         {
-            forceAccumulator = math::vec3(0);
-            torqueAccumulator = math::vec3(0);
+            forceAccumulator = math::float3(0);
+            torqueAccumulator = math::float3(0);
         }
 
         void UpdateInertiaTensor(math::quat orientation)

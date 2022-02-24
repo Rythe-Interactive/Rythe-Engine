@@ -35,9 +35,9 @@ namespace legion
         ecs::filter<camera, transform> cameraQuery;
         ecs::entity selected;
 
-        math::mat4 view = math::mat4(1.0f);
-        math::mat4 projection = math::mat4(1.0f);
-        math::mat4 model = math::mat4(1.0f);
+        math::float4x4 view = math::float4x4(1.0f);
+        math::float4x4 projection = math::float4x4(1.0f);
+        math::float4x4 model = math::float4x4(1.0f);
 
         void setup()
         {
@@ -69,7 +69,7 @@ namespace legion
 
             position pos(5.f, 0.f, 5.f);
             scale scal(3.f, 2.f, 3.f);
-            rotation rot = angleAxis(math::quarter_pi<float>(), math::vec3::up);
+            rotation rot = angleAxis(math::quarter_pi<float>(), math::float3::up);
             model = compose(scal, rot, pos);
 
             decalEntity.add_component<transform>(pos, rot, scal);
@@ -393,7 +393,7 @@ namespace legion
             break;
             case GL_FLOAT_VEC2:
             {
-                math::vec2 value = material.get_param<math::vec2>(name);
+                math::float2 value = material.get_param<math::float2>(name);
                 if (DisplayValue(label.c_str(), value))
                 {
                     material.set_param(name, value);
@@ -403,7 +403,7 @@ namespace legion
             break;
             case GL_FLOAT_VEC3:
             {
-                math::vec3 value = material.get_param<math::vec3>(name);
+                math::float3 value = material.get_param<math::float3>(name);
                 if (DisplayValue(label.c_str(), value))
                 {
                     material.set_param(name, value);
@@ -413,7 +413,7 @@ namespace legion
             break;
             case GL_FLOAT_VEC4:
             {
-                math::vec4 value = material.get_param<math::vec4>(name);
+                math::float4 value = material.get_param<math::float4>(name);
                 if (DisplayValue(label.c_str(), value))
                 {
                     material.set_param(name, value);
@@ -443,7 +443,7 @@ namespace legion
             break;
             case GL_INT_VEC2:
             {
-                math::ivec2 value = material.get_param<math::ivec2>(name);
+                math::int2 value = material.get_param<math::int2>(name);
                 if (DisplayValue(label.c_str(), value))
                 {
                     material.set_param(name, value);
@@ -453,7 +453,7 @@ namespace legion
             break;
             case GL_INT_VEC3:
             {
-                math::ivec3 value = material.get_param<math::ivec3>(name);
+                math::int3 value = material.get_param<math::int3>(name);
                 if (DisplayValue(label.c_str(), value))
                 {
                     material.set_param(name, value);
@@ -545,7 +545,7 @@ namespace legion
             break;
             case GL_FLOAT_MAT4:
             {
-                math::mat4 value = material.get_param<math::mat4>(name);
+                math::float4x4 value = material.get_param<math::float4x4>(name);
                 bool changed = false;
                 std::string label0 = label + '0';
                 changed |= DisplayValue(label0.c_str(), value[0]);

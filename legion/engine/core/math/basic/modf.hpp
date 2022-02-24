@@ -22,10 +22,26 @@ namespace legion::core::math
                     return result;
             }
         };
+
+        template<typename Scalar>
+        struct compute_modf<Scalar, 1u>
+        {
+            static constexpr size_type size = 1u;
+            using value_type = vector<Scalar, size>;
+
+            template<typename RET>
+            inline L_ALWAYS_INLINE static value_type compute(const value_type& val, RET& integer) noexcept
+            {
+                if constexpr (is_vector_v<RET>)
+                    return ::std::modf(val[0], &integer[0]);
+                else
+                    return ::std::modf(val[0], &integer);
+            }
+        };
     }
 
-    template<typename T>
-    inline L_ALWAYS_INLINE static T modf(const T& val, T& integer)
+    template<typename T, typename RET>
+    inline L_ALWAYS_INLINE static auto modf(const T& val, RET& integer)
     {
         if constexpr (is_vector_v<T>)
         {

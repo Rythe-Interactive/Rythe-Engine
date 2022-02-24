@@ -19,10 +19,10 @@ namespace legion::application
     struct window_move final : public events::event<window_move>
     {
         ecs::component<window> windowHandle;
-        math::ivec2 position;
+        math::int2 position;
 
         window_move() = default;
-        window_move(ecs::component<window> windowHandle, math::ivec2 position) : windowHandle(windowHandle), position(position) {}
+        window_move(ecs::component<window> windowHandle, math::int2 position) : windowHandle(windowHandle), position(position) {}
 
         
     };
@@ -30,10 +30,10 @@ namespace legion::application
     struct window_resize final : public events::event<window_resize>
     {
         ecs::component<window> windowHandle;
-        math::ivec2 size;
+        math::int2 size;
 
         window_resize() = default;
-        window_resize(ecs::component<window> windowHandle, math::ivec2 size) : windowHandle(windowHandle), size(size) {}
+        window_resize(ecs::component<window> windowHandle, math::int2 size) : windowHandle(windowHandle), size(size) {}
 
         
     };
@@ -84,10 +84,10 @@ namespace legion::application
     struct window_framebuffer_resize final : public events::event<window_framebuffer_resize>
     {
         ecs::component<window> windowHandle;
-        math::ivec2 size;
+        math::int2 size;
 
         window_framebuffer_resize() = default;
-        window_framebuffer_resize(ecs::component<window> windowHandle, math::ivec2 size) : windowHandle(windowHandle), size(size) {}
+        window_framebuffer_resize(ecs::component<window> windowHandle, math::int2 size) : windowHandle(windowHandle), size(size) {}
 
         
     };
@@ -95,10 +95,10 @@ namespace legion::application
     struct window_content_rescale final : public events::event<window_content_rescale>
     {
         ecs::component<window> windowHandle;
-        math::vec2 scale;
+        math::float2 scale;
 
         window_content_rescale() = default;
-        window_content_rescale(ecs::component<window> windowHandle, math::vec2 scale) : windowHandle(windowHandle), scale(scale) {}
+        window_content_rescale(ecs::component<window> windowHandle, math::float2 scale) : windowHandle(windowHandle), scale(scale) {}
 
         
     };

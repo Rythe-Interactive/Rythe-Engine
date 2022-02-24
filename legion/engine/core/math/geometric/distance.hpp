@@ -4,26 +4,26 @@
 
 namespace legion::core::math
 {
-    template<typename _Scalar, size_type _Size>
-    _Scalar dist(const vector<_Scalar, _Size>& a, const vector<_Scalar, _Size>& b) noexcept
+    template<typename vec_type0, typename vec_type1, std::enable_if_t<is_vector_v<vec_type0>&& is_vector_v<vec_type1>, bool> = true>
+    auto dist(const vec_type0& a, const vec_type1& b) noexcept
     {
         return length(a - b);
     }
 
-    template<typename _Scalar, size_type _Size>
-    constexpr _Scalar dist2(const vector<_Scalar, _Size>& a, const vector<_Scalar, _Size>& b) noexcept
+    template<typename vec_type0, typename vec_type1, std::enable_if_t<is_vector_v<vec_type0>&& is_vector_v<vec_type1>, bool> = true>
+    constexpr auto dist2(const vec_type0& a, const vec_type1& b) noexcept
     {
         return length2(a - b);
     }
 
-    template<typename _Scalar, size_type _Size>
-    _Scalar distance(const vector<_Scalar, _Size>& a, const vector<_Scalar, _Size>& b) noexcept
+    template<typename vec_type0, typename vec_type1, std::enable_if_t<is_vector_v<vec_type0>&& is_vector_v<vec_type1>, bool> = true>
+    auto distance(const vec_type0& a, const vec_type1& b) noexcept
     {
         return length(a - b);
     }
 
-    template<typename _Scalar, size_type _Size>
-    constexpr _Scalar distance2(const vector<_Scalar, _Size>& a, const vector<_Scalar, _Size>& b) noexcept
+    template<typename vec_type0, typename vec_type1, std::enable_if_t<is_vector_v<vec_type0>&& is_vector_v<vec_type1>, bool> = true>
+    constexpr auto distance2(const vec_type0& a, const vec_type1& b) noexcept
     {
         return length2(a - b);
     }

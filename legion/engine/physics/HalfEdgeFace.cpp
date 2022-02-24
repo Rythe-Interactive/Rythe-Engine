@@ -4,18 +4,18 @@
 
 namespace legion::physics
 {
-    HalfEdgeFace::HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal) : startEdge{ newStartEdge }, normal{ newNormal }
+    HalfEdgeFace::HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::float3 newNormal) : startEdge{ newStartEdge }, normal{ newNormal }
     {
         /*log::debug("HalfEdgeFace::HalfEdgeFace");*/
         static int faceCount = 0;
 
         DEBUG_color =math::color( math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f));
-        math::vec3 faceCenter{ 0.0f };
+        math::float3 faceCenter{ 0.0f };
         int edgeCount = 0;
 
         auto calculateFaceCentroid = [&faceCenter, &edgeCount](HalfEdgeEdge* edge)
         {
-            math::vec3 pos = edge->edgePosition;
+            math::float3 pos = edge->edgePosition;
             faceCenter += pos;
             edgeCount++;
         };
@@ -99,7 +99,7 @@ namespace legion::physics
             log::warn("Testing face with itself for convexity: returning true");
             return true;
         }
-        math::vec3 difference = startEdge->edgePosition - other.centroid;
+        math::float3 difference = startEdge->edgePosition - other.centroid;
         float scaledAngle = math::dot(difference, normal);
 
         // if the scaledAngle is smaller or equal to 0, it is not convex
@@ -135,7 +135,7 @@ namespace legion::physics
 
         }
 
-        //math::vec3 difference = startEdge->edgePosition - other.centroid;
+        //math::float3 difference = startEdge->edgePosition - other.centroid;
         //float scaledAngle = math::dot(difference, normal);
 
         //// if the scaledAngle is smaller or equal to 0, it is not convex
@@ -272,7 +272,7 @@ namespace legion::physics
      {
 
         HalfEdgeEdge* current = startEdge;
-        if (this->normal != math::vec3(0, 0, 0))
+        if (this->normal != math::float3(0, 0, 0))
         {
             return;
         }
@@ -281,7 +281,7 @@ namespace legion::physics
         {
             HalfEdgeFace* neigbor = current->pairingEdge->face;
 
-            if (neigbor->normal != math::vec3(0, 0, 0))
+            if (neigbor->normal != math::float3(0, 0, 0))
             {
                 current = current->nextEdge;
                 continue;
@@ -297,7 +297,7 @@ namespace legion::physics
                     this->mergeFaces(*middle);
 
                     removed.push_back(neigbor);
-                    neigbor->normal = math::vec3();
+                    neigbor->normal = math::float3();
                 }
            
             }
@@ -363,12 +363,12 @@ namespace legion::physics
 
         // Recalculate centroid
         {
-            math::vec3 faceCenter{ 0.0f };
+            math::float3 faceCenter{ 0.0f };
             int edgeCount = 0;
 
             auto calculateFaceCentroid = [&faceCenter, &edgeCount](HalfEdgeEdge* edge)
             {
-                math::vec3 pos = edge->edgePosition;
+                math::float3 pos = edge->edgePosition;
                 faceCenter += pos;
                 edgeCount++;
             };
@@ -383,7 +383,7 @@ namespace legion::physics
         return face;
     }
 
-    void HalfEdgeFace::DEBUG_DrawFace(const math::mat4& transform,const math::color& debugColor,float time)
+    void HalfEdgeFace::DEBUG_DrawFace(const math::float4x4& transform,const math::color& debugColor,float time)
     {
 
         auto drawFunc = [&transform,debugColor,time](HalfEdgeEdge* edge)

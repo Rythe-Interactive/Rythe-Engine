@@ -6,11 +6,11 @@ namespace legion::core::math
 {
     namespace detail
     {
-        template<typename _Scalar, size_type _Size>
+        template<typename Scalar, size_type Size>
         struct compute_all
         {
-            static constexpr size_type size = _Size;
-            using value_type = vector<_Scalar, size>;
+            static constexpr size_type size = Size;
+            using value_type = vector<Scalar, size>;
 
             L_NODISCARD constexpr static bool compute(const value_type& value) noexcept
             {

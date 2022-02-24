@@ -14,7 +14,7 @@ namespace legion::physics
 
         bool isTrigger =false;
 
-        math::vec3 localCenterOfMass{};
+        math::float3 localCenterOfMass{};
 
         //physics bitmask
 

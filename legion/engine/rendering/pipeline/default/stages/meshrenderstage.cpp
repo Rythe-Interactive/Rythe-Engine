@@ -25,7 +25,7 @@ namespace legion::rendering
         // static id_type sceneDepthId = nameHash("scene depth history");
 
         //auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::unordered_set<ecs::entity>>>>(batchesId);
-        auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::pair<std::vector<ecs::entity>, std::vector<math::mat4>>>>>(batchesId);
+        auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::pair<std::vector<ecs::entity>, std::vector<math::float4x4>>>>>(batchesId);
         if (!batches)
             return;
 

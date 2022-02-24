@@ -24,25 +24,25 @@ namespace legion::physics
         * the colliders are colliding. The result is recorded in the physics_manifold
         */
         static void DetectConvexConvexCollision(ConvexCollider* convexA, ConvexCollider* convexB
-            , const math::mat4& transformA, const math::mat4& transformB,
+            , const math::float4x4& transformA, const math::float4x4& transformB,
             ConvexConvexCollisionInfo& outCollisionInfo,  physics_manifold& manifold);
 
         /** @brief Given a transformed ConvexCollider and a direction, Gets the vertex furthest in the given direction
          * @param planePosition The position of the support plane in world space
          * @param direction The direction we would like to know the support point of
          * @param collider The ConvexCollider in question
-         * @param colliderTransform A mat4 describing the transform of the collider
+         * @param colliderTransform A float4x4 describing the transform of the collider
          * @param worldSupportPoint [out] the resulting support point
          * @return returns true if a seperating axis was found
          */
-        static void GetSupportPoint(const math::vec3& planePosition, const math::vec3& direction, ConvexCollider* collider, const math::mat4& colliderTransform
-            , math::vec3& worldSupportPoint)
+        static void GetSupportPoint(const math::float3& planePosition, const math::float3& direction, ConvexCollider* collider, const math::float4x4& colliderTransform
+            , math::float3& worldSupportPoint)
         {
             float largestDistanceInDirection = std::numeric_limits<float>::lowest();
 
             for (const auto& vert : collider->GetVertices())
             {
-                math::vec3 transformedVert = colliderTransform * math::vec4(vert, 1);
+                math::float3 transformedVert = colliderTransform * math::float4(vert, 1);
 
                 float dotResult = math::dot(transformedVert - planePosition, direction);
 
@@ -59,20 +59,20 @@ namespace legion::physics
         * @param planePosition The position of the support plane in world space
         * @param direction The direction we would like to know the support point of
         * @param collider The ConvexCollider in question
-        * @param colliderTransform A mat4 describing the transform of the collider
+        * @param colliderTransform A float4x4 describing the transform of the collider
         * @param worldSupportPoint [out] the resulting support point
         * @return returns true if a seperating axis was found
         */
-        static void GetSupportPointNoTransform( math::vec3 planePosition,  math::vec3 direction, ConvexCollider* collider, const math::mat4& colliderTransform
-            , math::vec3& worldSupportPoint)
+        static void GetSupportPointNoTransform( math::float3 planePosition,  math::float3 direction, ConvexCollider* collider, const math::float4x4& colliderTransform
+            , math::float3& worldSupportPoint)
         {
             float largestDistanceInDirection = std::numeric_limits<float>::lowest();
-            planePosition = math::inverse(colliderTransform) * math::vec4(planePosition, 1);
-            direction = math::inverse(colliderTransform) * math::vec4(direction, 0);
+            planePosition = math::inverse(colliderTransform) * math::float4(planePosition, 1);
+            direction = math::inverse(colliderTransform) * math::float4(direction, 0);
 
             for (const auto& vert : collider->GetVertices())
             {
-                math::vec3 transformedVert = math::vec4(vert, 1);
+                math::float3 transformedVert = math::float4(vert, 1);
 
                 float dotResult = math::dot(transformedVert - planePosition, direction);
 
@@ -83,13 +83,13 @@ namespace legion::physics
                 }
             }
 
-            worldSupportPoint = colliderTransform * math::vec4(worldSupportPoint, 1);
+            worldSupportPoint = colliderTransform * math::float4(worldSupportPoint, 1);
         }
 
 
         /** @brief Given a std::vector of vertices, gets the support point in the given direction
         */
-        static float GetSupportPoint(const std::vector<math::vec3>& vertices, const math::vec3& direction, math::vec3& outVec);
+        static float GetSupportPoint(const std::vector<math::float3>& vertices, const math::float3& direction, math::float3& outVec);
         
         /** @brief Given 2 ConvexColliders, convexA and convexB, checks if one of the faces of convexB creates a seperating axis
          * that seperates the given convex shapes
@@ -102,7 +102,7 @@ namespace legion::physics
          * @return returns true if a seperating axis was found
          */
         static bool FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
-            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeFace>&refFace, float& maximumSeperation,bool shouldDebug = false)
+            , ConvexCollider* convexB, const math::float4x4& transformA, const math::float4x4& transformB, PointerEncapsulator<HalfEdgeFace>&refFace, float& maximumSeperation,bool shouldDebug = false)
         {
             //shouldDebug = false;
 
@@ -113,12 +113,12 @@ namespace legion::physics
 
                 //log::debug("face->normal {} ", math::to_string( face->normal));
                 //get inverse normal
-                math::vec3 seperatingAxis = math::normalize(transformB * math::vec4((face->normal), 0));
+                math::float3 seperatingAxis = math::normalize(transformB * math::float4((face->normal), 0));
 
-                math::vec3 transformedPositionB = transformB * math::vec4(face->centroid, 1);
+                math::float3 transformedPositionB = transformB * math::float4(face->centroid, 1);
 
                 //get extreme point of other face in normal direction
-                math::vec3 worldSupportPoint;
+                math::float3 worldSupportPoint;
                 GetSupportPoint(transformedPositionB, -seperatingAxis,
                     convexA, transformA, worldSupportPoint);
 
@@ -156,37 +156,37 @@ namespace legion::physics
          * @return returns true if a seperating axis was found
          */
         static bool FindSeperatingAxisByGaussMapEdgeCheck(ConvexCollider* convexA, ConvexCollider* convexB,
-            const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeEdge>& refEdge, PointerEncapsulator<HalfEdgeEdge>& incEdge,
-            math::vec3& seperatingAxisFound, float& maximumSeperation, bool shouldDebug = false);
+            const math::float4x4& transformA, const math::float4x4& transformB, PointerEncapsulator<HalfEdgeEdge>& refEdge, PointerEncapsulator<HalfEdgeEdge>& incEdge,
+            math::float3& seperatingAxisFound, float& maximumSeperation, bool shouldDebug = false);
       
         /** @brief Given a ConvexCollider and sphere with a position and a readius, checks if these 2 shapes are colliding
         */
-        static bool DetectConvexSphereCollision(ConvexCollider* convexA, const math::mat4& transformA, math::vec3 sphereWorldPosition, float sphereRadius,
+        static bool DetectConvexSphereCollision(ConvexCollider* convexA, const math::float4x4& transformA, math::float3 sphereWorldPosition, float sphereRadius,
              float& maximumSeperation);
 
 
-        static std::pair< math::vec3,math::vec3> ConstructAABBFromPhysicsComponentWithTransform
-        (ecs::component<physicsComponent> physicsComponentToUse, const math::mat4& transform);
+        static std::pair< math::float3,math::float3> ConstructAABBFromPhysicsComponentWithTransform
+        (ecs::component<physicsComponent> physicsComponentToUse, const math::float4x4& transform);
 
-        static float GetPhysicsComponentSupportPointAtDirection(math::vec3 direction,physicsComponent& physicsComponentToUse);
+        static float GetPhysicsComponentSupportPointAtDirection(math::float3 direction,physicsComponent& physicsComponentToUse);
 
-        static std::pair< math::vec3, math::vec3> ConstructAABBFromVertices(const std::vector<math::vec3>& vertices);
+        static std::pair< math::float3, math::float3> ConstructAABBFromVertices(const std::vector<math::float3>& vertices);
 
-        static std::pair< math::vec3, math::vec3> ConstructAABBFromTransformedVertices(const std::vector<math::vec3>& vertices,const math::mat4& transform);
+        static std::pair< math::float3, math::float3> ConstructAABBFromTransformedVertices(const std::vector<math::float3>& vertices,const math::float4x4& transform);
 
         /**@brief Creates one big AABB from two AABBs
          * The first element in the tuple will be the lower bounds
          * The second element in the tuple will be the higher bounds
-         * The AABB will be between the two vec3's in the tuple 
+         * The AABB will be between the two float3's in the tuple 
          */
-        static std::pair<math::vec3, math::vec3> CombineAABB(const std::pair<math::vec3, math::vec3>& first, const std::pair<math::vec3, math::vec3>& second);
+        static std::pair<math::float3, math::float3> CombineAABB(const std::pair<math::float3, math::float3>& first, const std::pair<math::float3, math::float3>& second);
 
         //---------------------------------------------------------- Polyhedron Clipping ----------------------------------------------------------------------------//
 
         /** @brief Given a 3D plane, clips the vertices in the inputList and places the results in the output list
          *
          */
-        static void SutherlandHodgmanFaceClip( math::vec3& planeNormal, math::vec3& planePosition,
+        static void SutherlandHodgmanFaceClip( math::float3& planeNormal, math::float3& planePosition,
             std::vector<ContactVertex>& inputList, std::vector<ContactVertex>& outputList, HalfEdgeEdge* clippingEdge)
         {
             for (size_t i = 0; i < inputList.size(); i++)
@@ -211,8 +211,8 @@ namespace legion::physics
 
                 //we always check clipping with a line that goes from the point below the plane to the point outside the plane.
                 //We do this mostly for numerical robustness reasons.
-                const math::vec3& pointAbovePlane = isCurrentVertexUnderPlane ? nextVertex.position : currentVertex.position;
-                const math::vec3& pointBelowPlane = isCurrentVertexUnderPlane ? currentVertex.position : nextVertex.position;
+                const math::float3& pointAbovePlane = isCurrentVertexUnderPlane ? nextVertex.position : currentVertex.position;
+                const math::float3& pointBelowPlane = isCurrentVertexUnderPlane ? currentVertex.position : nextVertex.position;
 
                 if (isCurrentVertexUnderPlane && isNextVertexUnderPlane)
                 {
@@ -223,7 +223,7 @@ namespace legion::physics
                 {
                     //send next vertex to outputlist and the intersection between the line and the plane
 
-                    math::vec3 intersectionPoint;
+                    math::float3 intersectionPoint;
 
                     if (FindLineToPlaneIntersectionPoint(planeNormal, planePosition,
                         pointBelowPlane, pointAbovePlane, intersectionPoint))
@@ -242,7 +242,7 @@ namespace legion::physics
                 {
                     //send intersection between the line and the plane
 
-                    math::vec3 intersectionPoint;
+                    math::float3 intersectionPoint;
 
                     if (FindLineToPlaneIntersectionPoint(planeNormal, planePosition,
                         pointBelowPlane, pointAbovePlane, intersectionPoint))
@@ -267,8 +267,8 @@ namespace legion::physics
         * @param p3 The start of the third line
         * @param p4 The end of the fourth line
         */
-        static void FindClosestPointsToLineSegment(math::vec3 p1, math::vec3 p2,
-            math::vec3 p3, math::vec3 p4,math::vec3& outp1p2, math::vec3& outp3p4)
+        static void FindClosestPointsToLineSegment(math::float3 p1, math::float3 p2,
+            math::float3 p3, math::float3 p4,math::float3& outp1p2, math::float3& outp3p4)
         {
             //------------------find the interpolants of both lines that represent the closest points of the line segments-----------//
 
@@ -316,7 +316,7 @@ namespace legion::physics
                 (p4.y - p3.y) * (p3.y - p1.y) +
                 (p4.z - p3.z) * (p3.z - p1.z);
 
-            math::vec2 interpolantVector = LinearSystemCramerSolver2D(a, b, c, d, e, f);
+            math::float2 interpolantVector = LinearSystemCramerSolver2D(a, b, c, d, e, f);
 
             outp1p2 = p1 + (p2 - p1) * math::clamp(interpolantVector.x,0.0f,1.0f);
             outp3p4 = p3 + (p4 - p3) * math::clamp(interpolantVector.y,0.0f,1.0f);
@@ -333,7 +333,7 @@ namespace legion::physics
         * @param f The result of the linear transformation in the y axis
         * @note a,b,c,d is a column major matrix
         */
-        static math::vec2 LinearSystemCramerSolver2D(float a, float b, float c, float d, float e, float f)
+        static math::float2 LinearSystemCramerSolver2D(float a, float b, float c, float d, float e, float f)
         {
             //[ a c ] [x] [e]
             //[ b d ] [y] [f]
@@ -348,20 +348,20 @@ namespace legion::physics
             //[ b f ] 
             float y = ((a * f) - (e * b)) / denom;
 
-            return math::vec2(x,-y);
+            return math::float2(x,-y);
         }
 
         /**@brief Finds the distance of a point given a 3D plane
         * Assumes the plane normal is normalized
         */
-        static float PointDistanceToPlane(const math::vec3& planeNormal, const math::vec3& planePosition, const math::vec3& point)
+        static float PointDistanceToPlane(const math::float3& planeNormal, const math::float3& planePosition, const math::float3& point)
         {
             return math::dot(point - planePosition, planeNormal);
         }
 
         /**@brief Checks if the distance of a point from a 3D plane is above zero
         */
-        static bool IsPointAbovePlane(const math::vec3& planeNormal, const math::vec3& planePosition, const math::vec3& point)
+        static bool IsPointAbovePlane(const math::float3& planeNormal, const math::float3& planePosition, const math::float3& point)
         {
             return PointDistanceToPlane(planeNormal, planePosition, point) > 0.0f;
         }
@@ -369,10 +369,10 @@ namespace legion::physics
         /**@brief Given a line going from start point to end point finds the intersection point of the line to a given 3D plane
         * @return Returns true if an intersection is found
         */
-        static bool FindLineToPlaneIntersectionPoint(const math::vec3& planeNormal, const math::vec3& planePosition,
-            const math::vec3& startPoint, const math::vec3& endPoint, math::vec3& intersectionPoint)
+        static bool FindLineToPlaneIntersectionPoint(const math::float3& planeNormal, const math::float3& planePosition,
+            const math::float3& startPoint, const math::float3& endPoint, math::float3& intersectionPoint)
         {
-            math::vec3 direction = endPoint - startPoint;
+            math::float3 direction = endPoint - startPoint;
 
             if (math::epsilonEqual(math::dot(direction, planeNormal), 0.0f, math::epsilon<float>()))
             {
@@ -390,10 +390,10 @@ namespace legion::physics
         * @param [out] interpolant The calculated interpolant required to get from the startPoint to the endPoint
         * @return Returns true if an intersection is found
         */
-        static bool FindLineToPlaneIntersectionPoint(const math::vec3& planeNormal, const math::vec3& planePosition,
-            const math::vec3& startPoint, const math::vec3& endPoint, math::vec3& intersectionPoint,float& interpolant)
+        static bool FindLineToPlaneIntersectionPoint(const math::float3& planeNormal, const math::float3& planePosition,
+            const math::float3& startPoint, const math::float3& endPoint, math::float3& intersectionPoint,float& interpolant)
         {
-            math::vec3 direction = endPoint - startPoint;
+            math::float3 direction = endPoint - startPoint;
 
             if (math::epsilonEqual(math::dot(direction, planeNormal), 0.0f, math::epsilon<float>()))
             {
@@ -412,8 +412,8 @@ namespace legion::physics
 
         /** Given a line going from a startPoint to and endPoint, finds the interpolant required to intersect a given 3D plane
         */
-        static float FindLineToPointInterpolant(const math::vec3& startPoint, const math::vec3& endPoint, const math::vec3& planePosition,
-            const math::vec3& planeNormal)
+        static float FindLineToPointInterpolant(const math::float3& startPoint, const math::float3& endPoint, const math::float3& planePosition,
+            const math::float3& planeNormal)
         {
             return math::dot(planePosition - startPoint, planeNormal) / math::dot(endPoint - startPoint, planeNormal);
         }
@@ -431,10 +431,10 @@ namespace legion::physics
         * @param yPeriodic A bool that decides whether y should be periodic.
         * @param zPeriodic A bool that decides whether z should be periodic.
         * @param initMem The initial memory amount.
-        * @return A list of lists of vec4's
+        * @return A list of lists of float4's
         */
-        static std::vector<std::vector<math::vec4>> GenerateVoronoi(std::vector<math::vec3> points,math::vec2 xRange, math::vec2 yRange,
-            math::vec2 zRange, math::vec3 containerResolution, bool xPeriodic = false, bool yPeriodic = false, bool zPeriodic = false, int initMem = 8)
+        static std::vector<std::vector<math::float4>> GenerateVoronoi(std::vector<math::float3> points,math::float2 xRange, math::float2 yRange,
+            math::float2 zRange, math::float3 containerResolution, bool xPeriodic = false, bool yPeriodic = false, bool zPeriodic = false, int initMem = 8)
         {
             return GenerateVoronoi(points,xRange.x,xRange.y,yRange.x,yRange.y,zRange.x,zRange.y,containerResolution.x,containerResolution.y,containerResolution.z,xPeriodic,yPeriodic,zPeriodic,initMem);
         }
@@ -454,9 +454,9 @@ namespace legion::physics
         * @param yPeriodic A bool that decides whether y should be periodic.
         * @param zPeriodic A bool that decides whether z should be periodic.
         * @param initMem The initial memory amount.
-        * @return A list of lists of vec4's
+        * @return A list of lists of float4's
         */
-        static std::vector<std::vector<math::vec4>> GenerateVoronoi(std::vector<math::vec3> points,const double xMin = -5, const double xMax = 5, const double yMin = -5, const double yMax = 5, const double zMin = -5, const double zMax = 5,const double conResX = 10,const double conResY = 10 , const double conResZ = 10,bool xPeriodic = false,bool yPeriodic = false,bool zPeriodic = false,int initMem = 8)
+        static std::vector<std::vector<math::float4>> GenerateVoronoi(std::vector<math::float3> points,const double xMin = -5, const double xMax = 5, const double yMin = -5, const double yMax = 5, const double zMin = -5, const double zMax = 5,const double conResX = 10,const double conResY = 10 , const double conResZ = 10,bool xPeriodic = false,bool yPeriodic = false,bool zPeriodic = false,int initMem = 8)
         {
             voro::container con(xMin, xMax, yMin, yMax, zMin, zMax, conResX, conResY, conResZ, xPeriodic, yPeriodic, zPeriodic, initMem);
             return GenerateVoronoi(con,points);
@@ -465,12 +465,12 @@ namespace legion::physics
         /**Creates a Voronoi diagram based on the given parameters.
         * @param con The container that hold the parameters and generates the voronoi diagram.
         * @param points A list of points these will serve as the points of the voronoi diagram.
-        * @return A list of lists of vec4's
+        * @return A list of lists of float4's
         */
-        static std::vector<std::vector<math::vec4>> GenerateVoronoi(voro::container& con,std::vector<math::vec3> points)
+        static std::vector<std::vector<math::float4>> GenerateVoronoi(voro::container& con,std::vector<math::float3> points)
         {
             int i = 0;
-            for (math::vec3 point : points)
+            for (math::float3 point : points)
             {
                 con.put(i,point.x,point.y,point.z);
                 i++;
@@ -480,13 +480,13 @@ namespace legion::physics
 
         /**Creates a Voronoi diagram based on the given parameters.
         * @param con The container that hold the parameters and generates the voronoi diagram.
-        * @return A list of lists of vec4's
+        * @return A list of lists of float4's
         */
-        static std::vector<std::vector<math::vec4>> GenerateVoronoi(voro::container& con)
+        static std::vector<std::vector<math::float4>> GenerateVoronoi(voro::container& con)
         {
             con.draw_cells_json("assets/voronoi/output/cells.json");
             std::ifstream f("assets/voronoi/output/cells.json");
-            return serialization::SerializationUtil::JSONDeserialize< std::vector<std::vector<math::vec4>>>(f);
+            return serialization::SerializationUtil::JSONDeserialize< std::vector<std::vector<math::float4>>>(f);
         }
 
         /**@brief Checks collision between two AABB colliders and returns whether there is collision
@@ -496,7 +496,7 @@ namespace legion::physics
          * @param high1 the higher bounds of the second collider
          * @return Whether there is collision
          */
-        static bool CollideAABB(const math::vec3 low0, const math::vec3 high0, const math::vec3 low1, const math::vec3 high1)
+        static bool CollideAABB(const math::float3 low0, const math::float3 high0, const math::float3 low1, const math::float3 high1)
         {
             return low0.x <= high1.x && high0.x >= low1.x &&
                 low0.y <= high1.y && high0.y >= low1.y
@@ -508,7 +508,7 @@ namespace legion::physics
          * @param col1 the lower and higher bounds of the second collider
          * @return Whether there is collision
          */
-        static bool CollideAABB(const std::pair<math::vec3, math::vec3> col0, const std::pair<math::vec3, math::vec3> col1)
+        static bool CollideAABB(const std::pair<math::float3, math::float3> col0, const std::pair<math::float3, math::float3> col1)
         {
             auto& [low0, high0] = col0;
             auto& [low1, high1] = col1;
@@ -520,31 +520,31 @@ namespace legion::physics
         /** @brief Given 2 HalfEdgeEdges and their respective transforms, transforms their normals and checks if they create a minkowski face
          * @return returns true if a minkowski face was succesfully constructed
          */
-        static bool attemptBuildMinkowskiFace(HalfEdgeEdge* edgeA, HalfEdgeEdge* edgeB, const math::mat4& transformA,
-            const math::mat4& transformB)
+        static bool attemptBuildMinkowskiFace(HalfEdgeEdge* edgeA, HalfEdgeEdge* edgeB, const math::float4x4& transformA,
+            const math::float4x4& transformB)
         {
             //TODO the commmented parts are technically more robust and should work but somehow dont, figure out why.
 
-            const math::vec3 transformedA1 = transformA *
-                math::vec4(edgeA->getLocalNormal(), 0);
+            const math::float3 transformedA1 = transformA *
+                math::float4(edgeA->getLocalNormal(), 0);
 
-            const math::vec3 transformedA2 = transformA *
-                math::vec4(edgeA->pairingEdge->getLocalNormal(), 0);
+            const math::float3 transformedA2 = transformA *
+                math::float4(edgeA->pairingEdge->getLocalNormal(), 0);
 
-            const math::vec3 transformedEdgeDirectionA = math::cross(transformedA1, transformedA2);
-            //transformA * math::vec4(edgeA->getLocalEdgeDirection(), 0);
+            const math::float3 transformedEdgeDirectionA = math::cross(transformedA1, transformedA2);
+            //transformA * math::float4(edgeA->getLocalEdgeDirection(), 0);
            
-            const math::vec3 transformedB1 = transformB *
-                math::vec4(edgeB->getLocalNormal(), 0);
+            const math::float3 transformedB1 = transformB *
+                math::float4(edgeB->getLocalNormal(), 0);
 
-            const math::vec3 transformedB2 = transformB *
-                math::vec4(edgeB->pairingEdge->getLocalNormal(), 0);
+            const math::float3 transformedB2 = transformB *
+                math::float4(edgeB->pairingEdge->getLocalNormal(), 0);
 
-            const math::vec3 transformedEdgeDirectionB = math::cross(-transformedB1, -transformedB2);
-            //transformB *math::vec4(edgeB->getLocalEdgeDirection(), 0);
+            const math::float3 transformedEdgeDirectionB = math::cross(-transformedB1, -transformedB2);
+            //transformB *math::float4(edgeB->getLocalEdgeDirection(), 0);
                 
 
-            math::vec3 positionA = transformA * math::vec4(edgeA->edgePosition, 1);
+            math::float3 positionA = transformA * math::float4(edgeA->edgePosition, 1);
 
             return isMinkowskiFace(transformedA1, transformedA2, -transformedB1, -transformedB2
                 , transformedEdgeDirectionA, transformedEdgeDirectionB);
@@ -554,9 +554,9 @@ namespace legion::physics
          * that starts at transformedB1 and ends at transformedB2, checks if the given arcs collider each other
          * @return returns true if the given arcs intersect
          */
-        static bool isMinkowskiFace(const math::vec3& transformedA1, const math::vec3& transformedA2,
-            const math::vec3& transformedB1, const math::vec3& transformedB2
-            ,const math::vec3& planeANormal, const math::vec3& planeBNormal)
+        static bool isMinkowskiFace(const math::float3& transformedA1, const math::float3& transformedA2,
+            const math::float3& transformedB1, const math::float3& transformedB2
+            ,const math::float3& planeANormal, const math::float3& planeBNormal)
         {
             //------------------------ Check if normals created by arcA seperate normals of B --------------------------------------//
             //CBA

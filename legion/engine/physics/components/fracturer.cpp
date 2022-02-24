@@ -18,7 +18,7 @@ namespace legion::physics
         //log::debug("manifold invalidated");
         manifoldValid = false;
 
-        math::vec3 impactPoint = GetImpactPointFromManifold(manifold);
+        math::float3 impactPoint = GetImpactPointFromManifold(manifold);
         float impactRadius = 0.2f;
         
         auto fracturedEnt = isfracturingA ? manifold.entityA : manifold.entityB;
@@ -49,20 +49,20 @@ namespace legion::physics
                                 //Generate a Voronoi Diagram, for now, the points are manually generated //
         //-----------------------------------------------------------------------------------------------------------------------------//
 
-        std::vector<math::vec3> voronoiPoints;
+        std::vector<math::float3> voronoiPoints;
 
         QuadrantVoronoi(min, max, voronoiPoints);
 
-        //math::vec3 six = third + math::vec3(-0.2f, 0.0f, -0.0f);
+        //math::float3 six = third + math::float3(-0.2f, 0.0f, -0.0f);
         //voronoiPoints.push_back(six);
 
         for (auto point : voronoiPoints)
         {/*
             debug::drawLine(point,
-                point + math::vec3(0, 0.1f, 0), math::colors::magenta, 8.0f, FLT_MAX, true);*/
+                point + math::float3(0, 0.1f, 0), math::colors::magenta, 8.0f, FLT_MAX, true);*/
         }
 
-        std::vector<std::vector<math::vec3>> groupedPoints(voronoiPoints.size());
+        std::vector<std::vector<math::float3>> groupedPoints(voronoiPoints.size());
 
         GetVoronoiPoints(groupedPoints,
             voronoiPoints, min, max);
@@ -110,7 +110,7 @@ namespace legion::physics
         for (auto ent : entitiesGenerated)
         {
             auto [posH, rotH, scaleH] = ent.get_component_handles<transform>();
-            math::mat4 trans = math::compose(scaleH.read(), rotH.read(), posH.read());
+            math::float4x4 trans = math::compose(scaleH.read(), rotH.read(), posH.read());
             //generate hull
             auto physicsCompHandle = ent.add_component<physicsComponent>();
             auto physicsComp = physicsCompHandle.read();
@@ -125,8 +125,8 @@ namespace legion::physics
             fragmentRB.globalCentreOfMass = posH.read();
 
             //add force based on distance from explosion point
-            math::vec3 distanceFromCentroid = posH.read() - fractureParams.explosionCentroid ;
-            math::vec3 forceDir = math::normalize(distanceFromCentroid);
+            math::float3 distanceFromCentroid = posH.read() - fractureParams.explosionCentroid ;
+            math::float3 forceDir = math::normalize(distanceFromCentroid);
             float forceAmount = (1.0f / (math::length(distanceFromCentroid))) * fractureParams.strength;
 
             //crude estimation of explosion point
@@ -144,7 +144,7 @@ namespace legion::physics
                 }
             }
 
-            math::vec3 explosionPoint = trans * math::vec4(chosenFace->centroid, 1);
+            math::float3 explosionPoint = trans * math::float4(chosenFace->centroid, 1);
 
             fragmentRB.addForceAt(explosionPoint,forceDir * forceAmount);
             rbH.write(fragmentRB);
@@ -159,8 +159,8 @@ namespace legion::physics
     }
 
 
-    void Fracturer::GetVoronoiPoints(std::vector<std::vector<math::vec3>>& groupedPoints,
-        std::vector<math::vec3>& voronoiPoints,math::vec3 min,math::vec3 max)
+    void Fracturer::GetVoronoiPoints(std::vector<std::vector<math::float3>>& groupedPoints,
+        std::vector<math::float3>& voronoiPoints,math::float3 min,math::float3 max)
     {
         time::timer tick;
 
@@ -170,13 +170,13 @@ namespace legion::physics
 
         //groupedPoints.reserve( voronoiPoints.size() );
 
-        for (std::vector<math::vec4>& vector : vectorList)
+        for (std::vector<math::float4>& vector : vectorList)
         {
-            for (const math::vec4& position : vector)
+            for (const math::float4& position : vector)
             {
                 int id = position.w;
 
-                //log::debug("position {} id {} ",math::to_string(math::vec3(position)), id);
+                //log::debug("position {} id {} ",math::to_string(math::float3(position)), id);
                 groupedPoints.at(id).push_back(position);
 
             }
@@ -185,26 +185,26 @@ namespace legion::physics
     }
 
     void Fracturer::InstantiateVoronoiColliders(std::vector<std::shared_ptr<ConvexCollider>>& voronoiColliders
-        ,std::vector<std::vector<math::vec3>>& groupedPoints)
+        ,std::vector<std::vector<math::float3>>& groupedPoints)
     {
         time::timer tick;
         int i = 1;
 
-        for (std::vector<math::vec3>& vector : groupedPoints)
+        for (std::vector<math::float3>& vector : groupedPoints)
         {
             //// if (i != 1) { continue; }
             //math::color debugColor =
             //    math::color(math::linearRand(0.0f, 0.3f), math::linearRand(0.0f, 0.3f), math::linearRand(0.0f, 0.3f));
             //// i * 2.0f, 0, 0
-            math::vec3 debugOffset = math::vec3();
-            //math::mat4 transform =
-            //    math::compose(math::vec3(1.0f), math::identity<math::quat>(), debugOffset);
+            math::float3 debugOffset = math::float3();
+            //math::float4x4 transform =
+            //    math::compose(math::float3(1.0f), math::identity<math::quat>(), debugOffset);
 
-            for (math::vec3 vertex : vector)
+            for (math::float3 vertex : vector)
             {
                 //
-                math::vec3 vertPos = vertex + debugOffset;
-                //debug::user_projectDrawLine(vertPos, vertPos + math::vec3(0,0.5,0), debugColor,10.0f,FLT_MAX);
+                math::float3 vertPos = vertex + debugOffset;
+                //debug::user_projectDrawLine(vertPos, vertPos + math::float3(0,0.5,0), debugColor,10.0f,FLT_MAX);
             }
 
             auto newCollider = std::make_shared<ConvexCollider>();
@@ -252,7 +252,7 @@ namespace legion::physics
 
                 time::timer convexConvexCollision;
  /*               PhysicsStatics::DetectConvexConvexCollision(instantiatedVoronoiCollider.get()
-                    , meshToColliderPairing.colliderPair.get(), math::mat4(1.0f), transformB, collisionInfo, manifold);*/
+                    , meshToColliderPairing.colliderPair.get(), math::float4x4(1.0f), transformB, collisionInfo, manifold);*/
                 manifold.isColliding = true;
                 totalCollisionDetection += convexConvexCollision.elapsedTime().milliseconds();
 
@@ -270,7 +270,7 @@ namespace legion::physics
                         {
                             float interpolant = (float)i / splittingParams.size();
 
-                            math::vec3 color = math::color(1, 0, 0) * interpolant;
+                            math::float3 color = math::color(1, 0, 0) * interpolant;
 
                             /*debug::user_projectDrawLine(splittingParams.at(i).planePostion
                                 , splittingParams.at(i).planePostion + splittingParams.at(i).planeNormal,
@@ -297,35 +297,35 @@ namespace legion::physics
        
     }
 
-    void Fracturer::QuadrantVoronoi(math::vec3& min,math::vec3& max, std::vector<math::vec3>& voronoiPoints)
+    void Fracturer::QuadrantVoronoi(math::float3& min,math::float3& max, std::vector<math::float3>& voronoiPoints)
     {
-        math::vec3 difference = max - min;
-        math::vec3 differenceQuadrant = difference / 4.0f;
+        math::float3 difference = max - min;
+        math::float3 differenceQuadrant = difference / 4.0f;
 
-        math::vec3 first = min + differenceQuadrant;
+        math::float3 first = min + differenceQuadrant;
         voronoiPoints.push_back(first);
 
-        math::vec3 second = max - differenceQuadrant;
+        math::float3 second = max - differenceQuadrant;
         voronoiPoints.push_back(second);
 
-        math::vec3 third = max - (differenceQuadrant * 2);
+        math::float3 third = max - (differenceQuadrant * 2);
         voronoiPoints.push_back(third);
 
-        math::vec3 fourth = third + math::vec3(0.2f, 0, 0);
+        math::float3 fourth = third + math::float3(0.2f, 0, 0);
         voronoiPoints.push_back(fourth);
 
-        math::vec3 fifth = third + math::vec3(0, -0.1f, 0);
+        math::float3 fifth = third + math::float3(0, -0.1f, 0);
         voronoiPoints.push_back(fifth);
 
-        //math::vec3 sixth = min + differenceQuadrant + math::vec3(0.1, 0.25f, 0.1);
+        //math::float3 sixth = min + differenceQuadrant + math::float3(0.1, 0.25f, 0.1);
         //voronoiPoints.push_back(sixth);
 
-        math::vec3 centroid = (min + max) / 2.0f;
+        math::float3 centroid = (min + max) / 2.0f;
         int rand = math::linearRand(0, 5);
         //log::debug("rand {} ",rand );
-        for (math::vec3& point : voronoiPoints)
+        for (math::float3& point : voronoiPoints)
         {
-            math::vec3 vecFromCentroid = point - centroid;
+            math::float3 vecFromCentroid = point - centroid;
 
             vecFromCentroid = math::rotateY(vecFromCentroid, math::deg2rad(90.0f * rand));
 
@@ -335,11 +335,11 @@ namespace legion::physics
 
     }
 
-    void Fracturer::BalancedVoronoi(math::vec3& min, math::vec3& max, std::vector<math::vec3>& voronoiPoints)
+    void Fracturer::BalancedVoronoi(math::float3& min, math::float3& max, std::vector<math::float3>& voronoiPoints)
     {
-        math::vec3 difference = max - min;
+        math::float3 difference = max - min;
 
-        math::vec3 first = min + difference * 0.1f;
+        math::float3 first = min + difference * 0.1f;
         voronoiPoints.push_back(first);
     }
 
@@ -405,9 +405,9 @@ namespace legion::physics
 
     }
 
-    math::vec3 Fracturer::GetImpactPointFromManifold(physics_manifold& manifold)
+    math::float3 Fracturer::GetImpactPointFromManifold(physics_manifold& manifold)
     {
-        math::vec3 impactPoint = math::vec3();
+        math::float3 impactPoint = math::float3();
    
         for (auto& contact : manifold.contacts)
         {

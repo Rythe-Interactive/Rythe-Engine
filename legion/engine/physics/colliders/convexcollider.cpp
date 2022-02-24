@@ -59,7 +59,7 @@ namespace legion::physics
         PointerEncapsulator< HalfEdgeEdge> edgeRef;
         PointerEncapsulator< HalfEdgeEdge> edgeInc;
 
-        math::vec3 edgeNormal;
+        math::float3 edgeNormal;
         float aToBEdgeSeperation;
         //log::debug("Edge Check");
         if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(this, convexCollider, manifold.transformB, manifold.transformA,
@@ -99,15 +99,15 @@ namespace legion::physics
 
         //TODO all penetration querys should supply a constructor that takes in a  ConvexConvexCollisionInfo
         
-        math::vec3 worldFaceCentroidA = manifold.transformA * math::vec4(ARefFace.ptr->centroid, 1);
-        math::vec3 worldFaceNormalA = manifold.transformA * math::vec4(ARefFace.ptr->normal, 0);
+        math::float3 worldFaceCentroidA = manifold.transformA * math::float4(ARefFace.ptr->centroid, 1);
+        math::float3 worldFaceNormalA = manifold.transformA * math::float4(ARefFace.ptr->normal, 0);
         
-        math::vec3 worldFaceCentroidB = manifold.transformB * math::vec4(BRefFace.ptr->centroid, 1);
-        math::vec3 worldFaceNormalB = manifold.transformB * math::vec4(BRefFace.ptr->normal, 0);
+        math::float3 worldFaceCentroidB = manifold.transformB * math::float4(BRefFace.ptr->centroid, 1);
+        math::float3 worldFaceNormalB = manifold.transformB * math::float4(BRefFace.ptr->normal, 0);
 
     
-        math::vec3 worldEdgeAPosition = edgeRef.ptr? manifold.transformB * math::vec4(edgeRef.ptr->edgePosition, 1) : math::vec3();
-        math::vec3 worldEdgeNormal = edgeNormal;
+        math::float3 worldEdgeAPosition = edgeRef.ptr? manifold.transformB * math::float4(edgeRef.ptr->edgePosition, 1) : math::float3();
+        math::float3 worldEdgeNormal = edgeNormal;
 
         auto abPenetrationQuery =
             std::make_unique< ConvexConvexPenetrationQuery>(ARefFace.ptr
@@ -159,15 +159,15 @@ namespace legion::physics
         //physics::PhysicsSystem::penetrationQueries.push_back(manifold.penetrationInformation);
 
         //convexCollisionInfo
-        //math::vec3 worldFaceCentroidA = manifold.transformA * math::vec4(convexCollisionInfo.ARefFace.ptr->centroid, 1);
-        //math::vec3 worldFaceNormalA = manifold.transformA * math::vec4(convexCollisionInfo.ARefFace.ptr->normal, 0);
+        //math::float3 worldFaceCentroidA = manifold.transformA * math::float4(convexCollisionInfo.ARefFace.ptr->centroid, 1);
+        //math::float3 worldFaceNormalA = manifold.transformA * math::float4(convexCollisionInfo.ARefFace.ptr->normal, 0);
 
-        //math::vec3 worldFaceCentroidB = manifold.transformB * math::vec4(convexCollisionInfo.BRefFace.ptr->centroid, 1);
-        //math::vec3 worldFaceNormalB = manifold.transformB * math::vec4(convexCollisionInfo.BRefFace.ptr->normal, 0);
+        //math::float3 worldFaceCentroidB = manifold.transformB * math::float4(convexCollisionInfo.BRefFace.ptr->centroid, 1);
+        //math::float3 worldFaceNormalB = manifold.transformB * math::float4(convexCollisionInfo.BRefFace.ptr->normal, 0);
 
 
-        //math::vec3 worldEdgeAPosition = convexCollisionInfo.edgeRef.ptr ? manifold.transformB * math::vec4(convexCollisionInfo.edgeRef.ptr->edgePosition, 1) : math::vec3();
-        //math::vec3 worldEdgeNormal = convexCollisionInfo.edgeNormal;
+        //math::float3 worldEdgeAPosition = convexCollisionInfo.edgeRef.ptr ? manifold.transformB * math::float4(convexCollisionInfo.edgeRef.ptr->edgePosition, 1) : math::float3();
+        //math::float3 worldEdgeNormal = convexCollisionInfo.edgeNormal;
 
         //auto abPenetrationQuery =
         //    std::make_shared< ConvexConvexPenetrationQuery>(convexCollisionInfo.ARefFace.ptr
@@ -186,8 +186,8 @@ namespace legion::physics
     void ConvexCollider::PopulateContactPointsWith(ConvexCollider* convexCollider, physics_manifold& manifold)
     {
         OPTICK_EVENT();
-        math::mat4& refTransform = manifold.penetrationInformation->isARef ? manifold.transformA : manifold.transformB;
-        math::mat4& incTransform = manifold.penetrationInformation->isARef ? manifold.transformB : manifold.transformA;
+        math::float4x4& refTransform = manifold.penetrationInformation->isARef ? manifold.transformA : manifold.transformB;
+        math::float4x4& incTransform = manifold.penetrationInformation->isARef ? manifold.transformB : manifold.transformA;
 
         physicsComponent* refPhysicsComp = manifold.penetrationInformation->isARef ? manifold.physicsCompA : manifold.physicsCompB;
         physicsComponent* incPhysicsComp = manifold.penetrationInformation->isARef ? manifold.physicsCompB : manifold.physicsCompA;
@@ -200,8 +200,8 @@ namespace legion::physics
         rigidbody* refRB = manifold.penetrationInformation->isARef ? manifold.rigidbodyA : manifold.rigidbodyB;
         rigidbody* incRB = manifold.penetrationInformation->isARef ? manifold.rigidbodyB : manifold.rigidbodyA;
 
-        math::vec3 refWorldCentroid = refTransform * math::vec4(refPhysicsComp->localCenterOfMass,1);
-        math::vec3 incWorldCentroid = incTransform * math::vec4(incPhysicsComp->localCenterOfMass,1);
+        math::float3 refWorldCentroid = refTransform * math::float4(refPhysicsComp->localCenterOfMass,1);
+        math::float3 incWorldCentroid = incTransform * math::float4(incPhysicsComp->localCenterOfMass,1);
 
         for ( auto& contact : manifold.contacts)
         {
@@ -219,7 +219,7 @@ namespace legion::physics
         }
     }
 
-    void ConvexCollider::UpdateTightAABB(const math::mat4& transform)
+    void ConvexCollider::UpdateTightAABB(const math::float4x4& transform)
     {
         minMaxWorldAABB = PhysicsStatics::ConstructAABBFromTransformedVertices
         (vertices, transform);
@@ -230,11 +230,11 @@ namespace legion::physics
         minMaxLocalAABB = PhysicsStatics::ConstructAABBFromVertices(vertices);
     }
 
-    void ConvexCollider::DrawColliderRepresentation(const math::mat4& transform,math::color usedColor, float width, float time,bool ignoreDepth)
+    void ConvexCollider::DrawColliderRepresentation(const math::float4x4& transform,math::color usedColor, float width, float time,bool ignoreDepth)
     {
         if (!shouldBeDrawn) { return; }
-        //math::vec3 colliderCentroid = pos + math::vec3(localTransform * math::vec4(physCollider->GetLocalCentroid(), 0));
-        //debug::user_projectDrawLine(colliderCentroid, colliderCentroid + math::vec3(0.0f,0.2f,0.0f), math::colors::cyan, 6.0f,0.0f,true);
+        //math::float3 colliderCentroid = pos + math::float3(localTransform * math::float4(physCollider->GetLocalCentroid(), 0));
+        //debug::user_projectDrawLine(colliderCentroid, colliderCentroid + math::float3(0.0f,0.2f,0.0f), math::colors::cyan, 6.0f,0.0f,true);
 
         for (auto face : GetHalfEdgeFaces())
         {
@@ -242,8 +242,8 @@ namespace legion::physics
             physics::HalfEdgeEdge* initialEdge = face->startEdge;
             physics::HalfEdgeEdge* currentEdge = face->startEdge;
 
-            math::vec3 faceStart = transform * math::vec4(face->centroid, 1);
-            math::vec3 faceEnd = faceStart + math::vec3((transform * math::vec4(face->normal, 0))) * 0.5f;
+            math::float3 faceStart = transform * math::float4(face->centroid, 1);
+            math::float3 faceEnd = faceStart + math::float3((transform * math::float4(face->normal, 0))) * 0.5f;
 
             debug::user_projectDrawLine(faceStart, faceEnd, math::colors::green, 2.0f);
 
@@ -254,8 +254,8 @@ namespace legion::physics
                 physics::HalfEdgeEdge* edgeToExecuteOn = currentEdge;
                 currentEdge = currentEdge->nextEdge;
 
-                math::vec3 worldStart = transform * math::vec4(edgeToExecuteOn->edgePosition, 1);
-                math::vec3 worldEnd = transform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1);
+                math::float3 worldStart = transform * math::float4(edgeToExecuteOn->edgePosition, 1);
+                math::float3 worldEnd = transform * math::float4(edgeToExecuteOn->nextEdge->edgePosition, 1);
 
                 debug::user_projectDrawLine(worldStart, worldEnd, usedColor, width, time,ignoreDepth);
 
@@ -265,7 +265,7 @@ namespace legion::physics
 
     }
 
-    void ConvexCollider::ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount,bool shouldDebug)
+    void ConvexCollider::ConstructConvexHullWithMesh(mesh& mesh, math::float3 spacingAmount,bool shouldDebug)
     {
         OPTICK_EVENT();
        // log::debug("-------------------------------- ConstructConvexHullWithMesh ----------------------------------");
@@ -295,7 +295,7 @@ namespace legion::physics
         }
 
         //normal for face constructed from index0, index1 and index2
-        math::vec3 normal012 = math::normalize(math::cross((mesh.vertices.at(index1) - mesh.vertices.at(index0)), (mesh.vertices.at(index2) - mesh.vertices.at(index0))));
+        math::float3 normal012 = math::normalize(math::cross((mesh.vertices.at(index1) - mesh.vertices.at(index0)), (mesh.vertices.at(index2) - mesh.vertices.at(index0))));
         if (debug)
         {
             log::debug("triangle verts {} {} {} ", mesh.vertices.at(index0), mesh.vertices.at(index1), mesh.vertices.at(index2));
@@ -351,7 +351,7 @@ namespace legion::physics
         edge3->setNextAndPrevEdge(edge5, edge4); // goes from 3 to 1
         edge4->setNextAndPrevEdge(edge3, edge5); // goes from 1 to 0
         edge5->setNextAndPrevEdge(edge4, edge3); // goes from 0 to 3
-        math::vec3 normal310 = math::normalize(math::cross((mesh.vertices.at(index1) - mesh.vertices.at(index3)), (mesh.vertices.at(index0) - mesh.vertices.at(index3))));
+        math::float3 normal310 = math::normalize(math::cross((mesh.vertices.at(index1) - mesh.vertices.at(index3)), (mesh.vertices.at(index0) - mesh.vertices.at(index3))));
         HalfEdgeFace* face310 = new HalfEdgeFace(edge3, normal310);
 
 
@@ -362,7 +362,7 @@ namespace legion::physics
         edge6->setNextAndPrevEdge(edge8, edge7); // goes from 2 to 1
         edge7->setNextAndPrevEdge(edge6, edge8); // goes from 1 to 3
         edge8->setNextAndPrevEdge(edge7, edge6); // goes from 3 to 2
-        math::vec3 normal213 = math::normalize(math::cross((mesh.vertices.at(index1) - mesh.vertices.at(index2)), (mesh.vertices.at(index3) - mesh.vertices.at(index2))));
+        math::float3 normal213 = math::normalize(math::cross((mesh.vertices.at(index1) - mesh.vertices.at(index2)), (mesh.vertices.at(index3) - mesh.vertices.at(index2))));
         HalfEdgeFace* face213 = new HalfEdgeFace(edge6, normal213);
 
 
@@ -373,7 +373,7 @@ namespace legion::physics
         edge9->setNextAndPrevEdge(edge11, edge10); // goes from 3 to 0
         edge10->setNextAndPrevEdge(edge9, edge11); // goes from 0 to 2
         edge11->setNextAndPrevEdge(edge10, edge9); // goes from 2 to 3
-        math::vec3 normal302 = math::normalize(math::cross((mesh.vertices.at(index0) - mesh.vertices.at(index3)), (mesh.vertices.at(index2) - mesh.vertices.at(index3))));
+        math::float3 normal302 = math::normalize(math::cross((mesh.vertices.at(index0) - mesh.vertices.at(index3)), (mesh.vertices.at(index2) - mesh.vertices.at(index3))));
         HalfEdgeFace* face302 = new HalfEdgeFace(edge9, normal302);
 
         // Pair edges
@@ -422,7 +422,7 @@ namespace legion::physics
 
         if (shouldDebug)
         {
-            DrawColliderRepresentation(math::mat4(1.0f), math::colors::green, 12.0f, FLT_MAX);
+            DrawColliderRepresentation(math::float4x4(1.0f), math::colors::green, 12.0f, FLT_MAX);
         }
         
 
@@ -533,9 +533,9 @@ namespace legion::physics
                 {
                     
                     float interpolant = (float)i / max;
-                    math::vec3 edgePosition = edges.at(i)->edgePosition;
-                    math::vec3 nextEdgePosiion = edges.at((i + 1) % edges.size())->edgePosition;
-                    math::vec3 vecColor = math::vec3(1, 0, 0) * interpolant;
+                    math::float3 edgePosition = edges.at(i)->edgePosition;
+                    math::float3 nextEdgePosiion = edges.at((i + 1) % edges.size())->edgePosition;
+                    math::float3 vecColor = math::float3(1, 0, 0) * interpolant;
 
                     //log::debug("Normal {}",edges.at(i)->face->normal);
 
@@ -600,7 +600,7 @@ namespace legion::physics
                 pairingEdge = edge1;
 
                 // Calculate normal
-                math::vec3 normal = math::normalize(math::cross(edge1->edgePosition - edge0->edgePosition, edge2->edgePosition - edge0->edgePosition));
+                math::float3 normal = math::normalize(math::cross(edge1->edgePosition - edge0->edgePosition, edge2->edgePosition - edge0->edgePosition));
 
                 //Create Face
                 HalfEdgeFace* face = new HalfEdgeFace(edge0, normal);
@@ -614,7 +614,7 @@ namespace legion::physics
             vertices.push_back(faceVertMap.at(faceIndex).at(vertIndex));
 
             // Store our added vert
-            math::vec3 addedVert = faceVertMap.at(faceIndex).at(vertIndex);
+            math::float3 addedVert = faceVertMap.at(faceIndex).at(vertIndex);
 
             // Clear the toBeSorted list, so we can fill it again with vertices that need to be sorted
             // We can not just remove the added vertex since there may be vertices that share the same positions
@@ -687,7 +687,7 @@ namespace legion::physics
     }
     
 
-    void ConvexCollider::convexHullConstructHorizon(math::vec3 vert, HalfEdgeFace& face, std::deque<HalfEdgeEdge*>& edges, HalfEdgeEdge* originEdge,
+    void ConvexCollider::convexHullConstructHorizon(math::float3 vert, HalfEdgeFace& face, std::deque<HalfEdgeEdge*>& edges, HalfEdgeEdge* originEdge,
         std::shared_ptr<std::unordered_set<HalfEdgeFace*>> visited)
     {
         if (!visited)
@@ -761,8 +761,8 @@ namespace legion::physics
         } while (edge != start);
     }
 
-    void ConvexCollider::ConstructHorizonByEdgeJumping(math::vec3 vert, std::deque<HalfEdgeEdge*>& edges
-        , std::vector<HalfEdgeFace*>& faces, math::vec3 spacing, bool shouldDebug )
+    void ConvexCollider::ConstructHorizonByEdgeJumping(math::float3 vert, std::deque<HalfEdgeEdge*>& edges
+        , std::vector<HalfEdgeFace*>& faces, math::float3 spacing, bool shouldDebug )
     {
         //log::debug("-> ConstructHorizonByEdgeJumping");
         //from list of faces, get first horizon edge

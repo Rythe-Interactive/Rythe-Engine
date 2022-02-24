@@ -26,7 +26,7 @@ namespace legion::core
 
             return assets::AssetCache<image>::createAsLoader<GltfFauxImageLoader>(hash, img.name, "",
                 // Image constructor parameters.
-                math::ivec2(img.width, img.height),
+                math::int2(img.width, img.height),
                 img.pixel_type == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE ? channel_format::eight_bit : img.pixel_type == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT ? channel_format::sixteen_bit : channel_format::float_hdr,
                 img.component == 1 ? image_components::grey : img.component == 2 ? image_components::grey_alpha : img.component == 3 ? image_components::rgb : image_components::rgba,
                 data_view<byte>{ imgData, img.image.size(), 0 });
@@ -84,7 +84,7 @@ namespace legion::core
             }
         }
 
-        static void handleGltfBuffer(const tinygltf::Model& model, const tinygltf::Accessor& accessor, std::vector<math::float3>& data, const math::mat4 transform, bool normal = false)
+        static void handleGltfBuffer(const tinygltf::Model& model, const tinygltf::Accessor& accessor, std::vector<math::float3>& data, const math::float4x4 transform, bool normal = false)
         {
             const tinygltf::BufferView& bufferView = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
             const tinygltf::Buffer& buffer = model.buffers.at(static_cast<size_type>(bufferView.buffer));
@@ -142,7 +142,7 @@ namespace legion::core
                         const float* x = reinterpret_cast<const float*>(&valueBuffer.data[valuePos]);
                         const float* y = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + sizeof(float)]);
                         const float* z = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + 2 * sizeof(float)]);
-                        data.at(dataStart + *idx) = math::normalize((transform * math::vec4(*x, *y, *z, 0.f)).xyz());
+                        data.at(dataStart + *idx) = math::normalize((transform * math::float4(*x, *y, *z, 0.f)).xyz());
 
                         indexPos += indexStride;
                         valuePos += valueStride;
@@ -156,7 +156,7 @@ namespace legion::core
                         const float* x = reinterpret_cast<const float*>(&valueBuffer.data[valuePos]);
                         const float* y = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + sizeof(float)]);
                         const float* z = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + 2 * sizeof(float)]);
-                        data.at(dataStart + *idx) = (transform * math::vec4(*x, *y, *z, 1)).xyz();
+                        data.at(dataStart + *idx) = (transform * math::float4(*x, *y, *z, 1)).xyz();
 
                         indexPos += indexStride;
                         valuePos += valueStride;
@@ -170,7 +170,7 @@ namespace legion::core
          *
          * @param buffer - tinygltf::Buffer containing the mesh data
          * @param bufferView - tinygltf::BufferView containing information about the buffer (data size/data offset)
-         * @param accessorType - tinygltf accessorType, Vertex color is expected to come in vec3 or vec4 - will be handled by the function
+         * @param accessorType - tinygltf accessorType, Vertex color is expected to come in float3 or float4 - will be handled by the function
          * @param componentType - tinygltf componentType, Vertex color is expected to come in float, unsigned byte or unsigned short - will be handled by the function
          * @param data - std::vector<color> the destination of the data copy. The vector will be resized to vector.size()+(tinygltf vertex color size)
          */
@@ -186,7 +186,7 @@ namespace legion::core
             data.reserve(dataStart + accessor.count);
 
             std::vector<std::string> warnings;
-            //colors in glft are in vec3/vec4 float/unsigned byte/unsigned short
+            //colors in glft are in float3/float4 float/unsigned byte/unsigned short
             for (size_type i = bufferStart; i < bufferEnd; i += stride)
             {
                 if (accessorType == TINYGLTF_TYPE_VEC3)
@@ -296,7 +296,7 @@ namespace legion::core
                             const float r = static_cast<float>(valueBuffer.data[valuePos]) / 255.f;
                             const float g = static_cast<float>(valueBuffer.data[valuePos + sizeof(byte)]) / 255.f;
                             const float b = static_cast<float>(valueBuffer.data[valuePos + 2 * sizeof(byte)]) / 255.f;
-                            data.at(dataStart + *idx) = math::color(r, g, b);
+                            data.at(dataStart + *idx) = math::color(r, g, b, 1.f);
                         }
                         break;
                         case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
@@ -309,7 +309,7 @@ namespace legion::core
                             const float* r = reinterpret_cast<const float*>(&valueBuffer.data[valuePos]);
                             const float* g = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + sizeof(float)]);
                             const float* b = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + 2 * sizeof(float)]);
-                            data.at(dataStart + *idx) = math::color(*r, *g, *b);
+                            data.at(dataStart + *idx) = math::color(*r, *g, *b, 1.f);
                         }
                         break;
                         }
@@ -452,13 +452,13 @@ namespace legion::core
             return { common::success, warnings };
         }
 
-        static math::mat4 getGltfNodeTransform(const tinygltf::Node& node)
+        static math::float4x4 getGltfNodeTransform(const tinygltf::Node& node)
         {
             if (node.matrix.size() == 16u)
             {
 
                 // Use matrix attribute
-                return math::mat4(
+                return math::float4x4(
                     static_cast<float>(node.matrix[0]), static_cast<float>(node.matrix[1]), static_cast<float>(node.matrix[2]), static_cast<float>(node.matrix[3]),
                     static_cast<float>(node.matrix[4]), static_cast<float>(node.matrix[5]), static_cast<float>(node.matrix[6]), static_cast<float>(node.matrix[7]),
                     static_cast<float>(node.matrix[8]), static_cast<float>(node.matrix[9]), static_cast<float>(node.matrix[10]), static_cast<float>(node.matrix[11]),
@@ -466,25 +466,25 @@ namespace legion::core
             }
             else
             {
-                math::vec3 pos{ 0.f, 0.f, 0.f };
+                math::float3 pos{ 0.f, 0.f, 0.f };
                 math::quat rot{ 1.f, 0.f, 0.f, 0.f };
-                math::vec3 scale{ 1.f, 1.f, 1.f };
+                math::float3 scale{ 1.f, 1.f, 1.f };
 
                 // Assume Trans x Rotate x Scale order
                 if (node.scale.size() == 3)
-                    scale = math::vec3(static_cast<float>(node.scale[0]), static_cast<float>(node.scale[1]), static_cast<float>(node.scale[2]));
+                    scale = math::float3(static_cast<float>(node.scale[0]), static_cast<float>(node.scale[1]), static_cast<float>(node.scale[2]));
 
                 if (node.rotation.size() == 4)
                     rot = math::quat(static_cast<float>(node.rotation[3]), static_cast<float>(node.rotation[0]), static_cast<float>(node.rotation[1]), static_cast<float>(node.rotation[2]));
 
                 if (node.translation.size() == 3)
-                    pos = math::vec3(static_cast<float>(node.translation[0]), static_cast<float>(node.translation[1]), static_cast<float>(node.translation[2]));
+                    pos = math::float3(static_cast<float>(node.translation[0]), static_cast<float>(node.translation[1]), static_cast<float>(node.translation[2]));
 
                 return math::compose(scale, rot, pos);
             }
         }
 
-        static common::result<void, void> handleGltfMesh(mesh& meshData, const tinygltf::Model& model, const tinygltf::Mesh& mesh, const math::mat4& transform)
+        static common::result<void, void> handleGltfMesh(mesh& meshData, const tinygltf::Model& model, const tinygltf::Mesh& mesh, const math::float4x4& transform)
         {
             std::vector<std::string> warnings;
 
@@ -544,10 +544,10 @@ namespace legion::core
                 for (size_type i = smallestBufferSize; i < vertexCount; ++i)
                 {
                     if (meshData.normals.size() == i)
-                        meshData.normals.push_back(math::vec3::up);
+                        meshData.normals.push_back(math::float3::up);
 
                     if (meshData.uvs.size() == i)
-                        meshData.uvs.push_back(math::vec2(0, 0));
+                        meshData.uvs.push_back(math::float2(0, 0));
 
                     if (meshData.colors.size() == i)
                         meshData.colors.push_back(core::math::colors::white);
@@ -584,7 +584,7 @@ namespace legion::core
             return { common::success, warnings };
         }
 
-        static common::result<void, void> handleGltfNode(mesh& meshData, const tinygltf::Model& model, const tinygltf::Node& node, const math::mat4& parentTransf)
+        static common::result<void, void> handleGltfNode(mesh& meshData, const tinygltf::Model& model, const tinygltf::Node& node, const math::float4x4& parentTransf)
         {
             std::vector<std::string> warnings;
 
@@ -820,11 +820,11 @@ namespace legion::core
 
         const float percentagePerNode = 10.f / static_cast<float>(model.scenes[sceneToLoad].nodes.size());
 
-        math::mat4 rootMat = settings.transform;
+        math::float4x4 rootMat = settings.transform;
 
         if (!settings.keepNativeCoords)
         {
-            rootMat *= math::mat4{
+            rootMat *= math::float4x4{
                      -1.f, 0.f, 0.f, 0.f,
                      0.f, 1.f, 0.f, 0.f,
                      0.f, 0.f, 1.f, 0.f,

@@ -6,7 +6,7 @@ namespace legion::rendering
 {
     class MeshRenderStage : public RenderStage<MeshRenderStage>
     {
-        std::vector<math::mat4> m_matrices;
+        std::vector<math::float4x4> m_matrices;
 
     public:
         virtual void setup(app::window& context) override;

@@ -41,7 +41,7 @@ namespace legion::physics
         * populates the std::vector 'meshPolygons' using BFS.
         * @note halfEdgeQueue will be empty after this function
         */
-        void BFSPolygonize(std::queue<meshHalfEdgePtr>& halfEdgeQueue, const math::mat4& transform)
+        void BFSPolygonize(std::queue<meshHalfEdgePtr>& halfEdgeQueue, const math::float4x4& transform)
         {
             //while edge queue is not empty
             while (!halfEdgeQueue.empty())
@@ -66,7 +66,7 @@ namespace legion::physics
         */
         bool BFSIdentifyPolygon(meshHalfEdgePtr startEdge
             , std::shared_ptr<SplittablePolygon>& polygon, std::queue<meshHalfEdgePtr>& halfEdgeQueue
-            , const math::mat4& transform)
+            , const math::float4x4& transform)
         {
             log::debug("->BFSIdentifyPolygon");
             //polygonEdgeList : edges considered to be in the same polygon
@@ -94,7 +94,7 @@ namespace legion::physics
 
             std::vector<meshHalfEdgePtr> edgesNotInPolygon;
 
-            const math::vec3 comparisonNormal = startEdge->calculateEdgeNormal(transform);
+            const math::float3 comparisonNormal = startEdge->calculateEdgeNormal(transform);
 
             //BFS search for adjacent triangles with same normal
             while (!unvisitedEdgeQueue.empty())
@@ -132,7 +132,7 @@ namespace legion::physics
                 halfEdgeQueue.push(edge);
             }
 
-            math::vec3 localNormal = math::inverse(transform) * math::vec4(comparisonNormal, 0);
+            math::float3 localNormal = math::inverse(transform) * math::float4(comparisonNormal, 0);
             polygon = std::make_shared<SplittablePolygon>(edgesInPolygon, localNormal);
 
             polygon->AssignEdgeOwnership();
@@ -153,9 +153,9 @@ namespace legion::physics
         */
         void SplitPolygons
         (std::vector<SplittablePolygonPtr>& polygonsToSplit,
-            const math::vec3& planeNormal,
-            const math::vec3& planePosition,
-            const math::mat4& transform,
+            const math::float3& planeNormal,
+            const math::float3& planePosition,
+            const math::float4x4& transform,
             std::vector<std::vector<SplittablePolygonPtr>>& resultingIslands,
             bool keepBelow = true, bool shouldDebug = false);
         
@@ -189,8 +189,8 @@ namespace legion::physics
         * given a SplittablePolygon along a plane located at 'planePosition' with a normal equal to 'planeNormal'.
         */
         void SplitPolygon(SplittablePolygonPtr splitPolygon
-            , const math::mat4& transform, const math::vec3 cutPosition
-            , const math::vec3 cutNormal, SplitState requestedState,
+            , const math::float4x4& transform, const math::float3 cutPosition
+            , const math::float3 cutNormal, SplitState requestedState,
             std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges, bool shouldDebug = false);
        
 
@@ -234,22 +234,22 @@ namespace legion::physics
 
         SplittablePolygonPtr CreateIntersectionPolygon(
             std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges,
-            const math::vec3& localSplitNormal)
+            const math::float3& localSplitNormal)
         {
             //log::debug("CreateIntersectionPolygon");
 
             std::vector<meshHalfEdgePtr> edgesCreated;
 
-            math::vec3 localCentroid{};
+            math::float3 localCentroid{};
 
             //---------------------------------- Instantiate Edges and connect them into a triangle -------------------------------------//
             for (IntersectionEdgeInfo& info : generatedIntersectionEdges)
             {
                 //instantiate edge and set its pairing
-                meshHalfEdgePtr firstEdge = std::make_shared<MeshHalfEdge>(info.first,math::vec2(0.0f));
-                meshHalfEdgePtr secondEdge = std::make_shared<MeshHalfEdge>(info.second, math::vec2(0.0f));
+                meshHalfEdgePtr firstEdge = std::make_shared<MeshHalfEdge>(info.first,math::float2(0.0f));
+                meshHalfEdgePtr secondEdge = std::make_shared<MeshHalfEdge>(info.second, math::float2(0.0f));
                 //temporarily second edge to info.second
-                meshHalfEdgePtr thirdEdge = std::make_shared<MeshHalfEdge>(info.second, math::vec2(0.0f));
+                meshHalfEdgePtr thirdEdge = std::make_shared<MeshHalfEdge>(info.second, math::float2(0.0f));
 
                 info.centroidEdge = thirdEdge;
                 info.instantiatedEdge  = firstEdge;
@@ -283,7 +283,7 @@ namespace legion::physics
                 meshHalfEdgePtr closestEdge = nullptr;
                 //get closest unvisisted IntersectionEdgeInfo
 
-                const math::vec3& pointToCompare = info.second;
+                const math::float3& pointToCompare = info.second;
                 //find edge closest to pointToCompare
                 for (IntersectionEdgeInfo& otherInfo : generatedIntersectionEdges)
                 {
@@ -339,8 +339,8 @@ namespace legion::physics
                 for (auto splitObject : splitTester)
                 {
                     auto [posH, rotH, scaleH] = splitObject.get_component_handles<transform>();
-                    const math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
-                    const math::vec3 worldUp = transform * math::vec4(0, 1, 0, 0);
+                    const math::float4x4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
+                    const math::float3 worldUp = transform * math::float4(0, 1, 0, 0);
 
                     splittingPlanes.push_back(MeshSplitParams(posH.read(), math::normalize(worldUp)));
 
@@ -355,7 +355,7 @@ namespace legion::physics
             }
         }
 
-        void DEBUG_DrawPolygonData(const math::mat4& transform);
+        void DEBUG_DrawPolygonData(const math::float4x4& transform);
 
 
 

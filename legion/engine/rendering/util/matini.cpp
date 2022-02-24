@@ -37,19 +37,19 @@ namespace legion::rendering {
                         if (auto [success, values] = detail::convert_tuple<float, 4>::convert(value); success)
                         {
                             auto& [v1, v2, v3, v4] = values;
-                            material.set_param(key, math::vec4(v1, v2, v3, v4));
+                            material.set_param(key, math::float4(v1, v2, v3, v4));
                             return false;
                         }
                         if (auto [success, values] = detail::convert_tuple<float, 3>::convert(value); success)
                         {
                             auto& [v1, v2, v3] = values;
-                            material.set_param(key, math::vec3(v1, v2, v3));
+                            material.set_param(key, math::float3(v1, v2, v3));
                             return false;
                         }
                         if (auto [success, values] = detail::convert_tuple<float, 2>::convert(value); success)
                         {
                             auto& [v1, v2] = values;
-                            material.set_param(key, math::vec2(v1, v2));
+                            material.set_param(key, math::float2(v1, v2));
                             return false;
                         }
                         if (auto [success, parsed] = detail::convert<float>(value); success)
@@ -69,13 +69,13 @@ namespace legion::rendering {
                         if (auto [success, values] = detail::convert_tuple<int, 3>::convert(value); success)
                         {
                             auto& [v1, v2, v3] = values;
-                            material.set_param(key, math::ivec3(v1, v2, v3));
+                            material.set_param(key, math::int3(v1, v2, v3));
                             return false;
                         }
                         if (auto [success, values] = detail::convert_tuple<int, 2>::convert(value); success)
                         {
                             auto& [v1, v2] = values;
-                            material.set_param(key, math::ivec2(v1, v2));
+                            material.set_param(key, math::int2(v1, v2));
                             return false;
                         }
                         if (auto [success, parsed] = detail::convert<int>(value); success)

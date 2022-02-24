@@ -20,7 +20,7 @@ namespace legion::rendering
         texture texture{};
         texture.channels = settings.components;
         texture.type = settings.type;
-        math::ivec2 texSize;
+        math::int2 texSize;
         // Throwaway temporary storage for the original components in the texture that we're loading. (Everything gets converted to the components specified in the settings anyways.)
         texture_components components = texture_components::grey;
 

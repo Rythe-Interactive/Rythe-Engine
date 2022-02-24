@@ -39,7 +39,7 @@ namespace legion::rendering
         if (!valid_textures) return;
 
         //Change sizes
-        math::ivec2 textureSize = color_texture.get_texture().size();
+        math::int2 textureSize = color_texture.get_texture().size();
         if (textureSize != m_destinationTexture.get_texture().size())
         {
             m_destinationTexture.get_texture().resize(textureSize);
@@ -108,8 +108,8 @@ namespace legion::rendering
         // Bind and assign the depth threshold shader.
         m_depthThresholdShader.bind();
         m_depthThresholdShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(color_texture);
-        m_depthThresholdShader.get_uniform_with_location<math::vec4>(SV_VIEWDIR).set_value(camInput.vdirfarz);
-        m_depthThresholdShader.get_uniform_with_location<math::mat4>(SV_VIEW).set_value(camInput.view);
+        m_depthThresholdShader.get_uniform_with_location<math::float4>(SV_VIEWDIR).set_value(camInput.vdirfarz);
+        m_depthThresholdShader.get_uniform_with_location<math::float4x4>(SV_VIEW).set_value(camInput.view);
         m_depthThresholdShader.get_uniform_with_location<texture_handle>(SV_SCENEPOSITION).set_value(position_texture);
         m_depthThresholdShader.get_uniform<float>("sampleOffset").set_value(0.5f);
         m_depthThresholdShader.get_uniform<float>("focalRange").set_value(20.f);
@@ -130,7 +130,7 @@ namespace legion::rendering
         fbo.bind();
         m_bokehShader.bind();
         m_bokehShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(m_halfres1);
-        m_bokehShader.get_uniform<math::vec2>("scale").set_value(math::vec2(0.5f));
+        m_bokehShader.get_uniform<math::float2>("scale").set_value(math::float2(0.5f));
         m_bokehShader.get_uniform<float>("bokehRadius").set_value(m_bokehSize);
         renderQuad();
         m_bokehShader.release();
@@ -156,7 +156,7 @@ namespace legion::rendering
         fbo.bind();
         m_preFilterShader.bind();
         m_preFilterShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(color_texture);
-        m_preFilterShader.get_uniform<math::vec2>("scale").set_value(math::vec2(0.5f));
+        m_preFilterShader.get_uniform<math::float2>("scale").set_value(math::float2(0.5f));
         m_preFilterShader.get_uniform<texture_handle>("aofTexture").set_value(m_thresholdTexture);
         renderQuad();
         m_preFilterShader.release();

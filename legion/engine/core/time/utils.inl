@@ -15,7 +15,7 @@ namespace legion::core::time
             precision fractional = math::modf(amount, integral);
             // Avoid floating point precision loss with large numbers by multiplying the integer
             // part of the floating point number seperately using integer multiplication.
-            integer = math::iround<precision, int64>(integral) * ratio + math::iround<precision, int64>(fractional * ratio);
+            integer = math::iround<int64>(integral) * ratio + math::iround<int64>(fractional * ratio);
         }
         else
         {
@@ -37,7 +37,7 @@ namespace legion::core::time
             precision fractional = math::modf(amount, integral);
             // Avoid floating point precision loss with large numbers by multiplying the integer
             // part of the floating point number seperately using integer multiplication.
-            integer = math::iround<precision, int64>(integral) * ratio + math::iround<precision, int64>(fractional * ratio);
+            integer = math::iround<int64>(integral) * ratio + math::iround<int64>(fractional * ratio);
         }
         else
         {
@@ -59,7 +59,7 @@ namespace legion::core::time
             precision fractional = math::modf(amount, integral);
             // Avoid floating point precision loss with large numbers by multiplying the integer
             // part of the floating point number seperately using integer multiplication.
-            integer = math::iround<precision, int64>(integral) * ratio + math::iround<precision, int64>(fractional * ratio);
+            integer = math::iround<int64>(integral) * ratio + math::iround<int64>(fractional * ratio);
         }
         else
         {
@@ -81,7 +81,7 @@ namespace legion::core::time
             precision fractional = math::modf(amount, integral);
             // Avoid floating point precision loss with large numbers by multiplying the integer
             // part of the floating point number seperately using integer multiplication.
-            integer = math::iround<precision, int64>(integral) * ratio + math::iround<precision, int64>(fractional * ratio);
+            integer = math::iround<int64>(integral) * ratio + math::iround<int64>(fractional * ratio);
         }
         else
         {
@@ -103,7 +103,7 @@ namespace legion::core::time
             precision fractional = math::modf(amount, integral);
             // Avoid floating point precision loss with large numbers by multiplying the integer
             // part of the floating point number seperately using integer multiplication.
-            integer = math::iround<precision, int64>(integral) * ratio + math::iround<precision, int64>(fractional * ratio);
+            integer = math::iround<int64>(integral) * ratio + math::iround<int64>(fractional * ratio);
         }
         else
         {
@@ -117,7 +117,7 @@ namespace legion::core::time
     constexpr time_span<precision> nanoseconds(precision amount) noexcept
     {
         if constexpr (std::is_floating_point_v<precision>)
-            return time_span<precision>(std::chrono::nanoseconds(math::iround<precision, int64>(amount)));
+            return time_span<precision>(std::chrono::nanoseconds(math::iround<int64>(amount)));
         else
             return time_span<precision>(std::chrono::nanoseconds(static_cast<int64>(amount)));
     }

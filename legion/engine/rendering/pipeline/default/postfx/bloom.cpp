@@ -51,14 +51,14 @@ namespace legion::rendering
 #define itterations 2
 #define kernelsize 5
 
-    texture_handle Bloom::blurOverdraw(const math::ivec2& framebufferSize, texture_handle overdrawtexture)
+    texture_handle Bloom::blurOverdraw(const math::int2& framebufferSize, texture_handle overdrawtexture)
     {
         // Gaussian blur stage
         bool horizontal = true, first_iteration = true;
 
         // Bind and assign the viewport size to the gaussian blur shader.
         m_gaussianBlurShader.bind();
-        m_gaussianBlurShader.get_uniform_with_location<math::ivec2>(SV_VIEWPORT).set_value(framebufferSize);
+        m_gaussianBlurShader.get_uniform_with_location<math::int2>(SV_VIEWPORT).set_value(framebufferSize);
         m_gaussianBlurShader.get_uniform<int>("kernelsize").set_value(kernelsize);
 
         // Resize the pingpong textures.
@@ -162,7 +162,7 @@ namespace legion::rendering
         seperateOverdraw(fbo, color_texture, overdrawTexture);
 
         // Gets the size of the lighting data texture.
-        math::ivec2 framebufferSize = color_texture.get_texture().size();
+        math::int2 framebufferSize = color_texture.get_texture().size();
 
         // Mix slight part of the previous frame overdraw into the current frame to reduce flickering and introduce slight trail when it's dark.
         historyMixOverdraw(fbo, overdrawTexture);

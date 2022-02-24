@@ -7,7 +7,7 @@ namespace legion::physics
     {
         float fractureTime = FLT_MAX;
         float fractureStrength;
-        math::vec3 explosionPoint;
+        math::float3 explosionPoint;
         bool explodeNow = false;
     };
 }

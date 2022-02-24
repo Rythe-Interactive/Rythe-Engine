@@ -58,7 +58,7 @@ namespace legion::application
     void WindowSystem::onWindowMoved(GLFWwindow* window, int x, int y)
     {
         if (m_windowComponents.contains(window))
-            raiseEvent<window_move>(m_windowComponents[window], math::ivec2(x, y));
+            raiseEvent<window_move>(m_windowComponents[window], math::int2(x, y));
     }
 
     void WindowSystem::onWindowResize(GLFWwindow* win, int width, int height)
@@ -66,7 +66,7 @@ namespace legion::application
         if (m_windowComponents.contains(win))
         {
             window& wincomp = m_windowComponents[win];
-            wincomp.m_size = math::ivec2(width, height);
+            wincomp.m_size = math::int2(width, height);
             raiseEvent<window_resize>(m_windowComponents[win], wincomp.m_size);
         }
     }
@@ -98,7 +98,7 @@ namespace legion::application
     void WindowSystem::onWindowFrameBufferResize(GLFWwindow* window, int width, int height)
     {
         if (m_windowComponents.contains(window))
-            raiseEvent<window_framebuffer_resize>(m_windowComponents[window], math::ivec2(width, height));
+            raiseEvent<window_framebuffer_resize>(m_windowComponents[window], math::int2(width, height));
     }
 
     void WindowSystem::onWindowContentRescale(GLFWwindow* window, float xscale, float yscale)
@@ -210,7 +210,7 @@ namespace legion::application
             log::warn("Icon change denied, invalid entity given.");
     }
 
-    void WindowSystem::requestFullscreenToggle(id_type entityId, math::ivec2 position, math::ivec2 size)
+    void WindowSystem::requestFullscreenToggle(id_type entityId, math::int2 position, math::int2 size)
     {
         if (entityId)
         {
@@ -221,7 +221,7 @@ namespace legion::application
             log::warn("Fullscreen toggle denied, invalid entity given.");
     }
 
-    void WindowSystem::requestWindow(id_type entityId, math::ivec2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
+    void WindowSystem::requestWindow(id_type entityId, math::int2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
     {
         if (entityId)
         {
@@ -232,7 +232,7 @@ namespace legion::application
             log::warn("Window creation denied, invalid entity given.");
     }
 
-    void WindowSystem::requestWindow(id_type entityId, math::ivec2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval)
+    void WindowSystem::requestWindow(id_type entityId, math::int2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval)
     {
         if (entityId)
         {
@@ -243,7 +243,7 @@ namespace legion::application
             log::warn("Window creation denied, invalid entity given.");
     }
 
-    void WindowSystem::requestWindow(id_type entityId, math::ivec2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
+    void WindowSystem::requestWindow(id_type entityId, math::int2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
     {
         if (entityId)
         {
@@ -254,7 +254,7 @@ namespace legion::application
             log::warn("Window creation denied, invalid entity given.");
     }
 
-    void WindowSystem::requestWindow(id_type entityId, math::ivec2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval)
+    void WindowSystem::requestWindow(id_type entityId, math::int2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval)
     {
         if (entityId)
         {
@@ -275,7 +275,7 @@ namespace legion::application
         bindToEvent<events::exit, &WindowSystem::onExit>();
 
         if (m_creationRequests.empty() || (std::find_if(m_creationRequests.begin(), m_creationRequests.end(), [](window_request& r) { return r.entityId == ecs::world_entity_id; }) == m_creationRequests.end()))
-            requestWindow(ecs::world, math::ivec2(1360, 768), "LEGION Engine", assets::invalid_asset<image>, nullptr, nullptr, 1); // Create the request for the main window.
+            requestWindow(ecs::world, math::int2(1360, 768), "LEGION Engine", assets::invalid_asset<image>, nullptr, nullptr, 1); // Create the request for the main window.
 
         if (!ContextHelper::initialized()) // Initialize context.
             if (!ContextHelper::init())
@@ -333,7 +333,7 @@ namespace legion::application
                 ContextHelper::windowHint(GLFW_REFRESH_RATE, mode->refreshRate);
             }
 
-            if (request.size == math::ivec2(0, 0))
+            if (request.size == math::int2(0, 0))
                 request.size = { 400, 400 };
 
             if (request.name.empty())
@@ -463,8 +463,8 @@ namespace legion::application
                 GLFWmonitor* monitor = ContextHelper::getCurrentMonitor(win);
                 const GLFWvidmode* mode = ContextHelper::getVideoMode(monitor);
 
-                ContextHelper::setWindowMonitor(win, monitor, { 0 ,0 }, math::ivec2(mode->width, mode->height), mode->refreshRate);
-                win.m_size = math::ivec2(mode->width, mode->height);
+                ContextHelper::setWindowMonitor(win, monitor, { 0 ,0 }, math::int2(mode->width, mode->height), mode->refreshRate);
+                win.m_size = math::int2(mode->width, mode->height);
                 ContextHelper::makeContextCurrent(win);
                 ContextHelper::swapInterval(win.m_swapInterval);
                 ContextHelper::makeContextCurrent(nullptr);

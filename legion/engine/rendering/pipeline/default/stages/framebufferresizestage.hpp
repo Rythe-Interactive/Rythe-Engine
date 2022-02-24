@@ -8,7 +8,7 @@ namespace legion::rendering
     {
         static std::atomic<float> m_renderScale;
 
-        math::ivec2 m_framebufferSize;
+        math::int2 m_framebufferSize;
         texture_handle m_colorTexture[2];
         texture_handle m_normalTexture[2];
         texture_handle m_positionTexture[2];

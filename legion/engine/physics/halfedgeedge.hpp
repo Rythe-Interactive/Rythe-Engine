@@ -16,12 +16,12 @@ namespace legion::physics
 
         EdgeLabel label;
         
-        math::vec3 edgePosition;
+        math::float3 edgePosition;
         std::string id;
 
         HalfEdgeEdge() = default;
 
-        HalfEdgeEdge(math::vec3 newEdgePositionPtr) : edgePosition{ newEdgePositionPtr }
+        HalfEdgeEdge(math::float3 newEdgePositionPtr) : edgePosition{ newEdgePositionPtr }
         {
 
         }
@@ -43,7 +43,7 @@ namespace legion::physics
             edge->pairingEdge = this;
         }
 
-        math::vec3 getLocalNormal() const
+        math::float3 getLocalNormal() const
         {
             return face->normal;
         }
@@ -51,12 +51,12 @@ namespace legion::physics
         /**@brief Gets the direction of the edge by getting the
         * vector starting from the current edge's position to the next edge
         */
-        math::vec3 getLocalEdgeDirection()  const
+        math::float3 getLocalEdgeDirection()  const
         {
             return nextEdge->edgePosition - edgePosition;
         }
 
-        bool isVertexVisible(const math::vec3& vert)
+        bool isVertexVisible(const math::float3& vert)
         {
             float distanceToPlane =
                 math::pointToPlane(vert, edgePosition, face->normal);
@@ -64,29 +64,29 @@ namespace legion::physics
             return distanceToPlane > math::sqrt(math::epsilon<float>());
         }
 
-        bool isEdgeHorizonFromVertex(const math::vec3& vert)
+        bool isEdgeHorizonFromVertex(const math::float3& vert)
         {
             return isVertexVisible(vert) && !pairingEdge->isVertexVisible(vert);
         }
 
 
-        void DEBUG_drawEdge(const math::mat4& transform, const math::color& debugColor,float time = 20.0f, float width = 5.0f)
+        void DEBUG_drawEdge(const math::float4x4& transform, const math::color& debugColor,float time = 20.0f, float width = 5.0f)
         {
-            math::vec3 worldStart = transform * math::vec4(edgePosition, 1);
-            math::vec3 worldEnd = transform * math::vec4(nextEdge->edgePosition, 1);
+            math::float3 worldStart = transform * math::float4(edgePosition, 1);
+            math::float3 worldEnd = transform * math::float4(nextEdge->edgePosition, 1);
 
             debug::user_projectDrawLine(worldStart, worldEnd, debugColor, width, time, true);
         }
 
-        void DEBUG_drawInsetEdge(const math::vec3 spacing, const math::color& debugColor, float time = 20.0f, float width = 5.0f)
+        void DEBUG_drawInsetEdge(const math::float3 spacing, const math::color& debugColor, float time = 20.0f, float width = 5.0f)
         {
-            math::vec3 worldCentroid = face->centroid + spacing;
+            math::float3 worldCentroid = face->centroid + spacing;
 
-            math::vec3 worldStart = edgePosition + spacing;
-            math::vec3 startDifference = (worldCentroid - worldStart) * 0.1f;
+            math::float3 worldStart = edgePosition + spacing;
+            math::float3 startDifference = (worldCentroid - worldStart) * 0.1f;
       
-            math::vec3 worldEnd = nextEdge->edgePosition + spacing;
-            math::vec3 endDifference = (worldCentroid - worldEnd) * 0.1f;
+            math::float3 worldEnd = nextEdge->edgePosition + spacing;
+            math::float3 endDifference = (worldCentroid - worldEnd) * 0.1f;
 
 
             debug::user_projectDrawLine(worldStart + startDifference, worldEnd + endDifference, debugColor, width, time, true);

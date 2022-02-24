@@ -40,11 +40,11 @@ namespace legion::core
      */
     struct image final
     {
-        image(const math::ivec2& res, channel_format format, image_components comp, const data_view<byte>& data);
+        image(const math::int2& res, channel_format format, image_components comp, const data_view<byte>& data);
 
         NO_DEF_CTOR_RULE5_NOEXCEPT(image);
 
-        const math::ivec2& resolution() const noexcept;
+        const math::int2& resolution() const noexcept;
         const channel_format& format() const noexcept;
         const image_components& components() const noexcept;
 
@@ -77,7 +77,7 @@ namespace legion::core
     private:
         common::result<void> _apply_raw_impl() const;
 
-        math::ivec2 m_resolution;
+        math::int2 m_resolution;
         channel_format m_format;
         image_components m_components;
 

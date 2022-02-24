@@ -12,7 +12,7 @@ namespace legion::core::math
     template<typename Scalar>
     struct quaternion
     {
-        static_assert(std::is_arithmetic<Scalar>::value, "Scalar must be a numeric type.");
+        static_assert(::std::is_arithmetic_v<Scalar>, "Scalar must be a numeric type.");
 
         using scalar = Scalar;
         static constexpr size_type size = 4;

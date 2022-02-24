@@ -6,16 +6,16 @@ namespace legion::physics
 {
     struct BoundaryEdgeInfo
     {
-        math::vec3 worldNormal;
-        std::pair<math::vec3, math::vec3> intersectionPoints;
-        std::pair<math::vec3, math::vec3> finalSortingDirection;
+        math::float3 worldNormal;
+        std::pair<math::float3, math::float3> intersectionPoints;
+        std::pair<math::float3, math::float3> finalSortingDirection;
         std::vector<meshHalfEdgePtr> boundaryEdges;
         math::color drawColor;
 
-        math::vec3 nextSupport;
-        math::vec3 prevSupport;
-        math::vec3 intersectionEdge;
-        math::vec3 base;
+        math::float3 nextSupport;
+        math::float3 prevSupport;
+        math::float3 intersectionEdge;
+        math::float3 base;
 
     };
 
@@ -23,11 +23,11 @@ namespace legion::physics
 
     struct MeshSplitterDebugHelper
     {
-        std::pair<math::vec3, math::vec3> cuttingSetting;
-        math::mat4 DEBUG_transform;
-        std::vector<math::vec3> intersectionsPolygons;
-        std::vector<math::vec3> nonIntersectionPolygons;
-        std::vector< std::vector<math::vec3>> intersectionIslands;
+        std::pair<math::float3, math::float3> cuttingSetting;
+        math::float4x4 DEBUG_transform;
+        std::vector<math::float3> intersectionsPolygons;
+        std::vector<math::float3> nonIntersectionPolygons;
+        std::vector< std::vector<math::float3>> intersectionIslands;
 
         std::vector<BoundaryEdgeInfo> boundaryEdgesForPolygon;
 
@@ -49,8 +49,8 @@ namespace legion::physics
 
     struct SplitterIntersectionInfo
     {
-        SplitterIntersectionInfo(const math::vec3& pStartIntersection, const math::vec3& pStartToEndPosition,
-            const math::vec2& pStartIntersectionUV, const math::vec2& pStartToEndUV) :
+        SplitterIntersectionInfo(const math::float3& pStartIntersection, const math::float3& pStartToEndPosition,
+            const math::float2& pStartIntersectionUV, const math::float2& pStartToEndUV) :
 
             startIntersectionPosition(pStartIntersection),
             startToEndPosition(pStartToEndPosition),
@@ -65,11 +65,11 @@ namespace legion::physics
             return std::make_tuple(startIntersectionPosition, startToEndPosition, startIntersectionUV, startToEndUV);
         }
 
-        math::vec3 startIntersectionPosition;
-        math::vec3 startToEndPosition;
+        math::float3 startIntersectionPosition;
+        math::float3 startToEndPosition;
 
-        math::vec2 startIntersectionUV;
-        math::vec2 startToEndUV;
+        math::float2 startIntersectionUV;
+        math::float2 startToEndUV;
 
 
     };

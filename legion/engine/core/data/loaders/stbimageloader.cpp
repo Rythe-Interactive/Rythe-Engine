@@ -61,11 +61,11 @@ namespace legion::core
                 false;
         }
 
-        static data_view<byte> load_8bit(const byte_vec& data, math::ivec2& size, image_components& components, const import_cfg& settings)
+        static data_view<byte> load_8bit(const byte_vec& data, math::int2& size, image_components& components, const import_cfg& settings)
         {
             byte* resultData = stbi_load_from_memory(
                 data.data(), static_cast<int>(data.size()),
-                &size.x, &size.y,
+                size.x.data, size.y.data,
                 reinterpret_cast<int*>(&components),
                 settings.detectComponents ? 0 : static_cast<int>(settings.components));
 
@@ -77,11 +77,11 @@ namespace legion::core
             return { resultData, dataSize };
         }
 
-        static data_view<byte> load_16bit(const byte_vec& data, math::ivec2& size, image_components& components, const import_cfg& settings)
+        static data_view<byte> load_16bit(const byte_vec& data, math::int2& size, image_components& components, const import_cfg& settings)
         {
             uint16* resultData = stbi_load_16_from_memory(
                 data.data(), static_cast<int>(data.size()),
-                &size.x, &size.y,
+                size.x.data, size.y.data,
                 reinterpret_cast<int*>(&components),
                 settings.detectComponents ? 0 : static_cast<int>(settings.components));
 
@@ -93,11 +93,11 @@ namespace legion::core
             return { reinterpret_cast<byte*>(resultData), dataSize };
         }
 
-        static data_view<byte> load_hdr(const byte_vec& data, math::ivec2& size, image_components& components, const import_cfg& settings)
+        static data_view<byte> load_hdr(const byte_vec& data, math::int2& size, image_components& components, const import_cfg& settings)
         {
             float* resultData = stbi_loadf_from_memory(
                 data.data(), static_cast<int>(data.size()),
-                &size.x, &size.y,
+                size.x.data, size.y.data,
                 reinterpret_cast<int*>(&components),
                 settings.detectComponents ? 0 : static_cast<int>(settings.components));
 
@@ -136,7 +136,7 @@ namespace legion::core
         // Setup stb_image settings.
         stbi_set_flip_vertically_on_load(settings.flipVertical);
 
-        math::ivec2 size;
+        math::int2 size;
 
         image_components components = image_components::grey;
         channel_format format;

@@ -10,22 +10,34 @@ namespace legion::core::math
 {
     namespace detail
     {
-        template<typename _Scalar, size_type _Size>
+        template<typename Scalar, size_type Size>
         struct compute_normalize
         {
-            static constexpr size_type size = _Size;
-            using value_type = vector<_Scalar, size>;
+            static constexpr size_type size = Size;
+            using value_type = vector<Scalar, size>;
 
             L_ALWAYS_INLINE static value_type compute(const value_type& v) noexcept
             {
                 return v / length(v);
             }
         };
+
+        template<typename Scalar>
+        struct compute_normalize<Scalar, 1u>
+        {
+            static constexpr size_type size = 1u;
+            using value_type = vector<Scalar, size>;
+
+            L_ALWAYS_INLINE static Scalar compute(const value_type& v) noexcept
+            {
+                return static_cast<Scalar>(1);
+            }
+        };
     }
 
-    template<typename _Scalar, size_type _Size>
-    constexpr auto normalize(const vector<_Scalar, _Size>& v) noexcept
+    template<typename vec_type, ::std::enable_if_t<is_vector_v<vec_type>, bool> = true>
+    constexpr auto normalize(const vec_type& v) noexcept
     {
-        return detail::compute_normalize<_Scalar, _Size>::compute(v);
+        return detail::compute_normalize<typename vec_type::scalar, vec_type::size>::compute(v);
     }
 }

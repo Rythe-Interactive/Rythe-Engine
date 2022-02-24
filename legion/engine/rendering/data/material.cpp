@@ -12,13 +12,13 @@ namespace legion::rendering
             return new material_parameter<float>(name, location);
             break;
         case GL_FLOAT_VEC2:
-            return new material_parameter<math::vec2>(name, location);
+            return new material_parameter<math::float2>(name, location);
             break;
         case GL_FLOAT_VEC3:
-            return new material_parameter<math::vec3>(name, location);
+            return new material_parameter<math::float3>(name, location);
             break;
         case GL_FLOAT_VEC4:
-            return new material_parameter<math::vec4>(name, location);
+            return new material_parameter<math::float4>(name, location);
             break;
         case GL_UNSIGNED_INT:
             return new material_parameter<uint>(name, location);
@@ -27,10 +27,10 @@ namespace legion::rendering
             return new material_parameter<int>(name, location);
             break;
         case GL_INT_VEC2:
-            return new material_parameter<math::ivec2>(name, location);
+            return new material_parameter<math::int2>(name, location);
             break;
         case GL_INT_VEC3:
-            return new material_parameter<math::ivec3>(name, location);
+            return new material_parameter<math::int3>(name, location);
             break;
         case GL_INT_VEC4:
             return new material_parameter<math::ivec4>(name, location);
@@ -54,7 +54,7 @@ namespace legion::rendering
             return new material_parameter<math::mat3>(name, location);
             break;
         case GL_FLOAT_MAT4:
-            return new material_parameter<math::mat4>(name, location);
+            return new material_parameter<math::float4x4>(name, location);
             break;
         default:
             return nullptr;
