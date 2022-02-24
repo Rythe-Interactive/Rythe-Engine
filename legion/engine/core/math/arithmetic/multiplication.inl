@@ -6,7 +6,7 @@ namespace legion::core::math
     namespace detail
     {
         template<typename Scalar, size_type Size>
-        L_NODISCARD constexpr auto compute_multiplication<Scalar, Size>::compute(const vector<Scalar, Size>& a, const vector<Scalar, Size>& b) noexcept
+        L_NODISCARD constexpr auto compute_multiplication<vector<Scalar, Size>>::compute(const value_type& a, const value_type& b) noexcept
         {
             value_type result;
             for (size_type i = 0; i < Size; i++)
@@ -15,7 +15,7 @@ namespace legion::core::math
         }
 
         template<typename Scalar, size_type Size>
-        L_NODISCARD constexpr auto compute_multiplication<Scalar, Size>::compute(const vector<Scalar, Size>& a, Scalar b) noexcept
+        L_NODISCARD constexpr auto compute_multiplication<vector<Scalar, Size>>::compute(const value_type& a, Scalar b) noexcept
         {
             value_type result;
             for (size_type i = 0; i < Size; i++)
@@ -25,7 +25,7 @@ namespace legion::core::math
 
 
         template<typename Scalar>
-        L_NODISCARD constexpr Scalar compute_multiplication<Scalar, 1u>::compute(const value_type& a, Scalar b) noexcept
+        L_NODISCARD constexpr Scalar compute_multiplication<vector<Scalar, 1u>>::compute(const value_type& a, Scalar b) noexcept
         {
             return a[0] * b;
         }

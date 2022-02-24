@@ -1,6 +1,7 @@
 #pragma once
 #include <core/math/vector/vector_base.hpp>
 #include <core/math/vector/swizzle/swizzle_base.hpp>
+#include <core/math/matrix/matrix_base.hpp>
 
 namespace legion::core::math
 {
@@ -33,6 +34,21 @@ namespace legion::core::math
 
     template<typename T>
     constexpr static bool is_vector_v = is_vector<T>::value;
+
+    template<typename T>
+    struct is_matrix
+    {
+        constexpr static bool value = false;
+    };
+
+    template<typename Scalar, size_type SizeH, size_type SizeV>
+    struct is_matrix<matrix<Scalar, SizeH, SizeV>>
+    {
+        constexpr static bool value = true;
+    };
+
+    template<typename T>
+    constexpr static bool is_matrix_v = is_matrix<T>::value;
 
     template<typename FPType>
     struct epsilon

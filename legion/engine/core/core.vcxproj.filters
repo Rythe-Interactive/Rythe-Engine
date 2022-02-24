@@ -213,6 +213,10 @@
     <ClInclude Include="math\vector\aligned_vector3.hpp" />
     <ClInclude Include="math\basic\round.hpp" />
     <ClInclude Include="math\logic\not.hpp" />
+    <ClInclude Include="math\matrix\matrix_base.hpp" />
+    <ClInclude Include="math\matrix\column\column_base.hpp" />
+    <ClInclude Include="math\matrix\matrix4.hpp" />
+    <ClInclude Include="math\matrix\matrix.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -245,6 +249,7 @@
     <None Include="math\vector\swizzle\swizzle.inl" />
     <None Include="math\vector\vector1.inl" />
     <None Include="math\vector\vector_base.inl" />
+    <None Include="math\matrix\matrix_base.inl" />
     <None Include="math\arithmetic\multiplication.inl" />
   </ItemGroup>
 </Project>
