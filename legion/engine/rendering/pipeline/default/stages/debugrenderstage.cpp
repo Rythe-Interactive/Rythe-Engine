@@ -15,34 +15,36 @@ namespace legion::rendering
     void DebugRenderStage::endDebugDomain()
     {
         if (!localLines) return;
-            //localLines = new std::unordered_set<debug::debug_line_event>();*/
-        size_type size = localLines->size();
-
-        if (size == 0)
-            return;
+        size_type localSize = localLines->size();
 
         std::thread::id id = std::this_thread::get_id();
 
         {
             std::lock_guard guard(debugLinesLock);
 
-            if (debugLines[id])
+            if (auto itr = debugLines.find(id); itr != debugLines.end())
             {
-                for (auto& line : *(debugLines[id]))
+                auto* lineBuffer = itr->second;
+                if (localSize == 0 && lineBuffer->size() == 0)
+                    return;
+
+                for (auto& line : *lineBuffer)
                 {
                     if (line.time > 0 && !localLines->count(line))
                         localLines->insert(line);
                 }
 
-                delete debugLines[id];
+                delete lineBuffer;
             }
+            else if (localSize == 0)
+                return;
 
             debugLines[id] = localLines;
             localLines = nullptr;
         }
 
         localLines = new std::unordered_set<debug::debug_line_event>();
-        localLines->reserve(size);
+        localLines->reserve(localSize);
     }
 
     void DebugRenderStage::drawDebugLine(events::event_base& event)
