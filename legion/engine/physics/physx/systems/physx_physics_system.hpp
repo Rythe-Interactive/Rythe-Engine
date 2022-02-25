@@ -32,7 +32,6 @@ namespace legion::physics
 
         physx::PxScene* m_physxScene;
 
-        std::mutex m_setupLock;
-        std::mutex m_shutdownLock;
+        std::mutex m_setupShutdownMutex;
     };
 };

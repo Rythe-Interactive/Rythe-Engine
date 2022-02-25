@@ -27,7 +27,7 @@ namespace legion::physics
 
     void PhysXPhysicsSystem::setup()
     {
-        const std::lock_guard<std::mutex> setupLock(m_setupLock);
+        const std::lock_guard<std::mutex> setupLock(m_setupShutdownMutex);
 
         PS::selfInstanceCounter++;
         
@@ -39,7 +39,7 @@ namespace legion::physics
 
     void PhysXPhysicsSystem::shutdown()
     {
-        const std::lock_guard<std::mutex> shutdownLock(m_shutdownLock);
+        const std::lock_guard<std::mutex> shutdownLock(m_setupShutdownMutex);
 
         m_physxScene->release();
         
