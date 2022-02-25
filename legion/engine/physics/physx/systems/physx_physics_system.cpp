@@ -5,29 +5,21 @@ namespace legion::physics
 {
     using namespace physx;
 
-    struct physXStatics
+    struct PhysxStatics
     {
-        static size_type sSelfInstanceCounter;
+        inline static size_type selfInstanceCounter = 0;
 
-        static PxFoundation* foundation;
-        static PxPvd* pvd;
-        static PxDefaultCpuDispatcher* dispatcher;
-        static PxPhysics* phyxSDK;
+        inline static PxFoundation* foundation = nullptr;
+        inline static PxPvd* pvd = nullptr;
+        inline static PxDefaultCpuDispatcher* dispatcher = nullptr;
+        inline static PxPhysics* phyxSDK = nullptr;
 
-        static PxDefaultAllocator defaultAllocator;
-        static PxDefaultErrorCallback defaultErrorCallback;
+        inline static PxDefaultAllocator defaultAllocator;
+        inline static PxDefaultErrorCallback defaultErrorCallback;
     };
 
-    size_type physXStatics::sSelfInstanceCounter = 0;
+    using PS = PhysxStatics;
 
-    PxFoundation* physXStatics::foundation = nullptr;
-    PxPvd* physXStatics::pvd = nullptr;
-    PxDefaultCpuDispatcher* physXStatics::dispatcher = nullptr;
-    PxPhysics* physXStatics::phyxSDK = nullptr;
-
-    PxDefaultAllocator physXStatics::defaultAllocator;
-    PxDefaultErrorCallback physXStatics::defaultErrorCallback;
-    
     //PhysX PVD Debugger Related
     constexpr const char* pvdHost = "127.0.0.1";
     constexpr size_type defaultPVDListeningPort = 5425;
@@ -35,8 +27,10 @@ namespace legion::physics
 
     void PhysXPhysicsSystem::setup()
     {
-        physXStatics::sSelfInstanceCounter++;
+        const std::lock_guard<std::mutex> setupLock(m_setupLock);
 
+        PS::selfInstanceCounter++;
+        
         lazyInitPhysXVariables();
         setupDefaultScene();
 
@@ -45,11 +39,13 @@ namespace legion::physics
 
     void PhysXPhysicsSystem::shutdown()
     {
+        const std::lock_guard<std::mutex> shutdownLock(m_shutdownLock);
+
         m_physxScene->release();
+        
+        PS::selfInstanceCounter--;
 
-        physXStatics::sSelfInstanceCounter--;
-
-        if (physXStatics::sSelfInstanceCounter == 0)
+        if (PS::selfInstanceCounter == 0)
         {
             releasePhysXVariables();
         }
@@ -57,46 +53,46 @@ namespace legion::physics
 
     void PhysXPhysicsSystem::lazyInitPhysXVariables()
     {
-        if (physXStatics::sSelfInstanceCounter == 1)
+        if (PS::selfInstanceCounter == 1)
         {
-            physXStatics::foundation = PxCreateFoundation(PX_PHYSICS_VERSION,
-                physXStatics::defaultAllocator, physXStatics::defaultErrorCallback);
+            PS::foundation = PxCreateFoundation(PX_PHYSICS_VERSION,
+                PS::defaultAllocator, PS::defaultErrorCallback);
 
-            physXStatics::pvd = PxCreatePvd(*physXStatics::foundation);
+            PS::pvd = PxCreatePvd(*PS::foundation);
             PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate(pvdHost, defaultPVDListeningPort, defaultPVDHostTimeout);
-            physXStatics::pvd->connect(*transport, PxPvdInstrumentationFlag::eDEBUG);
+            PS::pvd->connect(*transport, PxPvdInstrumentationFlag::eDEBUG);
 
-            physXStatics::dispatcher = PxDefaultCpuDispatcherCreate(0); //deal with multithreading later on
+            PS::dispatcher = PxDefaultCpuDispatcherCreate(0); //deal with multithreading later on
 
-            physXStatics::phyxSDK = PxCreatePhysics(PX_PHYSICS_VERSION, *physXStatics::foundation, PxTolerancesScale(), true, physXStatics::pvd);
+            PS::phyxSDK = PxCreatePhysics(PX_PHYSICS_VERSION, *PS::foundation, PxTolerancesScale(), true, PS::pvd);
         }
     }
 
     void PhysXPhysicsSystem::setupDefaultScene()
     {
-        PxSceneDesc sceneDesc(physXStatics::phyxSDK->getTolerancesScale());
+        PxSceneDesc sceneDesc(PS::phyxSDK->getTolerancesScale());
         sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
-        sceneDesc.cpuDispatcher = physXStatics::dispatcher;
+        sceneDesc.cpuDispatcher = PS::dispatcher;
         sceneDesc.filterShader = PxDefaultSimulationFilterShader;
         sceneDesc.flags |= PxSceneFlag::eENABLE_STABILIZATION;
 
-        m_physxScene = physXStatics::phyxSDK->createScene(sceneDesc);
+        m_physxScene = PS::phyxSDK->createScene(sceneDesc);
     }
 
     void PhysXPhysicsSystem::releasePhysXVariables()
     {
-        physXStatics::dispatcher->release();
-        physXStatics::phyxSDK->release();
+        PS::dispatcher->release();
+        PS::phyxSDK->release();
 
-        if (physXStatics::pvd)
+        if (PS::pvd)
         {
-            PxPvdTransport* transport = physXStatics::pvd->getTransport();
-            physXStatics::pvd->release();
-            physXStatics::pvd = nullptr;
+            PxPvdTransport* transport = PS::pvd->getTransport();
+            PS::pvd->release();
+            PS::pvd = nullptr;
             transport->release();
         }
 
-        physXStatics::foundation->release();
+        PS::foundation->release();
     }
 
     void PhysXPhysicsSystem::fixedUpdate(time::time_span<fast_time> deltaTime)

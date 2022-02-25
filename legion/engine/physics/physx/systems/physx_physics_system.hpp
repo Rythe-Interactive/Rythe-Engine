@@ -20,7 +20,7 @@ namespace legion::physics
 
     private:
 
-        struct physx_statics;
+        struct PhysxStatics;
 
         void lazyInitPhysXVariables();
 
@@ -31,5 +31,8 @@ namespace legion::physics
         static constexpr float m_timeStep = 0.02f;
 
         physx::PxScene* m_physxScene;
+
+        std::mutex m_setupLock;
+        std::mutex m_shutdownLock;
     };
 };
