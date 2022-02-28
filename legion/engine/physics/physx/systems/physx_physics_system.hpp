@@ -31,7 +31,5 @@ namespace legion::physics
         static constexpr float m_timeStep = 0.02f;
 
         physx::PxScene* m_physxScene;
-
-        std::mutex m_setupShutdownMutex;
     };
 };

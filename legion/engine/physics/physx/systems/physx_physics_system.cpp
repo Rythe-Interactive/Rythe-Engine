@@ -16,6 +16,7 @@ namespace legion::physics
 
         inline static PxDefaultAllocator defaultAllocator;
         inline static PxDefaultErrorCallback defaultErrorCallback;
+        inline static async::spinlock setupShutdownLock;
     };
 
     using PS = PhysxStatics;
@@ -27,19 +28,21 @@ namespace legion::physics
 
     void PhysXPhysicsSystem::setup()
     {
-        const std::lock_guard<std::mutex> setupLock(m_setupShutdownMutex);
+        {
+            const async::lock_guard guard(PS::setupShutdownLock);
 
-        PS::selfInstanceCounter++;
+            PS::selfInstanceCounter++;
+
+            lazyInitPhysXVariables();
+            setupDefaultScene();
+        }
         
-        lazyInitPhysXVariables();
-        setupDefaultScene();
-
         createProcess<&PhysXPhysicsSystem::fixedUpdate>("Physics", m_timeStep);
     }
 
     void PhysXPhysicsSystem::shutdown()
     {
-        const std::lock_guard<std::mutex> shutdownLock(m_setupShutdownMutex);
+        const async::lock_guard guard(PS::setupShutdownLock);
 
         m_physxScene->release();
         
