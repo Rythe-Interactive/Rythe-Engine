@@ -1,6 +1,6 @@
 # ALL THE PEOPLE THAT WORKED ON THIS
 
-## Legion Team
+## Rythe-Interactive Team
 
 | Last Name(s) | First Name(s)     | Handle[role]                           | E-Mail                            |
 |--------------|-------------------|----------------------------------------|-----------------------------------|
