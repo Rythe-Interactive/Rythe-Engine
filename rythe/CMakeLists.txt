@@ -32,13 +32,13 @@ if (NOT ${SUBMODULE_COUNT} EQUAL 0)
         endif()
 
         # Add if either A) this is core, B) the module is enabled, or C) all modules are forcefully enabled
-        if (SUBMODULE_NAME STREQUAL "core" OR
-            ${RYTHE_MODULE_${SUBMODULE_VARIABLE_NAME}} OR 
-            ${RYTHE_FORCE_ENABLE_ALL_MODULES})
+        if ((SUBMODULE_NAME STREQUAL "core") OR
+            (${RYTHE_MODULE_${SUBMODULE_VARIABLE_NAME}}) OR 
+            (${RYTHE_FORCE_ENABLE_ALL_MODULES}))
 
             message(STATUS "Module: ${SUBMODULE_NAME} [Enabled]")
             update_submodule(${SUBMODULE_PATH})
-            add_subdirectory(${SUBMODULE_PATH})
+            add_subdirectory(${RYTHE_DIR_ROOT}/${SUBMODULE_PATH})
             set_target_properties(${SUBMODULE_NAME} PROPERTIES FOLDER "rythe/engine/modules")
 
             # Add the submodule to the link list
@@ -50,7 +50,7 @@ if (NOT ${SUBMODULE_COUNT} EQUAL 0)
 
             # Try to find a matching editor
             list(FIND SUBMODULE_PATHS "rythe/editor/modules/${SUBMODULE_NAME}" SUBMODULE_EDITOR_FOUND)
-            if (${SUBMODULE_EDITOR_FOUND})
+            if (NOT ${SUBMODULE_EDITOR_FOUND} EQUAL -1)
                 message(STATUS "Editor: ${SUBMODULE_NAME}-editor found!")
                 update_submodule("rythe/editor/modules/${SUBMODULE_NAME}")
                 add_subdirectory("${RYTHE_DIR_EDITOR_MODULES}/${SUBMODULE_NAME}")
