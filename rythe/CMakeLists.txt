@@ -38,7 +38,7 @@ if (NOT ${SUBMODULE_COUNT} EQUAL 0)
 
             message(STATUS "Module: ${SUBMODULE_NAME} [Enabled]")
             update_submodule(${SUBMODULE_PATH})
-            add_subdirectory(${RYTHE_DIR_ROOT}/${SUBMODULE_PATH})
+            add_subdirectory(${RYTHE_DIR_ROOT}/${SUBMODULE_PATH}/src/${SUBMODULE_NAME})
             set_target_properties(${SUBMODULE_NAME} PROPERTIES FOLDER "rythe/engine/modules")
 
             # Add the submodule to the link list
@@ -53,7 +53,7 @@ if (NOT ${SUBMODULE_COUNT} EQUAL 0)
             if (NOT ${SUBMODULE_EDITOR_FOUND} EQUAL -1)
                 message(STATUS "Editor: ${SUBMODULE_NAME}-editor found!")
                 update_submodule("rythe/editor/modules/${SUBMODULE_NAME}")
-                add_subdirectory("${RYTHE_DIR_EDITOR_MODULES}/${SUBMODULE_NAME}")
+                add_subdirectory("${RYTHE_DIR_EDITOR_MODULES}/${SUBMODULE_NAME}/src/${SUBMODULE_NAME}-editor")
                 set_target_properties("${SUBMODULE_NAME}-editor" PROPERTIES FOLDER "rythe/editor/modules")
 
                 list(APPEND RYTHE_LIBS_ALL "${SUBMODULE_NAME}-editor")
@@ -71,6 +71,8 @@ endif()
 # Use RYTHE_LIBS to set a few shared features
 # such as include dirs, definitions, and compiler/linker flags.
 foreach(library ${RYTHE_LIBS_ENGINE})
+    set_target_properties(${library} PROPERTIES LINKER_LANGUAGE ${RYTHE_LANGUAGE})
+
 	target_include_directories(${library} PUBLIC ${RYTHE_INCLUDE_ENGINE})
 	target_compile_definitions(${library} PUBLIC ${RYTHE_DEFINITIONS})
 	target_compile_options(${library} PUBLIC ${RYTHE_COMPILER_FLAGS})
@@ -79,6 +81,8 @@ foreach(library ${RYTHE_LIBS_ENGINE})
 endforeach()
 
 foreach(library ${RYTHE_LIBS_EDITOR})
+    set_target_properties(${library} PROPERTIES LINKER_LANGUAGE ${RYTHE_LANGUAGE})
+
     target_include_directories(${library} PUBLIC ${RYTHE_INCLUDE_ALL})
 	target_compile_definitions(${library} PUBLIC ${RYTHE_DEFINITIONS})
     target_compile_options(${library} PUBLIC ${RYTHE_COMPILER_FLAGS})

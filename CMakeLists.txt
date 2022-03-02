@@ -30,6 +30,10 @@ set(RYTHE_DIR_EDITOR_MODULES ${CMAKE_CURRENT_SOURCE_DIR}/rythe/editor/modules)
 set(RYTHE_DIR_OUTPUT_LIBS ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(RYTHE_DIR_OUTPUT_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+# C++ files/lang
+set(RYTHE_LANGUAGE CXX)
+set(RYTHE_FILE_TYPES *.h *.hpp *.c *.cpp *.inl)
+
 # Include dirs
 set(RYTHE_INCLUDE_ALL "")
 set(RYTHE_INCLUDE_ENGINE "")
