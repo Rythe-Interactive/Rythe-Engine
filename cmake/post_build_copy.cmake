@@ -27,8 +27,8 @@ endfunction()
 # Add post-build commands to copy library and header files to output directories.
 function(post_build_copy targetName targetDir)
 	# Prepare directories for library output
-	create_dir(${targetName} ${RYTHE_OUTPUT_LIB_DIR}/Debug)
-	create_dir(${targetName} ${RYTHE_OUTPUT_LIB_DIR}/Release)
+	create_dir(${targetName} ${RYTHE_DIR_OUTPUT_LIBS}/Debug)
+	create_dir(${targetName} ${RYTHE_DIR_OUTPUT_LIBS}/Release)
 
 	# Copy debug library
 	add_custom_command(TARGET ${targetName} 
@@ -49,28 +49,28 @@ function(post_build_copy targetName targetDir)
 	)
 
 	# Clear previously created output directory for header files
-	delete_dir(${targetName} ${RYTHE_OUTPUT_INCLUDE_DIR}/${targetDir}/)
+	delete_dir(${targetName} ${RYTHE_DIR_OUTPUT_INCLUDES}/${targetDir}/)
 
 	# Macro for recursively going through directories.
 	# This is necessary because cmake copy takes a directory,
 	# and we want to make sure to copy the files to the correct directory.
 	macro(read_directory curdir)
 		# Get all files and folders in the current directory
-		file(GLOB children RELATIVE ${RYTHE_ROOT_DIR}/${curdir}/ ${RYTHE_ROOT_DIR}/${curdir}/*)
+		file(GLOB children RELATIVE ${RYTHE_DIR_ROOT}/${curdir}/ ${RYTHE_DIR_ROOT}/${curdir}/*)
 		
 		# Clear files list
 		set(files "")
 
 		foreach(child ${children})
 			# Files can be added to our files list for copying
-			if (NOT (IS_DIRECTORY ${RYTHE_ROOT_DIR}/${curdir}/${child}))
+			if (NOT (IS_DIRECTORY ${RYTHE_DIR_ROOT}/${curdir}/${child}))
 				get_filename_component(CHILD_EXT ${child} EXT)
 
 				# Only copy headers/inl files
 				if (CHILD_EXT STREQUAL ".hpp" OR 
 					CHILD_EXT STREQUAL ".h" OR 
 					CHILD_EXT STREQUAL ".inl")
-					list(APPEND files ${RYTHE_ROOT_DIR}/${curdir}/${child})
+					list(APPEND files ${RYTHE_DIR_ROOT}/${curdir}/${child})
 				endif()
 			# Folders can be recursively looked through for more headers
 			else()
