@@ -8,6 +8,7 @@
 #
 # output ${SUBMODULE_NAMES}     list of submodule names (last part of the path, so "path/to/submodule" is just "submodule")
 # output ${SUBMODULE_PATHS}     list of submodule paths (from root, "path/to/submodule")
+# output ${SUBMODULE_DIRS}      list of submodule directories (from root, "path/to/")
 # output ${SUBMODULE_HASHES}    list of submodule commit hashes
 # output ${SUBMODULE_COUNT}     number of submodules in the lists
 
@@ -15,6 +16,7 @@
 set(SUBMODULE_NAMES "")
 set(SUBMODULE_PATHS "")
 set(SUBMODULE_HASHES "")
+set(SUBMODULE_DIRS "")
 set(SUBMODULE_COUNT 0)
 
 # Get submodules
@@ -48,8 +50,15 @@ if (NOT GIT_SUBMOD_OUTPUT STREQUAL "")
             continue()
         endif()
 
+        # Get the submodule dir by removing the submodule name from the path
+        string(LENGTH ${SUBMODULE_PATH} PATH_LEN)
+        string(LENGTH ${SUBMODULE_NAME} NAME_LEN)
+        math(EXPR DIR_END "${PATH_LEN} - ${NAME_LEN}")
+        string(SUBSTRING ${SUBMODULE_PATH} 0 ${DIR_END} SUBMODULE_DIR)
+
         list(APPEND SUBMODULE_NAMES ${SUBMODULE_NAME})
         list(APPEND SUBMODULE_PATHS ${SUBMODULE_PATH})
+        list(APPEND SUBMODULE_DIRS ${SUBMODULE_DIR})
         list(APPEND SUBMODULE_HASHES ${SUBMODULE_HASH})
     endforeach()
 
