@@ -14,6 +14,7 @@ if (NOT ${SUBMODULE_COUNT} EQUAL 0)
         # Get submodule info
         list(GET SUBMODULE_NAMES ${INDEX} SUBMODULE_NAME)
         list(GET SUBMODULE_PATHS ${INDEX} SUBMODULE_PATH)
+        list(GET SUBMODULE_DIRS ${INDEX} SUBMODULE_DIR)
         list(GET SUBMODULE_HASHES ${INDEX} SUBMODULE_HASH)
 
         # Only add modules if they are in the rythe/engine folder
@@ -39,7 +40,7 @@ if (NOT ${SUBMODULE_COUNT} EQUAL 0)
             message(STATUS "Module: ${SUBMODULE_NAME} [Enabled]")
             update_submodule(${SUBMODULE_PATH})
             add_subdirectory(${RYTHE_DIR_ROOT}/${SUBMODULE_PATH}/src/${SUBMODULE_NAME})
-            set_target_properties(${SUBMODULE_NAME} PROPERTIES FOLDER "rythe/engine/modules")
+            set_target_properties(${SUBMODULE_NAME} PROPERTIES FOLDER ${SUBMODULE_DIR})
 
             # Add the submodule to the link list
             list(APPEND RYTHE_LIBS_ALL ${SUBMODULE_NAME})
@@ -49,17 +50,23 @@ if (NOT ${SUBMODULE_COUNT} EQUAL 0)
             list(APPEND RYTHE_DEFINITIONS "RYTHE_${SUBMODULE_VARIABLE_NAME}")
 
             # Try to find a matching editor
-            list(FIND SUBMODULE_PATHS "rythe/editor/modules/${SUBMODULE_NAME}" SUBMODULE_EDITOR_FOUND)
-            if (NOT ${SUBMODULE_EDITOR_FOUND} EQUAL -1)
-                message(STATUS "Editor: ${SUBMODULE_NAME}-editor found!")
-                update_submodule("rythe/editor/modules/${SUBMODULE_NAME}")
-                add_subdirectory("${RYTHE_DIR_EDITOR_MODULES}/${SUBMODULE_NAME}/src/${SUBMODULE_NAME}-editor")
-                set_target_properties("${SUBMODULE_NAME}-editor" PROPERTIES FOLDER "rythe/editor/modules")
+            list(FIND SUBMODULE_PATHS "rythe/editor/modules/${SUBMODULE_NAME}" SUBMODULE_EDITOR_INDEX)
+            if (NOT ${SUBMODULE_EDITOR_INDEX} EQUAL -1)
+                # Get submodule info
+                list(GET SUBMODULE_NAMES ${SUBMODULE_EDITOR_INDEX} SUBMODULE_EDITOR_NAME)
+                list(GET SUBMODULE_PATHS ${SUBMODULE_EDITOR_INDEX} SUBMODULE_EDITOR_PATH)
+                list(GET SUBMODULE_DIRS ${SUBMODULE_EDITOR_INDEX} SUBMODULE_EDITOR_DIR)
+                list(GET SUBMODULE_HASHES ${SUBMODULE_EDITOR_INDEX} SUBMODULE_EDITOR_HASH)
+
+                message(STATUS "Editor: ${SUBMODULE_EDITOR_NAME} found!")
+                update_submodule("${SUBMODULE_EDITOR_PATH}")
+                add_subdirectory("${SUBMODULE_EDITOR_PATH}/src/${SUBMODULE_NAME}-editor")
+                set_target_properties("${SUBMODULE_NAME}-editor" PROPERTIES FOLDER ${SUBMODULE_EDITOR_DIR})
 
                 list(APPEND RYTHE_LIBS_ALL "${SUBMODULE_NAME}-editor")
                 list(APPEND RYTHE_LIBS_EDITOR "${SUBMODULE_NAME}-editor")
-                list(APPEND RYTHE_INCLUDE_ALL "${RYTHE_DIR_EDITOR_MODULES}/${SUBMODULE_NAME}/src")
-                list(APPEND RYTHE_INCLUDE_EDITOR "${RYTHE_DIR_EDITOR_MODULES}/${SUBMODULE_NAME}/src")
+                list(APPEND RYTHE_INCLUDE_ALL "${SUBMODULE_EDITOR_PATH}/src")
+                list(APPEND RYTHE_INCLUDE_EDITOR "${SUBMODULE_EDITOR_PATH}/src")
                 list(APPEND RYTHE_DEFINITIONS "RYTHE_${SUBMODULE_VARIABLE_NAME}_EDITOR")
             endif()
         else()
