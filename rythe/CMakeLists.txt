@@ -45,8 +45,8 @@ if (NOT ${SUBMODULE_COUNT} EQUAL 0)
             # Add the submodule to the link list
             list(APPEND RYTHE_LIBS_ALL ${SUBMODULE_NAME})
             list(APPEND RYTHE_LIBS_ENGINE ${SUBMODULE_NAME})
-            list(APPEND RYTHE_INCLUDE_ALL "${RYTHE_DIR_ENGINE_MODULES}/${SUBMODULE_NAME}/src")
-            list(APPEND RYTHE_INCLUDE_ENGINE "${RYTHE_DIR_ENGINE_MODULES}/${SUBMODULE_NAME}/src")
+            list(APPEND RYTHE_INCLUDE_ALL "${RYTHE_DIR_ROOT}/${SUBMODULE_PATH}/src")
+            list(APPEND RYTHE_INCLUDE_ENGINE "${RYTHE_DIR_ROOT}/${SUBMODULE_PATH}/src")
             list(APPEND RYTHE_DEFINITIONS "RYTHE_${SUBMODULE_VARIABLE_NAME}")
 
             # Try to find a matching editor
@@ -65,8 +65,8 @@ if (NOT ${SUBMODULE_COUNT} EQUAL 0)
 
                 list(APPEND RYTHE_LIBS_ALL "${SUBMODULE_NAME}-editor")
                 list(APPEND RYTHE_LIBS_EDITOR "${SUBMODULE_NAME}-editor")
-                list(APPEND RYTHE_INCLUDE_ALL "${SUBMODULE_EDITOR_PATH}/src")
-                list(APPEND RYTHE_INCLUDE_EDITOR "${SUBMODULE_EDITOR_PATH}/src")
+                list(APPEND RYTHE_INCLUDE_ALL "${RYTHE_DIR_ROOT}/${SUBMODULE_EDITOR_PATH}/src")
+                list(APPEND RYTHE_INCLUDE_EDITOR "${RYTHE_DIR_ROOT}/${SUBMODULE_EDITOR_PATH}/src")
                 list(APPEND RYTHE_DEFINITIONS "RYTHE_${SUBMODULE_VARIABLE_NAME}_EDITOR")
             endif()
         else()
