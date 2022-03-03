@@ -52,7 +52,7 @@ function(copy_module_output targetName targetDir)
 		set(files "")
 
 		foreach(child ${children})
-			# Files can be added to our files list for copying
+			# Files can be checked for copying
 			if (NOT (IS_DIRECTORY ${SOURCE_PATH}/${child}))
 				get_filename_component(CHILD_EXT ${child} EXT)
 
@@ -61,6 +61,8 @@ function(copy_module_output targetName targetDir)
 					CHILD_EXT STREQUAL ".h" OR 
 					CHILD_EXT STREQUAL ".inl")
 
+					# configure_file creates a CMake (configure time) dependency
+					# where if the source file changes, the destination file gets updated (in this case copied to)
 					configure_file(${SOURCE_PATH}/${child} ${DEST_PATH}/${child} COPYONLY)
 				endif()
 			# Folders can be recursively looked through for more headers
