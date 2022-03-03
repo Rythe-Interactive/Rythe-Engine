@@ -4,31 +4,19 @@
 # Note: this utility function is **only** designed for use with rythe projects,
 # it uses ${RYTHE_DIR_ROOT} to get full filepaths and ${RYTHE_DIR_OUTPUT_INCLUDES} to copy results to.
 
-# Util function for internal use in copy_module_output.
-# Adds a post-build command to target that creates a directory at path p.
-function(create_dir target p)
-	add_custom_command(TARGET ${target} 
-		POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E
-		make_directory ${p}
-	)
-endfunction()
-
-# Util function for internal use in copy_module_output.
-# Adds a post-build command to target that deletes a directory at path p.
-function(delete_dir target p)
-	add_custom_command(TARGET ${target} 
-		POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E 
-		remove_directory  ${p}
-	)
-endfunction()
-
 # Add post-build commands to copy library and header files to output directories.
 function(copy_module_output targetName targetDir)
 	# Prepare directories for library output
-	create_dir(${targetName} ${RYTHE_DIR_OUTPUT_LIBS}/Debug)
-	create_dir(${targetName} ${RYTHE_DIR_OUTPUT_LIBS}/Release)
+	add_custom_command(TARGET ${targetName} 
+		POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E
+		make_directory ${RYTHE_DIR_OUTPUT_LIBS}/Debug
+	)
+	add_custom_command(TARGET ${targetName} 
+		POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E
+		make_directory ${RYTHE_DIR_OUTPUT_LIBS}/Release
+	)
 
 	# Copy debug library
 	add_custom_command(TARGET ${targetName} 
