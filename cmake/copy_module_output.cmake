@@ -36,7 +36,7 @@ function(copy_module_output targetName targetDir)
 		COMMAND $<$<CONFIG:Debug>:${CMAKE_COMMAND}> -E 
 		copy 
 			$<TARGET_FILE:${targetName}>
-			"${RYTHE_DIR_OUTPUT_LIBS}/Debug/"
+			"${RYTHE_DIR_OUTPUT_LIBS}/Debug/" || (exit 0)
 	)
 
 	# Copy release library
@@ -45,7 +45,7 @@ function(copy_module_output targetName targetDir)
 		COMMAND $<$<CONFIG:Release>:${CMAKE_COMMAND}> -E 
 		copy
 			$<TARGET_FILE:${targetName}>
-			"${RYTHE_DIR_OUTPUT_LIBS}/Release/"
+			"${RYTHE_DIR_OUTPUT_LIBS}/Release/" || (exit 0)
 	)
 	
 	# Macro for recursively going through directories.
@@ -88,9 +88,6 @@ function(copy_module_output targetName targetDir)
 				read_directory(${curdir}/${child})
 			endif()
 		endforeach()
-
-		# Prepare the output directory for copying
-		create_dir(${targetName} ${RYTHE_DIR_OUTPUT_INCLUDES}/${curdir})
 	endmacro()
 
 	# Run the macro on the root folder
