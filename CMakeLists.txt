@@ -88,7 +88,7 @@ mark_as_advanced(FORCE BUILD_SHARED_LIBS) # Hide
 
 # Utility files
 include("${CMAKE_MODULE_PATH}/update_submodule.cmake")
-include("${CMAKE_MODULE_PATH}/post_build_copy.cmake")
+include("${CMAKE_MODULE_PATH}/copy_module_output.cmake")
 
 # Get Git
 find_package(Git REQUIRED)
