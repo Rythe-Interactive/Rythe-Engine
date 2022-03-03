@@ -12,6 +12,7 @@ function(copy_module_output targetName targetDir)
 		COMMAND ${CMAKE_COMMAND} -E
 		make_directory ${RYTHE_DIR_OUTPUT_LIBS}/Debug
 	)
+
 	add_custom_command(TARGET ${targetName} 
 		POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E
@@ -19,6 +20,7 @@ function(copy_module_output targetName targetDir)
 	)
 
 	# Copy debug library
+	# Note: || (exit 0) makes sure these commands succeed even if no library file was generated.
 	add_custom_command(TARGET ${targetName} 
 		POST_BUILD
 		COMMAND $<$<CONFIG:Debug>:${CMAKE_COMMAND}> -E 
