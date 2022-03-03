@@ -4,6 +4,10 @@
     # Enabled modules are added to the build system
     # Matching editor modules are added if their engine module is enabled
 
+# Clear previously created output directory for header and lib files
+execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${RYTHE_DIR_OUTPUT_INCLUDES}/)
+execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${RYTHE_DIR_OUTPUT_LIBS}/)
+
 # Parse submodules
 include("${CMAKE_MODULE_PATH}/parse_submodules.cmake")
 

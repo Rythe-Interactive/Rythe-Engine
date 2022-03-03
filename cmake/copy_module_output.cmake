@@ -47,10 +47,7 @@ function(copy_module_output targetName targetDir)
 			$<TARGET_FILE:${targetName}>
 			"${RYTHE_DIR_OUTPUT_LIBS}/Release/"
 	)
-
-	# Clear previously created output directory for header files
-	delete_dir(${targetName} ${RYTHE_DIR_OUTPUT_INCLUDES}/${targetDir}/)
-
+	
 	# Macro for recursively going through directories.
 	# This is necessary because cmake copy takes a directory,
 	# and we want to make sure to copy the files to the correct directory.
