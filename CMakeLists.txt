@@ -78,8 +78,7 @@ else()
 	endif()
 endif()
 
-# Handle static/shared libs
-# TODO (Leon): This could be more elegant and we could potentially allow for dynamic libraries.
+# Force library type to static
 set(RYTHE_LIBRARY_TYPE STATIC)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 mark_as_advanced(FORCE BUILD_SHARED_LIBS) # Hide
