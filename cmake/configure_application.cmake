@@ -1,7 +1,7 @@
-# Utility file that introduces configure_engine_application() and configure_editor_application()
+# Utility file that introduces rythe_configure_engine_application() and rythe_configure_editor_application()
 # These functions simplify setting up compiler settings and dependencies.
 
-function(configure_engine_application target)
+function(rythe_configure_engine_application target)
 	# Language
 	target_compile_features(${target} PUBLIC cxx_std_17)
 	
@@ -20,7 +20,7 @@ function(configure_engine_application target)
 	set_target_properties(${target} PROPERTIES LINKER_LANGUAGE ${RYTHE_LANGUAGE})
 endfunction()
 	
-function(configure_editor_application target)
+function(rythe_configure_editor_application target)
 	# Language
 	target_compile_features(${target} PUBLIC cxx_std_17)
 	

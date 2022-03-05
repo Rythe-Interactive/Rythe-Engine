@@ -5,7 +5,7 @@
 # it uses ${RYTHE_DIR_ROOT} to get full filepaths and ${RYTHE_DIR_OUTPUT_INCLUDES} to copy results to.
 
 # Add post-build commands to copy library and header files to output directories.
-function(copy_module_output targetName targetDir)
+function(rythe_copy_module_output targetName targetDir)
 	# Prepare directories for library output
 	add_custom_command(TARGET ${targetName} 
 		POST_BUILD

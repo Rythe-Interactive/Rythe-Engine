@@ -1,8 +1,8 @@
-# Utility file that introduces a configure_module macro.
+# Utility file that introduces a rythe_configure_module macro.
 # Unlike configure_application.cmake, this is intentionally introduced as a macro so that
 # the functions called internally can use the true parent scope appropriately.
 
-macro(configure_module module)
+macro(rythe_configure_module module)
     set(MODULE_INFO_HAS_HEADERS OFF PARENT_SCOPE)
     set(MODULE_INFO_HAS_SOURCES OFF PARENT_SCOPE)
 

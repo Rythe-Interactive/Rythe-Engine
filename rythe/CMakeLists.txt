@@ -48,7 +48,7 @@ if (NOT ${SUBMODULE_COUNT} EQUAL 0)
             set(MODULE_INFO_HAS_SOURCES OFF)
             set(MODULE_INFO_SOURCES "")
 
-            update_submodule(${SUBMODULE_PATH})
+            rythe_update_submodule(${SUBMODULE_PATH})
             add_subdirectory(${RYTHE_DIR_ROOT}/${SUBMODULE_PATH}/src/${SUBMODULE_NAME})
             set_target_properties(${SUBMODULE_NAME} PROPERTIES FOLDER ${SUBMODULE_DIR})
 
@@ -81,7 +81,7 @@ if (NOT ${SUBMODULE_COUNT} EQUAL 0)
                 list(GET SUBMODULE_HASHES ${SUBMODULE_EDITOR_INDEX} SUBMODULE_EDITOR_HASH)
 
                 message(STATUS "Editor: ${SUBMODULE_EDITOR_NAME} found!")
-                update_submodule("${SUBMODULE_EDITOR_PATH}")
+                rythe_update_submodule("${SUBMODULE_EDITOR_PATH}")
                 add_subdirectory("${SUBMODULE_EDITOR_PATH}/src/${SUBMODULE_NAME}-editor")
                 set_target_properties("${SUBMODULE_NAME}-editor" PROPERTIES FOLDER ${SUBMODULE_EDITOR_DIR})
 
