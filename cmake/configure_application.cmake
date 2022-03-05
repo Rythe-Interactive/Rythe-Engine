@@ -15,9 +15,9 @@ function(configure_engine_application target)
 	
 	# Linker
 	if (NOT ${RYTHE_LINKER_FLAGS} STREQUAL "")
-		target_link_options(${library} PUBLIC ${RYTHE_LINKER_FLAGS})
+		target_link_options(${target} PUBLIC ${RYTHE_LINKER_FLAGS})
 	endif()
-	set_target_properties(${library} PROPERTIES LINKER_LANGUAGE ${RYTHE_LANGUAGE})
+	set_target_properties(${target} PROPERTIES LINKER_LANGUAGE ${RYTHE_LANGUAGE})
 endfunction()
 	
 function(configure_editor_application target)
@@ -34,7 +34,7 @@ function(configure_editor_application target)
 	
 	# Linker
 	if (NOT ${RYTHE_LINKER_FLAGS} STREQUAL "")
-		target_link_options(${library} PUBLIC ${RYTHE_LINKER_FLAGS})
+		target_link_options(${target} PUBLIC ${RYTHE_LINKER_FLAGS})
 	endif()
-	set_target_properties(${library} PROPERTIES LINKER_LANGUAGE ${RYTHE_LANGUAGE})
+	set_target_properties(${target} PROPERTIES LINKER_LANGUAGE ${RYTHE_LANGUAGE})
 endfunction()
