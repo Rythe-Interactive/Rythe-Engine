@@ -42,16 +42,34 @@ if (NOT ${SUBMODULE_COUNT} EQUAL 0)
             (${RYTHE_FORCE_ENABLE_ALL_MODULES}))
 
             message(STATUS "Module: ${SUBMODULE_NAME} [Enabled]")
+            # MODULE_INFO variables are updated by the module
+            # see cmake/configure_module.cmake
+            set(MODULE_INFO_HAS_HEADERS OFF)
+            set(MODULE_INFO_HAS_SOURCES OFF)
+            set(MODULE_INFO_SOURCES "")
+
             update_submodule(${SUBMODULE_PATH})
             add_subdirectory(${RYTHE_DIR_ROOT}/${SUBMODULE_PATH}/src/${SUBMODULE_NAME})
             set_target_properties(${SUBMODULE_NAME} PROPERTIES FOLDER ${SUBMODULE_DIR})
 
-            # Add the submodule to the link list
-            list(APPEND RYTHE_LIBS_ALL ${SUBMODULE_NAME})
-            list(APPEND RYTHE_LIBS_ENGINE ${SUBMODULE_NAME})
-            list(APPEND RYTHE_INCLUDE_ALL "${RYTHE_DIR_ROOT}/${SUBMODULE_PATH}/src")
-            list(APPEND RYTHE_INCLUDE_ENGINE "${RYTHE_DIR_ROOT}/${SUBMODULE_PATH}/src")
+            # No need to add as an include path if no headers are present
+            if (${MODULE_INFO_HAS_HEADERS})
+                list(APPEND RYTHE_INCLUDE_ALL "${RYTHE_DIR_ROOT}/${SUBMODULE_PATH}/src")
+                list(APPEND RYTHE_INCLUDE_ENGINE "${RYTHE_DIR_ROOT}/${SUBMODULE_PATH}/src")
+            endif()
+
+            # We have to check explicitly because otherwise
+            # targets will attempt to link with ${SUBMODULE_NAME}, which won't
+            # exist if the target has no cpp or c files
+            if (${MODULE_INFO_HAS_SOURCES})
+                list(APPEND RYTHE_LIBS_ALL ${SUBMODULE_NAME})
+                list(APPEND RYTHE_LIBS_ENGINE ${SUBMODULE_NAME})
+            endif()
+            
             list(APPEND RYTHE_DEFINITIONS "RYTHE_${SUBMODULE_VARIABLE_NAME}")
+
+            list(APPEND RYTHE_ENABLED_MODULE_NAMES ${SUBMODULE_NAME})
+            list(APPEND RYTHE_ENABLED_MODULE_PATHS ${SUBMODULE_PATH})
 
             # Try to find a matching editor
             list(FIND SUBMODULE_PATHS "rythe/editor/modules/${SUBMODULE_NAME}" SUBMODULE_EDITOR_INDEX)
@@ -100,3 +118,14 @@ foreach(library ${RYTHE_LIBS_EDITOR})
     target_compile_features(${library} PUBLIC cxx_std_17)
     target_link_options(${library} PUBLIC ${RYTHE_LINKER_FLAGS})
 endforeach()
+
+# Re-set all the modified RYTHE variables but with PARENT_SCOPE enabled
+# so that it properly updates in the root scope.
+set(RYTHE_LIBS_ALL ${RYTHE_LIBS_ALL} PARENT_SCOPE)
+set(RYTHE_LIBS_ENGINE ${RYTHE_LIBS_ENGINE} PARENT_SCOPE)
+set(RYTHE_INCLUDE_ALL ${RYTHE_INCLUDE_ALL} PARENT_SCOPE)
+set(RYTHE_INCLUDE_ENGINE ${RYTHE_INCLUDE_ENGINE} PARENT_SCOPE)
+set(RYTHE_DEFINITIONS ${RYTHE_DEFINITIONS} PARENT_SCOPE)
+
+set(RYTHE_ENABLED_MODULE_NAMES ${RYTHE_ENABLED_MODULE_NAMES} PARENT_SCOPE)
+set(RYTHE_ENABLED_MODULE_PATHS ${RYTHE_ENABLED_MODULE_PATHS} PARENT_SCOPE)

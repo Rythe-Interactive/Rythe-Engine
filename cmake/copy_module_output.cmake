@@ -19,24 +19,26 @@ function(copy_module_output targetName targetDir)
 		make_directory ${RYTHE_DIR_OUTPUT_LIBS}/Release
 	)
 
-	# Copy debug library
-	# Note: || (exit 0) makes sure these commands succeed even if no library file was generated.
-	add_custom_command(TARGET ${targetName} 
-		POST_BUILD
-		COMMAND $<$<CONFIG:Debug>:${CMAKE_COMMAND}> -E 
-		copy 
-			$<TARGET_FILE:${targetName}>
-			"${RYTHE_DIR_OUTPUT_LIBS}/Debug/" || (exit 0)
-	)
+	if (${MODULE_INFO_HAS_SOURCES})
+		# Copy debug library
+		# Note: || (exit 0) makes sure these commands succeed even if no library file was generated.
+		add_custom_command(TARGET ${targetName} 
+			POST_BUILD
+			COMMAND $<$<CONFIG:Debug>:${CMAKE_COMMAND}> -E 
+			copy 
+				$<TARGET_FILE:${targetName}>
+				"${RYTHE_DIR_OUTPUT_LIBS}/Debug/" || (exit 0)
+		)
 
-	# Copy release library
-	add_custom_command(TARGET ${targetName} 
-		POST_BUILD
-		COMMAND $<$<CONFIG:Release>:${CMAKE_COMMAND}> -E 
-		copy
-			$<TARGET_FILE:${targetName}>
-			"${RYTHE_DIR_OUTPUT_LIBS}/Release/" || (exit 0)
-	)
+		# Copy release library
+		add_custom_command(TARGET ${targetName} 
+			POST_BUILD
+			COMMAND $<$<CONFIG:Release>:${CMAKE_COMMAND}> -E 
+			copy
+				$<TARGET_FILE:${targetName}>
+				"${RYTHE_DIR_OUTPUT_LIBS}/Release/" || (exit 0)
+		)
+	endif()
 	
 	# Macro for recursively going through directories.
 	# This is necessary because cmake copy takes a directory,
