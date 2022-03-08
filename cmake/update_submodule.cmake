@@ -1,7 +1,7 @@
 # Utility function for updating a git submodule.
 # Simply calls `git submodule update --init --recursive --rebase -- ${modulePath}`,
 # but only if the submodule hasn't already been updated (checks for common repo files).
-function(update_submodule modulePath)
+function(rythe_update_submodule modulePath)
 	if( NOT (EXISTS ${RYTHE_DIR_ROOT}/${modulePath}/README.md) AND
 		NOT (EXISTS ${RYTHE_DIR_ROOT}/${modulePath}/.gitignore) AND 
 		NOT (EXISTS ${RYTHE_DIR_ROOT}/${modulePath}/CMakeLists.txt))
