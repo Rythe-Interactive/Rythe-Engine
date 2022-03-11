@@ -36,11 +36,13 @@ set(RYTHE_FILE_TYPES *.h *.hpp *.c *.cpp *.inl)
 set(RYTHE_INCLUDE_ALL "")
 set(RYTHE_INCLUDE_ENGINE "")
 set(RYTHE_INCLUDE_EDITOR "")
+set(RYTHE_INCLUDE_THIRD_PARTY "")
 
 # Libs
 set(RYTHE_LIBS_ALL "")
 set(RYTHE_LIBS_ENGINE "")
 set(RYTHE_LIBS_EDITOR "")
+set(RYTHE_LIBS_THIRD_PARTY "")
 
 # Definitions
 set(RYTHE_DEFINITIONS "")
@@ -88,6 +90,7 @@ include("${CMAKE_MODULE_PATH}/update_submodule.cmake")
 include("${CMAKE_MODULE_PATH}/copy_module_output.cmake")
 include("${CMAKE_MODULE_PATH}/configure_application.cmake")
 include("${CMAKE_MODULE_PATH}/configure_module.cmake")
+include("${CMAKE_MODULE_PATH}/add_third_party.cmake")
 
 # Get Git
 find_package(Git REQUIRED)
