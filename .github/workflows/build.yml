@@ -1,0 +1,95 @@
+# GH Action: Build
+# Builds the entire engine using supported configurations.
+name: build
+on: [push, pull_request]
+  
+jobs:
+  build:
+    name: "${{ matrix.platform }} (${{ matrix.type }}) (${{ matrix.compiler }}) / 
+      apps: ${{ matrix.applications }}, 
+      asan: ${{ matrix.asan }}, 
+      modules: ${{ matrix.modules }}"
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        is_pr: # Conditional matrix parameter allows us to exclude configurations depending on the action's context
+        - ${{ contains(github.event_name, 'pull_request') }}
+        type: [Debug, Release]
+        platform: [windows-2019]
+        compiler: [clang++]
+        modules: [NONE, ALL, RYTHE_MODULE_RENDERING]
+        applications: [ON, OFF]
+        asan: [ON, OFF]
+      
+        include:
+          # MSVC + Clang requires setting the cmake toolset to "-T ClangCL"
+          - platform: windows-2019
+            compiler: clang++
+            toolset: -T ClangCL
+
+          # Use is_pr to determine if a part of the matrix should be ran.
+          # This way we can exclude more thorough tests (e.g. with different modules, applications, etc).
+          # For push we use simple parameters: modules=ALL, applications=ON, asan=ON
+          # For PRs we check all variations possible for maximum coverage.
+        exclude:
+          - is_pr: false
+            modules: NONE
+          - is_pr: false
+            modules: RYTHE_MODULE_RENDERING
+          - is_pr: false
+            applications: OFF
+          - is_pr: false
+            asan: OFF
+
+    # Runner platform
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build
+
+    # ${{ matrix.modules }} can't be handled implicitly because the cmake doesn't take the parameter in that format
+    # So we handle the few possible cases (ALL, NONE, "specific module") separately.
+    - name: Configure CMake with modules == ALL
+      if: ${{ matrix.modules == 'ALL' }}
+      shell: bash
+      working-directory: ${{runner.workspace}}/build 
+      run: cmake $GITHUB_WORKSPACE 
+        ${{ matrix.toolset }}
+        -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} 
+        -DCMAKE_BUILD_TYPE=${{ matrix.type }}
+        -DRYTHE_BUILD_APPLICATIONS=${{ matrix.applications }}
+        -DRYTHE_BUILD_OPTION_ASAN=${{ matrix.asan }}
+        -DRYTHE_FORCE_ENABLE_ALL_MODULES=ON
+
+    - name: Configure CMake with modules == NONE
+      if: ${{ matrix.modules == 'NONE' }}
+      shell: bash
+      working-directory: ${{runner.workspace}}/build 
+      run: cmake $GITHUB_WORKSPACE 
+        ${{ matrix.toolset }}
+        -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} 
+        -DCMAKE_BUILD_TYPE=${{ matrix.type }}
+        -DRYTHE_BUILD_APPLICATIONS=${{ matrix.applications }}
+        -DRYTHE_BUILD_OPTION_ASAN=${{ matrix.asan }}
+        -DRYTHE_FORCE_ENABLE_ALL_MODULES=OFF
+
+    - name: Configure CMake with a specific module
+      if: ${{ matrix.modules != 'NONE' && matrix.modules != 'ALL' }}
+      shell: bash
+      working-directory: ${{runner.workspace}}/build 
+      run: cmake $GITHUB_WORKSPACE 
+        ${{ matrix.toolset }}
+        -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} 
+        -DCMAKE_BUILD_TYPE=${{ matrix.type }}
+        -DRYTHE_BUILD_APPLICATIONS=${{ matrix.applications }}
+        -DRYTHE_BUILD_OPTION_ASAN=${{ matrix.asan }}
+        -D${{ matrix.modules }}=ON
+
+    - name: Build all
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: cmake --build . --config ${{ matrix.type }}

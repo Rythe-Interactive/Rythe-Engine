@@ -1,8 +1,7 @@
 [![legion logo banner](https://cdn.discordapp.com/attachments/682321169541890070/767684570199359499/banner.png)](https://legion-engine.com)
-[![build](https://github.com/Legion-Engine/Legion-Engine/workflows/build-action/badge.svg)](https://github.com/Legion-Engine/Legion-Engine/actions?query=workflow%3Abuild-action)
-[![analyze](https://github.com/Legion-Engine/Legion-Engine/workflows/analyze-action/badge.svg)](https://github.com/Legion-Engine/Legion-Engine/actions?query=workflow%3Aanalyze-action)
-[![docs](https://github.com/Legion-Engine/Legion-Engine/workflows/docs-action/badge.svg)](https://docs.legion-engine.com)
-[![License-MIT](https://img.shields.io/github/license/Legion-Engine/Legion-Engine)](https://github.com/Legion-Engine/Legion-Engine/blob/main/LICENSE)
+[![build](https://github.com/Rythe-Interactive/Rythe-Engine/workflows/build/badge.svg)](https://github.com/Rythe-Interactive/Rythe-Engine/actions?query=workflow%3Abuild)
+[![analyze](https://github.com/Rythe-Interactive/Rythe-Engine/workflows/analyze/badge.svg)](https://github.com/Rythe-Interactive/Rythe-Engine/actions?query=workflow%3Aanalyze)
+[![License-MIT](https://img.shields.io/github/license/Rythe-Interactive/Rythe-Engine)](https://github.com/Legion-Engine/Legion-Engine/blob/main/LICENSE)
 [![Discord](https://img.shields.io/discord/682321168610623707.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/unVNRbd)
 # Legion-Engine
 Legion-Engine is a data oriented C++17 game engine built to make optimal use of modern hardware.<br><br>

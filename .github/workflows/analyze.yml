@@ -1,0 +1,68 @@
+# GH Action: Analyze
+# Runs various code analysis tools on the codebase
+name: analyze
+on: [push, pull_request]
+  
+jobs:
+  clang-format:
+    if: false # Disabled until a .clang-format style guide is established
+    name: clang-format
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download submodules
+      run: git submodule update --init --recursive
+
+    - name: Run style check with clang-format
+      uses: jidicula/clang-format-action@v4.5.0
+      with:
+        clang-format-version: '13'
+        check-path: 'rythe'
+
+  cppcheck:
+    name: cppcheck
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download submodules
+      run: git submodule update --init --recursive
+
+    - name: Get cppcheck
+      run: DEBIAN_FRONTEND=noninteractive sudo apt-get update -yqq --allow-releaseinfo-change -o::Dpkg::Use-Pty=0 && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yqq -o::Dpkg::Use-Pty=0 cppcheck
+
+    - name: cppcheck
+      run: cppcheck rythe/ --inline-suppr --suppress=syntaxError --xml --error-exitcode=1 2>&1 | python3 tools/cppcheck2github.py
+
+  codeql:
+    name: codeql
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Configure CMake
+      shell: bash
+      run: cmake 
+            $GITHUB_WORKSPACE 
+            -G "Visual Studio 16 2019"
+            -DRYTHE_BUILD_APPLICATIONS=ON
+            -DRYTHE_BUILD_OPTION_ASAN=ON
+            -DRYTHE_FORCE_ENABLE_ALL_MODULES=ON
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: cpp
+
+    # Builds the project using CodeQL autobuild
+    # Since this action only runs on Windows, it automatically
+    # picks the vcxproj files that were generated using CMake
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v1
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
