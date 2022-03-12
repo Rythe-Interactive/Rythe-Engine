@@ -91,6 +91,7 @@ include("${CMAKE_MODULE_PATH}/copy_module_output.cmake")
 include("${CMAKE_MODULE_PATH}/configure_application.cmake")
 include("${CMAKE_MODULE_PATH}/configure_module.cmake")
 include("${CMAKE_MODULE_PATH}/add_third_party.cmake")
+include("${CMAKE_MODULE_PATH}/find_sources.cmake")
 
 # Get Git
 find_package(Git REQUIRED)
