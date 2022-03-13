@@ -19,6 +19,8 @@ CMakeScripts/
 cmake_install.cmake
 CMakeCache.txt
 cmake-build-*/
+CMakeDoxyfile.in
+CMakeDoxygenDefaults.cmake
 
 # CMake Tests
 CTestTestfile.cmake
@@ -71,6 +73,7 @@ x86/
 *.vcxproj
 *.vcxproj.user
 *.vcxproj.filters
+.vs/
 
 # Visual Studio Code
 .vscode/

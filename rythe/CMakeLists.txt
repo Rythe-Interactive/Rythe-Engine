@@ -49,7 +49,7 @@ if (NOT ${SUBMODULE_COUNT} EQUAL 0)
             set(MODULE_INFO_SOURCES "")
 
             rythe_update_submodule(${SUBMODULE_PATH})
-            add_subdirectory(${RYTHE_DIR_ROOT}/${SUBMODULE_PATH}/src/${SUBMODULE_NAME})
+            add_subdirectory(${RYTHE_DIR_ROOT}/${SUBMODULE_PATH})
             set_target_properties(${SUBMODULE_NAME} PROPERTIES FOLDER ${SUBMODULE_DIR})
 
             # No need to add as an include path if no headers are present
@@ -82,11 +82,11 @@ if (NOT ${SUBMODULE_COUNT} EQUAL 0)
 
                 message(STATUS "Editor: ${SUBMODULE_EDITOR_NAME} found!")
                 rythe_update_submodule("${SUBMODULE_EDITOR_PATH}")
-                add_subdirectory("${SUBMODULE_EDITOR_PATH}/src/${SUBMODULE_NAME}-editor")
-                set_target_properties("${SUBMODULE_NAME}-editor" PROPERTIES FOLDER ${SUBMODULE_EDITOR_DIR})
+                add_subdirectory("${SUBMODULE_EDITOR_PATH}")
+                set_target_properties("${SUBMODULE_EDITOR_NAME}" PROPERTIES FOLDER ${SUBMODULE_EDITOR_DIR})
 
-                list(APPEND RYTHE_LIBS_ALL "${SUBMODULE_NAME}-editor")
-                list(APPEND RYTHE_LIBS_EDITOR "${SUBMODULE_NAME}-editor")
+                list(APPEND RYTHE_LIBS_ALL "${SUBMODULE_EDITOR_NAME}")
+                list(APPEND RYTHE_LIBS_EDITOR "${SUBMODULE_EDITOR_NAME}")
                 list(APPEND RYTHE_INCLUDE_ALL "${RYTHE_DIR_ROOT}/${SUBMODULE_EDITOR_PATH}/src")
                 list(APPEND RYTHE_INCLUDE_EDITOR "${RYTHE_DIR_ROOT}/${SUBMODULE_EDITOR_PATH}/src")
                 list(APPEND RYTHE_DEFINITIONS "RYTHE_${SUBMODULE_VARIABLE_NAME}_EDITOR")
@@ -123,8 +123,12 @@ endforeach()
 # so that it properly updates in the root scope.
 set(RYTHE_LIBS_ALL ${RYTHE_LIBS_ALL} PARENT_SCOPE)
 set(RYTHE_LIBS_ENGINE ${RYTHE_LIBS_ENGINE} PARENT_SCOPE)
+set(RYTHE_LIBS_THIRD_PARTY ${RYTHE_LIBS_THIRD_PARTY} PARENT_SCOPE)
+
 set(RYTHE_INCLUDE_ALL ${RYTHE_INCLUDE_ALL} PARENT_SCOPE)
 set(RYTHE_INCLUDE_ENGINE ${RYTHE_INCLUDE_ENGINE} PARENT_SCOPE)
+set(RYTHE_INCLUDE_THIRD_PARTY ${RYTHE_INCLUDE_THIRD_PARTY} PARENT_SCOPE)
+
 set(RYTHE_DEFINITIONS ${RYTHE_DEFINITIONS} PARENT_SCOPE)
 
 set(RYTHE_ENABLED_MODULE_NAMES ${RYTHE_ENABLED_MODULE_NAMES} PARENT_SCOPE)

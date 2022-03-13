@@ -8,6 +8,9 @@ function(rythe_configure_engine_application target)
 	# Dependency on Rythe
 	target_include_directories(${target} PUBLIC ${RYTHE_INCLUDE_ENGINE})
 	target_link_libraries(${target} PUBLIC ${RYTHE_LIBS_ENGINE})
+
+	target_include_directories(${target} PUBLIC ${RYTHE_INCLUDE_THIRD_PARTY})
+	target_link_libraries(${target} PUBLIC ${RYTHE_LIBS_THIRD_PARTY})
 	
 	# Compiler
 	target_compile_definitions(${target} PUBLIC ${RYTHE_DEFINITIONS})
@@ -27,6 +30,9 @@ function(rythe_configure_editor_application target)
 	# Dependency on Rythe
 	target_include_directories(${target} PUBLIC ${RYTHE_INCLUDE_ALL})
 	target_link_libraries(${target} PUBLIC ${RYTHE_LIBS_ALL})
+		
+	target_include_directories(${target} PUBLIC ${RYTHE_INCLUDE_THIRD_PARTY})
+	target_link_libraries(${target} PUBLIC ${RYTHE_LIBS_THIRD_PARTY})
 	
 	# Compiler
 	target_compile_definitions(${target} PUBLIC ${RYTHE_DEFINITIONS})
