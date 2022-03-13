@@ -11,7 +11,9 @@ macro(rythe_add_third_party)
         add_subdirectory(${RYTHE_ADD_THIRD_PARTY_PATH})
 
 		foreach(target ${RYTHE_ADD_THIRD_PARTY_FOLDER_TARGETS})
-			set_target_properties(${target} PROPERTIES FOLDER ${RYTHE_ADD_THIRD_PARTY_FOLDER})
+			if (TARGET ${target})
+				set_target_properties(${target} PROPERTIES FOLDER ${RYTHE_ADD_THIRD_PARTY_FOLDER})
+			endif()
 		endforeach()
 
 		set(RYTHE_INCLUDE_THIRD_PARTY ${RYTHE_INCLUDE_THIRD_PARTY} ${RYTHE_ADD_THIRD_PARTY_INCLUDE} PARENT_SCOPE)
