@@ -1,8 +1,8 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create an issue to point out a problem with the codebase.
 title: ''
-labels: ''
+labels: 'bug'
 assignees: ''
 
 ---
@@ -19,9 +19,9 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Version [e.g. 22]
+**Platform (please complete the following information):**
+ - OS: [e.g. Windows]
+ - Compiler: [e.g. Clang++]
 
 **Additional context**
 Add any other context about the problem here.
