@@ -40,18 +40,23 @@ function(rythe_copy_module_output targetName targetDir)
 		)
 	endif()
 	
-	# Macro for recursively going through directories.
+	# Function for recursively going through directories.
 	# This is necessary because cmake copy takes a directory,
 	# and we want to make sure to copy the files to the correct directory.
-	macro(read_directory curdir)
+	function(read_directory curdir)
 		set(SOURCE_PATH ${RYTHE_DIR_ROOT}/${targetDir}/src/${targetName}/${curdir})
 		set(DEST_PATH ${RYTHE_DIR_OUTPUT_INCLUDES}/${targetDir}/${curdir})
 
-		# Get all files and folders in the current directory
-		file(GLOB children RELATIVE ${SOURCE_PATH} ${SOURCE_PATH}/*)
-		
-		# Clear files list
+		# Clear data
 		set(files "")
+
+		message(STATUS "READING DIR: ${curdir}")
+
+		# Get all files and folders in the current directory
+		file(GLOB children 
+			LIST_DIRECTORIES true
+			RELATIVE ${SOURCE_PATH} 
+			${SOURCE_PATH}/*)
 
 		foreach(child ${children})
 			# Files can be checked for copying
@@ -82,7 +87,7 @@ function(rythe_copy_module_output targetName targetDir)
 				read_directory(${curdir}/${child})
 			endif()
 		endforeach()
-	endmacro()
+	endfunction()
 
 	# Run the macro on the root folder
 	read_directory("")
