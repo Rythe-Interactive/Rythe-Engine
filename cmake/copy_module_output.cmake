@@ -50,8 +50,6 @@ function(rythe_copy_module_output targetName targetDir)
 		# Clear data
 		set(files "")
 
-		message(STATUS "READING DIR: ${curdir}")
-
 		# Get all files and folders in the current directory
 		file(GLOB children 
 			LIST_DIRECTORIES true
