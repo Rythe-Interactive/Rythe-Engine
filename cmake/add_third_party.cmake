@@ -3,9 +3,17 @@ macro(rythe_add_third_party)
 	set(options CURRENT_HEADER_ONLY LIBRARY_HEADER_ONLY)
 	set(oneValueArgs CURRENT LIBRARY PATH INCLUDE FOLDER)
 	set(multiValueArgs FOLDER_TARGETS)
+
 	cmake_parse_arguments(RYTHE_ADD_THIRD_PARTY "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
-	message(STATUS ${RYTHE_ADD_THIRD_PARTY_PATH}})
+	message(STATUS "Downloading ${RYTHE_ADD_THIRD_PARTY_PATH}")
+	
+	execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive --rebase -- ${RYTHE_ADD_THIRD_PARTY_PATH}
+					WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+					RESULT_VARIABLE GIT_SUBMOD_RESULT)
+	if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+		message(FATAL_ERROR "git submodule update failed with ${GIT_SUBMOD_RESULT}")
+	endif()
 
     if (NOT TARGET ${RYTHE_ADD_THIRD_PARTY_LIBRARY})
         add_subdirectory(${RYTHE_ADD_THIRD_PARTY_PATH})

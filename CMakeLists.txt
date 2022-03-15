@@ -85,6 +85,15 @@ set(RYTHE_LIBRARY_TYPE STATIC)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 mark_as_advanced(FORCE BUILD_SHARED_LIBS) # Hide
 
+# Third party libraries often like to enable docs/examples
+# we practically never want this from our dependencies
+set(BUILD_DOC OFF CACHE BOOL "" FORCE)
+set(BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(BUILD_SANDBOX OFF CACHE BOOL "" FORCE)
+set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+
 # Utility files
 include("${CMAKE_MODULE_PATH}/update_submodule.cmake")
 include("${CMAKE_MODULE_PATH}/copy_module_output.cmake")
@@ -95,6 +104,14 @@ include("${CMAKE_MODULE_PATH}/find_sources.cmake")
 
 # Get Git
 find_package(Git REQUIRED)
+
+execute_process(COMMAND ${GIT_EXECUTABLE} config --global core.longpaths true
+	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+	RESULT_VARIABLE GIT_SUBMOD_RESULT)
+
+if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+	message(FATAL_ERROR "git submodule update failed with ${GIT_SUBMOD_RESULT}")
+endif()
 
 # Add Rythe
 set(RYTHE_ENABLED_MODULE_NAMES "")
