@@ -16,18 +16,19 @@ macro(rythe_add_third_party)
 	endif()
 
     if (NOT TARGET ${RYTHE_ADD_THIRD_PARTY_LIBRARY})
-        add_subdirectory(${RYTHE_ADD_THIRD_PARTY_PATH})
-
-		foreach(target ${RYTHE_ADD_THIRD_PARTY_FOLDER_TARGETS})
-			if (TARGET ${target})
-				set_target_properties(${target} PROPERTIES FOLDER ${RYTHE_ADD_THIRD_PARTY_FOLDER})
-			endif()
-		endforeach()
-
 		set(RYTHE_INCLUDE_THIRD_PARTY ${RYTHE_INCLUDE_THIRD_PARTY} ${RYTHE_ADD_THIRD_PARTY_INCLUDE} PARENT_SCOPE)
-
+		
 		if (NOT ${RYTHE_ADD_THIRD_PARTY_LIBRARY_HEADER_ONLY})
-			set(RYTHE_LIBS_THIRD_PARTY ${RYTHE_LIBS_THIRD_PARTY} ${RYTHE_ADD_THIRD_PARTY_LIBRARY} PARENT_SCOPE)
+        	add_subdirectory(${RYTHE_ADD_THIRD_PARTY_PATH})
+
+			foreach(target ${RYTHE_ADD_THIRD_PARTY_FOLDER_TARGETS})
+				if (TARGET ${target})
+					set_target_properties(${target} PROPERTIES FOLDER ${RYTHE_ADD_THIRD_PARTY_FOLDER})
+				endif()
+			endforeach()
+			
+			set(RYTHE_LIBS_THIRD_PARTY ${RYTHE_LIBS_THIRD_PARTY} ${RYTHE_ADD_THIRD_PARTY_LIBRARY})
+			set(RYTHE_LIBS_THIRD_PARTY ${RYTHE_LIBS_THIRD_PARTY} PARENT_SCOPE)
 		endif()
     endif()
 
