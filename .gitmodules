@@ -1,3 +1,6 @@
 [submodule "rythe/engine/core"]
 	path = rythe/engine/core
 	url = https://github.com/Rythe-Interactive/Rythe-Core.git
+[submodule "rythe/engine/application"]
+	path = rythe/engine/application
+	url = https://github.com/Rythe-Interactive/Rythe-Application.git
