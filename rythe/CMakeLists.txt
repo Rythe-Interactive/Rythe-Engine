@@ -11,9 +11,78 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${RYTHE_DIR_OUTPUT_
 # Parse submodules
 include("${CMAKE_MODULE_PATH}/parse_submodules.cmake")
 
-if (NOT ${SUBMODULE_COUNT} EQUAL 0)
-    math(EXPR ITER_END "${SUBMODULE_COUNT} - 1")
+macro(rythe_add_module NAME PATH DIR)
+	# Core isn't optional so no need for an option variable
+	if (NOT ${NAME} STREQUAL "core")
+		# Convert the name to uppercase to follow CMake all caps naming
+		string(TOUPPER ${NAME} VARIABLE_NAME)
+		option(RYTHE_MODULE_${VARIABLE_NAME} "Adds module ${NAME} from the build if enabled" OFF)
+	endif()
 
+	# Add if either A) this is core, B) the module is enabled, or C) all modules are forcefully enabled
+	if ((${NAME} STREQUAL "core") OR
+		(${RYTHE_MODULE_${VARIABLE_NAME}}) OR 
+		(${RYTHE_FORCE_ENABLE_ALL_MODULES}))
+
+		message(STATUS "Module: \"${NAME}\" [Enabled]")
+		# MODULE_INFO variables are updated by the module
+		# see cmake/configure_module.cmake
+		set(MODULE_INFO_HAS_HEADERS OFF)
+		set(MODULE_INFO_HAS_SOURCES OFF)
+		set(MODULE_INFO_SOURCES "")
+
+		rythe_update_submodule(${PATH})
+		add_subdirectory(${RYTHE_DIR_ROOT}/${PATH})
+		set_target_properties(${NAME} PROPERTIES FOLDER ${DIR})
+
+		# No need to add as an include path if no headers are present
+		if (${MODULE_INFO_HAS_HEADERS})
+			list(APPEND RYTHE_INCLUDE_ALL "${RYTHE_DIR_ROOT}/${PATH}/src")
+			list(APPEND RYTHE_INCLUDE_ENGINE "${RYTHE_DIR_ROOT}/${PATH}/src")
+		endif()
+
+		# We have to check explicitly because otherwise
+		# targets will attempt to link with ${NAME}, which won't
+		# exist if the target has no cpp or c files
+		if (${MODULE_INFO_HAS_SOURCES})
+			list(APPEND RYTHE_LIBS_ALL ${NAME})
+			list(APPEND RYTHE_LIBS_ENGINE ${NAME})
+		endif()
+		
+		list(APPEND RYTHE_DEFINITIONS "RYTHE_${VARIABLE_NAME}")
+
+		list(APPEND RYTHE_ENABLED_MODULE_NAMES ${NAME})
+		list(APPEND RYTHE_ENABLED_MODULE_PATHS ${PATH})
+
+		# Try to find a matching editor
+		list(FIND SUBMODULE_PATHS "rythe/editor/modules/${NAME}" EDITOR_INDEX)
+		if (NOT ${SUBMODULE_EDITOR_INDEX} EQUAL -1)
+			# Get submodule info
+			list(GET SUBMODULE_NAMES  ${EDITOR_INDEX} EDITOR_NAME)
+			list(GET SUBMODULE_PATHS  ${EDITOR_INDEX} EDITOR_PATH)
+			list(GET SUBMODULE_DIRS   ${EDITOR_INDEX} EDITOR_DIR)
+			list(GET SUBMODULE_HASHES ${EDITOR_INDEX} EDITOR_HASH)
+
+			message(STATUS "Editor: \"${EDITOR_NAME}\" found!")
+			rythe_update_submodule("${EDITOR_PATH}")
+			add_subdirectory("${EDITOR_PATH}")
+			set_target_properties("${EDITOR_NAME}" PROPERTIES FOLDER ${EDITOR_DIR})
+
+			list(APPEND RYTHE_LIBS_ALL "${EDITOR_NAME}")
+			list(APPEND RYTHE_LIBS_EDITOR "${EDITOR_NAME}")
+			list(APPEND RYTHE_INCLUDE_ALL "${RYTHE_DIR_ROOT}/${EDITOR_PATH}/src")
+			list(APPEND RYTHE_INCLUDE_EDITOR "${RYTHE_DIR_ROOT}/${EDITOR_PATH}/src")
+			list(APPEND RYTHE_DEFINITIONS "RYTHE_${VARIABLE_NAME}_EDITOR")
+		endif()
+	else()
+		message(STATUS "Module: \"${NAME}\" [Disabled]")
+	endif()
+endmacro()
+
+if (NOT ${SUBMODULE_COUNT} EQUAL 0)
+	rythe_add_module("core" "rythe/engine/core" "rythe/engine")
+
+	math(EXPR ITER_END "${SUBMODULE_COUNT} - 1")
     foreach(INDEX RANGE 0 ${ITER_END})
         # Get submodule info
         list(GET SUBMODULE_NAMES ${INDEX} SUBMODULE_NAME)
@@ -21,79 +90,20 @@ if (NOT ${SUBMODULE_COUNT} EQUAL 0)
         list(GET SUBMODULE_DIRS ${INDEX} SUBMODULE_DIR)
         list(GET SUBMODULE_HASHES ${INDEX} SUBMODULE_HASH)
 
-        # Only add modules if they are in the rythe/engine folder
-        # Editor modules are added separately based on the engine modules
-        string(SUBSTRING ${SUBMODULE_PATH} 0 12 SUBMODULE_NAME_PREFIX)
-        if (NOT SUBMODULE_NAME_PREFIX STREQUAL "rythe/engine")
-            continue()
-        endif()
+		# Only add modules if they are in the rythe/engine folder
+		# Editor modules are added separately based on the engine modules
+		string(SUBSTRING ${SUBMODULE_PATH} 0 12 PATH_PREFIX)
+		if (NOT ${PATH_PREFIX} STREQUAL "rythe/engine")
+			continue()
+		endif()
 
-        # Convert the name to uppercase to follow CMake all caps naming
-        string(TOUPPER ${SUBMODULE_NAME} SUBMODULE_VARIABLE_NAME)
+		# Core was added in manually before the for loop
+		if (${SUBMODULE_NAME} STREQUAL "core")
+			continue()
+		endif()
 
-        # Core isn't optional so no need for an option variable
-        if (NOT SUBMODULE_NAME STREQUAL "core")
-            option(RYTHE_MODULE_${SUBMODULE_VARIABLE_NAME} "Adds module ${SUBMODULE_NAME} from the build if enabled" OFF)
-        endif()
-
-        # Add if either A) this is core, B) the module is enabled, or C) all modules are forcefully enabled
-        if ((SUBMODULE_NAME STREQUAL "core") OR
-            (${RYTHE_MODULE_${SUBMODULE_VARIABLE_NAME}}) OR 
-            (${RYTHE_FORCE_ENABLE_ALL_MODULES}))
-
-            message(STATUS "Module: ${SUBMODULE_NAME} [Enabled]")
-            # MODULE_INFO variables are updated by the module
-            # see cmake/configure_module.cmake
-            set(MODULE_INFO_HAS_HEADERS OFF)
-            set(MODULE_INFO_HAS_SOURCES OFF)
-            set(MODULE_INFO_SOURCES "")
-
-            rythe_update_submodule(${SUBMODULE_PATH})
-            add_subdirectory(${RYTHE_DIR_ROOT}/${SUBMODULE_PATH})
-            set_target_properties(${SUBMODULE_NAME} PROPERTIES FOLDER ${SUBMODULE_DIR})
-
-            # No need to add as an include path if no headers are present
-            if (${MODULE_INFO_HAS_HEADERS})
-                list(APPEND RYTHE_INCLUDE_ALL "${RYTHE_DIR_ROOT}/${SUBMODULE_PATH}/src")
-                list(APPEND RYTHE_INCLUDE_ENGINE "${RYTHE_DIR_ROOT}/${SUBMODULE_PATH}/src")
-            endif()
-
-            # We have to check explicitly because otherwise
-            # targets will attempt to link with ${SUBMODULE_NAME}, which won't
-            # exist if the target has no cpp or c files
-            if (${MODULE_INFO_HAS_SOURCES})
-                list(APPEND RYTHE_LIBS_ALL ${SUBMODULE_NAME})
-                list(APPEND RYTHE_LIBS_ENGINE ${SUBMODULE_NAME})
-            endif()
-            
-            list(APPEND RYTHE_DEFINITIONS "RYTHE_${SUBMODULE_VARIABLE_NAME}")
-
-            list(APPEND RYTHE_ENABLED_MODULE_NAMES ${SUBMODULE_NAME})
-            list(APPEND RYTHE_ENABLED_MODULE_PATHS ${SUBMODULE_PATH})
-
-            # Try to find a matching editor
-            list(FIND SUBMODULE_PATHS "rythe/editor/modules/${SUBMODULE_NAME}" SUBMODULE_EDITOR_INDEX)
-            if (NOT ${SUBMODULE_EDITOR_INDEX} EQUAL -1)
-                # Get submodule info
-                list(GET SUBMODULE_NAMES ${SUBMODULE_EDITOR_INDEX} SUBMODULE_EDITOR_NAME)
-                list(GET SUBMODULE_PATHS ${SUBMODULE_EDITOR_INDEX} SUBMODULE_EDITOR_PATH)
-                list(GET SUBMODULE_DIRS ${SUBMODULE_EDITOR_INDEX} SUBMODULE_EDITOR_DIR)
-                list(GET SUBMODULE_HASHES ${SUBMODULE_EDITOR_INDEX} SUBMODULE_EDITOR_HASH)
-
-                message(STATUS "Editor: ${SUBMODULE_EDITOR_NAME} found!")
-                rythe_update_submodule("${SUBMODULE_EDITOR_PATH}")
-                add_subdirectory("${SUBMODULE_EDITOR_PATH}")
-                set_target_properties("${SUBMODULE_EDITOR_NAME}" PROPERTIES FOLDER ${SUBMODULE_EDITOR_DIR})
-
-                list(APPEND RYTHE_LIBS_ALL "${SUBMODULE_EDITOR_NAME}")
-                list(APPEND RYTHE_LIBS_EDITOR "${SUBMODULE_EDITOR_NAME}")
-                list(APPEND RYTHE_INCLUDE_ALL "${RYTHE_DIR_ROOT}/${SUBMODULE_EDITOR_PATH}/src")
-                list(APPEND RYTHE_INCLUDE_EDITOR "${RYTHE_DIR_ROOT}/${SUBMODULE_EDITOR_PATH}/src")
-                list(APPEND RYTHE_DEFINITIONS "RYTHE_${SUBMODULE_VARIABLE_NAME}_EDITOR")
-            endif()
-        else()
-            message(STATUS "Module: ${SUBMODULE_NAME} [Disabled]")
-        endif()
+		# Add module
+		rythe_add_module(${SUBMODULE_NAME} ${SUBMODULE_PATH} ${SUBMODULE_DIR})
     endforeach()
 endif()
 
