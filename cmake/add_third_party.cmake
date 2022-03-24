@@ -6,13 +6,15 @@ macro(rythe_add_third_party)
 
 	cmake_parse_arguments(RYTHE_ADD_THIRD_PARTY "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
-	message(STATUS "Downloading ${RYTHE_ADD_THIRD_PARTY_PATH}")
-	
-	execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive --rebase -- ${RYTHE_ADD_THIRD_PARTY_PATH}
-					WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-					RESULT_VARIABLE GIT_SUBMOD_RESULT)
-	if(NOT GIT_SUBMOD_RESULT EQUAL "0")
-		message(FATAL_ERROR "git submodule update failed with ${GIT_SUBMOD_RESULT}")
+	if (${RYTHE_FETCH_SUBMODULES})
+		message(STATUS "Downloading ${RYTHE_ADD_THIRD_PARTY_PATH}")
+		
+		execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive --rebase -- ${RYTHE_ADD_THIRD_PARTY_PATH}
+						WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+						RESULT_VARIABLE GIT_SUBMOD_RESULT)
+		if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+			message(FATAL_ERROR "git submodule update failed with ${GIT_SUBMOD_RESULT}")
+		endif()
 	endif()
 
     if (NOT TARGET ${RYTHE_ADD_THIRD_PARTY_LIBRARY})
