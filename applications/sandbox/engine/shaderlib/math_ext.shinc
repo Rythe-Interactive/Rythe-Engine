@@ -1,0 +1,128 @@
+//////////////////////
+//  Math Extension  //
+//////////////////////
+#if !defined MATH_EXT
+#define MATH_EXT
+
+#define epsilon 0.0001
+#define pi 3.141592653589793
+#define one_over_pi 0.318309886183790
+
+const vec4 ones = vec4(1.0);
+
+float average(vec2 v)
+{
+    return (v.x + v.y)/2.0;
+}
+
+float average(vec3 v)
+{
+    return (v.x + v.y + v.z)/3.0;
+}
+
+float average(vec4 v)
+{
+    return (v.x + v.y + v.z + v.w)/4.0;
+}
+
+float sum(vec2 v)
+{
+    return dot(v, ones.xy);
+}
+
+float sum(vec3 v)
+{
+    return dot(v, ones.xyz);
+}
+
+float sum(vec4 v)
+{
+    return dot(v, ones);
+}
+
+float length2(vec2 v)
+{
+    return sum(v*v);
+}
+
+float length2(vec3 v)
+{
+    return sum(v*v);
+}
+
+float length2(vec4 v)
+{
+    return sum(v*v);
+}
+
+float dot01(vec2 a, vec2 b)
+{
+    return max(dot(a, b), 0.0);
+}
+
+float dot01(vec3 a, vec3 b)
+{
+    return max(dot(a, b), 0.0);
+}
+
+float dot01(vec4 a, vec4 b)
+{
+    return max(dot(a, b), 0.0);
+}
+
+float clamp01(float v)
+{
+    return clamp(v, 0, 1);
+}
+
+vec2 clamp01(vec2 v)
+{
+    return clamp(v, 0, 1);
+}
+
+vec3 clamp01(vec3 v)
+{
+    return clamp(v, 0, 1);
+}
+
+vec4 clamp01(vec4 v)
+{
+    return clamp(v, 0, 1);
+}
+
+float safeDiv(float a, float b)
+{
+    return a / (b == 0 ? epsilon : b);
+}
+
+vec2 safeDiv(vec2 a, float b)
+{
+    return a / (b == 0 ? epsilon : b);
+}
+
+vec3 safeDiv(vec3 a, float b)
+{
+    return a / (b == 0 ? epsilon : b);
+}
+
+vec4 safeDiv(vec4 a, float b)
+{
+    return a / (b == 0 ? epsilon : b);
+}
+
+vec2 safeDiv(vec2 a, vec2 b)
+{
+    return vec2(safeDiv(a.x, b.x), safeDiv(a.y, b.y));
+}
+
+vec3 safeDiv(vec3 a, vec3 b)
+{
+    return vec3(safeDiv(a.x, b.x), safeDiv(a.y, b.y), safeDiv(a.z, b.z));
+}
+
+vec4 safeDiv(vec4 a, vec4 b)
+{
+    return vec4(safeDiv(a.x, b.x), safeDiv(a.y, b.y), safeDiv(a.z, b.z), safeDiv(a.w, b.w));
+}
+
+#endif

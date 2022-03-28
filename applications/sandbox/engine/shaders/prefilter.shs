@@ -1,0 +1,60 @@
+#version 450
+#state CULL OFF
+#state DEPTH OFF
+#state ALPHA OFF
+
+generate(vertex, fragment)
+
+#include <stdio.shinc>
+#include <math_ext.shinc>
+
+shader(vertex)
+{
+    void main(void)
+    {
+        gl_Position = vec4(stdin(position), 1.0);
+        PropagateStdIO();
+    }
+}
+
+shader(fragment)
+{
+
+    float Weigh (vec3 c) 
+    {
+        return 1 / (1 + max(max(c.r, c.g), c.b));
+    }
+
+    uniform vec2 scale;
+    uniform sampler2D aofTexture;
+    void main(void)
+    {
+        //Gets texelsize.
+        const vec2 texelSize = 1.0 / textureSize(lgn_sceneColor, 0);
+        vec4 o = texelSize.xyxy * vec2(-0.5, 0.5).xxyy;
+        //This whole section is magically scaling down an image.
+        vec3 s0 = SceneColor(stdin(uv)*scale + o.xy).rgb;
+        vec3 s1 = SceneColor(stdin(uv)*scale + o.zy).rgb;
+        vec3 s2 = SceneColor(stdin(uv)*scale + o.xw).rgb;
+        vec3 s3 = SceneColor(stdin(uv)*scale + o.zw).rgb;
+        //Figuring out which pixel has more influence on what the current pixel will become.
+        float w0 = Weigh(s0);
+        float w1 = Weigh(s1);
+        float w2 = Weigh(s2);
+        float w3 = Weigh(s3);
+
+        vec3 color = s0 * w0 + s1 * w1 + s2 * w2 + s3 * w3;
+        color /= max(w0+w1+w2+w3, 0.00001);
+
+        //Sampling the area of focus texture and adding that as the alpha value.
+        float coc0 = texture(aofTexture, stdin(uv)*scale + o.xy).r;
+        float coc1 = texture(aofTexture, stdin(uv)*scale + o.zy).r;
+        float coc2 = texture(aofTexture, stdin(uv)*scale + o.xw).r;
+        float coc3 = texture(aofTexture, stdin(uv)*scale + o.zw).r;
+        
+        float cocMin = min(min(min(coc0, coc1), coc2), coc3);
+        float cocMax = max(max(max(coc0, coc1), coc2), coc3);
+        float coc = cocMax >= -cocMin ? cocMax : cocMin;
+        fragment_color = vec4(clamp01(color), coc);
+    }
+}

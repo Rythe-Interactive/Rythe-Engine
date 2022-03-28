@@ -1,0 +1,33 @@
+#version 450
+#state CULL OFF
+
+generate(vertex, fragment)
+
+#include <stdio.shinc>
+#include <utils.shinc>
+#include <math_ext.shinc>
+
+shader(vertex)
+{
+    uniform bool fixedSize;
+    void main(void)
+    {
+        if(fixedSize)
+            gl_Position = FixedSizeBillboardModelToScreenSpacePosition(position);
+        else
+            gl_Position = BillboardModelToScreenSpacePosition(position);
+
+        PropagateStdIO();
+    }
+}
+
+shader(fragment)
+{
+    uniform sampler2D _texture;
+    void main(void)
+    {
+        //fragment_color = texture(_texture, stdio(uv)) * stdio(vertexcolor);
+        fragment_color = stdio(vertexcolor);
+
+    }
+}

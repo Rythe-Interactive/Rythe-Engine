@@ -1,0 +1,55 @@
+#version 450
+#state CULL OFF
+#state DEPTH OFF
+#state ALPHA OFF
+
+generate(vertex, fragment)
+
+#include <stdio.shinc>
+
+
+shader(vertex)
+{
+    void main(void)
+    {
+        gl_Position = vec4(stdin(position), 1.0);
+        PropagateStdIO();
+    }
+}
+
+
+shader(fragment)
+{
+    uniform bool horizontal;
+    uniform int kernelsize = 3;
+    const float weights[4][5] = float[][] (float[] (0.367548, 0.3162260, 0.0000000, 0.000000, 0.000000),  // 3x3
+                                             float[] (0.262014, 0.2254290, 0.1435640, 0.000000, 0.000000),  // 5x5
+                                             float[] (0.230781, 0.1985570, 0.1264510, 0.059602, 0.000000),  // 7x7
+                                             float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216)); // 9x9
+
+    void main()
+    {
+        int spread = int(ceil(clamp(kernelsize, 3, 9) * 0.5));
+        int index = spread - 2;
+        vec2 tex_offset = 1.0 / ScreenResolution(); // gets size of single texel
+        vec4 result = SceneColor(stdin(uv)) * weights[index][0]; // current fragment's contribution
+        if(horizontal)
+        {
+            for(int i = 1; i < spread; ++i)
+            {
+                result += SceneColor(stdin(uv) + vec2(tex_offset.x * i, 0.0)) * weights[index][i];
+                result += SceneColor(stdin(uv) - vec2(tex_offset.x * i, 0.0)) * weights[index][i];
+            }
+        }
+        else
+        {
+            for(int i = 1; i < spread; ++i)
+            {
+                result += SceneColor(stdin(uv) + vec2(0.0, tex_offset.y * i)) * weights[index][i];
+                result += SceneColor(stdin(uv) - vec2(0.0, tex_offset.y * i)) * weights[index][i];
+            }
+        }
+        fragment_color = result;
+    }
+}
+

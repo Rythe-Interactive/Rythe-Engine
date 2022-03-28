@@ -1,0 +1,33 @@
+#version 450
+#state CULL OFF
+#state DEPTH OFF
+
+generate(vertex, fragment)
+
+#include <stdio.shinc>
+#include <math_ext.shinc>
+#include <color_correction.shinc>
+
+shader(vertex)
+{
+    void main(void)
+    {
+        gl_Position =  vec4(stdin(position), 1.0);
+        PropagateStdIO();
+    }
+}
+
+
+shader(fragment)
+{
+
+    uniform sampler2D overdrawHistory;
+
+    void main(void)
+    {
+        vec3 current = HDROverdraw(stdin(uv)).rgb;
+        vec3 history = texture(overdrawHistory, stdin(uv)).rgb;
+        fragment_color = vec4(mix(history, current, clamp(abs(Luminance(history) - Luminance(current)), 0.95, 1.0)), 1.0);
+    }
+}
+
