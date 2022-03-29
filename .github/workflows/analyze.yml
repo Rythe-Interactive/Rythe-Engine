@@ -35,7 +35,7 @@ jobs:
       run: DEBIAN_FRONTEND=noninteractive sudo apt-get update -yqq --allow-releaseinfo-change -o::Dpkg::Use-Pty=0 && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yqq -o::Dpkg::Use-Pty=0 cppcheck
 
     - name: cppcheck
-      run: cppcheck rythe/ --inline-suppr --suppress=syntaxError --xml --error-exitcode=1 2>&1 | python3 tools/cppcheck2github.py
+      run: cppcheck rythe/ --suppress=*:*third_party/* --inline-suppr --suppress=syntaxError --xml --error-exitcode=1 2>&1 | python3 tools/cppcheck2github.py
 
   codeql:
     name: codeql
@@ -57,6 +57,7 @@ jobs:
       uses: github/codeql-action/init@v1
       with:
         languages: cpp
+        paths-ignore: '*/third_party/'
 
     # Builds the project using CodeQL autobuild
     # Since this action only runs on Windows, it automatically
