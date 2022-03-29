@@ -10,3 +10,6 @@
 [submodule "rythe/engine/audio"]
 	path = rythe/engine/audio
 	url = https://github.com/Rythe-Interactive/Rythe-Audio.git
+[submodule "rythe/engine/physics"]
+	path = rythe/engine/physics
+	url = https://github.com/Rythe-Interactive/Rythe-Physics.git
