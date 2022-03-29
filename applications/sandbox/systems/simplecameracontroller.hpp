@@ -5,6 +5,10 @@
 #include "gui_test.hpp"
 //#include "../data/crosshair.hpp"
 
+#ifdef RYTHE_AUDIO
+#include <audio/audio.hpp>
+#endif
+
 using namespace legion;
 
 struct player_move : public app::input_axis<player_move> {};
@@ -105,6 +109,10 @@ public:
 
         camera = createEntity("Camera");
         camera.add_component<transform>(position(0.f, 3.f, -30.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
+
+#ifdef RYTHE_AUDIO
+        camera.add_component<audio::audio_listener>();
+#endif
 
         rendering::camera cam;
         cam.set_projection(60.f, 0.001f, 1000.f);

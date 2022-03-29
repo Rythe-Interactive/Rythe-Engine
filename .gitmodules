@@ -7,3 +7,6 @@
 [submodule "rythe/engine/graphics"]
 	path = rythe/engine/graphics
 	url = https://github.com/Rythe-Interactive/Rythe-Graphics.git
+[submodule "rythe/engine/audio"]
+	path = rythe/engine/audio
+	url = https://github.com/Rythe-Interactive/Rythe-Audio.git
