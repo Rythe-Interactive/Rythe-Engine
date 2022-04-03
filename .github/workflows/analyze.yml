@@ -52,13 +52,13 @@ jobs:
             -DRYTHE_BUILD_APPLICATIONS=ON
             -DRYTHE_BUILD_OPTION_ASAN=ON
             -DRYTHE_FORCE_ENABLE_ALL_MODULES=ON
+            -T ClangCL
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
       with:
         languages: cpp
-        paths-ignore: '*/third_party/'
-
+        
     # Builds the project using CodeQL autobuild
     # Since this action only runs on Windows, it automatically
     # picks the vcxproj files that were generated using CMake
