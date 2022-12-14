@@ -127,3 +127,6 @@ if (${RYTHE_BUILD_APPLICATIONS})
 		add_subdirectory(${RYTHE_DIR_ROOT}/${path}/applications)
 	endforeach()
 endif()
+
+# MISC
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
