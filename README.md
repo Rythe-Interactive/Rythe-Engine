@@ -96,7 +96,7 @@ cmake .
     -T ClangCL
 ```
 Enable/disable optional parameters by adding them to the last command using `-D<PARAMETER_NAME>=ON` Optional parameters to add to the last command are:
-| Paarameter                     | Description   |
+| Parameter                     | Description   |
 |--------------------------------|------------|
 | RYTHE_BUILD_APPLICATIONS         | Add applications to the project files. The engine provides a sandbox application in the root repository, but modules may also provide their own (sandbox, samples, etc.). |
 | RYTHE_BUILD_OPTION_ASAN       | Enable the address sanitizer. Can be useful/important for debugging memory violations.  |
