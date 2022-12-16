@@ -128,5 +128,9 @@ if (${RYTHE_BUILD_APPLICATIONS})
 	endforeach()
 endif()
 
-# MISC
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+# FOLDER THINGS
+file(GLOB files ${RYTHE_DIR_RYTHE}/${RYTHE_FILE_TYPES})
+foreach(file ${files})
+	set_target_properties(${file} PROPERTIES FOLDER ${file})
+endforeach()
