@@ -36,6 +36,12 @@ macro(rythe_add_third_party)
 			foreach(target ${RYTHE_ADD_THIRD_PARTY_FOLDER_TARGETS})
 				if (TARGET ${target})
 					set_target_properties(${target} PROPERTIES FOLDER ${RYTHE_ADD_THIRD_PARTY_FOLDER})
+
+					get_target_property(target_sources ${target} SOURCES)
+					foreach(src ${target_sources})
+						get_filename_component(dir ${src} DIRECTORY)
+						source_group("${dir}" FILES "${src}")
+					endforeach()
 				endif()
 			endforeach()
 			

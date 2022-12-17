@@ -120,7 +120,7 @@ set(RYTHE_ENABLED_MODULE_PATHS "")
 add_subdirectory(${RYTHE_DIR_RYTHE})
 
 # The engine is ready - add applications
-if (${RYTHE_BUILD_APPLICATIONS})
+if ((${RYTHE_BUILD_APPLICATIONS}))
 	add_subdirectory(${RYTHE_DIR_ROOT}/applications)
 
 	foreach(path ${RYTHE_ENABLED_MODULE_PATHS})

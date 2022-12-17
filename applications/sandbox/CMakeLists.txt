@@ -1,6 +1,6 @@
 # Sandbox depends on applications and graphics in this case
 
-if (${RYTHE_MODULE_APPLICATION} AND ${RYTHE_MODULE_GRAPHICS})
+if (${RYTHE_BUILD_APPLICATIONS} AND ${RYTHE_MODULE_GRAPHICS})
 	project(sandbox LANGUAGES ${RYTHE_LANGUAGE})
 
 	rythe_find_sources(sources "${PROJECT_SOURCE_DIR}")

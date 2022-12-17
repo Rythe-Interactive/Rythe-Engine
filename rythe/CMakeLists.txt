@@ -24,6 +24,8 @@ macro(rythe_add_module NAME PATH DIR)
 		(${RYTHE_MODULE_${VARIABLE_NAME}}) OR 
 		(${RYTHE_FORCE_ENABLE_ALL_MODULES}))
 
+		set(RYTHE_MODULE_${VARIABLE_NAME} ON CACHE INTERNAL "Enable ${NAME} module" FORCE)
+		
 		message(STATUS "Module: \"${NAME}\" [Enabled]")
 		# MODULE_INFO variables are updated by the module
 		# see cmake/configure_module.cmake
