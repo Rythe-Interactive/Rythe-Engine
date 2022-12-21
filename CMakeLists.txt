@@ -116,6 +116,7 @@ endif()
 
 # Add Rythe
 set(RYTHE_ENABLED_MODULE_NAMES "")
+set(RYTHE_ENABLED_APPLICATION_NAMES "")
 set(RYTHE_ENABLED_MODULE_PATHS "")
 add_subdirectory(${RYTHE_DIR_RYTHE})
 
@@ -128,6 +129,49 @@ if ((${RYTHE_BUILD_APPLICATIONS}))
 	endforeach()
 endif()
 
+# Add config project
+set(configure_command "${CMAKE_COMMAND} ${RYTHE_DIR_ROOT} -G \"${CMAKE_GENERATOR}\" -S ${RYTHE_DIR_ROOT} -B ${CMAKE_BINARY_DIR} -T ClangCL -D RYTHE_FETCH_SUBMODULES=OFF")
+if ((${RYTHE_BUILD_APPLICATIONS}))
+	string(APPEND configure_command " -D RYTHE_BUILD_APPLICATIONS=ON")
+else()
+	string(APPEND configure_command " -D RYTHE_BUILD_APPLICATIONS=OFF")
+endif()
+
+if ((${RYTHE_BUILD_OPTION_ASAN}))
+	string(APPEND configure_command " -D RYTHE_BUILD_OPTION_ASAN=ON")
+else()
+	string(APPEND configure_command " -D RYTHE_BUILD_OPTION_ASAN=OFF")
+endif()
+
+if ((${RYTHE_BUILD_OPTION_WERROR}))
+	string(APPEND configure_command " -D RYTHE_BUILD_OPTION_WERROR=ON")
+else()
+	string(APPEND configure_command " -D RYTHE_BUILD_OPTION_WERROR=OFF")
+endif()
+
+if ((${RYTHE_FORCE_ENABLE_ALL_MODULES}))
+	string(APPEND configure_command " -D RYTHE_FORCE_ENABLE_ALL_MODULES=ON")
+else()
+	string(APPEND configure_command " -D RYTHE_FORCE_ENABLE_ALL_MODULES=OFF")
+	foreach(module_name ${RYTHE_ENABLED_MODULE_NAMES})
+		string(TOUPPER module_name module)
+		string(APPEND configure_command " -D RYTHE_MODULE_${module}=ON")
+	endforeach()	
+endif()
+
+add_custom_target(configure ${configure_command})
+
+foreach(module_name ${RYTHE_ENABLED_MODULE_NAMES})
+	add_dependencies(${module_name} configure)
+	message(STATUS "module ${module_name}")
+endforeach()
+
+foreach(application_name ${RYTHE_ENABLED_APPLICATION_NAMES})
+	add_dependencies(${application_name} configure)
+	message(STATUS "application ${applicaiton_name}")
+endforeach()
+
+message(configure_command="${configure_command}")
 
 # FOLDER THINGS
 file(GLOB files ${RYTHE_DIR_RYTHE}/${RYTHE_FILE_TYPES})

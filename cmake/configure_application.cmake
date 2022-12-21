@@ -29,6 +29,8 @@ function(rythe_configure_engine_application target)
 		source_group("${rel_path}" FILES "${src}")
 	endforeach()
 
+	list(APPEND RYTHE_ENABLED_APPLICATION_NAMES ${target})
+
 	message(STATUS "Application: \"${target}\" [Enabled] [Mode=Engine]")
 endfunction()
 	

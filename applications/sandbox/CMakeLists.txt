@@ -8,4 +8,7 @@ if (${RYTHE_BUILD_APPLICATIONS} AND ${RYTHE_MODULE_GRAPHICS})
 	set_target_properties(sandbox PROPERTIES FOLDER applications)
 
 	rythe_configure_engine_application(sandbox)
+	
+	list(APPEND RYTHE_ENABLED_APPLICATION_NAMES "sandbox")
+	set(RYTHE_ENABLED_APPLICATION_NAMES ${RYTHE_ENABLED_APPLICATION_NAMES} PARENT_SCOPE)
 endif()
