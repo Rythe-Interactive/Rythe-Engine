@@ -5,7 +5,7 @@ if (${RYTHE_BUILD_APPLICATIONS} AND ${RYTHE_MODULE_GRAPHICS})
 
 	rythe_find_sources(sources "${PROJECT_SOURCE_DIR}")
 	add_executable(sandbox ${sources})
-	set_target_properties(sandbox PROPERTIES FOLDER applications)
+	set_target_properties(sandbox PROPERTIES FOLDER "2 - applications")
 
 	rythe_configure_engine_application(sandbox)
 	

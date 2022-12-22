@@ -35,7 +35,8 @@ macro(rythe_add_module NAME PATH DIR)
 
 		rythe_update_submodule(${PATH})
 		add_subdirectory(${RYTHE_DIR_ROOT}/${PATH})
-		set_target_properties(${NAME} PROPERTIES FOLDER ${DIR})
+		string(REGEX REPLACE "^rythe\/engine" "3 - rythe" filter ${DIR})
+		set_target_properties(${NAME} PROPERTIES FOLDER ${filter})
 
 		# No need to add as an include path if no headers are present
 		if (${MODULE_INFO_HAS_HEADERS})

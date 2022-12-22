@@ -15,7 +15,7 @@ option(RYTHE_FETCH_SUBMODULES "Enable fetching required submodules. Recommended 
 # Folder structure
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
-set(CMAKE_FOLDER CMakePredefinedTargets)
+set(CMAKE_FOLDER "1 - utils")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
@@ -130,7 +130,7 @@ if ((${RYTHE_BUILD_APPLICATIONS}))
 endif()
 
 # Add config project
-set(configure_command "${CMAKE_COMMAND} ${RYTHE_DIR_ROOT} -G \"${CMAKE_GENERATOR}\" -S ${RYTHE_DIR_ROOT} -B ${CMAKE_BINARY_DIR} -T ClangCL -D RYTHE_FETCH_SUBMODULES=OFF")
+set(configure_command "${CMAKE_COMMAND} ${RYTHE_DIR_ROOT} -G \"${CMAKE_GENERATOR}\" -S \"${RYTHE_DIR_ROOT}\" -B \"${CMAKE_BINARY_DIR}\" -T ClangCL -D RYTHE_FETCH_SUBMODULES=OFF")
 if ((${RYTHE_BUILD_APPLICATIONS}))
 	string(APPEND configure_command " -D RYTHE_BUILD_APPLICATIONS=ON")
 else()
@@ -159,19 +159,16 @@ else()
 	endforeach()	
 endif()
 
-add_custom_target(configure ${configure_command})
+add_custom_target(configure)
+add_custom_command(TARGET configure PRE_BUILD COMMAND ${configure_command})
 
 foreach(module_name ${RYTHE_ENABLED_MODULE_NAMES})
 	add_dependencies(${module_name} configure)
-	message(STATUS "module ${module_name}")
 endforeach()
 
 foreach(application_name ${RYTHE_ENABLED_APPLICATION_NAMES})
 	add_dependencies(${application_name} configure)
-	message(STATUS "application ${applicaiton_name}")
 endforeach()
-
-message(configure_command="${configure_command}")
 
 # FOLDER THINGS
 file(GLOB files ${RYTHE_DIR_RYTHE}/${RYTHE_FILE_TYPES})
