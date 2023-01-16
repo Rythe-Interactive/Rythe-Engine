@@ -3,7 +3,7 @@
 
 function(rythe_configure_engine_application target)
 	# Language
-	target_compile_features(${target} PUBLIC cxx_std_17)
+	target_compile_features(${target} PUBLIC cxx_std_20)
 	
 	# Dependency on Rythe
 	target_include_directories(${target} PUBLIC ${RYTHE_INCLUDE_ENGINE})
@@ -36,7 +36,7 @@ endfunction()
 	
 function(rythe_configure_editor_application target)
 	# Language
-	target_compile_features(${target} PUBLIC cxx_std_17)
+	target_compile_features(${target} PUBLIC cxx_std_20)
 	
 	# Dependency on Rythe
 	target_include_directories(${target} PUBLIC ${RYTHE_INCLUDE_ALL})

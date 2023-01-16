@@ -7,8 +7,8 @@ project(rythe LANGUAGES CXX)
 
 # Configuration
 option(RYTHE_FORCE_ENABLE_ALL_MODULES "Forcefully enable all modules (overrides module toggles)" OFF)
-option(RYTHE_BUILD_OPTION_ASAN "Enable the address sanitizer where possible" OFF)
-option(RYTHE_BUILD_OPTION_WERROR "Treat warnings as errors in all of Rythe's libraries and applications" OFF)
+option(RYTHE_BUILD_OPTION_ASAN "Enable the address sanitizer where possible" ON)
+option(RYTHE_BUILD_OPTION_WERROR "Treat warnings as errors in all of Rythe's libraries and applications" ON)
 option(RYTHE_BUILD_APPLICATIONS "Build applications such as samples and sandbox apps" ON)
 option(RYTHE_FETCH_SUBMODULES "Enable fetching required submodules. Recommended when configuring modules/dependencies. Turn off if you're just adjusting files within the project." ON)
 
