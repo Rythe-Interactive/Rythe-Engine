@@ -1,7 +1,7 @@
 #define RYTHE_VALIDATE
 
-#include <rythe/delegate>
-#include <rythe/buffered_string>
+#include <rsl/delegate>
+#include <rsl/buffered_string>
 
 #include <iostream>
 #include <chrono>
@@ -24,7 +24,7 @@ struct Object {
 
     void constMemberFunc() const {
 
-        for (int i : ints) {
+        for (size_t i : ints) {
             counter += i;
         }
     }
@@ -193,8 +193,13 @@ int main() {
         counter = 0;
     }
 
+
     rsl::buffered_string<16> str = "Hello there!";
     rsl::buffered_string<16> str2 = "This is more than 16 chars!";
+
+    constexpr auto typeName = rsl::type_name(str);
+
+    std::cout << typeName << '\n';
 
     std::cout << '\"' << str << "\"\n\"" << str2 << "\"\n";
 
