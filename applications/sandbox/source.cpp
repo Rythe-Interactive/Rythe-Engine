@@ -53,15 +53,13 @@ struct RenderFeature : public rythe::feature {
     void invoke() {}
 };
 
-template<typename T>
-class GameModule : public rythe::Module<T, rythe::feature_set<StartFeature, UpdateFeature>> {
+class GameModule : public rythe::module<rythe::feature_set<StartFeature, UpdateFeature, RenderFeature>> {
 };
 
-template<typename T>
-class PhysicsModule : public rythe::Module<T, rythe::feature_set<RaycastFeature, RaycastTerrainFeature>> {
+class PhysicsModule : public rythe::module<rythe::feature_set<RaycastFeature, RaycastTerrainFeature>> {
 };
 
-class Game : public rythe::Program<Game, GameModule, PhysicsModule> {
+class Game : public rythe::program<GameModule, PhysicsModule> {
 };
 
 template<typename T>
@@ -84,23 +82,29 @@ void logFeatureSet() {
     logTypeSequenceImpl(typename Seq::type_sequence{});
 }
 
-template<rythe::feature_set_c Seq, rythe::feature_c feature>
+template<typename ProgramT, rythe::feature_c feature>
 void checkFeature() {
-    static_assert(rsl::type_sequence_contains_v<typename Seq::type_sequence, feature>, "Missing feature!");
+    static_assert(ProgramT::template has_feature<feature>(), "Missing feature!");
 }
 
 int main() {
-   using t = rsl::concat_sequence_t<rsl::type_sequence<StartFeature, UpdateFeature>, rsl::type_sequence<RaycastFeature, RaycastTerrainFeature>>;
-
+   using t = rsl::concat_sequence_t<rsl::type_sequence<StartFeature, UpdateFeature>, rsl::type_sequence<RaycastFeature, RaycastTerrainFeature, RenderFeature>>;
+   std::cout << "type sequence:\n";
     logTypeSequence<t>();
 
+    std::cout << "\nfeature set:\n";
     logFeatureSet<Game::features>();
 
-    checkFeature<Game::features, StartFeature>();
-    checkFeature<Game::features, UpdateFeature>();
-    checkFeature<Game::features, RaycastFeature>();
-    checkFeature<Game::features, RaycastTerrainFeature>();
-    checkFeature<Game::features, RenderFeature>();
+    checkFeature<Game, StartFeature>();
+    checkFeature<Game, UpdateFeature>();
+    checkFeature<Game, RaycastFeature>();
+    checkFeature<Game, RaycastTerrainFeature>();
+    if constexpr (!Game::has_feature<RenderFeature>()) {
+        std::cout << "Game does not have \"" << rsl::type_name<RenderFeature>() << "\"\n";
+    }
+    else {
+        std::cout << "Game has \"" << rsl::type_name<RenderFeature>() << "\"\n";
+    }
 
     return 0;
 }
