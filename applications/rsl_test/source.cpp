@@ -4,6 +4,8 @@
 #include <rsl/buffered_string>
 #include <rsl/time>
 
+#include <rsl/math>
+
 #include <iostream>
 #include <chrono>
 
