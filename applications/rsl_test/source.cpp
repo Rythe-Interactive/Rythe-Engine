@@ -2,6 +2,7 @@
 
 #include <rsl/delegate>
 #include <rsl/buffered_string>
+#include <rsl/time>
 
 #include <iostream>
 #include <chrono>
@@ -192,6 +193,23 @@ int main() {
         std::cout << (std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(elapsed).count() / ITERATIONS) << "\t" << elapsed.count() << std::endl;
         counter = 0;
     }
+
+    rsl::stopwatch<rsl::fast_time, std::chrono::system_clock> timer;
+    rsl::timer accurateTimer;
+
+    rsl::time_point startTime = timer.start_point();
+
+    std::cout << "timer started at: " << startTime.hours() << ':' << startTime.minutes() << ' ' << startTime.seconds() << "s\n";
+
+    rsl::time_point currentTime = timer.current_point();
+    rsl::time_span elapsedTime = currentTime - startTime;
+    rsl::time_span otherElapsed = timer.elapsed_time();
+    rsl::time_span accurateElapsed = accurateTimer.elapsed_time();
+
+    std::cout << "timer after log: " << currentTime.hours() << ':' << currentTime.minutes() << ' ' << currentTime.seconds() << "s\n";
+
+
+    std::cout << "elapsed time: " << elapsedTime.nanoseconds() << " nanoseconds, other elapsed: " << otherElapsed.nanoseconds() << " nanoseconds, accurate elapsed: " << accurateElapsed.nanoseconds() << " nanoseconds\n";
 
 
     rsl::buffered_string<16> str = "Hello there!";
