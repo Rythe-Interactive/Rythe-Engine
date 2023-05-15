@@ -24,6 +24,8 @@ macro(rythe_add_module NAME PATH DIR)
 		(${RYTHE_MODULE_${VARIABLE_NAME}}) OR 
 		(${RYTHE_FORCE_ENABLE_ALL_MODULES}))
 
+		set(RYTHE_MODULE_${VARIABLE_NAME} ON CACHE INTERNAL "Enable ${NAME} module" FORCE)
+		
 		message(STATUS "Module: \"${NAME}\" [Enabled]")
 		# MODULE_INFO variables are updated by the module
 		# see cmake/configure_module.cmake
@@ -33,7 +35,8 @@ macro(rythe_add_module NAME PATH DIR)
 
 		rythe_update_submodule(${PATH})
 		add_subdirectory(${RYTHE_DIR_ROOT}/${PATH})
-		set_target_properties(${NAME} PROPERTIES FOLDER ${DIR})
+		string(REGEX REPLACE "^rythe\/engine" "3 - rythe" filter ${DIR})
+		set_target_properties(${NAME} PROPERTIES FOLDER ${filter})
 
 		# No need to add as an include path if no headers are present
 		if (${MODULE_INFO_HAS_HEADERS})
@@ -115,7 +118,7 @@ foreach(library ${RYTHE_LIBS_ENGINE})
 	target_include_directories(${library} PUBLIC ${RYTHE_INCLUDE_ENGINE})
 	target_compile_definitions(${library} PUBLIC ${RYTHE_DEFINITIONS})
 	target_compile_options(${library} PUBLIC ${RYTHE_COMPILER_FLAGS})
-    target_compile_features(${library} PUBLIC cxx_std_17)
+    target_compile_features(${library} PUBLIC cxx_std_20)
 	target_link_options(${library} PUBLIC ${RYTHE_LINKER_FLAGS})
 endforeach()
 
@@ -125,7 +128,7 @@ foreach(library ${RYTHE_LIBS_EDITOR})
     target_include_directories(${library} PUBLIC ${RYTHE_INCLUDE_ALL})
 	target_compile_definitions(${library} PUBLIC ${RYTHE_DEFINITIONS})
     target_compile_options(${library} PUBLIC ${RYTHE_COMPILER_FLAGS})
-    target_compile_features(${library} PUBLIC cxx_std_17)
+    target_compile_features(${library} PUBLIC cxx_std_20)
     target_link_options(${library} PUBLIC ${RYTHE_LINKER_FLAGS})
 endforeach()
 

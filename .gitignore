@@ -98,3 +98,4 @@ vm/**
 
 # Dear Imgui
 imgui.ini
+build/*

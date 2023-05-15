@@ -7,15 +7,15 @@ project(rythe LANGUAGES CXX)
 
 # Configuration
 option(RYTHE_FORCE_ENABLE_ALL_MODULES "Forcefully enable all modules (overrides module toggles)" OFF)
-option(RYTHE_BUILD_OPTION_ASAN "Enable the address sanitizer where possible" OFF)
-option(RYTHE_BUILD_OPTION_WERROR "Treat warnings as errors in all of Rythe's libraries and applications" OFF)
+option(RYTHE_BUILD_OPTION_ASAN "Enable the address sanitizer where possible" ON)
+option(RYTHE_BUILD_OPTION_WERROR "Treat warnings as errors in all of Rythe's libraries and applications" ON)
 option(RYTHE_BUILD_APPLICATIONS "Build applications such as samples and sandbox apps" ON)
 option(RYTHE_FETCH_SUBMODULES "Enable fetching required submodules. Recommended when configuring modules/dependencies. Turn off if you're just adjusting files within the project." ON)
 
 # Folder structure
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
-set(CMAKE_FOLDER CMakePredefinedTargets)
+set(CMAKE_FOLDER "1 - utils")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
@@ -76,7 +76,7 @@ else()
         set(RYTHE_COMPILER_FLAGS /WX ${RYTHE_COMPILER_FLAGS})
     endif()
 
-	if (${RYTHE_BUILD_OPTION_ASAN}})
+	if (${RYTHE_BUILD_OPTION_ASAN})
 		set(RYTHE_COMPILER_FLAGS /fsanitize=address ${RYTHE_COMPILER_FLAGS})
 	endif()
 endif()
@@ -116,6 +116,7 @@ endif()
 
 # Add Rythe
 set(RYTHE_ENABLED_MODULE_NAMES "")
+set(RYTHE_ENABLED_APPLICATION_NAMES "")
 set(RYTHE_ENABLED_MODULE_PATHS "")
 add_subdirectory(${RYTHE_DIR_RYTHE})
 
@@ -127,3 +128,45 @@ if (${RYTHE_BUILD_APPLICATIONS})
 		add_subdirectory(${RYTHE_DIR_ROOT}/${path}/applications)
 	endforeach()
 endif()
+
+# Add config project
+set(configure_command_args "")
+list(APPEND configure_command_args "\"${RYTHE_DIR_ROOT}\"")
+list(APPEND configure_command_args "-G \"${CMAKE_GENERATOR}\"")
+list(APPEND configure_command_args "-S \"${RYTHE_DIR_ROOT}\"")
+list(APPEND configure_command_args "-B \"${CMAKE_BINARY_DIR}\"")
+list(APPEND configure_command_args -T ClangCL)
+list(APPEND configure_command_args -D RYTHE_FETCH_SUBMODULES=OFF)
+
+list(APPEND configure_command_args -D RYTHE_BUILD_APPLICATIONS=${RYTHE_BUILD_APPLICATIONS})
+
+list(APPEND configure_command_args -D RYTHE_BUILD_OPTION_ASAN=${RYTHE_BUILD_OPTION_ASAN})
+
+list(APPEND configure_command_args -D RYTHE_BUILD_OPTION_WERROR=${RYTHE_BUILD_OPTION_WERROR})
+
+
+if (${RYTHE_FORCE_ENABLE_ALL_MODULES})
+	list(APPEND configure_command_args -D RYTHE_FORCE_ENABLE_ALL_MODULES=ON)
+else()
+	list(APPEND configure_command_args -D RYTHE_FORCE_ENABLE_ALL_MODULES=OFF)
+	foreach(module_name ${RYTHE_ENABLED_MODULE_NAMES})
+		string(TOUPPER module_name module)
+		list(APPEND configure_command_args -D RYTHE_MODULE_${module}=ON)
+	endforeach()	
+endif()
+
+add_custom_target(configure ${CMAKE_COMMAND} ${configure_command_args})
+
+foreach(module_name ${RYTHE_ENABLED_MODULE_NAMES})
+	add_dependencies(${module_name} configure)
+endforeach()
+
+foreach(application_name ${RYTHE_ENABLED_APPLICATION_NAMES})
+	add_dependencies(${application_name} configure)
+endforeach()
+
+# Set folder names
+file(GLOB files ${RYTHE_DIR_RYTHE}/${RYTHE_FILE_TYPES})
+foreach(file ${files})
+	set_target_properties(${file} PROPERTIES FOLDER ${file})
+endforeach()
