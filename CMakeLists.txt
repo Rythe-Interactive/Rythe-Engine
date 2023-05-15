@@ -76,7 +76,7 @@ else()
         set(RYTHE_COMPILER_FLAGS /WX ${RYTHE_COMPILER_FLAGS})
     endif()
 
-	if (${RYTHE_BUILD_OPTION_ASAN}})
+	if (${RYTHE_BUILD_OPTION_ASAN})
 		set(RYTHE_COMPILER_FLAGS /fsanitize=address ${RYTHE_COMPILER_FLAGS})
 	endif()
 endif()
@@ -121,7 +121,7 @@ set(RYTHE_ENABLED_MODULE_PATHS "")
 add_subdirectory(${RYTHE_DIR_RYTHE})
 
 # The engine is ready - add applications
-if ((${RYTHE_BUILD_APPLICATIONS}))
+if (${RYTHE_BUILD_APPLICATIONS})
 	add_subdirectory(${RYTHE_DIR_ROOT}/applications)
 
 	foreach(path ${RYTHE_ENABLED_MODULE_PATHS})
@@ -138,25 +138,14 @@ list(APPEND configure_command_args "-B \"${CMAKE_BINARY_DIR}\"")
 list(APPEND configure_command_args -T ClangCL)
 list(APPEND configure_command_args -D RYTHE_FETCH_SUBMODULES=OFF)
 
-if ((${RYTHE_BUILD_APPLICATIONS}))
-	list(APPEND configure_command_args -D RYTHE_BUILD_APPLICATIONS=ON)
-else()
-	list(APPEND configure_command_args -D RYTHE_BUILD_APPLICATIONS=OFF)
-endif()
+list(APPEND configure_command_args -D RYTHE_BUILD_APPLICATIONS=${RYTHE_BUILD_APPLICATIONS})
 
-if ((${RYTHE_BUILD_OPTION_ASAN}))
-	list(APPEND configure_command_args -D RYTHE_BUILD_OPTION_ASAN=ON)
-else()
-	list(APPEND configure_command_args -D RYTHE_BUILD_OPTION_ASAN=OFF)
-endif()
+list(APPEND configure_command_args -D RYTHE_BUILD_OPTION_ASAN=${RYTHE_BUILD_OPTION_ASAN})
 
-if ((${RYTHE_BUILD_OPTION_WERROR}))
-	list(APPEND configure_command_args -D RYTHE_BUILD_OPTION_WERROR=ON)
-else()
-	list(APPEND configure_command_args -D RYTHE_BUILD_OPTION_WERROR=OFF)
-endif()
+list(APPEND configure_command_args -D RYTHE_BUILD_OPTION_WERROR=${RYTHE_BUILD_OPTION_WERROR})
 
-if ((${RYTHE_FORCE_ENABLE_ALL_MODULES}))
+
+if (${RYTHE_FORCE_ENABLE_ALL_MODULES})
 	list(APPEND configure_command_args -D RYTHE_FORCE_ENABLE_ALL_MODULES=ON)
 else()
 	list(APPEND configure_command_args -D RYTHE_FORCE_ENABLE_ALL_MODULES=OFF)
@@ -176,7 +165,7 @@ foreach(application_name ${RYTHE_ENABLED_APPLICATION_NAMES})
 	add_dependencies(${application_name} configure)
 endforeach()
 
-# FOLDER THINGS
+# Set folder names
 file(GLOB files ${RYTHE_DIR_RYTHE}/${RYTHE_FILE_TYPES})
 foreach(file ${files})
 	set_target_properties(${file} PROPERTIES FOLDER ${file})
