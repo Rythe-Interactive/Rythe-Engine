@@ -6,17 +6,17 @@
 #include "../systems/simplecameracontroller.hpp"
 #include "../systems/gui_test.hpp"
 
-class ExampleModule : public legion::Module
+class ExampleModule : public rythe::Module
 {
 public:
     virtual void setup() override
     {
-        using namespace legion;
+        using namespace rythe;
         app::WindowSystem::requestWindow(
             ecs::world_entity_id,
             math::ivec2(1920, 1080),
-            "LEGION Engine",
-            "Legion Icon",
+            "RYTHE Engine",
+            "RYTHE Icon",
             nullptr,
             nullptr,
             0

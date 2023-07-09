@@ -8,7 +8,7 @@
 #include <graphics/pipeline/gui/stages/imguirenderstage.hpp>
 #include <graphics/systems/renderer.hpp>
 
-LEGION_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wdeprecated-declarations")
+RYTHE_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wdeprecated-declarations")
 
 namespace ImGuizmo
 {
@@ -94,7 +94,7 @@ namespace ImGuizmo
         }
 }
 
-namespace legion
+namespace rythe
 {
     using namespace rendering;
     using namespace filesystem::literals;
@@ -434,7 +434,7 @@ namespace legion
 
         bool DisplayParamEditor(material_handle material, const std::string& name, const GLenum& type)
         {
-            if (common::starts_with(name, "lgn_"))
+            if (common::starts_with(name, "ryt_"))
                 return false;
 
             ImGui::Text("%s:", name.c_str());
@@ -839,4 +839,4 @@ namespace legion
 
 }
 
-LEGION_CLANG_SUPPRESS_WARNING_POP
+RYTHE_CLANG_SUPPRESS_WARNING_POP

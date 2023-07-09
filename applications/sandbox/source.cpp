@@ -1,10 +1,9 @@
-//#define LEGION_ENTRY
-//#define LEGION_LOG_DEBUG
-//
+//#define RYTHE_ENTRY
+//#define RYTHE_LOG_DEBUG
+
 //#if defined(NDEBUG)
-//    #define LEGION_KEEP_CONSOLE
+//    #define RYTHE_KEEP_CONSOLE
 //#endif
-//
 //#include <core/core.hpp>
 //#include <application/application.hpp>
 //#include <graphics/graphics.hpp>

@@ -8,21 +8,21 @@ struct example_comp
 
 };
 
-struct tonemap_action : public lgn::app::input_action<tonemap_action> {};
-struct reload_shaders_action : public lgn::app::input_action<reload_shaders_action> {};
-struct switch_skybox_action : public lgn::app::input_action<switch_skybox_action> {};
+struct tonemap_action : public ryt::app::input_action<tonemap_action> {};
+struct reload_shaders_action : public ryt::app::input_action<reload_shaders_action> {};
+struct switch_skybox_action : public ryt::app::input_action<switch_skybox_action> {};
 
-class ExampleSystem final : public legion::System<ExampleSystem>
+class ExampleSystem final : public rythe::System<ExampleSystem>
 {
-    lgn::size_type frames = 0;
-    lgn::time64 totalTime = 0;
-    lgn::time::stopwatch<lgn::time64> timer;
-    std::array<lgn::time64, 18000> times;
+    ryt::size_type frames = 0;
+    ryt::time64 totalTime = 0;
+    ryt::time::stopwatch<ryt::time64> timer;
+    std::array<ryt::time64, 18000> times;
 
 public:
     void setup()
     {
-        using namespace legion;
+        using namespace rythe;
         log::filter(log::severity_debug);
         log::debug("ExampleSystem setup");
 
@@ -48,7 +48,7 @@ public:
             rot = rotation::lookat(math::vec3::zero, math::vec3(1.f, -1.f, 0.1f));
         }*/
 
-        //#if defined(LEGION_DEBUG)
+        //#if defined(RYTHE_DEBUG)
         //        for (int i = 0; i < 2000; i++)
         //#else
         //        for (int i = 0; i < 20000; i++)
@@ -287,12 +287,12 @@ public:
 
     void shutdown()
     {
-        lgn::log::debug("ExampleSystem shutdown");
+        ryt::log::debug("ExampleSystem shutdown");
     }
 
     void onShaderReload(reload_shaders_action& event)
     {
-        using namespace legion;
+        using namespace rythe;
         if (event.pressed())
         {
             auto targetWin = ecs::world.get_component<app::window>();
@@ -315,10 +315,10 @@ public:
 
     void onTonemapSwitch(tonemap_action& event)
     {
-        using namespace legion;
+        using namespace rythe;
         if (event.pressed())
         {
-            static size_type type = static_cast<size_type>(gfx::tonemapping_type::legion);
+            static size_type type = static_cast<size_type>(gfx::tonemapping_type::rythe);
             type = (type + 1) % (static_cast<size_type>(gfx::tonemapping_type::unreal3) + 1);
 
             auto typeEnum = static_cast<gfx::tonemapping_type>(type);
@@ -335,14 +335,14 @@ public:
             case gfx::tonemapping_type::reinhard_jodie:
                 algorithmName = "reinhard_jodie";
                 break;
-            case gfx::tonemapping_type::legion:
-                algorithmName = "legion";
+            case gfx::tonemapping_type::rythe:
+                algorithmName = "rythe";
                 break;
             case gfx::tonemapping_type::unreal3:
                 algorithmName = "unreal3";
                 break;
             default:
-                algorithmName = "legion";
+                algorithmName = "rythe";
                 break;
             }
             log::debug("Set tonemapping algorithm to {}", algorithmName);
@@ -353,7 +353,7 @@ public:
 
     void onSkyboxSwitch(switch_skybox_action& event)
     {
-        using namespace legion;
+        using namespace rythe;
         if (event.pressed())
         {
             static size_type idx = 0;
@@ -392,9 +392,9 @@ public:
         }
     }
 
-    void onExit(L_MAYBEUNUSED lgn::events::exit& event)
+    void onExit(L_MAYBEUNUSED ryt::events::exit& event)
     {
-        using namespace legion;
+        using namespace rythe;
 
         time64 avg0 = totalTime / frames;
         time64 avg1 = timer.elapsed_time() / frames;
@@ -431,9 +431,9 @@ public:
         log::info("1%Low {:.3f} 0.1%Low {:.3f} Avg {:.3f} Measured Avg {:.3f}", 1.0 / onePcLow, 1.0 / pointOnePcLow, 1.0 / avg0, 1.0 / avg1);
     }
 
-    void update(legion::time::span deltaTime)
+    void update(rythe::time::span deltaTime)
     {
-        using namespace legion;
+        using namespace rythe;
         static bool firstFrame = true;
         if (firstFrame)
         {

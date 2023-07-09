@@ -37,8 +37,12 @@ DEALINGS IN THE SOFTWARE.
 require "../tools/export-compile-commands"
 ]]--
 
-function formatModuleInclude(moduleName)
-    return string.format("rythe/engine/%s/src/%s/build-%s.lua", moduleName,moduleName,moduleName)
+function formatEngineModulePath(moduleName)
+    return string.format("rythe/engine/%s/src/%s/build-%s.lua", moduleName, moduleName, moduleName)
+end
+
+function formatApplicationPath(moduleName)
+    return string.format("applications/%s/build-%s.lua", moduleName, moduleName)
 end
 
 -- root workspace, all sub-project should be included
@@ -46,11 +50,13 @@ workspace "rythe"
     configurations { "Debug64", "Release64" }
 
 -- core module, must not have any dependencies and should be first
-include(formatModuleInclude("core"))
-include(formatModuleInclude("application"))
-include(formatModuleInclude("graphics"))
-include(formatModuleInclude("physics"))
-include(formatModuleInclude("audio"))
+include(formatEngineModulePath("core"))
+include(formatEngineModulePath("application"))
+include(formatEngineModulePath("graphics"))
+include(formatEngineModulePath("physics"))
+include(formatEngineModulePath("audio"))
+
+include(formatApplicationPath("sandbox"))
 
 --include "legion/engine/scripting/build-scripting.lua"
 --include "legion/engine/networking/build-networking.lua"
@@ -58,14 +64,15 @@ include(formatModuleInclude("audio"))
 --include "applications/unit_tests/build-tests.lua"
 
 project "*"
-    includedirs { "include/" }
+    includedirs { "include/"}
     targetdir "build/%{cfg.buildcfg}"
-    libdirs { "libs/", "build/%{cfg.buildcfg}/" }
+    libdirs { "lib/", "build/%{cfg.buildcfg}/" }
     toolset "clang"
+
         
     filter "configurations:Debug*"
-        buildoptions { "-fsanitize=address,undefined" }
-        linkoptions { "-fsanitize=address,undefined" }
+        -- buildoptions { "-fsanitize=address,undefined" }
+        -- linkoptions { "-fsanitize=address,undefined" }
         defines {"DEBUG"}
         symbols "On"
 

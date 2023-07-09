@@ -6,46 +6,46 @@
 
 #include <core/core.hpp>
 
-class MySystem final : public lgn::System<MySystem>
+class MySystem final : public ryt::System<MySystem>
 {
 public:
-    auto to_string(lgn::channel_format format)
+    auto to_string(ryt::channel_format format)
     {
         switch (format)
         {
-        case lgn::channel_format::eight_bit:
+        case ryt::channel_format::eight_bit:
             return "8bit";
-        case lgn::channel_format::sixteen_bit:
+        case ryt::channel_format::sixteen_bit:
             return "16bit";
-        case lgn::channel_format::float_hdr:
+        case ryt::channel_format::float_hdr:
             return "hdr";
         default:
             return "unknown";
         }
     }
 
-    auto to_string(lgn::image_components components)
+    auto to_string(ryt::image_components components)
     {
         switch (components)
         {
-        case lgn::image_components::grey:
+        case ryt::image_components::grey:
             return "grey";
-        case lgn::image_components::grey_alpha:
+        case ryt::image_components::grey_alpha:
             return "grey alpha";
-        case lgn::image_components::rgb:
+        case ryt::image_components::rgb:
             return "rgb";
-        case lgn::image_components::rgba:
+        case ryt::image_components::rgba:
             return "rgba";
         default:
             return "unknown";
         }
     }
 
-    lgn::async::async_operation<lgn::common::result<lgn::assets::asset<lgn::mesh>>> asyncOp;
+    ryt::async::async_operation<ryt::common::result<ryt::assets::asset<ryt::mesh>>> asyncOp;
 
     void setup()
     {
-        using namespace legion;
+        using namespace rythe;
         auto result = assets::load<image>(fs::view("engine://resources/default/albedo"));
         if (!result)
             log::error("{}", result.error());
@@ -95,9 +95,9 @@ public:
 
     }
 
-    void update(L_MAYBEUNUSED lgn::time::span deltaTime)
+    void update(L_MAYBEUNUSED ryt::time::span deltaTime)
     {
-        using namespace legion;
+        using namespace rythe;
 
         static bool tested = false;
 
@@ -132,31 +132,31 @@ public:
 
         queueJobs(1, []()
             {
-                lgn::log::error("Sleep start");
+                ryt::log::error("Sleep start");
                 std::this_thread::sleep_for(std::chrono::minutes(1));
-                lgn::log::error("Sleep end");
+                ryt::log::error("Sleep end");
             });
 
-        lgn::async::rw_spinlock lock;
+        ryt::async::rw_spinlock lock;
         lock.lock();
 
-        auto procA = queueJobs(2000, [&lock](lgn::id_type jobId)
+        auto procA = queueJobs(2000, [&lock](ryt::id_type jobId)
             {
-                lgn::async::readonly_guard guard(lock);
-                lgn::log::info("\tjob A id [{}]", jobId);
+                ryt::async::readonly_guard guard(lock);
+                ryt::log::info("\tjob A id [{}]", jobId);
             });
 
-        auto procB = queueJobs(2000, [&lock](lgn::id_type jobId)
+        auto procB = queueJobs(2000, [&lock](ryt::id_type jobId)
             {
-                lgn::async::readonly_guard guard(lock);
-                lgn::log::debug("\tjob B id [{}]", jobId);
+                ryt::async::readonly_guard guard(lock);
+                ryt::log::debug("\tjob B id [{}]", jobId);
             });
 
 
-        auto procC = queueJobs(2000, [&lock](lgn::id_type jobId)
+        auto procC = queueJobs(2000, [&lock](ryt::id_type jobId)
             {
-                lgn::async::readonly_guard guard(lock);
-                lgn::log::warn("\tjob C id [{}]", jobId);
+                ryt::async::readonly_guard guard(lock);
+                ryt::log::warn("\tjob C id [{}]", jobId);
             });
 
         lock.unlock();

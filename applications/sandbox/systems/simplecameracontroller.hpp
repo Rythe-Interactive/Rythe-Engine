@@ -9,7 +9,7 @@
 #include <audio/audio.hpp>
 #endif
 
-using namespace legion;
+using namespace rythe;
 
 struct player_move : public app::input_axis<player_move> {};
 struct player_strive : public app::input_axis<player_strive> {};
