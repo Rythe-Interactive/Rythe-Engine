@@ -58,6 +58,13 @@ include(formatEngineModulePath("audio"))
 
 include(formatApplicationPath("sandbox"))
 
+group "include"
+externalproject "rsl"
+    location "include/Rythe-Standard-Library/src/rsl/"
+    kind "StaticLib"
+    language "C++"
+group ""
+
 project "*"
     includedirs { "include/","include/*/","include/*/src/"}
     libdirs { "lib/", "build/%{cfg.buildcfg}/" }
@@ -73,7 +80,6 @@ project "*"
 
     filter "configurations:*64"
         architecture "x86_64"
-
 -- how to build:
 --[[
     you require a copy of premake5 which can be obtained from https://premake.github.io/download.html#v5
