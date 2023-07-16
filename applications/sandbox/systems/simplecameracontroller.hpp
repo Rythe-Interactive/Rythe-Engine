@@ -35,7 +35,7 @@ public:
 
     void setup()
     {
-        //Crosshair::setScale(math::vec2(1.f));
+        //Crosshair::setScale(math::float2(1.f));
         //gfx::PostProcessingStage::addEffect<Crosshair>(-100);
 #pragma region Input binding
         app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
@@ -108,7 +108,7 @@ public:
         groundplane.add_component<transform>();
 
         camera = createEntity("Camera");
-        camera.add_component<transform>(position(0.f, 3.f, -30.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
+        camera.add_component<transform>(position(0.f, 3.f, -30.f), rotation::lookat(math::float3::zero, math::float3::forward), scale());
 
 #ifdef RYTHE_AUDIO
         camera.add_component<audio::audio_listener>();
@@ -153,7 +153,7 @@ public:
 
         if (action.released())
         {
-            app::WindowSystem::requestFullscreenToggle(ecs::world_entity_id, math::ivec2(100, 100), math::ivec2(1360, 768));
+            app::WindowSystem::requestFullscreenToggle(ecs::world_entity_id, math::int2(100, 100), math::int2(1360, 768));
         }
     }
 
@@ -200,8 +200,8 @@ public:
 
         position& pos = camera.get_component<position>();
         rotation& rot = camera.get_component<rotation>();
-        math::vec3 move = math::toMat3(rot) * math::vec3(0.f, 0.f, 1.f);
-        pos += math::normalize(move * math::vec3(1, 0, 1)) * action.value * action.input_delta * movementspeed;
+        math::float3 move = math::toMat3(rot) * math::float3(0.f, 0.f, 1.f);
+        pos += math::normalize(move * math::float3(1, 0, 1)) * action.value * action.input_delta * movementspeed;
     }
 
     void onPlayerStrive(player_strive& action)
@@ -214,8 +214,8 @@ public:
 
         position& pos = camera.get_component<position>();
         rotation& rot = camera.get_component<rotation>();
-        math::vec3 move = math::toMat3(rot) * math::vec3(1.f, 0.f, 0.f);
-        pos += math::normalize(move * math::vec3(1, 0, 1)) * action.value * action.input_delta * movementspeed;
+        math::float3 move = math::toMat3(rot) * math::float3(1.f, 0.f, 0.f);
+        pos += math::normalize(move * math::float3(1, 0, 1)) * action.value * action.input_delta * movementspeed;
     }
 
     void onPlayerFly(player_fly& action)
@@ -227,7 +227,7 @@ public:
             return;
 
         position& pos = camera.get_component<position>();
-        pos += (math::vec3(0.f, action.value * action.input_delta * movementspeed, 0.f));
+        pos += (math::float3(0.f, action.value * action.input_delta * movementspeed, 0.f));
     }
 
     void onPlayerLookX(player_look_x& action)
@@ -239,7 +239,7 @@ public:
             return;
 
         rotation& rot = camera.get_component<rotation>();
-        rot = math::angleAxis(action.value * action.input_delta * 500.f, math::vec3::up) * rot;
+        rot = math::angleAxis(action.value * action.input_delta * 500.f, math::float3::up) * rot;
     }
 
     void onPlayerLookY(player_look_y& action)
@@ -251,10 +251,10 @@ public:
             return;
 
         rotation& rot = camera.get_component<rotation>();
-        math::mat3 rotMat = math::toMat3(rot);
-        math::vec3 right = rotMat * math::vec3::right;
-        math::vec3 fwd = math::normalize(math::cross(right, math::vec3::up));
-        math::vec3 up = rotMat * math::vec3::up;
+        math::float3x3 rotMat = math::toMat3(rot);
+        math::float3 right = rotMat * math::float3::right;
+        math::float3 fwd = math::normalize(math::cross(right, math::float3::up));
+        math::float3 up = rotMat * math::float3::up;
         float angle = math::orientedAngle(fwd, up, right);
 
         angle += action.value * action.input_delta * 500.f;
@@ -264,9 +264,9 @@ public:
         if (angle < -(math::pi<float>() - 0.001f))
             angle = -(math::pi<float>() - 0.001f);
 
-        up = math::mat3(math::axisAngleMatrix(right, angle)) * fwd;
+        up = math::float3x3(math::axisAngleMatrix(right, angle)) * fwd;
         fwd = math::cross(right, up);
-        rot = (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3::zero, fwd, up)));
+        rot = (rotation)math::conjugate(math::toQuat(math::lookAt(math::float3::zero, fwd, up)));
     }
 #pragma endregion
 

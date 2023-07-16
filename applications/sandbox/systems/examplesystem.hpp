@@ -45,7 +45,7 @@ public:
             ent.add_component(gfx::light::directional(math::color(1, 1, 0.8f), 10.f));
             auto [pos, rot, scal] = ent.add_component<transform>();
             pos = position(0.f, 3.f, 6.f);
-            rot = rotation::lookat(math::vec3::zero, math::vec3(1.f, -1.f, 0.1f));
+            rot = rotation::lookat(math::float3::zero, math::float3(1.f, -1.f, 0.1f));
         }*/
 
         //#if defined(RYTHE_DEBUG)
@@ -91,9 +91,9 @@ public:
             auto ent = createEntity(material.get_name());
             ent.add_component<example_comp>();
             auto [pos, rot, scal] = ent.add_component<transform>();
-            pos = math::vec3(0.f, 0.f, 0.f);
-            scal = math::vec3(3.f);
-            rot = math::angleAxis(math::half_pi<float>(), math::vec3::up);
+            pos = math::float3(0.f, 0.f, 0.f);
+            scal = math::float3(3.f);
+            rot = math::angleAxis(math::half_pi<float>(), math::float3::up);
             ent.add_component(gfx::mesh_renderer(material, model));
         }
 
@@ -109,9 +109,9 @@ public:
             auto ent = createEntity(material.get_name());
             ent.add_component<example_comp>();
             auto [pos, rot, scal] = ent.add_component<transform>();
-            pos = math::vec3(0.f, 0.f, 4.f);
-            rot = math::angleAxis(math::half_pi<float>(), math::vec3::up);
-            scal = math::vec3(3.f);
+            pos = math::float3(0.f, 0.f, 4.f);
+            rot = math::angleAxis(math::half_pi<float>(), math::float3::up);
+            scal = math::float3(3.f);
             ent.add_component(gfx::mesh_renderer(material, model));
         }
 
@@ -127,9 +127,9 @@ public:
             auto ent = createEntity(material.get_name());
             ent.add_component<example_comp>();
             auto [pos, rot, scal] = ent.add_component<transform>();
-            pos = math::vec3(0.f, 0.f, 8.f);
-            rot = math::angleAxis(math::half_pi<float>(), math::vec3::up);
-            scal = math::vec3(3.f);
+            pos = math::float3(0.f, 0.f, 8.f);
+            rot = math::angleAxis(math::half_pi<float>(), math::float3::up);
+            scal = math::float3(3.f);
             ent.add_component(gfx::mesh_renderer(material, model));
         }
 
@@ -159,9 +159,9 @@ public:
             auto ent = createEntity(material.get_name());
             ent.add_component<example_comp>();
             auto [pos, rot, scal] = ent.add_component<transform>();
-            pos = math::vec3(0.f, 4.f, 0.f);
-            rot = math::angleAxis(math::half_pi<float>(), math::vec3::up);
-            scal = math::vec3(3.f);
+            pos = math::float3(0.f, 4.f, 0.f);
+            rot = math::angleAxis(math::half_pi<float>(), math::float3::up);
+            scal = math::float3(3.f);
             ent.add_component(gfx::mesh_renderer(material, model));
         }
 
@@ -177,9 +177,9 @@ public:
             auto ent = createEntity(material.get_name());
             ent.add_component<example_comp>();
             auto [pos, rot, scal] = ent.add_component<transform>();
-            pos = math::vec3(0.f, 4.f, 4.f);
-            rot = math::angleAxis(math::half_pi<float>(), math::vec3::up);
-            scal = math::vec3(3.f);
+            pos = math::float3(0.f, 4.f, 4.f);
+            rot = math::angleAxis(math::half_pi<float>(), math::float3::up);
+            scal = math::float3(3.f);
             ent.add_component(gfx::mesh_renderer(material, model));
         }
 
@@ -207,9 +207,9 @@ public:
             auto ent = createEntity(material.get_name());
             ent.add_component<example_comp>();
             auto [pos, rot, scal] = ent.add_component<transform>();
-            pos = math::vec3(0.f, 4.f, 8.f);
-            rot = math::angleAxis(math::half_pi<float>(), math::vec3::up);
-            scal = math::vec3(3.f);
+            pos = math::float3(0.f, 4.f, 8.f);
+            rot = math::angleAxis(math::half_pi<float>(), math::float3::up);
+            scal = math::float3(3.f);
             ent.add_component(gfx::mesh_renderer(material, model));
         }
 
@@ -225,9 +225,9 @@ public:
             auto ent = createEntity(material.get_name());
             ent.add_component<example_comp>();
             auto [pos, rot, scal] = ent.add_component<transform>();
-            pos = math::vec3(0.f, 8.f, 0.f);
-            rot = math::angleAxis(math::half_pi<float>(), math::vec3::up);
-            scal = math::vec3(3.f);
+            pos = math::float3(0.f, 8.f, 0.f);
+            rot = math::angleAxis(math::half_pi<float>(), math::float3::up);
+            scal = math::float3(3.f);
             ent.add_component(gfx::mesh_renderer(material, model));
         }
 
@@ -258,9 +258,9 @@ public:
             auto ent = createEntity(material.get_name());
             ent.add_component<example_comp>();
             auto [pos, rot, scal] = ent.add_component<transform>();
-            pos = math::vec3(0.f, 8.f, 4.f);
-            rot = math::angleAxis(math::half_pi<float>(), math::vec3::up);
-            scal = math::vec3(3.f);
+            pos = math::float3(0.f, 8.f, 4.f);
+            rot = math::angleAxis(math::half_pi<float>(), math::float3::up);
+            scal = math::float3(3.f);
             ent.add_component(gfx::mesh_renderer(material, model));
         }
 
@@ -276,9 +276,9 @@ public:
             auto ent = createEntity(material.get_name());
             ent.add_component<example_comp>();
             auto [pos, rot, scal] = ent.add_component<transform>();
-            pos = math::vec3(0.f, 8.f, 8.f);
-            rot = math::angleAxis(math::half_pi<float>(), math::vec3::up);
-            scal = math::vec3(3.f);
+            pos = math::float3(0.f, 8.f, 8.f);
+            rot = math::angleAxis(math::half_pi<float>(), math::float3::up);
+            scal = math::float3(3.f);
             ent.add_component(gfx::mesh_renderer(material, model));
         }
 
@@ -445,7 +445,7 @@ public:
             ecs::filter<rotation, example_comp> filter;
             for (auto& ent : filter)
             {
-                ent.get_component<rotation>().get() *= math::angleAxis(math::two_pi<float>() * 0.1f * deltaTime, math::vec3::up);
+                ent.get_component<rotation>().get() *= math::angleAxis(math::two_pi<float>() * 0.1f * deltaTime, math::float3::up);
             }
         }
 
@@ -472,14 +472,14 @@ public:
                         auto& pos = filter[i].get_component<position>().get();
                         auto& vel = filter[i].get_component<velocity>().get();
 
-                        if (vel == math::vec3::zero)
+                        if (vel == math::float3::zero)
                             vel = math::normalize(pos);
 
-                        math::vec3 perp;
+                        math::float3 perp;
 
-                        perp = math::normalize(math::cross(vel, math::vec3::up));
+                        perp = math::normalize(math::cross(vel, math::float3::up));
 
-                        math::vec3 rotated = (math::axisAngleMatrix(vel, math::perlin(pos) * math::pi<float>()) * math::vec4(perp.x, perp.y, perp.z, 0)).xyz();
+                        math::float3 rotated = (math::axisAngleMatrix(vel, math::perlin(pos) * math::pi<float>()) * math::float4(perp.x, perp.y, perp.z, 0)).xyz();
                         rotated.y -= 0.5f;
                         rotated = math::normalize(rotated);
 
@@ -489,7 +489,7 @@ public:
                         {
                             auto rand = math::circularRand(1.f);
                             vel.y = 0.9f;
-                            vel = math::normalize(vel + math::vec3(rand.x, 0.f, rand.y));
+                            vel = math::normalize(vel + math::float3(rand.x, 0.f, rand.y));
                         }
 
                         pos += vel * 0.3f * dt;

@@ -26,6 +26,7 @@ project "sandbox"
     kind "ConsoleApp"
     language "C++"
     cppdialect "C++20"
+    targetdir "../../build/%{cfg.buildcfg}"
     includedirs { "../","../../rythe/engine/core/src/"}
 
     files { "**.h", "**.hpp" ,"**.inl","**.c", "**.cpp" }

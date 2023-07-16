@@ -58,21 +58,12 @@ include(formatEngineModulePath("audio"))
 
 include(formatApplicationPath("sandbox"))
 
---include "legion/engine/scripting/build-scripting.lua"
---include "legion/engine/networking/build-networking.lua"
-
---include "applications/unit_tests/build-tests.lua"
-
 project "*"
-    includedirs { "include/"}
-    targetdir "build/%{cfg.buildcfg}"
+    includedirs { "include/","include/*/","include/*/src/"}
     libdirs { "lib/", "build/%{cfg.buildcfg}/" }
     toolset "clang"
-
         
     filter "configurations:Debug*"
-        -- buildoptions { "-fsanitize=address,undefined" }
-        -- linkoptions { "-fsanitize=address,undefined" }
         defines {"DEBUG"}
         symbols "On"
 

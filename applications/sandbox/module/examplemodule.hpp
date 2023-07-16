@@ -14,7 +14,7 @@ public:
         using namespace rythe;
         app::WindowSystem::requestWindow(
             ecs::world_entity_id,
-            math::ivec2(1920, 1080),
+            math::int2(1920, 1080),
             "RYTHE Engine",
             "RYTHE Icon",
             nullptr,
