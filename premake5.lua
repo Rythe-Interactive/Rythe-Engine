@@ -22,27 +22,96 @@ DEALINGS IN THE SOFTWARE.
 ]]--
 
 
---[[ //NOTE:(algo-ryth-mix)
-        The License of this module is problematic. Or rather the lack thereof
-        I have contacted the maintainers of this repository, to maybe get them
-        to add a license, I am still waiting however
 
-        for the time being the module int <root>/tools/export-compile-commands will
-        stay as a simple file-ptr to avoid problems
+function scandir(directory,recursive, extensions)
+    directory = directory or ''
+    recursive = recursive or false
+    -- if string.sub(directory, -1) ~= '/' then directory = directory .. '/' end
 
-        Why is this needed?
-        this can generate compile-commands for us, which clang-* can use to
-        analyze our code
+    local currentDirectory = directory
+    local fileList = {}
+    local command = "dir " .. directory .. " /b"
+    if recursive then command = command .. '/s' end
 
-require "../tools/export-compile-commands"
-]]--
+    for fileName in io.popen(command):lines() do
+        if string.find(fileName,"include") then
+            goto continue
+        end
+        if string.sub(fileName, -1) == '/' then
+            -- Directory, don't do anything
+        elseif string.sub(fileName, -1) == ':' then
+            currentDirectory = string.sub(fileName, 1, -2) .. 'wat'
+            -- if currentDirectory ~= directory then
+                currentDirectory = currentDirectory .. '/'
+            -- end
+        elseif string.len(fileName) == 0 then
+            -- Blank line
+            currentDirectory = directory
+        -- elseif string.find(fileName,"%.lua$") then
+            -- File is a .lua file
+        else
+            if type(extensions) == 'table' then
+                for _, extension in ipairs(extensions) do
+                    if string.find(fileName,"%." .. extension .. "$") then
+                        table.insert(fileList, currentDirectory .. fileName)
+                    end
+                end
+            else
+                table.insert(fileList, currentDirectory .. fileName)
+            end
+        end
+        ::continue::
+    end
+    return fileList
+end
+cleanExts = {"vcxproj","vcxproj.filters","vcxproj.user"}
+newaction
+{
+    trigger = "clean",
+    description = "clean the project files",
+    execute = function ()
+        for key, value in ipairs(scandir("",true,cleanExts)) do
+            os.remove(value)
+        end
+    end
+}
 
 function formatEngineModulePath(moduleName)
-    return string.format("rythe/engine/%s/src/%s/build-%s.lua", moduleName, moduleName, moduleName)
+    return string.format("rythe/engine/%s/build-%s.lua", moduleName, moduleName, moduleName)
 end
 
 function formatApplicationPath(moduleName)
     return string.format("applications/%s/build-%s.lua", moduleName, moduleName)
+end
+
+function formatExternalProject(projectName)
+    return string.format("include/%s/build-%s.lua",projectName,projectName)
+end
+
+function createProject(groupName,projectName,kindName)
+    print("Building " .. projectName)
+    group ("" .. groupName)
+    project ("" .. projectName)
+        kind (""..kindName)
+        location ("src/"..projectName)
+        architecture "x64"
+        toolset "clang"
+        language "C++"
+        cppdialect "C++20"
+        targetdir "$(SolutionDir)bin\\lib"
+        libdirs {"$(SolutionDir)bin\\lib\\"}
+        objdir "$(SolutionDir)bin\\obj"
+        defines {"RYTHE_INTERNAL", "PROJECT_NAME="..projectName}
+        filter "configurations:Debug*"
+            defines {"DEBUG"}
+            symbols "On"
+            targetsuffix "-d"
+        filter "configurations:Release*"
+            defines {"NDEBUG"}
+            optimize "On"
+
+        filter {}
+    group ""
 end
 
 -- root workspace, all sub-project should be included
@@ -55,44 +124,7 @@ include(formatEngineModulePath("application"))
 include(formatEngineModulePath("graphics"))
 include(formatEngineModulePath("physics"))
 include(formatEngineModulePath("audio"))
+include(formatExternalProject("rsl"))
 
 include(formatApplicationPath("sandbox"))
 
-group "include"
-externalproject "rsl"
-    location "include/Rythe-Standard-Library/src/rsl/"
-    kind "StaticLib"
-    language "C++"
-group ""
-
-project "*"
-    includedirs { "include/","include/*/","include/*/src/"}
-    libdirs { "lib/", "build/%{cfg.buildcfg}/" }
-    toolset "clang"
-        
-    filter "configurations:Debug*"
-        defines {"DEBUG"}
-        symbols "On"
-
-    filter "configurations:Release*"
-        defines {"NDEBUG"}
-        optimize "On"
-
-    filter "configurations:*64"
-        architecture "x86_64"
--- how to build:
---[[
-    you require a copy of premake5 which can be obtained from https://premake.github.io/download.html#v5
-    if you are on linux, here is a one liner to install it:
-
-    wget -qO- https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-linux.tar.gz | tar xvz premake5 | xargs -I"{}" sudo mv {} /usr/bin
-
-    on windows make sure that premake5 is in your path
-
-    then invoke premake
-        on windows: premake5 vs2019
-        on linux: premake5 gmake
-        to build the compilation database:
-        premake5 export-compile-commands (on any platform with export-compile-commands installed, see note above)
-
-]]--

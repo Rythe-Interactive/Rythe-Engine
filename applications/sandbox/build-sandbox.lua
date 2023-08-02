@@ -21,19 +21,22 @@ DEALINGS IN THE SOFTWARE.
 
 ]]--
 
-group "applications"
-project "sandbox"
-    kind "ConsoleApp"
-    language "C++"
-    cppdialect "C++20"
-    targetdir "../../build/%{cfg.buildcfg}"
-    includedirs { "../","../../rythe/engine/core/src/"}
+createProject("applications","sandbox","ConsoleApp")
+targetdir "$(SolutionDir)bin\\build\\"
+includedirs {
+    "sandbox"
+}   
+files { 
+    "**.h",
+     "**.hpp",
+     "**.inl",
+     "**.c",
+     "**.cpp"
+     }
 
-    files { "**.h", "**.hpp" ,"**.inl","**.c", "**.cpp" }
-
-    include "../../rythe/engine/core/src/core/include-core.lua"
-    include "../../rythe/engine/application/src/application/include-application.lua"
-    include "../../rythe/engine/graphics/src/graphics/include-graphics.lua"
-group ""
+dofile  "rythe/engine/core/include-core.lua"
+dofile  "rythe/engine/application/include-application.lua"
+dofile  "rythe/engine/graphics/include-graphics.lua"
+"
 
        
