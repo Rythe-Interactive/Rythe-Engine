@@ -65,16 +65,6 @@ function scandir(directory,recursive, extensions)
     return fileList
 end
 cleanExts = {"vcxproj","vcxproj.filters","vcxproj.user"}
-newaction
-{
-    trigger = "clean",
-    description = "clean the project files",
-    execute = function ()
-        for key, value in ipairs(scandir("",true,cleanExts)) do
-            os.remove(value)
-        end
-    end
-}
 
 function formatEngineModulePath(moduleName)
     return string.format("rythe/engine/%s/build-%s.lua", moduleName, moduleName, moduleName)
@@ -85,7 +75,7 @@ function formatApplicationPath(moduleName)
 end
 
 function formatExternalProject(projectName)
-    return string.format("include/%s/build-%s.lua",projectName,projectName)
+    return string.format("rythe/engine/core/third_party/%s/build-%s.lua",projectName,projectName)
 end
 
 function createProject(groupName,projectName,kindName)
@@ -128,3 +118,13 @@ include(formatExternalProject("rsl"))
 
 include(formatApplicationPath("sandbox"))
 
+newaction
+{
+    trigger = "clean",
+    description = "clean the project files",
+    execute = function ()
+        for key, value in ipairs(scandir("",true,cleanExts)) do
+            os.remove(value)
+        end
+    end
+}

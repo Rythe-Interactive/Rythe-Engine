@@ -13,6 +13,6 @@
 [submodule "rythe/engine/physics"]
 	path = rythe/engine/physics
 	url = https://github.com/Rythe-Interactive/Rythe-Physics.git
-[submodule "include/Rythe-Standard-Library"]
-	path = include/Rythe-Standard-Library
+[submodule "include/rsl"]
+	path = include/rsl
 	url = https://github.com/Rythe-Interactive/Rythe-Standard-Library.git
