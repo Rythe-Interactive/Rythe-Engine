@@ -114,9 +114,10 @@ include(formatEngineModulePath("application"))
 include(formatEngineModulePath("graphics"))
 include(formatEngineModulePath("physics"))
 include(formatEngineModulePath("audio"))
-include(formatExternalProject("rsl"))
+include(formatExternalProject("rythe-standard-library"))
 
 include(formatApplicationPath("sandbox"))
+include(formatApplicationPath("rsl_test"))
 
 newaction
 {
