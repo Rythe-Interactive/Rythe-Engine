@@ -128,3 +128,6 @@ applications/sandbox/imgui.ini
 docs/venv
 **/__pycache__/**
 **/imgui.ini
+*.sln
+*.vcxproj
+*.filters
