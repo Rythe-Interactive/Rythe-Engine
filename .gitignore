@@ -92,7 +92,7 @@ bld/
 !**/engine/resources/**
 
 # Rythe engine tools folder
-!tools/
+!**/tools/**
 
 # Word temporary files
 ~$*.*

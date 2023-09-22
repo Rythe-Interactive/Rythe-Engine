@@ -16,7 +16,9 @@ static void func() {
 }
 
 static void func2(unsigned& i) {
-    std::cout << "function" << i << "\n";
+    static unsigned tmp = 0;
+    static volatile unsigned* ptr = &tmp;
+    *ptr = i;
 }
 
 struct Object {
@@ -117,6 +119,15 @@ void delegate_test(size_t i) {
 }
 
 void stl_test(size_t i) {
+
+    std::function<void(rsl::uint32&)> del2;
+
+    {
+        del2 = &func2;
+        rsl::uint32 t = 0;
+        del2(t);
+    }
+
     std::function<void()> del;
 
     {
