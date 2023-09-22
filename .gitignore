@@ -1,32 +1,75 @@
-###################
-# Rythe Generated #
-###################
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
-# Rythe library output
-include/**
-lib/*
+# Mono auto generated files
+mono_crash.*
 
-# Rythe Precompiled shader files
-*.shil
+# Visual Studio 2015/2017 cache/options directory
+.vs/
 
-#########
-# Build #
-#########
+# Visual Studio code files
+.vscode/
 
-# CMake
-CMakeFiles/
-CMakeScripts/
-cmake_install.cmake
-CMakeCache.txt
-cmake-build-*/
-CMakeDoxyfile.in
-CMakeDoxygenDefaults.cmake
+# Visual C++ cache files
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.db
+*.VC.VC.opendb
 
-# CMake Tests
-CTestTestfile.cmake
-DartConfiguration.tcl
-unit_tests_*.cmake
-Testing/
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# Visual Studio cache files
+# files ending in .cache can be ignored
+*.[Cc]ache
+# but keep track of directories ending in .cache
+!?*.[Cc]ache/
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# Executables
+*.exe
+*.out
+*.app
 
 # Build results
 [Dd]ebug/
@@ -38,64 +81,50 @@ x86/
 [Ww][Ii][Nn]32/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
+bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
 
-# Executables
-*.exe
-*.out
-*.app
+# Rythe engine asset folder
+!**/assets/**
+!**/engine/resources/**
 
-#############
-# Platforms #
-#############
-
-# Windows
-
-# Linux
-
-# MacOS
-*.DS_Store
-*.sb-*
-
-#############
-# Compilers #
-#############
-
-################
-# IDEs/Editors #
-################
-
-# Visual Studio
-*.sln
-*.vcxproj
-*.vcxproj.user
-*.vcxproj.filters
-.vs/
-
-# Visual Studio Code
-.vscode/
-
-# CLion
-*.idea/
-
-# XCode
-*.xcodeproj/
-XCBuildData/
-
-########
-# Misc #
-########
-
-# Mono
-mono_crash.*
-vm/**
+# Rythe engine tools folder
+!tools/
 
 # Word temporary files
 ~$*.*
 
-# Dear Imgui
-imgui.ini
-build/*
+# linux Makefiles
+**/Makefile
+
+# Windows Preview files
+**/Thumbs.db
+*.xcf
+
+*.shil
+!**/applications/**/engine/**
+
+# Mono VM
+vm/**
+
+# Rythe Libraries
+lib/*
+
+# Rythe Precompiled shader files
+*.shil
+
+# Rythe Includes
+include/**
+
+# Misc
+*/**/Thumbs.db
+applications/sandbox/imgui.ini
+
+# Reference files (not for upload)
+**/**_ref/*
+docs/venv
+**/__pycache__/**
+**/imgui.ini
