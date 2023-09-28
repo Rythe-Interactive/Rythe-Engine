@@ -35,7 +35,6 @@ files {
      }
 
 dofile "rythe/engine/core/include-core.lua"
-dofile "rythe/engine/application/include-application.lua"
 dofile "rythe/engine/graphics/include-graphics.lua"
 
 

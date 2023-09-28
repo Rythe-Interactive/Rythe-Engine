@@ -54,7 +54,7 @@ public:
             for (auto& warn : result.warnings())
                 log::warn(warn);
 
-        L_MAYBEUNUSED auto val = result.except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
+        [[maybe_unused]] auto val = result.except([]([[maybe_unused]] exception& error) { return assets::invalid_asset<image>; });
 
         if (result)
         {
@@ -95,7 +95,7 @@ public:
 
     }
 
-    void update(L_MAYBEUNUSED ryt::time::span deltaTime)
+    void update([[maybe_unused]] rsl::span deltaTime)
     {
         using namespace rythe;
 
@@ -106,7 +106,7 @@ public:
 
         tested = true;
 
-        time::timer clock;
+        rsl::timer clock;
         asyncOp = assets::loadAsync<mesh>(fs::view("assets://models/wizardgnome.glb"));
 
         while (!asyncOp.is_done())
@@ -140,20 +140,20 @@ public:
         ryt::async::rw_spinlock lock;
         lock.lock();
 
-        auto procA = queueJobs(2000, [&lock](ryt::id_type jobId)
+        auto procA = queueJobs(2000, [&lock](rsl::id_type jobId)
             {
                 ryt::async::readonly_guard guard(lock);
                 ryt::log::info("\tjob A id [{}]", jobId);
             });
 
-        auto procB = queueJobs(2000, [&lock](ryt::id_type jobId)
+        auto procB = queueJobs(2000, [&lock](rsl::id_type jobId)
             {
                 ryt::async::readonly_guard guard(lock);
                 ryt::log::debug("\tjob B id [{}]", jobId);
             });
 
 
-        auto procC = queueJobs(2000, [&lock](ryt::id_type jobId)
+        auto procC = queueJobs(2000, [&lock](rsl::id_type jobId)
             {
                 ryt::async::readonly_guard guard(lock);
                 ryt::log::warn("\tjob C id [{}]", jobId);

@@ -297,7 +297,7 @@ namespace rythe
                     {
                         selected = handle;
                     }
-                    for (id_type id : handle.component_composition())
+                    for (rsl::id_type id : handle.component_composition())
                     {
                         ImGui::Text("%s", ecs::Registry::getFamilyName(id).c_str());
                         if (ImGui::IsItemClicked())
@@ -362,7 +362,7 @@ namespace rythe
         }
 
         template<typename Vec>
-        bool DisplayVec(cstring name, Vec& value)
+        bool DisplayVec(rsl::cstring name, Vec& value)
         {
             if constexpr (std::is_same_v<typename Vec::value_type, float>)
             {
@@ -412,7 +412,7 @@ namespace rythe
         }
 
         template<typename T>
-        bool DisplayValue(cstring name, T& value)
+        bool DisplayValue(rsl::cstring name, T& value)
         {
             if constexpr (std::is_same_v<T, float>)
             {
@@ -434,7 +434,7 @@ namespace rythe
 
         bool DisplayParamEditor(material_handle material, const std::string& name, const GLenum& type)
         {
-            if (common::starts_with(name, "ryt_"))
+            if (rsl::starts_with(name, "ryt_"))
                 return false;
 
             ImGui::Text("%s:", name.c_str());
@@ -505,7 +505,7 @@ namespace rythe
             break;
             case GL_UNSIGNED_INT:
             {
-                int value = material.get_param<uint>(name);
+                int value = material.get_param<rsl::uint>(name);
                 if (DisplayValue(label.c_str(), value))
                 {
                     material.set_param(name, value);
@@ -650,7 +650,7 @@ namespace rythe
             return false;
         }
 
-        void onGUI(L_MAYBEUNUSED app::window& context, camera& cam, const camera::camera_input& camInput, L_MAYBEUNUSED time::span deltaTime)
+        void onGUI([[maybe_unused]] app::window& context, camera& cam, const camera::camera_input& camInput, [[maybe_unused]] rsl::span deltaTime)
         {
             //if (!SceneManager::currentScene)
               //  SceneManager::currentScene = SceneManager::create_scene();
@@ -723,7 +723,7 @@ namespace rythe
                         rotation& rot = selected.get_component<rotation>();
                         scale& scal = selected.get_component<scale>();
                         model = compose(scal, rot, pos);
-                        ImGuizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
+                        ImGuizmo::EditTransform(view.data, projection.data, model.data, true);
                         decompose(model, scal, rot, pos);
                     }
                 }

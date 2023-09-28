@@ -14,10 +14,10 @@ struct switch_skybox_action : public ryt::app::input_action<switch_skybox_action
 
 class ExampleSystem final : public rythe::System<ExampleSystem>
 {
-    ryt::size_type frames = 0;
-    ryt::time64 totalTime = 0;
-    ryt::time::stopwatch<ryt::time64> timer;
-    std::array<ryt::time64, 18000> times;
+    rsl::size_type frames = 0;
+    rsl::time64 totalTime = 0;
+    rsl::stopwatch<rsl::time64> timer;
+    std::array<rsl::time64, 18000> times;
 
 public:
     void setup()
@@ -282,7 +282,7 @@ public:
             ent.add_component(gfx::mesh_renderer(material, model));
         }
 
-        bindToEvent<events::exit, &ExampleSystem::onExit>();
+        //core::events::bindToEvent<events::exit, &ExampleSystem::onExit>();
     }
 
     void shutdown()
@@ -318,8 +318,8 @@ public:
         using namespace rythe;
         if (event.pressed())
         {
-            static size_type type = static_cast<size_type>(gfx::tonemapping_type::rythe);
-            type = (type + 1) % (static_cast<size_type>(gfx::tonemapping_type::unreal3) + 1);
+            static rsl::size_type type = static_cast<rsl::size_type>(gfx::tonemapping_type::rythe);
+            type = (type + 1) % (static_cast<rsl::size_type>(gfx::tonemapping_type::unreal3) + 1);
 
             auto typeEnum = static_cast<gfx::tonemapping_type>(type);
 
@@ -356,7 +356,7 @@ public:
         using namespace rythe;
         if (event.pressed())
         {
-            static size_type idx = 0;
+            static rsl::size_type idx = 0;
             static gfx::texture_handle textures[4] = {};
             static bool initialized = false;
 
@@ -392,46 +392,46 @@ public:
         }
     }
 
-    void onExit(L_MAYBEUNUSED ryt::events::exit& event)
+    void onExit([[maybe_unused]] ryt::events::exit& event)
     {
         using namespace rythe;
 
-        time64 avg0 = totalTime / frames;
-        time64 avg1 = timer.elapsed_time() / frames;
+        rsl::time64 avg0 = totalTime / frames;
+        rsl::time64 avg1 = timer.elapsed_time() / frames;
 
-        std::set<time64, std::greater<time64>> orderedTimes;
+        std::set<rsl::time64, std::greater<rsl::time64>> orderedTimes;
 
         for (auto& time : times)
             orderedTimes.insert(time);
 
-        time64 onePcLow = 0;
-        time64 pointOnePcLow = 0;
+        rsl::time64 onePcLow = 0;
+        rsl::time64 pointOnePcLow = 0;
 
-        size_type i = 0;
+        rsl::size_type i = 0;
         for (auto& time : orderedTimes)
         {
             i++;
             onePcLow += time;
 
-            if (i <= math::max<size_type>(math::uround(frames / 1000.0), 1))
+            if (i <= math::max<rsl::size_type>(math::uround(frames / 1000.0), 1))
             {
                 pointOnePcLow += time;
             }
 
-            if (i >= math::max<size_type>(math::uround(frames / 100.0), 1))
+            if (i >= math::max<rsl::size_type>(math::uround(frames / 100.0), 1))
             {
                 break;
             }
         }
 
-        pointOnePcLow /= math::max<size_type>(math::uround(frames / 1000.0), 1);
-        onePcLow /= math::max<size_type>(math::uround(frames / 100.0), 1);
+        pointOnePcLow /= math::max<rsl::size_type>(math::uround(frames / 1000.0), 1);
+        onePcLow /= math::max<rsl::size_type>(math::uround(frames / 100.0), 1);
 
         log::info("1%Low {:.3f} 0.1%Low {:.3f} Avg {:.3f} Measured Avg {:.3f}", onePcLow, pointOnePcLow, avg0, avg1);
         log::info("1%Low {:.3f} 0.1%Low {:.3f} Avg {:.3f} Measured Avg {:.3f}", 1.0 / onePcLow, 1.0 / pointOnePcLow, 1.0 / avg0, 1.0 / avg1);
     }
 
-    void update(rythe::time::span deltaTime)
+    void update(rsl::span deltaTime)
     {
         using namespace rythe;
         static bool firstFrame = true;
@@ -445,7 +445,7 @@ public:
             ecs::filter<rotation, example_comp> filter;
             for (auto& ent : filter)
             {
-                ent.get_component<rotation>().get() *= math::angleAxis(math::two_pi<float>() * 0.1f * deltaTime, math::float3::up);
+                ent.get_component<rotation>().get() *= math::angleAxis(math::tau<float>() * 0.1f * deltaTime, math::float3::up);
             }
         }
 
@@ -458,16 +458,16 @@ public:
         if (filter.size())
         {
             auto poolSize = (schd::Scheduler::jobPoolSize() + 1);
-            size_type jobSize = math::iround(math::ceil(filter.size() / static_cast<float>(poolSize)));
+            rsl::size_type jobSize = math::iround(math::ceil(filter.size() / static_cast<float>(poolSize)));
 
-            queueJobs(poolSize, [&](id_type jobId)
+            queueJobs(poolSize, [&](rsl::id_type jobId)
                 {
                     auto start = jobId * jobSize;
                     auto end = start + jobSize;
                     if (end > filter.size())
                         end = filter.size();
 
-                    for (size_type i = start; i < end; i++)
+                    for (rsl::size_type i = start; i < end; i++)
                     {
                         auto& pos = filter[i].get_component<position>().get();
                         auto& vel = filter[i].get_component<velocity>().get();
@@ -479,7 +479,7 @@ public:
 
                         perp = math::normalize(math::cross(vel, math::float3::up));
 
-                        math::float3 rotated = (math::axisAngleMatrix(vel, math::perlin(pos) * math::pi<float>()) * math::float4(perp.x, perp.y, perp.z, 0)).xyz();
+           /*             math::float3 rotated = (math::axisAngleMatrix(vel, math::perlin(pos) * math::pi<float>()) * math::float4(perp.x, perp.y, perp.z, 0)).xyz();
                         rotated.y -= 0.5f;
                         rotated = math::normalize(rotated);
 
@@ -490,7 +490,7 @@ public:
                             auto rand = math::circularRand(1.f);
                             vel.y = 0.9f;
                             vel = math::normalize(vel + math::float3(rand.x, 0.f, rand.y));
-                        }
+                        }*/
 
                         pos += vel * 0.3f * dt;
                     }
@@ -498,7 +498,7 @@ public:
             ).wait();
         }
 
-        time64 delta = schd::Clock::lastTickDuration();
+        rsl::time64 delta = schd::Clock::lastTickDuration();
 
         if (frames < times.size())
         {
