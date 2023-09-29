@@ -106,7 +106,7 @@ public:
 
         tested = true;
 
-        rsl::timer clock;
+        rsl::stopwatch<> clock;
         asyncOp = assets::loadAsync<mesh>(fs::view("assets://models/wizardgnome.glb"));
 
         while (!asyncOp.is_done())

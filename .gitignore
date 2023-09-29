@@ -131,3 +131,6 @@ docs/venv
 *.sln
 *.vcxproj
 *.filters
+build/.cmake
+build/CMakeFiles
+build/CMakeCache.txt

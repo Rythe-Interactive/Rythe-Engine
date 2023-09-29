@@ -364,15 +364,15 @@ namespace rythe
         template<typename Vec>
         bool DisplayVec(rsl::cstring name, Vec& value)
         {
-            if constexpr (std::is_same_v<typename Vec::value_type, float>)
+            if constexpr (std::is_same_v<typename Vec::scalar, float>)
             {
-                return ImGui::InputScalarN(name, ImGuiDataType_Float, math::value_ptr(value), Vec::length());
+                return ImGui::InputScalarN(name, ImGuiDataType_Float, value.data, Vec::size);
             }
-            else if constexpr (std::is_same_v<typename Vec::value_type, int>)
+            else if constexpr (std::is_same_v<typename Vec::scalar, int>)
             {
-                return ImGui::InputScalarN(name, ImGuiDataType_S32, math::value_ptr(value), Vec::length());
+                return ImGui::InputScalarN(name, ImGuiDataType_S32, value.data, Vec::size);
             }
-            else if constexpr (std::is_same_v<typename Vec::value_type, bool>)
+            else if constexpr (std::is_same_v<typename Vec::scalar, bool>)
             {
                 ImGuiWindow* window = ImGui::GetCurrentWindow();
                 if (window->SkipItems)
@@ -382,9 +382,9 @@ namespace rythe
                 bool value_changed = false;
                 ImGui::BeginGroup();
                 ImGui::PushID(name);
-                ImGui::PushMultiItemsWidths(Vec::length(), ImGui::CalcItemWidth());
+                ImGui::PushMultiItemsWidths(Vec::size, ImGui::CalcItemWidth());
 
-                for (int i = 0; i < Vec::length(); i++)
+                for (int i = 0; i < Vec::size; i++)
                 {
                     ImGui::PushID(i);
                     if (i > 0)

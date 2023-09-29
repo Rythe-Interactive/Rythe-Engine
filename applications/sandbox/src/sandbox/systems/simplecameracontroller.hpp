@@ -85,7 +85,7 @@ public:
         createProcess<&SimpleCameraController::onGetCamera>("Update", 0.5f);
     }
 
-    void onGetCamera(time::span)
+    void onGetCamera(rsl::span)
     {
         static ecs::filter<gfx::camera> query{};
 
