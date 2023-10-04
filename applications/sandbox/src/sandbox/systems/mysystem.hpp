@@ -59,8 +59,8 @@ public:
         if (result)
         {
             auto img = result.value();
-            log::debug("\nname: {}\nid: {}\nresolution: {}\nformat: {}\ncomponents: {}",
-                img.name(), img.id(), img->resolution(), to_string(img->format()), to_string(img->components()));
+            //log::debug("\nname: {}\nid: {}\nresolution: {}\nformat: {}\ncomponents: {}",
+            //    img.name(), img.id(), img->resolution(), to_string(img->format()), to_string(img->components()));
         }
 
         auto objR = assets::load<mesh>(fs::view("assets://models/submeshtest.obj"));
@@ -74,8 +74,8 @@ public:
         if (objR)
         {
             auto msh = objR.value();
-            log::debug("\nname: {}\nid: {}\nvertex count: {}\ntriangle count: {}\nmaterial count: {}",
-                msh.name(), msh.id(), msh->vertices.size(), msh->indices.size() / 3, msh->materials.size());
+            //log::debug("\nname: {}\nid: {}\nvertex count: {}\ntriangle count: {}\nmaterial count: {}",
+            //    msh.name(), msh.id(), msh->vertices.size(), msh->indices.size() / 3, msh->materials.size());
         }
 
         auto glbR = assets::load<mesh>(fs::view("assets://models/submeshtest.glb"));
@@ -89,8 +89,8 @@ public:
         if (glbR)
         {
             auto msh = glbR.value();
-            log::debug("\nname: {}\nid: {}\nvertex count: {}\ntriangle count: {}\nmaterial count: {}",
-                msh.name(), msh.id(), msh->vertices.size(), msh->indices.size() / 3, msh->materials.size());
+            //log::debug("\nname: {}\nid: {}\nvertex count: {}\ntriangle count: {}\nmaterial count: {}",
+            //    msh.name(), msh.id(), msh->vertices.size(), msh->indices.size() / 3, msh->materials.size());
         }
 
     }

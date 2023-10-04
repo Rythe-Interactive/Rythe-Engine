@@ -139,10 +139,10 @@ namespace rythe
 
                 cubeModel = ModelCache::create_model("cube", "assets://models/Cube.obj"_view);
                 decalMaterial = MaterialCache::create_material("decal", "assets://shaders/decal.shs"_view);
-                decalMaterial.set_param(SV_ALBEDO, TextureCache::create_texture("engine://resources/default/albedo"_view));
-                decalMaterial.set_param(SV_NORMALHEIGHT, TextureCache::create_texture("engine://resources/default/normalHeight"_view));
-                decalMaterial.set_param(SV_MRDAO, TextureCache::create_texture("engine://resources/default/MRDAo"_view));
-                decalMaterial.set_param(SV_EMISSIVE, TextureCache::create_texture("engine://resources/default/emissive"_view));
+                decalMaterial.set_param(SV_ALBEDO, TextureCache::create_texture("engine://resources/default/albedo.png"_view));
+                decalMaterial.set_param(SV_NORMALHEIGHT, TextureCache::create_texture("engine://resources/default/normalHeight.png"_view));
+                decalMaterial.set_param(SV_MRDAO, TextureCache::create_texture("engine://resources/default/MRDAo.png"_view));
+                decalMaterial.set_param(SV_EMISSIVE, TextureCache::create_texture("engine://resources/default/emissive.png"_view));
                 decalMaterial.set_param(SV_HEIGHTSCALE, 0.f);
             }
 

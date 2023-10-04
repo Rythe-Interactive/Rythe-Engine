@@ -24,7 +24,7 @@ public:
 
         //reportSystem<MySystem>();
         reportSystem<SimpleCameraController>();
-        reportSystem<ExampleSystem>();
+        //reportSystem<ExampleSystem>();
         reportSystem<GuiTestSystem>();
     }
 };
