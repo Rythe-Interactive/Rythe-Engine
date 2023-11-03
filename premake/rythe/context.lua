@@ -33,7 +33,7 @@ function context.hasModule(module)
 	return hasFilter(_OPTIONS["modules"], module)
 end
 
--- Project types are e.g. test, module, application, static-libary, dynamic-library, header-only, util
+-- Project types are e.g. test, module, application, editor, static-libary, dynamic-library, header-only, util
 function context.hasProjectType(projectType)
     return hasFilter(_OPTIONS["types"], projectType)
 end

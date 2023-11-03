@@ -30,6 +30,8 @@ local function kindName(projectType, config)
         return ctx.linkTarget()
     elseif projectType == "test" then
         return "ConsoleApp"
+    elseif projectType == "editor" then
+        return "SharedLib"
     elseif projectType == "application" then
         if config == rythe.Configuration.RELEASE then
             return "WindowedApp"
@@ -44,6 +46,18 @@ local function kindName(projectType, config)
         return "Utility"
     end
     assert(false, "Unknown project type: \"" .. projectType .. "\"")
+end
+
+local function projectTypeGroupPrefix(projectType)
+    if projectType == "test" then
+        return "tests/"
+    elseif projectType == "application" then
+        return "applications/"
+    elseif projectType == "editor" then
+        return "editor/"
+    end
+
+    return ""
 end
 
 function projects.load(projectPath)
@@ -72,9 +86,6 @@ function projects.load(projectPath)
     assert(project.group == group, "Group folder structure mismatch \"" .. group .. "\" vs \"" .. project.group .. "\"")
     assert(project.name == name, "Project name folder structure mismatch \"" .. name .. "\" vs \"" .. project.name .. "\"")
     assert(not utils.tableIsEmpty(project.types), "Project must hold an assembly type. (Use the type \"util\" if no source code is required)")
-    if next(project.dependencies) == nil then
-        project.dependencies = nil
-    end
 
     if utils.tableIsEmpty(project.defines) then
         project.defines = { "PROJECT_NAME=" .. project.name }
@@ -118,18 +129,41 @@ function projects.submit(project)
     }
 
     for i, projectType in ipairs(project.types) do
-        group(project.group)
+        local fullGroupPath = projectTypeGroupPrefix(projectType) .. project.group
+        local binDir = _ACTION .. "/bin/"
+
+        group(fullGroupPath)
         project(project.name)
+        
+        location(_ACTION .. "/" .. fullGroupPath)
+        targetdir(binDir .. fullGroupPath)
+        objdir(binDir .. "obj")
+
+        if not utils.tableIsEmpty(project.dependencies) then
+            local libDirs = {}
+            for i, dep in ipairs(project.dependencies) do
+                -- something
+            end
+            
+            libdirs(libDirs)
+        end
+
         architecture(buildSettings.platform)
-        toolset("clang")
+        toolset(buildSettings.toolset)
         language("C++")
-        cppdialect("C++23")
+        cppdialect(buildSettings.cppVersion)
+
         defines(project.defines)
+
         for i, config in ipairs(rythe.Configuration) do
             configSetup[config]()
             kind(kindName(projectType, config))
         end
+
+        filter("")
     end
+
+    group("")
 end
 
 function projects.scan(path)

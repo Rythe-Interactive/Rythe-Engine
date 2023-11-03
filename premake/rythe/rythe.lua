@@ -9,6 +9,8 @@ premake.rythe = {
     loadedProjects = {},
     buildSettings = {
         platform = "x86_64"
+        toolset = "clang"
+        cppVersion = "C++23"
     }
 }
 
