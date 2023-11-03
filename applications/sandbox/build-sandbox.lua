@@ -24,7 +24,8 @@ DEALINGS IN THE SOFTWARE.
 createProject("applications","sandbox","ConsoleApp")
 targetdir "$(SolutionDir)bin\\build\\"
 includedirs {
-    "sandbox/"
+    "sandbox/",
+    "third_party/*"
 }   
 files { 
     "**.h",
@@ -33,9 +34,8 @@ files {
      "**.c",
      "**.cpp"
      }
-
+     
 dofile "rythe/engine/core/include-core.lua"
-dofile "rythe/engine/application/include-application.lua"
 dofile "rythe/engine/graphics/include-graphics.lua"
 
 

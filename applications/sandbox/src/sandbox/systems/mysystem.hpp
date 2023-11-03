@@ -54,13 +54,13 @@ public:
             for (auto& warn : result.warnings())
                 log::warn(warn);
 
-        L_MAYBEUNUSED auto val = result.except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
+        [[maybe_unused]] auto val = result.except([]([[maybe_unused]] exception& error) { return assets::invalid_asset<image>; });
 
         if (result)
         {
             auto img = result.value();
-            log::debug("\nname: {}\nid: {}\nresolution: {}\nformat: {}\ncomponents: {}",
-                img.name(), img.id(), img->resolution(), to_string(img->format()), to_string(img->components()));
+            //log::debug("\nname: {}\nid: {}\nresolution: {}\nformat: {}\ncomponents: {}",
+            //    img.name(), img.id(), img->resolution(), to_string(img->format()), to_string(img->components()));
         }
 
         auto objR = assets::load<mesh>(fs::view("assets://models/submeshtest.obj"));
@@ -74,8 +74,8 @@ public:
         if (objR)
         {
             auto msh = objR.value();
-            log::debug("\nname: {}\nid: {}\nvertex count: {}\ntriangle count: {}\nmaterial count: {}",
-                msh.name(), msh.id(), msh->vertices.size(), msh->indices.size() / 3, msh->materials.size());
+            //log::debug("\nname: {}\nid: {}\nvertex count: {}\ntriangle count: {}\nmaterial count: {}",
+            //    msh.name(), msh.id(), msh->vertices.size(), msh->indices.size() / 3, msh->materials.size());
         }
 
         auto glbR = assets::load<mesh>(fs::view("assets://models/submeshtest.glb"));
@@ -89,13 +89,13 @@ public:
         if (glbR)
         {
             auto msh = glbR.value();
-            log::debug("\nname: {}\nid: {}\nvertex count: {}\ntriangle count: {}\nmaterial count: {}",
-                msh.name(), msh.id(), msh->vertices.size(), msh->indices.size() / 3, msh->materials.size());
+            //log::debug("\nname: {}\nid: {}\nvertex count: {}\ntriangle count: {}\nmaterial count: {}",
+            //    msh.name(), msh.id(), msh->vertices.size(), msh->indices.size() / 3, msh->materials.size());
         }
 
     }
 
-    void update(L_MAYBEUNUSED ryt::time::span deltaTime)
+    void update([[maybe_unused]] rsl::span deltaTime)
     {
         using namespace rythe;
 
@@ -106,7 +106,7 @@ public:
 
         tested = true;
 
-        time::timer clock;
+        rsl::stopwatch<> clock;
         asyncOp = assets::loadAsync<mesh>(fs::view("assets://models/wizardgnome.glb"));
 
         while (!asyncOp.is_done())
@@ -140,20 +140,20 @@ public:
         ryt::async::rw_spinlock lock;
         lock.lock();
 
-        auto procA = queueJobs(2000, [&lock](ryt::id_type jobId)
+        auto procA = queueJobs(2000, [&lock](rsl::id_type jobId)
             {
                 ryt::async::readonly_guard guard(lock);
                 ryt::log::info("\tjob A id [{}]", jobId);
             });
 
-        auto procB = queueJobs(2000, [&lock](ryt::id_type jobId)
+        auto procB = queueJobs(2000, [&lock](rsl::id_type jobId)
             {
                 ryt::async::readonly_guard guard(lock);
                 ryt::log::debug("\tjob B id [{}]", jobId);
             });
 
 
-        auto procC = queueJobs(2000, [&lock](ryt::id_type jobId)
+        auto procC = queueJobs(2000, [&lock](rsl::id_type jobId)
             {
                 ryt::async::readonly_guard guard(lock);
                 ryt::log::warn("\tjob C id [{}]", jobId);

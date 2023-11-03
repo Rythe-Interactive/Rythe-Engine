@@ -1,4 +1,4 @@
-//#include "gui_test.hpp"
-//
-//bool legion::GuiTestSystem::captured = false;
-//bool legion::GuiTestSystem::isEditingText = false;
+#include "gui_test.hpp"
+
+bool rythe::GuiTestSystem::captured = false;
+bool rythe::GuiTestSystem::isEditingText = false;
