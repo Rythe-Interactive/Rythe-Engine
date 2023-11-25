@@ -96,6 +96,10 @@ function projects.load(projectPath)
     project.src = projectFile
     project.location = projectPath
 
+    if project.files == nil then -- files can be an empty table if no files need to be loaded
+        project.files = { "**.hpp", "**.inl", "**.cpp" }
+    end
+
     loadedProjects[projectPath] = project
 
     return project
@@ -192,10 +196,20 @@ function projects.scan(path)
                 message = message .. "\n\t" .. assem
             end
 
-            if project.dependencies ~= nil then
+            if not utils.tableIsEmpty(project.dependencies) then
                 message = message .. "\n  Dependencies:"                
                 for i, dep in ipairs(project.dependencies) do
                     message = message .. "\n\t" .. dep
+                end
+            end
+
+            message = message .. "\n  Location: " .. project.location
+            message  = message .. "\n  Src: " .. project.src
+
+            if not utils.tableIsEmpty(project.defines) then
+                message = message .. "\n  Defines:"
+                for i, def in ipairs(project.defines) do
+                    message = message .. "\n\t" .. def
                 end
             end
 
