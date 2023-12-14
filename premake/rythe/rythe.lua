@@ -10,7 +10,7 @@ premake.rythe = {
     buildSettings = {
         platform = "x86_64",
         toolset = "clang",
-        cppVersion = "C++23"
+        cppVersion = "C++20"
     }
 }
 
@@ -18,7 +18,17 @@ local rythe = premake.rythe
 
 local projects = dofile("projects.lua")
 
-function rythe.test()
+function rythe.configName(config)
+    local configNames = { 
+        [rythe.Configuration.RELEASE] = "Release",
+        [rythe.Configuration.DEVELOPMENT] = "Development",
+        [rythe.Configuration.DEBUG] = "Debug"        
+    }
+
+    return configNames[config]
+end
+
+function rythe.configure()
     projects.scan("./")
 end
 

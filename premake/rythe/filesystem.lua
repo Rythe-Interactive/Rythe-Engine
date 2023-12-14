@@ -25,4 +25,8 @@ function fs.fileName(path)
     return string.match(path, "([^/\\]+)$")
 end
 
+function fs.rootName(path)
+    return string.match(path, "^([^/\\]+)")
+end
+
 return fs

@@ -33,7 +33,7 @@ function context.hasModule(module)
 	return hasFilter(_OPTIONS["modules"], module)
 end
 
--- Project types are e.g. test, module, application, editor, static-libary, dynamic-library, header-only, util
+-- Project types are e.g. test, module, application, editor, libary, header-only, util
 function context.hasProjectType(projectType)
     return hasFilter(_OPTIONS["types"], projectType)
 end
@@ -43,23 +43,18 @@ function context.hasProjectGroup(projectGroup)
     return hasFilter(_OPTIONS["groups"], projectGroup)
 end
 
--- Links as shared library, but does no runtime reloading
+-- Links as shared library
 function context.linkShared()
-    return _OPTIONS["shared"] and not (_OPTIONS["dynamic"] or  _OPTIONS["static"])
-end
-
--- Enables runtime module loading, otherwise the same as shared
-function context.linkDynamic()
-    return _OPTIONS["dynamic"] and not _OPTIONS["static"]
+    return _OPTIONS["shared"] and not _OPTIONS["static"]
 end
 
 -- If no link target is defined, then static is chosen
 function context.linkStatic()
-    return _OPTIONS["static"] or not (context.linkShared() or context.linkDynamic())
+    return _OPTIONS["static"] or not context.linkShared()
 end
 
 function context.linkTarget()
-	return context.linkStatic() and "StaticLib" or "SharedLib"
+	return (context.linkStatic() and "StaticLib") or "SharedLib"
 end
 
 -- Tag to place at the end of a solution name
