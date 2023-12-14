@@ -327,37 +327,31 @@ local function getDepsRecursive(project, projectType)
 
             if fs.exists(path .. "/") then
                 thirdPartyProject.files = {}
-                thirdPartyProject.additional_include_dirs = {}
-                thirdPartyProject.additional_external_include_dirs = {}
+                    
+                thirdPartyProject.additional_include_dirs = {
+                    path .. "/src",
+                    path .. "/include"
+                }
+
+                thirdPartyProject.additional_external_include_dirs = {
+                    path .. "/src",
+                    path .. "/include"
+                }
 
                 local srcDir = path .. "/src/" .. thirdPartyProject.name .. "/"
                 if fs.exists(srcDir) then
                     thirdPartyProject.files[#thirdPartyProject.files + 1] = srcDir .. "**"
-                    thirdPartyProject.additional_include_dirs[#thirdPartyProject.additional_include_dirs + 1] = srcDir
-                    thirdPartyProject.additional_external_include_dirs[#thirdPartyProject.additional_external_include_dirs + 1] = srcDir
                 end
                 
                 local includeDir = path .. "/include/" .. thirdPartyProject.name .. "/"
                 if fs.exists(includeDir) then
                     thirdPartyProject.files[#thirdPartyProject.files + 1] = includeDir .. "**"
-                    thirdPartyProject.additional_include_dirs[#thirdPartyProject.additional_include_dirs + 1] = includeDir
-                    thirdPartyProject.additional_external_include_dirs[#thirdPartyProject.additional_external_include_dirs + 1] = includeDir
                 end
 
                 if utils.tableIsEmpty(thirdPartyProject.files) then
                     thirdPartyProject.files = {
                         path .. "/src/**",
                         path .. "/include/**"
-                    }
-                    
-                    thirdPartyProject.additional_include_dirs = {
-                        path .. "/src",
-                        path .. "/include"
-                    }
-
-                    thirdPartyProject.additional_external_include_dirs = {
-                        path .. "/src",
-                        path .. "/include"
                     }
                 end
 
