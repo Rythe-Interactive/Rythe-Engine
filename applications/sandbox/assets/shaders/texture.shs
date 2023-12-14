@@ -1,0 +1,24 @@
+#version 450
+
+generate(vertex, fragment)
+
+#include <stdio.shinc>
+
+
+shader(vertex)
+{
+    void main(void)
+    {
+        gl_Position = ModelToScreenSpacePosition(position);
+        PropagateStdIO();
+    }
+}
+
+shader(fragment)
+{
+    uniform sampler2D _texture;
+    void main(void)
+    {
+        SubmitOutput(texture(_texture, stdio(uv)));
+    }
+}

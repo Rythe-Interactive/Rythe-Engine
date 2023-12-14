@@ -1,0 +1,56 @@
+#version 450
+#state CULL OFF
+#state DEPTH OFF
+#state ALPHA OFF
+
+variant(upsample)
+{
+    #define delta 0.5
+    #define UPSAMPLE
+}
+
+variant(downsample)
+{
+    #define delta 1.0
+    #define DOWNSAMPLE
+}
+
+generate(vertex, fragment)
+
+#include<stdio.shinc>
+
+shader(vertex)
+{
+    void main(void)
+    {
+        gl_Position = vec4(stdin(position), 1.0);
+        PropagateStdIO();
+    }
+}
+
+shader(fragment)
+{
+    uniform vec2 scale;
+    uniform sampler2D mixTex;
+    
+    void main(void)
+    {
+        #if defined(delta)
+        const vec2 texelSize = 1.0 / textureSize(lgn_sceneColor, 0);
+        vec4 o = texelSize.xyxy * vec2(- delta, delta).xxyy;
+        vec2 uv = stdin(uv) * scale;
+        vec4 s =
+            (SceneColor(uv + o.xy) +
+            SceneColor(uv + o.zy) +
+            SceneColor(uv + o.xw) +
+            SceneColor(uv + o.zw)) * 0.25;
+
+        #if defined(UPSAMPLE)
+        s += texture(mixTex, stdin(uv) * scale);
+        #endif
+        #else
+        vec4 s = SceneColor(stdin(uv));
+        #endif
+        fragment_color = s;
+    }
+}

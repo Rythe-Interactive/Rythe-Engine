@@ -1,0 +1,40 @@
+#version 450
+
+generate(vertex, fragment)
+
+#include <stdio.shinc>
+
+io IO
+{
+    vec4 color;
+    flat uint ignoreDepth;
+} sharedData;
+
+shader(vertex)
+{
+    in vec4 color;
+    in uint ignoreDepth;
+
+    void main(void)
+    {
+        gl_Position = WorldToScreenSpacePosition(position);
+        sharedData.color = color;
+        sharedData.ignoreDepth = ignoreDepth;
+    }
+}
+
+shader(fragment)
+{
+    void main(void)
+    {
+        if(sharedData.ignoreDepth != 0)
+            fragment_depth = 1.0;
+        else
+            fragment_depth = gl_FragCoord.z;
+
+        fragment_color = sharedData.color;
+        fragment_normal = vec4(vec3(0.0), 1.0);
+        fragment_position = vec4(vec3(0.0), 1.0);
+        fragment_overdraw = vec4(vec3(0.0), 1.0);
+    }
+}

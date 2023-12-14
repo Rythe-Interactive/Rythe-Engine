@@ -1,0 +1,48 @@
+#version 450
+#state BLEND TRANSPARENT
+#state CULL OFF
+
+generate(vertex, fragment)
+
+#define NO_DEPTH_OUT
+#include <stdio.shinc>
+#include <math_ext.shinc>
+
+shader(vertex)
+{
+    void main(void)
+    {
+        vec3 worldPos = vec3(position.x * 250.0 + lgn_cmr_in.posnearz.x, 0.0, position.z * 250.0 + lgn_cmr_in.posnearz.z);
+        gl_Position = WorldToScreenSpacePosition(vec4(worldPos, 1.0));
+        stdout(position) = stdin(position);
+        stdout(wvertex) = worldPos;
+    }
+}
+
+shader(fragment)
+{
+    uniform sampler2D floorTile;
+
+    void main(void)
+    {
+        vec2 grid = mod(stdin(wvertex).xz, 1.0);
+
+        float alpha = mix(1, 0, 1.0-pow(1.0-clamp01(length(stdio(position))), 5.0));
+
+        ivec2 texSize = textureSize(floorTile, 0);
+        float maxmip = floor(log2(max(texSize.x, texSize.y)));
+
+        float mip = 1.0-alpha * maxmip;
+
+        vec4 col = textureLod(floorTile, grid, mip);
+        col.a *= alpha;
+
+        if(col.a < epsilon)
+            discard;
+
+        fragment_color = col;
+        fragment_normal = vec4(stdin(wnormal), 1.0);
+        fragment_position = vec4(stdin(wvertex), 1.0);
+        fragment_overdraw = vec4(vec3(0.0), col.a);
+    }
+}

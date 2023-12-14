@@ -1,0 +1,177 @@
+//////////////////////
+//  Lighting Input  //
+//////////////////////
+
+#if !defined(LIGHTING_INCL)
+#define ENUM uint
+
+#define point_light 0
+#define directional_light 1
+#define spot_light 2
+
+struct Light
+{
+	ENUM type;			// 4	0
+	float attenuation;	// 4	4
+	float intensity;	// 4	8
+	uint index;			// 4	12
+	vec3 direction;		// 12	16
+	float falloff;		// 4	28
+	vec3 position;		// 12	32
+	float angle;		// 4	44
+	vec3 color;		    // 12	48
+	float meta;		    // 4	60
+};
+
+struct Material
+{
+    mat3 tbn;
+    float height;
+    vec4 albedo;
+ 	vec3 normal;
+ 	float metallic;
+	vec3 emissive;
+    float roughness;
+    float dielectric;
+ 	float ambientOcclusion;
+    vec2 texcoords;
+    vec3 F0;
+};
+
+vec3 Fresnel0(vec4 albedo, float metallic, float dielectric)
+{
+    return mix(dielectric.xxx, albedo.rgb, metallic.xxx);
+}
+#endif
+
+layout(std140, binding = SV_LIGHTS) readonly buffer LightsBuffer
+{
+	Light lights[];
+};
+
+uniform uint lgn_light_count : SV_LIGHTCOUNT;
+
+uniform sampler2D lgn_skybox_tex : SV_SKYBOX;
+
+#if !defined(NO_MATH_EXT) || defined(MATH_EXT)
+#include <math_ext.shinc>
+
+int SkyboxMipLevels()
+{
+    return textureQueryLevels(lgn_skybox_tex);
+}
+
+vec2 SkyboxTexelSize(int mip)
+{
+    return vec2(1.0) / textureSize(lgn_skybox_tex, mip);
+}
+
+vec2 SkyboxUV(vec3 direction)
+{
+    vec2 horDir = normalize(vec2(direction.x, direction.z));
+    return vec2(1.0 - (atan(horDir.y, horDir.x) / (2.0 * pi)), 1.0 - (acos(dot(vec3(0.0, 1.0, 0.0), direction)) / pi));
+}
+
+vec4 SampleSkyboxLod(vec3 direction, float Lod)
+{
+    return textureLod(lgn_skybox_tex, SkyboxUV(direction), Lod);
+}
+
+vec4 SampleSkyboxLod(vec2 uv, float Lod)
+{
+    return textureLod(lgn_skybox_tex, uv, Lod);
+}
+
+vec4 SampleSkybox(vec3 direction)
+{
+    return texture(lgn_skybox_tex, SkyboxUV(direction));
+}
+
+vec4 SampleSkybox(vec2 uv)
+{
+    return texture(lgn_skybox_tex, uv);
+}
+#endif
+
+#include <texturemaps.shinc>
+
+#if !defined(NO_MATERIAL_INPUT)
+struct MaterialInput
+{
+    sampler2D albedo;
+    sampler2D normalHeight;
+    sampler2D MRDAo;
+    sampler2D emissive;
+    float heightScale;
+};
+uniform MaterialInput material_input : SV_MATERIAL;
+
+Material ExtractMaterial(vec2 uv, Camera camera, vec3 worldNormal, vec3 worldTangent)
+{
+    Material material;
+    material.tbn = GetTBNMatrix(worldNormal, worldTangent);
+    material.texcoords = ParallaxMap(material_input.normalHeight, material_input.heightScale, uv, camera, material.tbn, material.height);
+    material.albedo = AlbedoMap(material_input.albedo, stdio(vertexcolor), material.texcoords);
+    material.normal = NormalMap(material_input.normalHeight, material.texcoords, material.tbn);
+    vec4 MRDAo = LightingData(material_input.MRDAo, material.texcoords);
+    material.metallic = min(MRDAo.r, 1.0 - epsilon);
+    material.roughness = MRDAo.g;
+    material.dielectric = MRDAo.b;
+    material.ambientOcclusion = MRDAo.a;
+    material.F0 = Fresnel0(material.albedo, material.metallic, material.dielectric);
+ 	material.emissive = EmissiveMap(material_input.emissive, material.texcoords);
+
+    return material;
+}
+#endif
+
+#if defined(LIGHTING_INCL)
+vec3 GetAllLighting(Material material, Camera camera, vec3 worldPosition)
+{
+    vec3 lighting = vec3(0.0);
+
+    for(int i = 0; i < lgn_light_count; i++)
+        lighting += CalculateLight(lights[i], camera, material, worldPosition);
+
+    return lighting + GetAmbientLight(material.ambientOcclusion, material.albedo.rgb);
+}
+
+#if defined(MATH_EXT)
+vec3 FakeIBL(Camera camera, Material material)
+{
+    vec3 viewDir = normalize(camera.toView);
+    vec3 lightDirection = normalize(reflect(-viewDir, material.normal));
+
+    vec3 halfwayVector = normalize(lightDirection + viewDir);
+ 
+    float halfwayDotView = dot01(halfwayVector, viewDir);
+    float normalDotHalfway = dot01(material.normal, halfwayVector);
+    float normalDotView = dot01(material.normal, viewDir);
+    float normalDotLight = dot01(material.normal, lightDirection);
+
+    float roughness = clamp(pow(material.roughness, 0.5), 0.001, 0.999);
+    float metallic = clamp(material.metallic, 0.001, 0.999);
+
+    // cook-torrance brdf
+    vec3 specular = fresnelSchlick(mix(halfwayDotView, 1.0, roughness), material.F0);
+    vec3 specularRadiance = SampleSkyboxLod(lightDirection, SkyboxMipLevels() * roughness).rgb;
+
+    halfwayVector = normalize(material.normal + viewDir);
+    halfwayDotView = dot01(halfwayVector, viewDir);
+    vec3 fresnelReflection = fresnelSchlick(mix(halfwayDotView, 1.0, roughness), material.F0);
+    vec3 diffuse = LambertianDiffuse(fresnelReflection, material.albedo.rgb, metallic);
+
+    int diffuseMip =  int(((SkyboxMipLevels() - 1) * roughness) + 0.5);
+    vec4 texelOffset = SkyboxTexelSize(diffuseMip).xyxy * vec2(-1.0, 1.0).xxyy;
+    vec2 diffuseSkyUV = SkyboxUV(material.normal);
+
+    vec3 diffuseRadiance =  (SampleSkyboxLod(diffuseSkyUV, diffuseMip).rgb +
+                            SampleSkyboxLod(diffuseSkyUV + texelOffset.xy, diffuseMip).rgb +
+                            SampleSkyboxLod(diffuseSkyUV + texelOffset.zy, diffuseMip).rgb +
+                            SampleSkyboxLod(diffuseSkyUV + texelOffset.xw, diffuseMip).rgb +
+                            SampleSkyboxLod(diffuseSkyUV + texelOffset.zw, diffuseMip).rgb) * 0.2 * pi;
+
+    return max((diffuse * diffuseRadiance * diffuseRadiance) + (specular * specularRadiance), vec3(0.0));
+}
+#endif
+#endif

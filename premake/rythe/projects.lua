@@ -51,6 +51,25 @@ local function getProjectId(group, projectName)
     return group == "" and projectName or group .. "/" .. projectName
 end
 
+local function getDepAssemblyAndScope(dependency)
+    local scope = string.match(dependency, "([^%s]+[%s]+)")
+    local assemblyId = dependency
+    
+    if scope ~= "" and scope ~= nil then
+        assemblyId = string.sub(dependency, string.len(scope) + 1)
+        
+        scope = string.gsub(scope, "%s+", "")
+        if scope ~= "public" and scope ~= "private" then
+            return nil, nil
+        end
+
+    else
+        scope = "private"
+    end
+
+    return assemblyId, scope
+end
+
 local function findAssembly(assemblyId)
     local projectId = string.match(assemblyId, "^([^:]+)")
     local projectType = string.sub(assemblyId, string.len(projectId) + 2)
@@ -228,6 +247,48 @@ local function setupDebug(projectType)
         kind(kindName(projectType, rythe.Configuration.DEBUG))
 end
 
+local function getDepsRecursive(project, projectType)
+    local deps = project.dependencies
+    
+    if deps == nil then
+        deps = {}
+    end
+
+    local copy = deps
+
+    local set = {}
+
+    for i, dep in ipairs(deps) do
+        set[dep] = true
+    end
+
+    for i, dep in ipairs(deps) do
+        local assemblyId, scope = getDepAssemblyAndScope(dep)
+        local depProject, depId, depType = findAssembly(assemblyId)
+        if depProject ~= nil then
+            local newDeps = getDepsRecursive(depProject, depType)
+            for i, newDep in ipairs(newDeps) do
+                local newDepAssemblyId, newDepScope = getDepAssemblyAndScope(newDep)
+
+                if newDepScope == "public" and set[newDep] == nil then
+                    set[newDep] = true
+                    copy[#copy + 1] = newDep
+                end
+            end
+        end
+    end
+
+    if not isProjectTypeMainType(projectType) then
+        if utils.tableIsEmpty(copy) then
+            copy = { getProjectId(project.group, project.name) }
+        else
+            copy = utils.concatTables({ getProjectId(project.group, project.name) }, copy)
+        end
+    end
+
+    return copy
+end
+
 function projects.submit(proj)
     local configSetup = { 
         [rythe.Configuration.RELEASE] = setupRelease,
@@ -242,19 +303,16 @@ function projects.submit(proj)
 
         group(fullGroupPath)
         project(proj.alias .. projectNamePostfix(projectType))        
-            filename(proj.alias)
-            location(_ACTION .. "/" .. fullGroupPath)
+            filename(proj.alias .. projectNamePostfix(projectType))
+            location(_ACTION .. "/" .. proj.group)
             targetdir(binDir .. fullGroupPath)
             objdir(binDir .. "obj")
 
-            local allDeps = proj.dependencies
+            local allDeps = getDepsRecursive(proj, projectType)
+            local allDefines = proj.defines
 
-            if not isProjectTypeMainType(projectType) then
-                if utils.tableIsEmpty(allDeps) then
-                    allDeps = { getProjectId(proj.group, proj.name) }
-                else
-                    allDeps = utils.concatTables({ getProjectId(proj.group, proj.name) }, allDeps)
-                end
+            if allDefines == nil then
+                allDefines = {}
             end
 
             if not utils.tableIsEmpty(allDeps) then
@@ -263,12 +321,16 @@ function projects.submit(proj)
                 local depNames = {}
 
                 for i, dep in ipairs(allDeps) do
-                    depProject, depId, depType = findAssembly(dep)
+                    local assemblyId, scope = getDepAssemblyAndScope(dep)
+                    local depProject, depId, depType = findAssembly(assemblyId)
 
                     if depProject ~= nil then
                         print("\tDependency: " .. depId .. " - " .. depType)
                         externalIncludeDirs[#externalIncludeDirs + 1] = depProject.location .. "/" .. projectTypeFilesDir(depType)
+                        
                         depNames[#depNames + 1] = depProject.alias .. projectNamePostfix(depType)
+                        
+                        allDefines[#allDefines + 1] = depProject.group == "" and string.upper(depProject.alias) .. "=1" or string.upper(string.gsub(depProject.group, "[/\\]", "_")) .. "_" .. string.upper(depProject.alias) .. "=1"
                     else
                         print("\tDependency \"" .. depId .. "\" was not found")
                     end
@@ -278,23 +340,13 @@ function projects.submit(proj)
                 externalincludedirs(externalIncludeDirs)
                 libdirs(libDirs)
             end
+            
+            defines(allDefines)
 
             architecture(buildSettings.platform)
             toolset(buildSettings.toolset)
             language("C++")
             cppdialect(buildSettings.cppVersion)
-
-            local allDefines = proj.defines
-
-            if allDefines == nil then
-                allDefines = {}
-            end
-
-            for projectId, project in pairs(loadedProjects) do
-                allDefines[#allDefines + 1] = project.group == "" and string.upper(project.alias) .. "=1" or string.upper(string.gsub(project.group, "[/\\]", "_")) .. "_" .. string.upper(project.alias) .. "=1"
-            end
-
-            defines(allDefines)
 
             local filePatterns = {}
             for i, pattern in ipairs(proj.files) do

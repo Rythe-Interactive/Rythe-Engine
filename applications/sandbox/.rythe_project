@@ -1,0 +1,9 @@
+local project = {
+    dependencies = {
+        "rythe/core",
+        "rythe/graphics",
+        "rythe/audio"
+    }
+}
+
+return project

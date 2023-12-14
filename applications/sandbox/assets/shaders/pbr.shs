@@ -1,0 +1,60 @@
+#version 450
+#state CULL BACK
+
+variant(shadow pass)
+{
+    #state CULL FRONT
+    #state BLEND OFF
+
+    #define SHADOW_PASS
+}
+
+generate(fragment, vertex)
+
+#include <stdio.shinc>
+#include <lighting.shinc>
+
+shader(vertex)
+{
+    void main(void)
+    {
+        gl_Position = ModelToScreenSpacePosition(position);
+        PropagateStdIO();
+    }
+}
+
+shader(fragment)
+{
+    variant(shadow pass)
+    {
+        void main(void)
+        {
+            fragment_color = vec4(0.0);
+        }
+    }
+
+    variant(default)
+    {
+        uniform bool discardExcess;
+        uniform sampler2D skybox;
+
+        void main(void)
+        {
+            Camera camera = GetCamera();
+
+            vec3 worldNormal = GetWorldNormal();
+            Material material = ExtractMaterial(stdio(uv), camera, worldNormal, GetWorldTangent(worldNormal));
+
+            if(discardExcess)
+                if(material.texcoords.x < 0 || material.texcoords.x > 1 || material.texcoords.y < 0 || material.texcoords.y > 1)
+                    discard;
+
+            vec3 worldpos = (worldNormal * material.height) + GetWorldPosition();
+
+            vec3 lighting = GetAllLighting(material, camera, worldpos);
+            lighting += FakeIBL(camera, material);
+
+            SubmitOutput(vec4(lighting, material.albedo.a), material.normal, worldpos, material.emissive);
+        }
+    }
+}
