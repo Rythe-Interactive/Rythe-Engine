@@ -29,6 +29,11 @@ function rythe.configName(config)
 end
 
 function rythe.configure()
+    filter { "configurations:Debug" }
+        targetsuffix "-debug"
+    filter { "configurations:Development" }
+        targetsuffix "-dev"
+
     projects.scan("./")
 end
 

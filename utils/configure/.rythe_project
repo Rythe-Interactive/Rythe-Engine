@@ -1,0 +1,14 @@
+local project = {
+    pre_build = {},
+    files = { _MAIN_SCRIPT }
+}
+
+function project.init(proj, ctx)
+    proj.pre_build = {
+        "cd " .. _WORKING_DIR,
+        ctx.getCommand()
+    }
+    return proj
+end
+
+return project

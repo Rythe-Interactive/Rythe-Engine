@@ -15,6 +15,8 @@ local function folderToProjectType(projectFolder)
         return "module"
     elseif projectFolder == "libraries" then
         return "library"
+    elseif projectFolder == "utils" then
+        return "util"
     end
 
     return projectFolder
@@ -34,10 +36,15 @@ local function find(projectPath)
 
     local projectFile = projectPath .. "/.rythe_project"
 
-    return projectFile, group, projectName, folderToProjectType(projectType)
+    local thirdPartyFile = projectPath .. "/.rythe_third_party"
+    if not fs.exists(thirdPartyFile) then
+        thirdPartyFile = nil
+    end
+
+    return projectFile, thirdPartyFile, group, projectName, folderToProjectType(projectType)
 end
 
-local function projectIdPostfix(projectType)
+local function projectIdSuffix(projectType)
     if projectType == "test" then
         return ":test"
     elseif projectType == "editor" then
@@ -70,13 +77,16 @@ local function getDepAssemblyAndScope(dependency)
     return assemblyId, scope
 end
 
+local function isThirdPartyProject(projectId)
+    return string.find(projectId, "^(third_party)") ~= nil
+end
+
 local function findAssembly(assemblyId)
     local projectId = string.match(assemblyId, "^([^:]+)")
     local projectType = string.sub(assemblyId, string.len(projectId) + 2)
     local project = loadedProjects[projectId]
 
-    if projectType == "" then
-        
+    if projectType == "" then        
         if project == nil then
             return nil, projectId, nil
         else
@@ -128,7 +138,7 @@ local function projectTypeGroupPrefix(projectType)
     assert(false, "Unknown project type: \"" .. projectType .. "\"")
 end
 
-local function projectNamePostfix(projectType)
+local function projectNameSuffix(projectType)
     if projectType == "module" then
         return "-module"
     elseif projectType == "test" then
@@ -162,34 +172,7 @@ local function isProjectTypeMainType(projectType)
     return true
 end
 
-function projects.load(projectPath)
-    
-    local projectFile, group, name, projectType = find(projectPath)
-    local projectId = getProjectId(group, name)
-    
-    local project = loadedProjects[projectId]
-        
-    if project ~= nil then
-        return project
-    end
-
-    print("Loading project at \"" .. projectPath .. "\"")
-
-    if projectFile == nil then
-        print("Could not find project \"" .. group .. "/" .. name .. "\"")
-        return nil
-    end
-
-    project = dofile(projectFile)
-
-    if project == nil then
-        print("Could not initialize project \"" .. group .. "/" .. name .. "\"")
-        return nil
-    end
-
-    project.group = group
-    project.name = name
-    
+local function loadProject(projectId, project, projectFile, projectPath, name, projectType)    
     if project.alias == nil then
         project.alias = name
     end
@@ -216,12 +199,68 @@ function projects.load(projectPath)
     project.location = projectPath
 
     if project.files == nil then -- files can be an empty table if no files need to be loaded
-        project.files = { "**" }
+        project.files = { "./**" }
     end
 
     loadedProjects[projectId] = project
 
     return project
+end
+
+function projects.load(projectPath)
+    
+    local projectFile, thirdPartyFile, group, name, projectType = find(projectPath)
+    local projectId = getProjectId(group, name)
+    
+    local project = loadedProjects[projectId]
+        
+    if project ~= nil then
+        return project
+    end
+
+    if projectFile == nil then
+        print("Could not find project \"" .. group .. "/" .. name .. "\"")
+        return nil
+    end
+
+    if thirdPartyFile ~= nil then
+        local thirdParties = dofile(thirdPartyFile)
+
+        for i, thirdParty in ipairs(thirdParties) do
+            if thirdParty.init ~= nil then
+                thirdParty = thirdParty:init(ctx)
+            end
+
+            local thirdPartyId = getProjectId(thirdParty.group, thirdParty.name)
+
+            if not isThirdPartyProject(thirdPartyId) then
+                thirdParty.group = "third_party/" .. thirdParty.group
+                thirdPartyId = getProjectId(thirdParty.group, thirdParty.name)
+            end
+
+            if thirdParty.location == nil then
+                thirdParty.location = projectPath .. "/third_party/" .. thirdParty.name
+            end
+
+            loadProject(thirdPartyId, thirdParty, thirdPartyFile, thirdParty.location, thirdParty.name, "library")
+        end
+    end
+
+    project = dofile(projectFile)
+
+    if project.init ~= nil then
+        project = project:init(ctx)
+    end
+
+    if project == nil then
+        print("Could not initialize project \"" .. group .. "/" .. name .. "\"")
+        return nil
+    end
+
+    project.group = group
+    project.name = name
+
+    return loadProject(projectId, project, projectFile, projectPath, name, projectType)
 end
 
 local function setupRelease(projectType)
@@ -265,6 +304,23 @@ local function getDepsRecursive(project, projectType)
     for i, dep in ipairs(deps) do
         local assemblyId, scope = getDepAssemblyAndScope(dep)
         local depProject, depId, depType = findAssembly(assemblyId)
+
+        if depProject == nil and isThirdPartyProject(depId) then
+            local thirdPartyProject = {
+                group = fs.parentPath(depId),
+                name = fs.fileName(depId)
+            }
+
+            local path = project.location .. "/third_party/" .. thirdPartyProject.name
+            thirdPartyProject.files = {
+                path .. "/src/**",
+                path .. "/include/**"
+            }
+
+            depProject = loadProject(depId, thirdPartyProject, project.src, path, thirdPartyProject.name, "library")
+            depType = "library"
+        end
+
         if depProject ~= nil then
             local newDeps = getDepsRecursive(depProject, depType)
             for i, newDep in ipairs(newDeps) do
@@ -302,11 +358,21 @@ function projects.submit(proj)
         print("Building " .. proj.name .. ": " .. projectType)
 
         group(fullGroupPath)
-        project(proj.alias .. projectNamePostfix(projectType))        
-            filename(proj.alias .. projectNamePostfix(projectType))
+        project(proj.alias .. projectNameSuffix(projectType))
+            filename(proj.alias .. projectNameSuffix(projectType))
             location(_ACTION .. "/" .. proj.group)
-            targetdir(binDir .. fullGroupPath)
-            objdir(binDir .. "obj")
+
+            if proj.pre_build ~= nil then                
+                prebuildcommands(proj.pre_build)
+            end
+
+            if proj.post_build ~= nil then                
+                postbuildcommands(proj.post_build)
+            end
+
+            if proj.pre_link ~= nil then                
+                prelinkcommands(proj.pre_link)
+            end
 
             local allDeps = getDepsRecursive(proj, projectType)
             local allDefines = proj.defines
@@ -325,10 +391,9 @@ function projects.submit(proj)
                     local depProject, depId, depType = findAssembly(assemblyId)
 
                     if depProject ~= nil then
-                        print("\tDependency: " .. depId .. " - " .. depType)
                         externalIncludeDirs[#externalIncludeDirs + 1] = depProject.location .. "/" .. projectTypeFilesDir(depType)
                         
-                        depNames[#depNames + 1] = depProject.alias .. projectNamePostfix(depType)
+                        depNames[#depNames + 1] = depProject.alias .. projectNameSuffix(depType)
                         
                         allDefines[#allDefines + 1] = depProject.group == "" and string.upper(depProject.alias) .. "=1" or string.upper(string.gsub(depProject.group, "[/\\]", "_")) .. "_" .. string.upper(depProject.alias) .. "=1"
                     else
@@ -341,16 +406,25 @@ function projects.submit(proj)
                 libdirs(libDirs)
             end
             
-            defines(allDefines)
-
             architecture(buildSettings.platform)
-            toolset(buildSettings.toolset)
-            language("C++")
-            cppdialect(buildSettings.cppVersion)
+
+            if projectType ~= "util" then
+                targetdir(binDir .. proj.group .. "/" .. proj.name .. projectNameSuffix(projectType))
+                objdir(binDir .. "obj")
+                defines(allDefines)
+                
+                toolset(buildSettings.toolset)
+                language("C++")
+                cppdialect(buildSettings.cppVersion)
+            end
 
             local filePatterns = {}
             for i, pattern in ipairs(proj.files) do
-                filePatterns[#filePatterns + 1] =  proj.location .. projectTypeFilesDir(projectType) .. proj.namespace .. "/" .. pattern
+                if string.find(pattern, "^(%.[/\\])") == nil then
+                    filePatterns[#filePatterns + 1] = pattern
+                else
+                    filePatterns[#filePatterns + 1] = proj.location .. projectTypeFilesDir(projectType) .. proj.namespace .. "/" .. string.sub(pattern, 3)
+                end
             end
 
             files(filePatterns)
@@ -358,16 +432,23 @@ function projects.submit(proj)
             if not utils.tableIsEmpty(proj.exclude_files) then
                 local excludePatterns = {}
                 for i, pattern in ipairs(proj.exclude_files) do
-                    excludePatterns[#excludePatterns + 1] =  proj.location .. projectTypeFilesDir(projectType) .. proj.namespace .. "/" .. pattern
+                    if string.find(pattern, "^(%.[/\\])") == nil then
+                        excludePatterns[#excludePatterns + 1] = pattern
+                    else
+                        excludePatterns[#excludePatterns + 1] = proj.location .. projectTypeFilesDir(projectType) .. proj.namespace .. "/" .. string.sub(pattern, 3)
+                    end
                 end
 
                 removefiles(excludePatterns)
             end
-            
-            for i, config in pairs(rythe.Configuration) do
-                configSetup[config](projectType)
-            end
 
+            if projectType == "util" then
+                kind("Utility")
+            else
+                for i, config in pairs(rythe.Configuration) do
+                    configSetup[config](projectType)
+                end
+            end
         filter("")
     end
 
@@ -376,49 +457,13 @@ end
 
 function projects.scan(path)
     local srcDirs = {}
-    local thirdpartyDirs = {}
-    
-    for i, file in ipairs(os.matchfiles(path .. "**/.rythe_project")) do
-        if string.find(file, "third_party") then
-            thirdpartyDirs[#thirdpartyDirs + 1] = fs.parentPath(file)
-        else
-            srcDirs[#srcDirs + 1] = fs.parentPath(file)
-        end
+
+    for i, file in ipairs(os.matchfiles(path .. "**/.rythe_project")) do        
+        srcDirs[#srcDirs + 1] = fs.parentPath(file)
     end
 
     for i, dir in ipairs(srcDirs) do
-        local projectPath = dir
-        local project = projects.load(projectPath)
-
-        if project ~= nil then
-            local message = "Found project:"
-            message = message .. "\n  Group: " .. project.group
-            message = message .. "\n  Name: " .. project.name
-
-            message = message .. "\n  Assembly types:"
-            for i, assem in ipairs(project.types) do
-                message = message .. "\n\t" .. assem
-            end
-
-            if not utils.tableIsEmpty(project.dependencies) then
-                message = message .. "\n  Dependencies:"                
-                for i, dep in ipairs(project.dependencies) do
-                    message = message .. "\n\t" .. dep
-                end
-            end
-
-            message = message .. "\n  Location: " .. project.location
-            message  = message .. "\n  Src: " .. project.src
-
-            if not utils.tableIsEmpty(project.defines) then
-                message = message .. "\n  Defines:"
-                for i, def in ipairs(project.defines) do
-                    message = message .. "\n\t" .. def
-                end
-            end
-
-            print(message)
-        end
+        local project = projects.load(dir)
     end
     
     for projectId, project in pairs(loadedProjects) do
