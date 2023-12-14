@@ -2,14 +2,14 @@ local fs = {}
 
 function fs.exists(file)
     local ok, err, code = os.rename(file, file)
-   if not ok then
-      if code == 13 then
-         -- Permission denied, but it exists
-         return true
-      end
-      return false
+    if not ok then
+        if code == 13 or code == 32 or code == 5 then
+            -- Permission denied, but it exists
+            return true, nil, nil
+        end
+        return false, err, code
    end
-   return true
+   return true, nil, nil
 end
 
 function fs.readLines(file)

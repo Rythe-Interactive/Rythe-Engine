@@ -327,19 +327,37 @@ local function getDepsRecursive(project, projectType)
 
             if fs.exists(path .. "/") then
                 thirdPartyProject.files = {}
+                thirdPartyProject.additional_include_dirs = {}
+                thirdPartyProject.additional_external_include_dirs = {}
 
-                if fs.exists(path .. "/src/" .. thirdPartyProject.name .. "/") then
-                    thirdPartyProject.files[#thirdPartyProject.files + 1] = path .. "/src/" .. thirdPartyProject.name .. "/**"
+                local srcDir = path .. "/src/" .. thirdPartyProject.name .. "/"
+                if fs.exists(srcDir) then
+                    thirdPartyProject.files[#thirdPartyProject.files + 1] = srcDir .. "**"
+                    thirdPartyProject.additional_include_dirs[#thirdPartyProject.additional_include_dirs + 1] = srcDir
+                    thirdPartyProject.additional_external_include_dirs[#thirdPartyProject.additional_external_include_dirs + 1] = srcDir
                 end
-
-                if fs.exists(path .. "/include/" .. thirdPartyProject.name .. "/") then
-                    thirdPartyProject.files[#thirdPartyProject.files + 1] = path .. "/include/" .. thirdPartyProject.name .. "/**"
+                
+                local includeDir = path .. "/include/" .. thirdPartyProject.name .. "/"
+                if fs.exists(includeDir) then
+                    thirdPartyProject.files[#thirdPartyProject.files + 1] = includeDir .. "**"
+                    thirdPartyProject.additional_include_dirs[#thirdPartyProject.additional_include_dirs + 1] = includeDir
+                    thirdPartyProject.additional_external_include_dirs[#thirdPartyProject.additional_external_include_dirs + 1] = includeDir
                 end
 
                 if utils.tableIsEmpty(thirdPartyProject.files) then
                     thirdPartyProject.files = {
                         path .. "/src/**",
                         path .. "/include/**"
+                    }
+                    
+                    thirdPartyProject.additional_include_dirs = {
+                        path .. "/src",
+                        path .. "/include"
+                    }
+
+                    thirdPartyProject.additional_external_include_dirs = {
+                        path .. "/src",
+                        path .. "/include"
                     }
                 end
 
@@ -418,8 +436,12 @@ function projects.submit(proj)
                     local depProject, depId, depType = findAssembly(assemblyId)
 
                     if depProject ~= nil then
-                        externalIncludeDirs[#externalIncludeDirs + 1] = depProject.location .. "/" .. projectTypeFilesDir(depType, "")
+                        externalIncludeDirs[#externalIncludeDirs + 1] = depProject.location .. projectTypeFilesDir(depType, "")
                         
+                        if isThirdPartyProject(depId) then
+                            externalIncludeDirs[#externalIncludeDirs + 1] = depProject.location .. "/include/"
+                        end
+
                         depNames[#depNames + 1] = depProject.alias .. projectNameSuffix(depType)
                         
                         allDefines[#allDefines + 1] = depProject.group == "" and string.upper(depProject.alias) .. "=1" or string.upper(string.gsub(depProject.group, "[/\\]", "_")) .. "_" .. string.upper(depProject.alias) .. "=1"
@@ -433,6 +455,14 @@ function projects.submit(proj)
                 libdirs(libDirs)
             end
             
+            if not utils.tableIsEmpty(proj.additional_include_dirs) then
+                includedirs(proj.additional_include_dirs)
+            end
+
+            if not utils.tableIsEmpty(proj.additional_external_include_dirs) then
+                externalincludedirs(proj.additional_external_include_dirs)
+            end
+
             architecture(buildSettings.platform)
 
             if projectType ~= "util" then
