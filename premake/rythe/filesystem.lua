@@ -1,9 +1,15 @@
 local fs = {}
 
 function fs.exists(file)
-    local f = io.open(file, "rb")
-    if f then io.close(f) end
-    return f ~= nil
+    local ok, err, code = os.rename(file, file)
+   if not ok then
+      if code == 13 then
+         -- Permission denied, but it exists
+         return true
+      end
+      return false
+   end
+   return true
 end
 
 function fs.readLines(file)

@@ -152,14 +152,18 @@ local function projectNameSuffix(projectType)
     return ""
 end
 
-local function projectTypeFilesDir(projectType)
+local function projectTypeFilesDir(projectType, namespace)
     if projectType == "test" then
         return "/tests/"
     elseif projectType == "editor" then
         return "/editor/"
     end
 
-    return "/src/"
+    if namespace == "" or namespace == nil then
+        return "/src/"
+    end
+
+    return "/src/" .. namespace .. "/"
 end
 
 local function isProjectTypeMainType(projectType)
@@ -293,6 +297,10 @@ local function getDepsRecursive(project, projectType)
         deps = {}
     end
 
+    if projectType == "test" then
+        deps[#deps + 1] = "third_party/catch2"
+    end
+
     local copy = deps
 
     local set = {}
@@ -312,13 +320,32 @@ local function getDepsRecursive(project, projectType)
             }
 
             local path = project.location .. "/third_party/" .. thirdPartyProject.name
-            thirdPartyProject.files = {
-                path .. "/src/**",
-                path .. "/include/**"
-            }
 
-            depProject = loadProject(depId, thirdPartyProject, project.src, path, thirdPartyProject.name, "library")
-            depType = "library"
+            if not fs.exists(path .. "/") then
+                path = _WORKING_DIR .. "/libraries/third_party/" .. thirdPartyProject.name
+            end
+
+            if fs.exists(path .. "/") then
+                thirdPartyProject.files = {}
+
+                if fs.exists(path .. "/src/" .. thirdPartyProject.name .. "/") then
+                    thirdPartyProject.files[#thirdPartyProject.files + 1] = path .. "/src/" .. thirdPartyProject.name .. "/**"
+                end
+
+                if fs.exists(path .. "/include/" .. thirdPartyProject.name .. "/") then
+                    thirdPartyProject.files[#thirdPartyProject.files + 1] = path .. "/include/" .. thirdPartyProject.name .. "/**"
+                end
+
+                if utils.tableIsEmpty(thirdPartyProject.files) then
+                    thirdPartyProject.files = {
+                        path .. "/src/**",
+                        path .. "/include/**"
+                    }
+                end
+
+                depProject = loadProject(depId, thirdPartyProject, project.src, path, thirdPartyProject.name, "library")
+                depType = "library"
+            end
         end
 
         if depProject ~= nil then
@@ -391,7 +418,7 @@ function projects.submit(proj)
                     local depProject, depId, depType = findAssembly(assemblyId)
 
                     if depProject ~= nil then
-                        externalIncludeDirs[#externalIncludeDirs + 1] = depProject.location .. "/" .. projectTypeFilesDir(depType)
+                        externalIncludeDirs[#externalIncludeDirs + 1] = depProject.location .. "/" .. projectTypeFilesDir(depType, "")
                         
                         depNames[#depNames + 1] = depProject.alias .. projectNameSuffix(depType)
                         
@@ -423,10 +450,17 @@ function projects.submit(proj)
                 if string.find(pattern, "^(%.[/\\])") == nil then
                     filePatterns[#filePatterns + 1] = pattern
                 else
-                    filePatterns[#filePatterns + 1] = proj.location .. projectTypeFilesDir(projectType) .. proj.namespace .. "/" .. string.sub(pattern, 3)
+                    filePatterns[#filePatterns + 1] = proj.location .. projectTypeFilesDir(projectType, proj.namespace) .. string.sub(pattern, 3)
                 end
             end
 
+            if projectType == "test" then
+                filePatterns[#filePatterns + 1] = _WORKING_DIR .. "/utils/test utils/**"
+
+                vpaths({ ["test utils"] = _WORKING_DIR .. "/utils/test utils/**" })
+            end
+
+            vpaths({ ["*"] = proj.location .. projectTypeFilesDir(projectType, proj.namespace) })
             files(filePatterns)
             
             if not utils.tableIsEmpty(proj.exclude_files) then
@@ -435,7 +469,7 @@ function projects.submit(proj)
                     if string.find(pattern, "^(%.[/\\])") == nil then
                         excludePatterns[#excludePatterns + 1] = pattern
                     else
-                        excludePatterns[#excludePatterns + 1] = proj.location .. projectTypeFilesDir(projectType) .. proj.namespace .. "/" .. string.sub(pattern, 3)
+                        excludePatterns[#excludePatterns + 1] = proj.location .. projectTypeFilesDir(projectType, proj.namespace) .. string.sub(pattern, 3)
                     end
                 end
 
