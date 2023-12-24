@@ -176,7 +176,7 @@ local function isProjectTypeMainType(projectType)
     return true
 end
 
-local function loadProject(projectId, project, projectFile, projectPath, name, projectType)    
+local function loadProject(projectId, project, projectPath, name, projectType)    
     if project.alias == nil then
         project.alias = name
     end
@@ -199,7 +199,6 @@ local function loadProject(projectId, project, projectFile, projectPath, name, p
         project.defines[#project.defines +1 ] = "PROJECT_NAMESPACE=" .. project.namespace
     end
 
-    project.src = projectFile
     project.location = projectPath
 
     if project.files == nil then -- files can be an empty table if no files need to be loaded
@@ -231,8 +230,15 @@ function projects.load(projectPath)
         local thirdParties = dofile(thirdPartyFile)
 
         for i, thirdParty in ipairs(thirdParties) do
+            thirdParty.src = thirdPartyFile
+
             if thirdParty.init ~= nil then
                 thirdParty = thirdParty:init(ctx)
+            end
+            
+            if thirdParty == nil then
+                print("Could not initialize a third party dependency of project \"" .. group .. "/" .. name .. "\"")
+                return nil
             end
 
             local thirdPartyId = getProjectId(thirdParty.group, thirdParty.name)
@@ -246,12 +252,15 @@ function projects.load(projectPath)
                 thirdParty.location = projectPath .. "/third_party/" .. thirdParty.name
             end
 
-            loadProject(thirdPartyId, thirdParty, thirdPartyFile, thirdParty.location, thirdParty.name, "library")
+            thirdParty = loadProject(thirdPartyId, thirdParty, thirdParty.location, thirdParty.name, "library")
         end
     end
 
     project = dofile(projectFile)
 
+    project.group = group
+    project.name = name
+    project.src = projectFile
     if project.init ~= nil then
         project = project:init(ctx)
     end
@@ -261,10 +270,8 @@ function projects.load(projectPath)
         return nil
     end
 
-    project.group = group
-    project.name = name
 
-    return loadProject(projectId, project, projectFile, projectPath, name, projectType)
+    return loadProject(projectId, project, projectPath, name, projectType)
 end
 
 local function setupRelease(projectType)
@@ -355,7 +362,8 @@ local function getDepsRecursive(project, projectType)
                     }
                 end
 
-                depProject = loadProject(depId, thirdPartyProject, project.src, path, thirdPartyProject.name, "library")
+                thirdPartyProject.src = project.src
+                depProject = loadProject(depId, thirdPartyProject, path, thirdPartyProject.name, "library")
                 depType = "library"
             end
         end
@@ -393,13 +401,13 @@ function projects.submit(proj)
 
     for i, projectType in ipairs(proj.types) do
         local fullGroupPath = projectTypeGroupPrefix(projectType) .. proj.group
-        local binDir = _ACTION .. "/bin/"
+        local binDir = "build/" .. _ACTION .. "/bin/"
         print("Building " .. proj.name .. ": " .. projectType)
 
         group(fullGroupPath)
         project(proj.alias .. projectNameSuffix(projectType))
             filename(proj.alias .. projectNameSuffix(projectType))
-            location(_ACTION .. "/" .. proj.group)
+            location("build/" .. _ACTION .. "/" .. proj.group)
 
             if proj.pre_build ~= nil then                
                 prebuildcommands(proj.pre_build)
@@ -419,12 +427,12 @@ function projects.submit(proj)
             if allDefines == nil then
                 allDefines = {}
             end
-
+            
+            local libDirs = {}
+            local externalIncludeDirs = {}
+            
             if not utils.tableIsEmpty(allDeps) then
-                local libDirs = {}
-                local externalIncludeDirs = {}
                 local depNames = {}
-
                 for i, dep in ipairs(allDeps) do
                     local assemblyId, scope = getDepAssemblyAndScope(dep)
                     local depProject, depId, depType = findAssembly(assemblyId)
@@ -443,25 +451,33 @@ function projects.submit(proj)
                         print("\tDependency \"" .. depId .. "\" was not found")
                     end
                 end
-
+                
                 dependson(depNames)
-                externalincludedirs(externalIncludeDirs)
-                libdirs(libDirs)
             end
             
-            if not utils.tableIsEmpty(proj.additional_include_dirs) then
-                includedirs(proj.additional_include_dirs)
-            end
-
-            if not utils.tableIsEmpty(proj.additional_external_include_dirs) then
-                externalincludedirs(proj.additional_external_include_dirs)
-            end
-
             architecture(buildSettings.platform)
-
+            
+            local targetDir = binDir .. proj.group .. "/" .. proj.name .. projectNameSuffix(projectType)
+            targetdir(targetDir)
+            objdir(binDir .. "obj")
+            
             if projectType ~= "util" then
-                targetdir(binDir .. proj.group .. "/" .. proj.name .. projectNameSuffix(projectType))
-                objdir(binDir .. "obj")
+                if not utils.tableIsEmpty(externalIncludeDirs) then
+                    externalincludedirs(externalIncludeDirs)
+                end
+
+                if not utils.tableIsEmpty(libDirs) then
+                    libdirs(libDirs)
+                end
+
+                if not utils.tableIsEmpty(proj.additional_include_dirs) then
+                    includedirs(proj.additional_include_dirs)
+                end
+
+                if not utils.tableIsEmpty(proj.additional_external_include_dirs) then
+                    externalincludedirs(proj.additional_external_include_dirs)
+                end
+
                 defines(allDefines)
                 
                 toolset(buildSettings.toolset)
@@ -484,7 +500,9 @@ function projects.submit(proj)
                 vpaths({ ["test utils"] = _WORKING_DIR .. "/utils/test utils/**" })
             end
 
-            vpaths({ ["*"] = proj.location .. projectTypeFilesDir(projectType, proj.namespace) })
+            filePatterns[#filePatterns + 1] = proj.src
+
+            vpaths({ ["*"] = { proj.location .. projectTypeFilesDir(projectType, proj.namespace), fs.parentPath(proj.src) }})
             files(filePatterns)
             
             if not utils.tableIsEmpty(proj.exclude_files) then
