@@ -13,12 +13,9 @@ BreakAfterAttributes: Leave
 BreakBeforeConceptDeclarations: Always
 
 # General rules
-InsertBraces: true 			
+InsertBraces: false 			
 PointerAlignment: Left
-AllowShortIfStatementsOnASingleLine: Never
-AllowShortLambdasOnASingleLine: None
 ColumnLimit: 0
-AllowShortFunctionsOnASingleLine: Inline
 
 # Indentation: use 4 spaces for all indentation
 UseTab: ForContinuationAndIndentation
@@ -28,7 +25,6 @@ ContinuationIndentWidth: 4
 ConstructorInitializerIndentWidth: 4
 AccessModifierOffset: -4
 IndentCaseLabels: true
-AlwaysBreakTemplateDeclarations: Yes
 IndentPPDirectives: BeforeHash
 LambdaBodyIndentation: OuterScope
 
@@ -46,17 +42,16 @@ AlignTrailingComments:
   OverEmptyLines: 1
 AlignEscapedNewlines: Right
 AllowAllArgumentsOnNextLine: true
-AllowBreakBeforeNoexceptSpecifier: true
+AllowBreakBeforeNoexceptSpecifier: Always
 AllowShortBlocksOnASingleLine: true
-AllowBreakBeforeNoexceptSpecifier: true
 AllowShortCaseLabelsOnASingleLine: true
 AllowShortCompoundRequirementOnASingleLine: true
 AllowShortEnumsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: true
-AllowShortIfStatementsOnASingleLine: true
-AllowShortLambdasOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: All
 AllowShortLoopsOnASingleLine: true
-AlwaysBreakTemplateDeclarations: true
+AlwaysBreakTemplateDeclarations: Yes
 BitFieldColonSpacing: Both
 
 # includes
