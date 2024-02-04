@@ -6,7 +6,7 @@ LineEnding: LF
 InsertNewlineAtEOF: true
 MaxEmptyLinesToKeep: 3
 BreakBeforeBraces: Allman
-BreakConstructorInitializers: AfterColon
+BreakConstructorInitializers: BeforeColon
 BreakInheritanceList: AfterColon
 BreakAdjacentStringLiterals: true
 BreakAfterAttributes: Leave
