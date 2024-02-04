@@ -15,4 +15,8 @@ function utils.tableIsEmpty(t)
 	return t == nil or next(t) == nil
 end
 
+function utils.stringEndsWith(str, suffix)
+	return str:sub(-#suffix) == suffix
+end
+
 return utils

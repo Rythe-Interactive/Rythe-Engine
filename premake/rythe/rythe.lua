@@ -28,11 +28,21 @@ function rythe.configName(config)
     return configNames[config]
 end
 
+function rythe.targetSuffix(config)
+    local configSuffix = { 
+        [rythe.Configuration.RELEASE] = "",
+        [rythe.Configuration.DEVELOPMENT] = "-dev",
+        [rythe.Configuration.DEBUG] = "-debug"        
+    }
+
+    return configSuffix[config]
+end
+
 function rythe.configure()
     filter { "configurations:Debug" }
-        targetsuffix "-debug"
+        targetsuffix(rythe.targetSuffix(rythe.Configuration.DEBUG))
     filter { "configurations:Development" }
-        targetsuffix "-dev"
+        targetsuffix(rythe.targetSuffix(rythe.Configuration.DEVELOPMENT))
 
     projects.scan("./")
 end

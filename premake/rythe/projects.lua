@@ -44,16 +44,6 @@ local function find(projectPath)
     return projectFile, thirdPartyFile, group, projectName, folderToProjectType(projectType)
 end
 
-local function projectIdSuffix(projectType)
-    if projectType == "test" then
-        return ":test"
-    elseif projectType == "editor" then
-        return ":editor"
-    end
-
-    return ""
-end
-
 local function getProjectId(group, projectName)
     return group == "" and projectName or group .. "/" .. projectName
 end
@@ -176,6 +166,21 @@ local function isProjectTypeMainType(projectType)
     return true
 end
 
+local function printTable(name, table, indent)
+    print(indent .. name .. ":")
+    indent = indent .. "\t"
+    for key, value in pairs(table) do
+        if type(value) == "table" then
+            printTable(key, value, indent)
+        elseif type(value) == "function" then
+            print(indent .. key .. ": " .. "function")
+        else
+            print(indent .. key .. ": " .. value)
+        end
+    end
+    indent = indent:sub(-1)
+end
+
 local function loadProject(projectId, project, projectPath, name, projectType)    
     if project.alias == nil then
         project.alias = name
@@ -185,7 +190,11 @@ local function loadProject(projectId, project, projectPath, name, projectType)
         project.namespace = name
     end
 
-    project.types = { projectType }
+    if project.types == nil then
+        project.types = { projectType }
+    else
+        project.types[1] = projectType
+    end
 
     if not utils.tableIsEmpty(project.additional_types) then
         project.types = utils.concatTables(project.types, project.additional_types)
@@ -241,6 +250,12 @@ function projects.load(projectPath)
                 return nil
             end
 
+            local thirdPartyType = "library"
+
+            if not utils.tableIsEmpty(thirdParty.types) then
+                thirdPartyType = thirdParty.types[1]
+            end
+
             local thirdPartyId = getProjectId(thirdParty.group, thirdParty.name)
 
             if not isThirdPartyProject(thirdPartyId) then
@@ -252,7 +267,7 @@ function projects.load(projectPath)
                 thirdParty.location = projectPath .. "/third_party/" .. thirdParty.name
             end
 
-            thirdParty = loadProject(thirdPartyId, thirdParty, thirdParty.location, thirdParty.name, "library")
+            thirdParty = loadProject(thirdPartyId, thirdParty, thirdParty.location, thirdParty.name, thirdPartyType)
         end
     end
 
@@ -270,31 +285,47 @@ function projects.load(projectPath)
         return nil
     end
 
+    if not utils.tableIsEmpty(project.types) then
+        projectType = project.types[1]
+    end
 
     return loadProject(projectId, project, projectPath, name, projectType)
 end
 
-local function setupRelease(projectType)
+local function appendConfigSuffix(linkTargets, config)
+    local suffix = rythe.targetSuffix(config)
+    local copy = {}
+    for i, target in ipairs(linkTargets) do
+        copy[i] = target .. suffix
+    end
+
+    return copy
+end
+
+local function setupRelease(projectType, linkTargets)
     filter("configurations:Release")
         defines { "NDEBUG" }
         optimize("Full")
         kind(kindName(projectType, rythe.Configuration.RELEASE))
+        links(appendConfigSuffix(linkTargets, rythe.Configuration.RELEASE))
 end
 
-local function setupDevelopment(projectType)
+local function setupDevelopment(projectType, linkTargets)
     filter("configurations:Development")
         defines { "DEBUG" }
         optimize("Debug")
         inlining("Explicit")
         symbols("On")
         kind(kindName(projectType, rythe.Configuration.DEVELOPMENT))
+        links(appendConfigSuffix(linkTargets, rythe.Configuration.DEVELOPMENT))
 end
 
-local function setupDebug(projectType)
+local function setupDebug(projectType, linkTargets)
     filter("configurations:Debug")
         defines { "DEBUG" }
         symbols("On")
         kind(kindName(projectType, rythe.Configuration.DEBUG))
+        links(appendConfigSuffix(linkTargets, rythe.Configuration.DEBUG))
 end
 
 local function getDepsRecursive(project, projectType)
@@ -363,8 +394,12 @@ local function getDepsRecursive(project, projectType)
                 end
 
                 thirdPartyProject.src = project.src
-                depProject = loadProject(depId, thirdPartyProject, path, thirdPartyProject.name, "library")
-                depType = "library"
+
+                if depType == nil then
+                    depType = "library"
+                end
+
+                depProject = loadProject(depId, thirdPartyProject, path, thirdPartyProject.name, depType)
             end
         end
 
@@ -429,6 +464,7 @@ function projects.submit(proj)
             end
             
             local libDirs = {}
+            local linkTargets = {}
             local externalIncludeDirs = {}
             
             if not utils.tableIsEmpty(allDeps) then
@@ -447,6 +483,12 @@ function projects.submit(proj)
                         depNames[#depNames + 1] = depProject.alias .. projectNameSuffix(depType)
                         
                         allDefines[#allDefines + 1] = depProject.group == "" and string.upper(depProject.alias) .. "=1" or string.upper(string.gsub(depProject.group, "[/\\]", "_")) .. "_" .. string.upper(depProject.alias) .. "=1"
+
+                        libDirs[#libDirs + 1] = binDir .. depProject.group .. "/" .. depProject.name
+                        
+                        if depType ~= "header-only" then
+                            linkTargets[#linkTargets + 1] = depProject.alias .. projectNameSuffix(depType)
+                        end
                     else
                         print("\tDependency \"" .. depId .. "\" was not found")
                     end
@@ -504,7 +546,7 @@ function projects.submit(proj)
 
             vpaths({ ["*"] = { proj.location .. projectTypeFilesDir(projectType, proj.namespace), fs.parentPath(proj.src) }})
             files(filePatterns)
-            
+
             if not utils.tableIsEmpty(proj.exclude_files) then
                 local excludePatterns = {}
                 for i, pattern in ipairs(proj.exclude_files) do
@@ -522,7 +564,7 @@ function projects.submit(proj)
                 kind("Utility")
             else
                 for i, config in pairs(rythe.Configuration) do
-                    configSetup[config](projectType)
+                    configSetup[config](projectType, linkTargets)
                 end
             end
         filter("")
