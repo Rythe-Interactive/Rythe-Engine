@@ -478,6 +478,7 @@ function projects.submit(proj)
                         
                         if isThirdPartyProject(depId) then
                             externalIncludeDirs[#externalIncludeDirs + 1] = depProject.location .. "/include/"
+                            externalIncludeDirs[#externalIncludeDirs + 1] = depProject.location .. "/"
                         end
 
                         depNames[#depNames + 1] = depProject.alias .. projectNameSuffix(depType)
