@@ -510,7 +510,7 @@ function projects.submit(proj)
             
             architecture(buildSettings.platform)
             
-            local targetDir = binDir .. proj.group .. "/" .. proj.name .. projectNameSuffix(projectType)
+            local targetDir = binDir .. proj.group .. "/" .. proj.name
             targetdir(targetDir)
             objdir(binDir .. "obj")
             
