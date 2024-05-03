@@ -196,6 +196,10 @@ local function loadProject(projectId, project, projectPath, name, projectType)
         project.types[1] = projectType
     end
 
+    if project.fast_up_to_date_check == nil then
+        project.fast_up_to_date_check = true
+    end
+
     if not utils.tableIsEmpty(project.additional_types) then
         project.types = utils.concatTables(project.types, project.additional_types)
     end
@@ -443,6 +447,8 @@ function projects.submit(proj)
         project(proj.alias .. projectNameSuffix(projectType))
             filename(proj.alias .. projectNameSuffix(projectType))
             location("build/" .. _ACTION .. "/" .. proj.group)
+
+            fastuptodate(proj.fast_up_to_date_check)
 
             if proj.pre_build ~= nil then                
                 prebuildcommands(proj.pre_build)
