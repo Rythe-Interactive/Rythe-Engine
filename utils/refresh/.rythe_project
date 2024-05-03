@@ -1,0 +1,21 @@
+local project = {
+    pre_build = {},
+    fast_up_to_date_check = false
+}
+
+function project.init(proj, ctx)
+    proj.pre_build = {
+        "cd " .. _WORKING_DIR,
+        ctx.getCommand()
+    }
+
+    local targetPattern = "build/" .. _ACTION .. "/bin/**/" .. proj.name
+    for i, dir in ipairs(os.matchdirs(targetPattern)) do
+        print(dir)
+        os.rmdir(dir)
+    end
+    
+    return proj
+end
+
+return project

@@ -1,15 +1,21 @@
-[submodule "rythe/engine/core"]
-	path = rythe/engine/core
+[submodule "modules/rythe/core"]
+	path = modules/rythe/core
 	url = https://github.com/Rythe-Interactive/Rythe-Core.git
-[submodule "rythe/engine/application"]
-	path = rythe/engine/application
+[submodule "modules/rythe/application"]
+	path = modules/rythe/application
 	url = https://github.com/Rythe-Interactive/Rythe-Application.git
-[submodule "rythe/engine/graphics"]
-	path = rythe/engine/graphics
+[submodule "modules/rythe/graphics"]
+	path = modules/rythe/graphics
 	url = https://github.com/Rythe-Interactive/Rythe-Graphics.git
-[submodule "rythe/engine/audio"]
-	path = rythe/engine/audio
+[submodule "modules/rythe/audio"]
+	path = modules/rythe/audio
 	url = https://github.com/Rythe-Interactive/Rythe-Audio.git
-[submodule "rythe/engine/physics"]
-	path = rythe/engine/physics
+[submodule "modules/rythe/physics"]
+	path = modules/rythe/physics
 	url = https://github.com/Rythe-Interactive/Rythe-Physics.git
+[submodule "libraries/rythe/rythe-standard-library"]
+	path = libraries/rythe/rythe-standard-library
+	url = https://github.com/Rythe-Interactive/Rythe-Standard-Library.git
+[submodule "libraries/third_party/catch2"]
+	path = libraries/third_party/catch2
+	url = https://github.com/Rythe-Interactive/Catch2.git
