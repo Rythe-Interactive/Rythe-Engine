@@ -181,7 +181,7 @@ local function printTable(name, table, indent)
     indent = indent:sub(-1)
 end
 
-local function loadProject(projectId, project, projectPath, name, projectType)    
+local function loadProject(projectId, project, projectPath, name, projectType)
     if project.alias == nil then
         project.alias = name
     end
@@ -227,11 +227,9 @@ function projects.load(projectPath)
     
     local projectFile, thirdPartyFile, group, name, projectType = find(projectPath)
     local projectId = getProjectId(group, name)
-    
-    local project = loadedProjects[projectId]
-        
-    if project ~= nil then
-        return project
+            
+    if loadedProjects[projectId] ~= nil then
+        return loadedProjects[projectId]
     end
 
     if projectFile == nil then
@@ -275,7 +273,7 @@ function projects.load(projectPath)
         end
     end
 
-    project = dofile(projectFile)
+    local project = dofile(projectFile)
 
     project.group = group
     project.name = name
@@ -343,7 +341,7 @@ local function getDepsRecursive(project, projectType)
         deps[#deps + 1] = "third_party/catch2"
     end
 
-    local copy = deps
+    local copy = utils.copyTable(deps)
 
     local set = {}
 
@@ -429,6 +427,12 @@ local function getDepsRecursive(project, projectType)
     end
 
     return copy
+end
+
+function projects.resolveDeps(proj)
+    for i, projectType in ipairs(proj.types) do
+        getDepsRecursive(proj, projectType)
+    end
 end
 
 function projects.submit(proj)
@@ -590,7 +594,12 @@ function projects.scan(path)
     for i, dir in ipairs(srcDirs) do
         local project = projects.load(dir)
     end
-    
+
+    local sourceProjects = utils.copyTable(loadedProjects)
+    for projectId, project in pairs(sourceProjects) do
+        projects.resolveDeps(project)
+    end
+
     for projectId, project in pairs(loadedProjects) do
         projects.submit(project)
     end

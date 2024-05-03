@@ -19,4 +19,12 @@ function utils.stringEndsWith(str, suffix)
 	return str:sub(-#suffix) == suffix
 end
 
+function utils.copyTable(t)
+	local copy = {}
+	for key, value in pairs(t) do
+		copy[key] = value
+	end
+	return copy
+end
+
 return utils
