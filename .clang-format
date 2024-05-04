@@ -15,7 +15,7 @@ BreakBeforeConceptDeclarations: Always
 # General rules
 InsertBraces: false 			
 PointerAlignment: Left
-ColumnLimit: 0
+ColumnLimit: 120
 
 # Indentation: use 4 spaces for all indentation
 UseTab: ForContinuationAndIndentation
