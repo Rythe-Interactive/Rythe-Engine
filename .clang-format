@@ -1,0 +1,70 @@
+Language: Cpp
+BasedOnStyle: LLVM
+
+# Newlines
+LineEnding: LF
+InsertNewlineAtEOF: true
+MaxEmptyLinesToKeep: 3
+BreakBeforeBraces: Allman
+BreakConstructorInitializers: BeforeColon
+BreakInheritanceList: AfterColon
+BreakAdjacentStringLiterals: true
+BreakAfterAttributes: Leave
+BreakBeforeConceptDeclarations: Always
+
+# General rules
+InsertBraces: false 			
+PointerAlignment: Left
+ColumnLimit: 120
+
+# Indentation: use 4 spaces for all indentation
+UseTab: ForContinuationAndIndentation
+TabWidth: 4
+IndentWidth: 4
+ContinuationIndentWidth: 4
+ConstructorInitializerIndentWidth: 4
+AccessModifierOffset: -4
+IndentCaseLabels: true
+IndentPPDirectives: BeforeHash
+LambdaBodyIndentation: OuterScope
+
+# namespaces
+NamespaceIndentation: All
+FixNamespaceComments: true
+CompactNamespaces: false
+
+# Alignment
+AlignAfterOpenBracket: BlockIndent
+AlignArrayOfStructures: Right
+PackConstructorInitializers: Never
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 1
+AlignEscapedNewlines: Right
+AllowAllArgumentsOnNextLine: true
+AllowBreakBeforeNoexceptSpecifier: Always
+AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortCompoundRequirementOnASingleLine: true
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: All
+AllowShortLoopsOnASingleLine: true
+AlwaysBreakTemplateDeclarations: Yes
+BitFieldColonSpacing: Both
+
+# includes
+SortIncludes: CaseSensitive
+IncludeBlocks: Preserve
+
+# Empty lines
+EmptyLineAfterAccessModifier: Never
+EmptyLineBeforeAccessModifier: Always
+
+# Prevent indentation on next line after these macros:
+StatementMacros: [ESMeta, MetaExternal]
+
+
+
+
