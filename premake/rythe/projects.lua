@@ -8,6 +8,35 @@ local buildSettings = rythe.buildSettings
 
 local projects = {}
 
+-- ============================================================================================================================================================================================================
+-- =============================================================================== PROJECT STRUCTURE DEFINITION ===============================================================================================
+-- ============================================================================================================================================================================================================
+
+--  Field name                          | Default value                 | Description
+-- ============================================================================================================================================================================================================
+--  init                                | nil                           | Initialization function, this allows you to dynamically change project fields upon project load based on the workspace context
+--  alias                               | <Project name>                | Alias for the project name
+--  namespace                           | <Project name>                | Project namespace, also used for folder structures
+--  types                               | <Based on folder structure>   | Target types this projet uses, valid values: "application", "module", "editor", "library", "header-only", "util", "test"
+--  additional_types                    | [empty]                       | Extra target types to add to the project, can be used if you don't want to override the default project types
+--  dependencies                        | [empty]                       | Project dependency definitions, format: [(optional)<public|private>(default <private>)] [path][(optional):<type>(default <library>)]
+--  fast_up_to_date_check               | true                          | Enable or disable Visual Studio check if project outputs are already up to date (handy to turn off on util projects)
+--  warning_level                       | "High"                        | Compiler warning level to enable, valid values: "Off", "Default", "Extra", "High", "Everything"
+--  warnings_as_errors                  | true                          | Treat warnings as errors
+--  additional_warnings                 | nil                           | List of additional warnings to enable, for Visual Studio this needs to be the warning number instead of the name
+--  exclude_warnings                    | nil                           | List of warnings to explicitly disable, for Visual Studio this needs to be the warning number instead of the name
+--  floating_point_config               | "Default"                     | Floating point configuration for the compiler to use, valid values: "Default", "Fast", "Strict", "None"
+--  vector_extensions                   | nil                           | Which vector extension to enable, see: https://premake.github.io/docs/vectorextensions/
+--  defines                             | [empty]                       | Additional defines on top of the default ones Rythe will add (PROJECT_NAME, PROJECT_FULL_NAME, PROJECT_NAMESPACE)
+--  files                               | ["./**"]                      | File filter patterns to find source files with
+--  exclude_files                       | nil                           | Exclude patterns to exclude source files with
+--  additional_include_dirs             | [empty]                       | Additional include dirs for #include ""
+--  additional_external_include_dirs    | [empty]                       | Additional external include dirs for #include <> on top of the ones Rythe will auto detect from dependencies
+--  pre_build                           | nil                           | Prebuild command
+--  post_build                          | nil                           | Postbuild command
+--  pre_link                            | nil                           | Prelink command
+
+
 local function folderToProjectType(projectFolder)
     if projectFolder == "applications" then
         return "application"
@@ -142,18 +171,25 @@ local function projectNameSuffix(projectType)
     return ""
 end
 
-local function projectTypeFilesDir(projectType, namespace)
+local function projectTypeFilesDir(location, projectType, namespace)
     if projectType == "test" then
-        return "/tests/"
+        return location .. "/tests/"
     elseif projectType == "editor" then
-        return "/editor/"
+        return location .. "/editor/"
     end
 
-    if namespace == "" or namespace == nil then
-        return "/src/"
+    local namespaceSrcDir = location .. "/src/" .. namespace .. "/"
+
+    if namespace == "" or namespace == nil or os.isdir(namespaceSrcDir) ~= true then
+        local srcDir = location .. "/src/"
+        if os.isdir(srcDir) then
+            return srcDir
+        else
+            return location .. "/"
+        end
     end
 
-    return "/src/" .. namespace .. "/"
+    return namespaceSrcDir
 end
 
 local function isProjectTypeMainType(projectType)
@@ -202,6 +238,18 @@ local function loadProject(projectId, project, projectPath, name, projectType)
 
     if not utils.tableIsEmpty(project.additional_types) then
         project.types = utils.concatTables(project.types, project.additional_types)
+    end
+
+    if project.warning_level == nil then
+        project.warning_level = "High"
+    end
+
+    if project.warnings_as_errors == nil then
+        project.warnings_as_errors = true
+    end
+
+    if project.floating_point_config == nil then
+        project.floating_point_config = "Default"
     end
 
     if utils.tableIsEmpty(project.defines) then
@@ -325,6 +373,7 @@ end
 local function setupDebug(projectType, linkTargets)
     filter("configurations:Debug")
         defines { "DEBUG" }
+        optimize("Debug")
         symbols("On")
         kind(kindName(projectType, rythe.Configuration.DEBUG))
         links(appendConfigSuffix(linkTargets, rythe.Configuration.DEBUG))
@@ -484,11 +533,10 @@ function projects.submit(proj)
                     local depProject, depId, depType = findAssembly(assemblyId)
 
                     if depProject ~= nil then
-                        externalIncludeDirs[#externalIncludeDirs + 1] = depProject.location .. projectTypeFilesDir(depType, "")
+                        externalIncludeDirs[#externalIncludeDirs + 1] = projectTypeFilesDir(depProject.location, depType, "")
                         
-                        if isThirdPartyProject(depId) then
+                        if isThirdPartyProject(depId) and os.isdir(depProject.location .. "/include/") then
                             externalIncludeDirs[#externalIncludeDirs + 1] = depProject.location .. "/include/"
-                            externalIncludeDirs[#externalIncludeDirs + 1] = depProject.location .. "/"
                         end
 
                         depNames[#depNames + 1] = depProject.alias .. projectNameSuffix(depType)
@@ -536,14 +584,45 @@ function projects.submit(proj)
                 toolset(buildSettings.toolset)
                 language("C++")
                 cppdialect(buildSettings.cppVersion)
+                warnings(proj.warning_level)
+                floatingpoint(proj.floating_point_config)
+
+                if proj.additional_warnings ~= nil then
+                    enablewarnings(proj.additional_warnings)
+                end
+
+                if proj.exclude_warnings ~= nil then
+                    disablewarnings(proj.exclude_warnings)
+                end
+
+                local compileFlags = { }
+
+                if proj.warnings_as_errors then
+                    compileFlags[#compileFlags + 1] = "FatalWarnings"
+                end
+
+                flags(compileFlags)
+
+                if proj.vector_extensions ~= nil then
+                    vectorextensions(proj.vector_extensions)
+                end
             end
 
             local filePatterns = {}
+
+            if projectType == "application" then
+                filter { "system:windows" }
+				    files { proj.location .. "/**resources.rc", proj.location .. "/**.ico" }
+		  	    filter {}
+            end
+
+            local projectSrcDir = projectTypeFilesDir(proj.location, projectType, proj.namespace)
+
             for i, pattern in ipairs(proj.files) do
                 if string.find(pattern, "^(%.[/\\])") == nil then
                     filePatterns[#filePatterns + 1] = pattern
                 else
-                    filePatterns[#filePatterns + 1] = proj.location .. projectTypeFilesDir(projectType, proj.namespace) .. string.sub(pattern, 3)
+                    filePatterns[#filePatterns + 1] = projectSrcDir .. string.sub(pattern, 3)
                 end
             end
 
@@ -555,7 +634,7 @@ function projects.submit(proj)
 
             filePatterns[#filePatterns + 1] = proj.src
 
-            vpaths({ ["*"] = { proj.location .. projectTypeFilesDir(projectType, proj.namespace), fs.parentPath(proj.src) }})
+            vpaths({ ["*"] = { projectSrcDir, fs.parentPath(proj.src) }})
             files(filePatterns)
 
             if not utils.tableIsEmpty(proj.exclude_files) then
@@ -564,7 +643,7 @@ function projects.submit(proj)
                     if string.find(pattern, "^(%.[/\\])") == nil then
                         excludePatterns[#excludePatterns + 1] = pattern
                     else
-                        excludePatterns[#excludePatterns + 1] = proj.location .. projectTypeFilesDir(projectType, proj.namespace) .. string.sub(pattern, 3)
+                        excludePatterns[#excludePatterns + 1] = projectSrcDir .. string.sub(pattern, 3)
                     end
                 end
 
