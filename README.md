@@ -67,7 +67,7 @@ The engine's modules are separated into optional git submodules; links to them c
 The engine is by default build using Visual Studio 17 (2022) using Clang-cl and C++20.
 For linux we don't provide any default IDE support. However, you can still compile the engine using Clang++.
 ### Install
-To generate the gmake, make, or visual studio solution, use premake. As of now Rythe does not support compilation to DLL.
+To generate the gmake, make, or visual studio solution, use premake bundled in the tools folder. For visual studio an example is VisualStudio22-All.bat which can be used. As of now Rythe does not support compilation to DLL.
 Copy the include folder to your project and link the libraries you compiled.
 ### Setup
 Rythe already defines the C++ entry point in it's own source code. So in order to start making a program define ``RYTHE_ENTRY`` and include any of modules main include files.
