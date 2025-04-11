@@ -1,1 +1,4 @@
 -clang-diagnostic-c++17-extensions
+-cppcoreguidelines-missing-std-forward
+-cppcoreguidelines-rvalue-reference-param-not-moved
+-clang-diagnostic-extra-semi-stmt

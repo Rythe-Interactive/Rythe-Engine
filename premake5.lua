@@ -1,9 +1,9 @@
-/*
+--[[
     Rythe uses a build system built on top of Premake5.
     Using the rythe premake module you can define projects and workspaces.
     Projects can either be manually defined, or automatically detected through .rythe_project files.
     .rythe_project files also allows you to customize the project, and report third-party dependencies that don't use the rythe build system.
-*/
+]]
 
 os.chdir(_MAIN_SCRIPT_DIR)
 
