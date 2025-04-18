@@ -132,6 +132,4 @@ docs/venv
 *.vcxproj
 *.vcxitems
 *.filters
-build/.cmake
-build/CMakeFiles
-build/CMakeCache.txt
+build/
