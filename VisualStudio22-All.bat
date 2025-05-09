@@ -1,1 +1,1 @@
-tools\premake5 vs2022
+tools\premake5 --file=premake/rythe/premake5.lua vs2022
