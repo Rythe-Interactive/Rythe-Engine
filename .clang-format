@@ -1,70 +1,78 @@
+---
 Language: Cpp
 BasedOnStyle: LLVM
-
-# Newlines
-LineEnding: LF
-InsertNewlineAtEOF: true
-MaxEmptyLinesToKeep: 3
-BreakBeforeBraces: Allman
-BreakConstructorInitializers: BeforeColon
-BreakInheritanceList: AfterColon
-BreakAdjacentStringLiterals: true
-BreakAfterAttributes: Leave
-BreakBeforeConceptDeclarations: Always
-
-# General rules
-InsertBraces: true
-PointerAlignment: Left
-ColumnLimit: 120
-
-# Indentation: use 4 spaces for all indentation
-UseTab: ForContinuationAndIndentation
-TabWidth: 4
-IndentWidth: 4
-ContinuationIndentWidth: 4
-ConstructorInitializerIndentWidth: 4
 AccessModifierOffset: -4
-IndentCaseLabels: true
-IndentPPDirectives: BeforeHash
-LambdaBodyIndentation: OuterScope
-
-# namespaces
-NamespaceIndentation: All
-FixNamespaceComments: true
-CompactNamespaces: false
-
-# Alignment
-AlignAfterOpenBracket: BlockIndent
+AlignAfterOpenBracket: AlwaysBreak
 AlignArrayOfStructures: Right
-PackConstructorInitializers: Never
-AlignTrailingComments:
-  Kind: Always
-  OverEmptyLines: 1
-AlignEscapedNewlines: Right
-AllowAllArgumentsOnNextLine: true
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignOperands: false
+AlignTrailingComments: true
 AllowBreakBeforeNoexceptSpecifier: Always
 AllowShortBlocksOnASingleLine: true
 AllowShortCaseLabelsOnASingleLine: true
 AllowShortCompoundRequirementOnASingleLine: true
 AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Inline
-AllowShortIfStatementsOnASingleLine: Never
-AllowShortLambdasOnASingleLine: All
-AllowShortLoopsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+AlwaysBreakAfterDefinitionReturnType: false
 AlwaysBreakTemplateDeclarations: Yes
-BitFieldColonSpacing: Both
-
-# includes
-SortIncludes: CaseSensitive
-IncludeBlocks: Preserve
-
-# Empty lines
-EmptyLineAfterAccessModifier: Never
-EmptyLineBeforeAccessModifier: Always
-
-# Prevent indentation on next line after these macros:
-StatementMacros: [ESMeta, MetaExternal]
-
-
-
-
+BinPackArguments: false
+BinPackParameters: false
+BraceWrapping: 
+  AfterCaseLabel: true
+  AfterClass: true
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterExternBlock: true
+  BeforeCatch: true
+  BeforeElse: true
+  BeforeLambdaBody: true
+  BeforeWhile: true
+  IndentBraces: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+BreakAdjacentStringLiterals: true
+BreakAfterAttributes: Leave
+BreakBeforeBraces: Custom
+BreakBeforeTernaryOperators: false
+BreakInheritanceList: AfterColon
+ColumnLimit: 135
+ContinuationIndentWidth: 8
+IncludeCategories: 
+  - Regex: '^<.*'
+    Priority: 1
+  - Regex: '^".*'
+    Priority: 2
+  - Regex: '.*'
+    Priority: 3
+IncludeIsMainRegex: '([-_](test|unittest))?$'
+IndentCaseLabels: true
+IndentPPDirectives: BeforeHash
+IndentWidth: 4
+InsertBraces: true
+InsertNewlineAtEOF: true
+LambdaBodyIndentation: OuterScope
+LineEnding: LF
+MacroBlockBegin: ''
+MacroBlockEnd: ''
+MaxEmptyLinesToKeep: 2
+NamespaceIndentation: All
+PackConstructorInitializers: Never
+PointerAlignment: Left
+SpaceInEmptyParentheses: false
+SpacesInAngles: false
+SpacesInConditionalStatement: false
+SpacesInCStyleCastParentheses: false
+SpacesInParentheses: false
+StatementMacros: 
+  - ESMeta
+  - MetaExternal
+TabWidth: 4
+...
