@@ -45,6 +45,7 @@ BreakBeforeTernaryOperators: false
 BreakInheritanceList: AfterColon
 ColumnLimit: 135
 ContinuationIndentWidth: 8
+Cpp11BracedListStyle: false
 IncludeCategories: 
   - Regex: '^<.*'
     Priority: 1
@@ -56,6 +57,7 @@ IncludeIsMainRegex: '([-_](test|unittest))?$'
 IndentCaseLabels: true
 IndentPPDirectives: BeforeHash
 IndentWidth: 4
+IndentWrappedFunctionNames: true
 InsertBraces: true
 InsertNewlineAtEOF: true
 LambdaBodyIndentation: OuterScope
