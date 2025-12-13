@@ -1,11 +1,12 @@
 #define RYTHE_ENTRY
-#define RYTHE_LOG_DEBUG
+#define RSL_DEFAULT_LOG_SEVERITY debug
 
 #if defined(NDEBUG)
 #define RYTHE_KEEP_CONSOLE
 #endif
 
 #include <core/core.hpp>
+#include <rsl/logging>
 #include <rsl/type_traits>
 
 template <typename T>
@@ -16,17 +17,26 @@ rsl::result<void> RYTHE_CCONV init_program(rythe::core::program& program)
     using namespace rythe;
     program.add_engine_instance();
 
-    [[maybe_unused]] constexpr rsl::constexpr_string A = "Something";
-    [[maybe_unused]] constexpr rsl::constexpr_string B = "Other";
-    [[maybe_unused]] constexpr rsl::constexpr_string result = A + B;
+    constexpr static rsl::constexpr_string A = "Something";
+    constexpr static rsl::constexpr_string B = "Other";
+    constexpr static rsl::constexpr_string result = A + B;
 
-    [[maybe_unused]] constexpr rsl::constexpr_string hello_world = "hello world";
-    [[maybe_unused]] constexpr rsl::constexpr_string shorten = hello_world.filter_if([](char y) { return ' ' != y; });
-    [[maybe_unused]] constexpr rsl::constexpr_string optimal = shorten.refit<shorten.size() + 1>();
+    rsl::log::debug(A);
+    rsl::log::debug(B);
+    rsl::log::debug(result);
 
-    constexpr rsl::constexpr_string typeName = rsl::type_name<std::string>();
-    [[maybe_unused]] constexpr auto shrunk = typeName.refit<typeName.size() + 1>();
-    constexpr rsl::id_type typeHash = rsl::type_id<std::string>();
+    constexpr static rsl::constexpr_string hello_world = "hello world";
+    constexpr static rsl::constexpr_string shorten = hello_world.filter_if([&](const rsl::size_type i) { return ' ' != hello_world[i]; });
+    constexpr static rsl::constexpr_string optimal = shorten.refit<shorten.size() + 1>();
+
+    rsl::log::debug(hello_world);
+    rsl::log::debug(shorten);
+    rsl::log::debug(optimal);
+    rsl::log::debug("{} {}", shorten.capacity(), optimal.capacity());
+
+    constexpr rsl::constexpr_string typeName = rsl::type_name<rsl::dynamic_string>();
+    constexpr auto shrunk = typeName.refit<typeName.size() + 1>();
+    constexpr rsl::id_type typeHash = rsl::type_id<rsl::dynamic_string>();
 
     rsl::log::debug(
             "type info: {} : {}, {}, {}, {}",
