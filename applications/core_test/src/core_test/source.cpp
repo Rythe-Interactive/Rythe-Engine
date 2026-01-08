@@ -1,15 +1,17 @@
 #define RYTHE_ENTRY
 
+#include <rsl/logging>
+
 #include <core/core.hpp>
 
-using namespace rythe::core;
+using namespace rythe;
 
 struct test_struct
 {
     int i = 14;
 };
 
-rsl::result<void> RYTHE_CCONV init_program(program& program)
+rsl::result<void> RYTHE_CCONV init_program(core::program& program)
 {
     auto& engine = program.add_engine_instance();
     engine.get_context().emplace<test_struct>().i = 15;
