@@ -1,36 +1,60 @@
 #pragma once
 
 #include <core/core.hpp>
+#include <rsl/tuple>
 
 namespace sandbox
 {
     RYTHE_DECLARE_MODULE(sandbox);
-
-    RYTHE_DECLARE_SYSTEM(sandbox, test_system);
-    RYTHE_DECLARE_SYSTEM(sandbox, some_other_system);
-    RYTHE_DECLARE_SYSTEM(sandbox, my_late_system);
-
-    RYTHE_DECLARE_PUBLIC_PROCESS_CHAIN(test_system, update);
-    RYTHE_DECLARE_PUBLIC_PROCESS_CHAIN(some_other_system, update);
-    RYTHE_DECLARE_PUBLIC_PROCESS_CHAIN(my_late_system, update);
 
     struct hierarchy
     {
         rythe::core::entity parent;
     };
 
-    using position = rsl::math::float3;
-
     struct physics_config
     {
         rsl::tm::span32 updateInterval;
     };
 
-    struct transform
+    struct position
     {
-        rsl::math::float3 position;
-        rsl::math::quat rotation;
-        rsl::math::float3 scale;
+        position() = default;
+        position(const rsl::math::float3& src)
+            : value(src)
+        {}
+
+        operator rsl::math::float3() { return value; }
+
+        rsl::math::float3 value;
+    };
+
+    struct rotation
+    {
+        rotation() = default;
+        rotation(const rsl::math::quat& src)
+            : value(src)
+        {}
+
+        operator rsl::math::quat() { return value; }
+
+        rsl::math::quat value;
+    };
+
+    struct scale
+    {
+        scale() = default;
+        scale(const rsl::math::float3& src)
+            : value(src)
+        {}
+
+        operator rsl::math::float3() { return value; }
+
+        rsl::math::float3 value;
+    };
+
+    struct transform : rythe::architype<position, rotation, scale>
+    {
     };
 
     struct my_component

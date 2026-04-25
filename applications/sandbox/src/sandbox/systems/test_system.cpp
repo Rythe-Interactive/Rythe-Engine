@@ -4,21 +4,30 @@
 
 namespace sandbox
 {
-    RYTHE_DECLARE_PRIVATE_PROCESS_CHAIN(test_system, init_my_component);
-    RYTHE_DECLARE_PRIVATE_PROCESS_CHAIN(test_system, destroy_my_component);
-
-    RYTHE_DEFINE_SYSTEM(test_system)
+    [[rsl_reflect(rythe::system_function)]] static rsl::result<void> test_system(rythe::core::system_context& systemContext)
     {
         using namespace rythe;
-        using namespace rythe::core;
         using namespace rsl;
         using namespace rsl::literals;
 
-        systemBuilder.create_process_chain(test_system_update_id)
-                .after(some_other_system_update_id)
-                .before(my_late_system_update_id)
-                .interval(math::min(this_engine::get_context().get<physics_config>().updateInterval, 20_ms))
-                .add_parallel_process(
+        const process_chain_handle someOthersystemUpdate = systemContext.find_process_chain("some_other_update");
+        const process_chain_handle myLateSystemUpdate = systemContext.find_process_chain("my_late_system_update");
+
+        {
+            process_chain_builder processChainBuilder = systemContext.create_process_chain("test_system_update");
+            if (someOthersystemUpdate != process_chain_handle::invalid)
+            {
+                processChainBuilder.after(someOthersystemUpdate);
+            }
+
+            if (myLateSystemUpdate != process_chain_handle::invalid)
+            {
+                processChainBuilder.before(myLateSystemUpdate);
+            }
+
+            processChainBuilder.interval(math::min(this_engine::get_context().get<physics_config>().updateInterval, 20_ms));
+
+            processChainBuilder.add_parallel_process(
                     [](process_context<
                             reads<transform /* archetype of: position, rotation, scale */, my_component>,
                             writes<my_other_component>> context)
@@ -27,19 +36,21 @@ namespace sandbox
                         const auto& myComp = context.read<my_component>();
                         auto& myOtherComp = context.write<my_other_component>();
 
-                        myOtherComp.offset += myComp.rate * context.deltaTime.seconds() * math::sin(context.time.seconds()) * pos * rot * scal;
+                        myOtherComp.offset += myComp.rate * context.deltaTime.seconds() * math::sin(context.time.seconds()) * pos.value * rot.value * scal.value;
                     }
-                )
-                .add_sequential_process(
+            );
+
+            processChainBuilder.add_sequential_process(
                     [](process_context<reads<my_other_component, hierarchy>, writes<position>> context)
                     {
                         const math::float3 offset = context.read<my_other_component>().offset;
                         const entity parent = context.read<hierarchy>().parent;
-                        context.write<position>() = context.read<position>(parent) + offset;
+                        context.write<position>() = context.read<position>(parent).value + offset;
                     }
-                );
+            );
+        }
 
-		systemBuilder.create_process_chain(test_system_init_my_component_id)
+		systemContext.create_process_chain("init_my_component")
                 .on_create<my_component>()
                 .add_parallel_process(
                     [](process_context<writes<my_component>, emits<my_other_component>> context)
@@ -49,7 +60,7 @@ namespace sandbox
                     }
                 );
 
-        systemBuilder.create_process_chain(test_system_destroy_my_component_id)
+        systemContext.create_process_chain("destroy_my_component")
                 .on_destroy<my_component>()
                 .add_parallel_process(
                     [](process_context<destroys<my_other_component>> context)
