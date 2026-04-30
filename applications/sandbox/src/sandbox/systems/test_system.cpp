@@ -8,7 +8,6 @@ namespace sandbox
     {
         using namespace rythe;
         using namespace rsl;
-        using namespace rsl::literals;
 
         const process_chain_handle someOthersystemUpdate = systemContext.find_process_chain("some_other_update");
         const process_chain_handle myLateSystemUpdate = systemContext.find_process_chain("my_late_system_update");
