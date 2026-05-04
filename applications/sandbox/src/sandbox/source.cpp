@@ -9,12 +9,15 @@
 #include <rsl/logging>
 #include <rsl/type_traits>
 
+#include "sandbox.hpp"
+
 template <typename T>
 struct foo {};
 
 rsl::result<void> RYTHE_CCONV init_program(rythe::core::program& program)
 {
     using namespace rythe;
+    using namespace sandbox;
     program.add_engine_instance();
 
     constexpr static rsl::constexpr_string A = "Something";
@@ -46,6 +49,24 @@ rsl::result<void> RYTHE_CCONV init_program(rythe::core::program& program)
             typeName.capacity(),
             shrunk.capacity()
             );
+
+    using process_info = decltype(process_function(
+            [](process_context<
+                    reads<transform /* archetype of: position, rotation, scale */, my_component>,
+                    writes<my_other_component>, emits<position>, destroys<scale, rotation>> context)
+    {
+        const auto& [pos, rot, scal] = context.read<transform>();
+        const auto& myComp = context.read<my_component>();
+        auto& myOtherComp = context.write<my_other_component>();
+
+        myOtherComp.offset += myComp.rate * context.deltaTime.seconds() * math::sin(context.time.seconds()) * pos.value *
+                rot.value * scal.value;
+    }))::process_context_info;
+
+    rsl::log::debug("reading: {}", rsl::type_name<process_info::reading_components>());
+    rsl::log::debug("writing: {}", rsl::type_name<process_info::writing_components>());
+    rsl::log::debug("emitting: {}", rsl::type_name<process_info::emitting_components>());
+    rsl::log::debug("destroying: {}", rsl::type_name<process_info::destroying_components>());
 
     return rsl::okay;
 }
