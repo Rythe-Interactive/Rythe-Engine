@@ -50,7 +50,7 @@ rsl::result<void> RYTHE_CCONV init_program(rythe::core::program& program)
             shrunk.capacity()
             );
 
-    using process_info = decltype(process_function(
+    using process_info = process_func_info<decltype(
             [](process_context<
                     reads<transform /* archetype of: position, rotation, scale */, my_component>,
                     writes<my_other_component>, emits<position>, destroys<scale, rotation>> context)
@@ -61,7 +61,7 @@ rsl::result<void> RYTHE_CCONV init_program(rythe::core::program& program)
 
         myOtherComp.offset += myComp.rate * context.deltaTime.seconds() * math::sin(context.time.seconds()) * pos.value *
                 rot.value * scal.value;
-    }))::process_context_info;
+    })>::context_type;
 
     rsl::log::debug("reading: {}", rsl::type_name<process_info::reading_components>());
     rsl::log::debug("writing: {}", rsl::type_name<process_info::writing_components>());

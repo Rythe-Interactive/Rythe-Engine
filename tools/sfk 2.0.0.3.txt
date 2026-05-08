@@ -1,0 +1,31 @@
+https://stahlworks.com/swiss-file-knife.html
+Swiss File Knife most recent changes
+
+ 
+Version: 2.0.0.2
+most is now open source, also including tools sfktray and a simple image viewer. everything is now 64 bit first. full rework of source code for easier reuse. some added functions, and some bug fixes.
+
+fix: sfk echo -lines w1 w2 w3 +filt -join +toterm dropped last character of words.
+add: sfk (x)replace is now fully open source. compared to replace in sfk base before it is much faster, no matter if replacing same or different length.
+chg: sfk.exe for windows is now 64 bits. if you need a 32 bit version use sfkwinxp.exe.
+chg: global rework of source code, with more defines to select which parts should be built.
+add: sfk zip: option -nocomp to add files to a zip file with no compression, as fast as possible.
+add: sfk replace: options -showhits, -showmiss.
+add: sfk list -sincedir: option -ignoretime to force deep compare even if size and time are equal.
+add: sfk sel ... +sft mputx and cputx to set exec flag on all transferred files
+add: sfk webserv: option -style=f to supply an own css file to extend or overwrite page styles
+add: sfk filetime: option -unix to print just the unix time of a file in seconds
+add: sfk view: option -using x to run x instead of dview.exe or dview.bat
+add: sfk head: head50 as alias for head -lines=50
+add: sfk tail: tail50 as alias for tail -lines=50
+add: sfk ... +iview, to view selected images of a folder by iview.exe
+chg: sfk calc: now supports brackets by default.
+fix: sfk wtou -tofile: no longer removes CR characters
+fix: sfk batch tmp.sh under Windows did not produce bash script
+fix: sfk version: did not show version if binary contained text "$version:" multiple times. the command now searches for "$version:vernum=" or "$version:name=".
+add: touch: improved error message if text list is passed.
+add: sfk encode -wsp, sfk help wsp to protect whitespace in text for email or forum
+del: sfk update, getdv
+fix: xe: showed an error "zip dir entry, cannot close" when listing nested archive entries
+chg: sfk wget: no longer tries caching to memory.
+doc: sfk help var: rework of text.
