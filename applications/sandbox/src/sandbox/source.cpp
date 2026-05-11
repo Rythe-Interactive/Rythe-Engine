@@ -14,11 +14,16 @@
 template <typename T>
 struct foo {};
 
+namespace sandbox
+{
+    [[rsl_reflect(rythe::system_function), maybe_unused]] rsl::result<void> test_system(rythe::core::process_graph& processGraph);
+}
+
 rsl::result<void> RYTHE_CCONV init_program(rythe::core::program& program)
 {
     using namespace rythe;
     using namespace sandbox;
-    program.add_engine_instance();
+    program.add_engine_instance().bind();
 
     constexpr static rsl::constexpr_string A = "Something";
     constexpr static rsl::constexpr_string B = "Other";
@@ -67,6 +72,6 @@ rsl::result<void> RYTHE_CCONV init_program(rythe::core::program& program)
     rsl::log::debug("writing: {}", rsl::type_name<process_info::writing_components>());
     rsl::log::debug("emitting: {}", rsl::type_name<process_info::emitting_components>());
     rsl::log::debug("destroying: {}", rsl::type_name<process_info::destroying_components>());
-
-    return rsl::okay;
+    process_graph ctx{};
+    return test_system(ctx);
 }
