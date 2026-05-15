@@ -16,22 +16,24 @@ struct foo {};
 
 namespace sandbox
 {
-    [[rsl_reflect(rythe::system_function), maybe_unused]] rsl::result<void> test_system(rythe::core::process_graph& processGraph);
+    [[rsl_reflect(rythe::system_function), maybe_unused]] rsl::result<void> test_system(rythe::core::process_graph_builder& processGraph);
 }
 
 rsl::result<void> RYTHE_CCONV init_program(rythe::core::program& program)
 {
+    rsl::log::filter(rsl::log::severity::debug);
+
     using namespace rythe;
     using namespace sandbox;
     program.add_engine_instance().bind();
 
     constexpr static rsl::constexpr_string A = "Something";
     constexpr static rsl::constexpr_string B = "Other";
-    constexpr static rsl::constexpr_string result = A + B;
+    constexpr static rsl::constexpr_string C = A + B;
 
     rsl::log::debug(A);
     rsl::log::debug(B);
-    rsl::log::debug(result);
+    rsl::log::debug(C);
 
     constexpr static rsl::constexpr_string hello_world = "hello world";
     constexpr static rsl::constexpr_string shorten = hello_world.filter_if([&](const rsl::size_type i) { return ' ' != hello_world[i]; });
@@ -72,6 +74,8 @@ rsl::result<void> RYTHE_CCONV init_program(rythe::core::program& program)
     rsl::log::debug("writing: {}", rsl::type_name<process_info::writing_components>());
     rsl::log::debug("emitting: {}", rsl::type_name<process_info::emitting_components>());
     rsl::log::debug("destroying: {}", rsl::type_name<process_info::destroying_components>());
-    process_graph ctx{};
-    return test_system(ctx);
+    process_graph_builder ctx{};
+    rsl::result<void> result = test_system(ctx);
+    ctx.print();
+    return result;
 }

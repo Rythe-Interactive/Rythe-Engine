@@ -4,7 +4,7 @@
 
 namespace sandbox
 {
-    [[rsl_reflect(rythe::system_function), maybe_unused]] rsl::result<void> test_system(rythe::core::process_graph& processGraph)
+    [[rsl_reflect(rythe::system_function), maybe_unused]] rsl::result<void> test_system(rythe::core::process_graph_builder& processGraph)
     {
         using namespace rythe;
         using namespace rsl;

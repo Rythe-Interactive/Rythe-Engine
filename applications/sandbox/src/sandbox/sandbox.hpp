@@ -14,7 +14,7 @@ namespace sandbox
 
     struct physics_config
     {
-        rsl::time_span updateInterval;
+        rsl::time_span updateInterval = rsl::time_span::from_milliseconds(25);
     };
 
     struct position
