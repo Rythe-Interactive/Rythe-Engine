@@ -34,11 +34,11 @@ namespace sandbox
                     {
                         const math::float3 offset = context.read<my_other_component>().offset;
                         const entity parent = context.read<hierarchy>().parent;
-                        context.write<position>() = context.read<position>(parent).value + offset;
+                        context.write<position>(parent).value += offset;
                     }
                 );
 
-        processGraph.create_process_chain("init_my_component")
+        processGraph.create_process_chain()
                 .on_create<my_component>()
                 .add_parallel_process(
                     [](process_context<writes<my_component>, emits<my_other_component>> context)
@@ -48,7 +48,7 @@ namespace sandbox
                     }
                 );
 
-        processGraph.create_process_chain("destroy_my_component")
+        processGraph.create_process_chain()
                 .on_destroy<my_component>()
                 .add_parallel_process(
                     [](process_context<destroys<my_other_component>> context)

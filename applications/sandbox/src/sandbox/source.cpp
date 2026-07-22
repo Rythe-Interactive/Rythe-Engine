@@ -22,6 +22,7 @@ namespace sandbox
 rsl::result<void> RYTHE_CCONV init_program(rythe::core::program& program)
 {
     rsl::log::filter(rsl::log::severity::debug);
+    rsl::log::flush_at(rsl::log::severity::debug);
 
     using namespace rythe;
     using namespace sandbox;
