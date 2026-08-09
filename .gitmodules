@@ -19,3 +19,6 @@
 [submodule "rythe-build-system"]
 	path = rythe-build-system
 	url = https://github.com/Rythe-Interactive/rythe-build-system.git
+[submodule "tools/rythe/rythe-reflection-compiler"]
+	path = tools/rythe/rythe-reflection-compiler
+	url = https://github.com/Rythe-Interactive/rythe-reflection-compiler.git
