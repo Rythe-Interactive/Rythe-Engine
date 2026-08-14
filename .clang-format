@@ -9,13 +9,17 @@ AlignConsecutiveDeclarations: false
 AlignOperands: false
 AlignTrailingComments: true
 AllowBreakBeforeNoexceptSpecifier: Always
-AllowShortBlocksOnASingleLine: true
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseExpressionOnASingleLine: true
 AllowShortCaseLabelsOnASingleLine: true
 AllowShortCompoundRequirementOnASingleLine: true
 AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Inline
-AllowShortIfStatementsOnASingleLine: true
-AllowShortLoopsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: Inline
+AllowShortLoopsOnASingleLine: false
+AllowShortNamespacesOnASingleLine: false
+AllowShortRecordOnASingleLine: Empty
 AlwaysBreakAfterDefinitionReturnType: false
 AlwaysBreakTemplateDeclarations: Yes
 BinPackArguments: false
@@ -73,8 +77,5 @@ SpacesInAngles: false
 SpacesInConditionalStatement: false
 SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
-StatementMacros: 
-  - ESMeta
-  - MetaExternal
 TabWidth: 4
 ...
